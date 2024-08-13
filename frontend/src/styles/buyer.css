@@ -1,0 +1,2159 @@
+/* *************** HEADER COMPONENT + SEARCH BOX COMPONENT + CATERGORY DROPDOWN **************** */
+
+.buyerHeaderDiv{
+    background-color: var(--primaryBlue);
+    color: white;
+    height: 21vh;
+}
+
+.buyerHeaderDiv .buyerHeaderContent{
+    padding: 30px 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+/* .buyerHeaderDiv .buyerHeaderContent{
+    padding: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+} */
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper, 
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper, .buyerHeaderActions,
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper, .buyerHeaderActions, .leftActions,
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper, .buyerHeaderActions, .rightActions,
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower,
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .lowerLeft ul,
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .lowerRight ul,
+
+.searchBoxDiv .searchBoxMain,
+.searchBoxDiv .searchBoxMain .searchBoxRight,
+.searchBtnDiv
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper,
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower
+{
+    justify-content: space-between;
+}
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper .buyerHeaderUpperLeft{
+    display: flex;
+    gap: 80px;
+    align-items: center;
+}
+
+.searchBoxDiv{
+    position: relative;
+}
+
+.searchBoxDiv .searchBoxMain{
+    background-color: var(--lightGray);
+    border-radius: 28px;
+    min-width: 700px;
+    height: 50px;
+    justify-content: space-between;
+    gap: 0;
+}
+
+.searchBoxDiv .searchBoxMain .searchBoxLeft{
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.searchBoxDiv .searchBoxMain .searchBoxRight{
+    background: var(--primaryCopper);
+    height: 100%;
+    border-top-right-radius: 28px;
+    border-bottom-right-radius: 28px;
+    padding: 10px 20px;
+    padding-right: 60px;
+}
+.searchBoxDiv .searchBoxMain .searchBoxRight .dropdown{
+    color: var(--white);
+}
+.searchBoxDiv .searchBoxMain .searchBoxRight .dropdown option{
+    color: var(--black);
+}
+
+.searchBoxDiv .searchBoxMain .searchBoxLeft .searchInput{
+    outline: none;
+    background: var(--lightGray);
+    border: none;
+    width: 100%;
+}
+
+.searchBtnDiv{
+    position: absolute;
+    background-color: var(--primaryCopper);
+    top: -8px;
+    right: -28px;
+    font-size: 20px;
+    border-radius: 50%;
+    width: 70px;
+    height: 65px;
+    gap: 0;
+    box-shadow: -2px 1px 10px 0.1px var(--lightBlack);
+    cursor: pointer;
+}
+
+.buyerHeaderActions{
+    gap: 40px;
+}
+.buyerHeaderActions i{
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--gray);
+    transition: 0.1s;
+}
+.buyerHeaderActions i:hover{
+    color: var(--white);
+}
+
+.buyerHeaderActions .leftActions,
+.buyerHeaderActions .rightActions
+{
+    gap: 25px;
+}
+.buyerHeaderActions .leftActions i{
+    color: var(--secondaryCopper);
+    transition: 0.1s;
+}
+.buyerHeaderActions .leftActions i:hover{
+    color: var(--secondaryCopperDark);
+}
+.buyerHeaderActions .leftActions .ordersHeader p{
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--gray);
+}
+.buyerHeaderActions .leftActions .ordersHeader p:hover{
+    color: var(--white);
+}
+
+.buyerHeaderActions .rightActions{
+    border: 1px solid var(--primaryCopper);
+    border-radius: 8px;
+    padding: 12px 25px;
+    background-color: var(--secondaryBlue);
+}
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .lowerLeft ul,
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .lowerRight ul
+{
+    gap: 30px;
+}
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower i{
+    margin: 0px 10px;
+}
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower li a{
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .icon{
+    width: 25px;
+    height: 25px;
+}
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi{
+    position: relative;
+}
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi .catsDropdownDiv{
+    position: absolute;
+    background: var(--white);
+    top: 150%;
+    left: 0;
+    padding: 15px 20px;
+    min-width: 980%;
+    z-index: 1;
+}
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi .catsDropdownDiv .catsDropdownContent{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+}
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi .catsDropdownDiv .cat{
+    color: var(--lightBlack);
+    cursor: pointer;
+    transition: 0.1s;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 3px 10px;
+}
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi .catsDropdownDiv .cat:hover{
+    background: var(--lightGray);
+}
+
+
+
+/* *************** BUYER FOOOTER COMPONENT **************** */
+
+.buyerFooterDiv{
+    padding: 30px 0px;
+    background: var(--primaryBlue);
+}
+
+.buyerFooterDiv .footerContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    color: var(--gray);
+}
+
+.buyerFooterDiv .footerContent a{
+    color: var(--darkGray);
+    transition: 0.2s;
+}
+.buyerFooterDiv .footerContent a:hover{
+    color: var(--white);
+}
+
+.buyerFooterDiv .footerContent .footerUpper, 
+.buyerFooterDiv .footerContent .footerMiddle, 
+.buyerFooterDiv .footerContent .footerLower
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.buyerFooterDiv .footerContent .footerMiddle{
+    width: 95%;
+    margin: 20px 0px;
+    align-items: start;
+}
+.buyerFooterDiv .footerContent .footerMiddle div{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.buyerFooterDiv .footerContent .footerMiddle div h4{
+    margin-bottom: 10px;
+    color: var(--secondaryCopper);
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.buyerFooterDiv .footerContent .footerLower .socialIcons{
+    display: flex;
+    gap: 15px;
+}
+.buyerFooterDiv .footerContent .footerLower .socialIcons i{
+    cursor: pointer;
+}
+
+.buyerFooterDiv .footerContent .footerCategoriesBtn i{
+    margin-left: 10px;
+}
+
+
+
+
+/* *************** HERO COMPONENT **************** */
+
+.heroDiv{
+    position: relative;
+    color: white;
+    height: 79vh;
+}
+
+.heroDiv,
+.heroDiv .heroContent .heroBtns
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.heroDiv .heroContent{
+    flex-direction: column;
+    text-align: center;
+    /* width: 40%; */
+}
+
+.heroDiv .heroContent .heroContentMain h1{
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 60px;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+}
+.heroDiv .heroContent .heroContentMain span{
+    font-family: "Bebas Neue", sans-serif;
+    color: var(--secondaryCopper);
+}
+.heroDiv .heroContent .heroContentMain p{
+    color: var(--darkGray);
+    font-size: 18px;
+    margin: 20px 0px;
+}
+
+.heroDiv .heroContent .heroBtns{
+    margin-top: 30px;
+    gap: 20px;
+}
+.heroDiv .heroContent .heroBtns a{
+    background-color: var(--primaryCopper);
+}
+.heroDiv .heroContent .heroBtns a:hover{
+    background: transparent;
+    border: 2px solid var(--primaryCopper);
+    color: var(--white);
+}
+.heroDiv .heroContent .heroBtns i{
+    margin-left: 8px;
+}
+/* 
+.heroDiv .heroBgs{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    z-index: -1;
+}
+.heroDiv .heroBgs .leftBox {
+    position: relative;
+    width: 50%;
+    height: 100%;
+    background: var(--primaryBlue);
+    box-shadow: 150px 0px 50px var(--primaryBlue);
+}
+.heroDiv .heroBgs .leftBox .box{
+    position: absolute;
+    top: 0%;
+    left: -50%;
+    background: var(--secondaryCopper);
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+    opacity: 0.1;
+    box-shadow: 200px 10px 200px 100px var(--secondaryCopper);
+}
+.heroDiv .heroBgs .rightImgDiv{
+    width: 60%;
+    z-index: -2;
+    position: relative;
+}
+.heroDiv .heroBgs .rightImgDiv .box{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: var(--primaryBlue);
+    opacity: 0.9;
+}
+.heroDiv .heroBgs .rightImgDiv img{
+    width: 100%;
+    height: 100%;
+} */
+
+.heroDiv::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url("../../public/assets/images/heroBg.jpg");
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1;
+    opacity: 0.1;
+}
+.heroDiv::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--primaryBlue);
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    opacity: 1;
+}
+
+
+
+/* *************** REGISTER + LOGIN PAGE **************** */
+
+.registerDiv .registerContent,
+.registerDiv .registerContent .registerRight,
+.thirdPartyLoginDiv,
+.thirdPartyLoginDiv a,
+.registerDiv .registerContent .registerRight .registerRightLower,
+
+.loginDiv .loginContent,
+.loginDiv .loginContent .loginRight,
+.loginDiv .loginContent .loginRight .loginRightLower
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.thirdPartyLoginDiv{
+    width: 100%;
+    gap: 12px;
+}
+
+.thirdPartyLoginDiv a{
+    flex-direction: row;
+    gap: 20px;
+}
+
+.thirdPartyLoginDiv .loginWithFacebook img,
+.thirdPartyLoginDiv .loginWithGoogle img{
+    width: 20px;
+}
+
+.thirdPartyLoginDiv a{
+    color: var(--lightBlack);
+    width: 100%;
+    background: var(--white);
+    padding: 8px 0px;
+    border: 1px solid var(--black);
+    border-radius: 32px;
+    transition: 0.2s;
+}
+.thirdPartyLoginDiv a:hover{
+    background: var(--lightGray);
+}
+
+
+.registerDiv .registerContent,
+.loginDiv .loginContent
+{
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 30px;
+    padding: 50px 0px;
+}
+
+.registerDiv .registerContent .registerRight,
+.loginDiv .loginContent .loginRight
+{
+    min-width: 50%;
+    gap: 30px;
+}
+
+.orLine{
+    position: relative;
+    color: var(--darkGray);
+    width: 100%;
+    text-align: center;
+}
+.orLine::before{
+    position: absolute;
+    content: "";
+    top: 50%;
+    left: 0%;
+    width: 45%;
+    height: 4%;
+    background: var(--darkGray);
+}
+.orLine::after{
+    position: absolute;
+    content: "";
+    top: 50%;
+    right: 0%;
+    width: 45%;
+    height: 4%;
+    background: var(--darkGray);
+}
+
+
+.registerDiv .registerContent .registerRight .registerRightLower,
+.loginDiv .loginContent .loginRight .loginRightLower
+{
+    width: 100%;
+    gap: 10px;
+}
+.registerDiv .registerContent .registerRight .registerRightLower .inputDiv,
+.loginDiv .loginContent .loginRight .loginRightLower .inputDiv
+{
+    width: 100%;
+}
+
+.registerDiv .registerContent .registerRight .registerRightLower .inputDiv .passwordFieldUpper,
+.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .passwordFieldUpper
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.registerDiv .registerContent .registerRight .registerRightLower .inputDiv .hidePasswordBtn,
+.registerDiv .registerContent .registerRight .registerRightLower .inputDiv .passInstructions,
+.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .hidePasswordBtn,
+.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .forgotPasswordBtn
+{
+    color: var(--darkGray);
+    font-size: 0.85rem;
+} 
+
+.registerDiv .registerContent .registerRight .registerRightLower .inputDiv .hidePasswordBtn,
+.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .hidePasswordBtn{
+    cursor: pointer;
+    font-size: 0.95rem;
+    margin-right: 5px;
+}
+
+.registerDiv .registerContent .registerRight .registerRightLower .inputDiv .primaryBtn,
+.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .primaryBtn
+{
+    width: 100%;
+    margin: 15px 0px;
+}
+
+.registerDiv .registerContent .registerRight .registerRightLower .loginInsteadDiv a,
+.loginDiv .loginContent .loginRight .loginRightLower .registerInsteadDiv a
+{
+    color: var(--primaryCopper);
+}
+
+
+
+/* *************** SAMPLE PROVISIONS COMPONENT **************** */
+
+.sampleProvisionsDiv {
+    margin: 100px 0px;
+}
+
+.sampleProvisionsDiv .sampleProvisionsUpper,
+.sampleProvisionsDiv .sampleProvisionsLower .productsDiv,
+.sampleProvisionsDiv .sampleProvisionsUpper .sampleProvisionsUpperRight {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sampleProvisionsDiv .sampleProvisionsUpper {
+    margin-bottom: 30px;
+}
+
+/* .sampleProvisionsDiv .sampleProvisionsUpper .sampleProvisionsUpperRight {
+    gap: 30px;
+} */
+
+.sampleProvisionsDiv .sampleProvisionsLower{
+    position: relative;
+}
+
+.sampleProvisionsDiv .sampleProvisionsLower .productsDiv {
+    gap: 20px;
+    width: 100%;
+    margin: auto;
+    justify-content: left;
+}
+  
+.sampleProvisionsDiv .sampleProvisionsLower .productsDiv .slideLeftBtn {
+    position: absolute;
+    left: -2%;
+    top: 45%;
+    background: var(--primaryCopper);
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+  
+.sampleProvisionsDiv .sampleProvisionsLower .productsDiv .slideRightBtn {
+    position: absolute;
+    right: -2%;
+    top: 45%;
+    background: var(--primaryCopper);
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+
+
+
+/* **************** PRODUCT CARD **************** */
+
+.product {
+    padding: 10px;
+    /* width: 266px; */
+    width: 19%;
+    border-radius: 8px;
+    background-color: var(--white);
+    box-shadow: 0.1px 0.1px 10px 1px var(--gray);
+    transform: translateY(0%);
+    transition: all 0.3s ease-out;
+    position: relative;
+}
+
+.product:hover{
+    transform: translateY(-1.5%);
+}
+/* .product:hover .hoverActions{
+    display: flex;
+} */
+
+.product .productImgDiv{
+    width: 100%;
+    height: 250px;
+}
+
+.product .productImgDiv img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.product .productTitle {
+    font-size: 1rem;
+    color: var(--black);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: inherit;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 3em;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+
+.product .productLower{
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.product .productLower .productLowerTop{
+    display: flex;
+    align-items: center;
+}
+.product .productLower .productLowerBottom{
+    display: flex;
+    gap: 15px;
+    justify-content: right;
+    align-items: baseline;
+}
+
+.product .productLower .productLowerTop{
+    font-size: 0.9rem;
+    gap: 5px;
+}
+
+.product .productLower .productLowerTop p{
+    color: var(--lightBlack);
+    font-weight: 600;
+}
+.product .productLower .productLowerTop span{
+    color: var(--primaryCopper);
+    font-weight: 500;
+}
+
+.product .productLower .productPrice{
+    color: var(--secondaryBlue);
+    font-size: 1.8rem;
+    margin-right: 5px;
+}
+.product .productLower .productDiscount{
+    color: var(--darkGray);
+    text-decoration: line-through;
+    font-size: 1.2rem;
+}
+
+.service .hoverActions,
+.product .hoverActions{
+    position: absolute;
+    right: 10%;
+    top: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--primaryCopper);
+    /* display: none; */
+}
+
+.service .hoverActions .iconDiv,
+.product .hoverActions .iconDiv{
+    background: var(--secondaryCopper);
+    width: 35px;
+    height: 35px;
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+.service .hoverActions .iconDiv:hover,
+.product .hoverActions .iconDiv:hover{
+    background: var(--primaryCopper);
+    color: var(--white);
+}
+
+
+
+
+
+
+/* **************** PRODUCT DETAILS **************** */
+
+.productDetailsDiv{
+    padding: 100px 0px;
+}
+
+.productDetailsDiv .upper{
+    display: flex;
+    justify-content: space-between;
+}
+
+.productDetailsDiv .upper .upperLeft{
+    width: 40%;
+}
+
+.productDetailsDiv .upper .upperLeft .productThumbnail{
+    width: 100%;
+    border-radius: 8px;
+}
+
+.productDetailsDiv .upper .upperLeft .productGalleryDiv{
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: left;
+}
+
+.productDetailsDiv .upper .upperLeft .productGalleryDiv img{
+    width: 15%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.productDetailsDiv .upper .upperRight{
+    width: 52%;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.productDetailsDiv .upper .upperRight .ratingsDiv{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.productDetailsDiv .upper .upperRight .productTitle{
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.productDetailsDiv .upper .upperRight .sellerInfo{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.productDetailsDiv .upper .upperRight .sellerInfo img{
+    width: 30px;
+    border-radius: 50%;
+}
+.productDetailsDiv .upper .upperRight .sellerInfo a{
+    color: var(--black);
+}
+
+.productDetailsDiv .upper .upperRight .productInfo{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.productDetailsDiv .upper .upperRight .productInfo p{
+    width: 49%;
+    color: var(--primaryCopper);
+}
+.productDetailsDiv .upper .upperRight .productInfo strong{
+    color: var(--black);
+}
+
+.productDetailsDiv .upper .upperRight .productPrice{
+    display: flex;
+    gap: 20px;
+    align-items: baseline;
+}
+.productDetailsDiv .upper .upperRight .productPrice .salesPrice{
+    font-size: 1.8rem;
+    color: var(--primaryCopper);
+}
+.productDetailsDiv .upper .upperRight .productPrice .price{
+    color: var(--darkGray);
+    text-decoration: line-through;
+    font-size: 1.2rem;
+}
+.productDetailsDiv .upper .upperRight .productPrice .off{
+    color: var(--white);
+    background-color: var(--primaryBlue);
+    padding: 8px 15px;
+}
+
+.productDetailsDiv .upper .upperRight .productActions{
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+.productDetailsDiv .upper .upperRight .productActions .primaryBtn, 
+.productDetailsDiv .upper .upperRight .productActions .primaryBtn2{
+    width: 100%;
+    text-align: center;
+} 
+
+.productDetailsDiv .upper .upperRight .productActions .addToCartBtn{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.productDetailsDiv .upper .upperRight .addToWishlistBtn{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--primaryCopper);
+    cursor: pointer;
+}
+
+.productDetailsDiv .upper .upperRight .buyNowBtn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.productDetailsDiv .lower{
+    margin-top: 100px;
+    border: 1px solid var(--gray);
+    border-radius: 8px;
+}
+
+.productDetailsDiv .lower .upper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.productDetailsDiv .lower .upper p{
+    color: var(--primaryCopper);
+    padding: 15px;
+    border-bottom: 5px solid transparent;
+    cursor: pointer;
+}
+.productDetailsDiv .lower .upper .active{
+    background: var(--primaryBlue);
+    color: var(--white);
+    border-color: var(--primaryCopper);
+}
+
+.productDetailsDiv .lower .innerLower{
+    padding: 25px;
+}
+
+
+
+
+
+/* **************** SERVICE CARD **************** */
+
+.service {
+    padding: 10px;
+    /* width: 266px; */
+    width: 19%;
+    border-radius: 8px;
+    background-color: var(--white);
+    box-shadow: 0.1px 0.1px 10px 1px var(--gray);
+    transform: translateY(0%);
+    transition: all 0.3s ease-out;
+}
+
+.service:hover{
+    transform: translateY(-1.5%);
+}
+
+.service .serviceImgDiv{
+    width: 100%;
+    height: 180px;
+}
+
+.service .serviceImgDiv img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.service .serviceTitle {
+    font-size: 1rem;
+    color: var(--black);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: inherit;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 3em;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+
+.service .serviceLower{
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.service .serviceLower .serviceLowerTop{
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    gap: 5px;
+}
+.service .serviceLower .serviceLowerBottom{
+    display: flex;
+    gap: 15px;
+    justify-content: right;
+    align-items: baseline;
+    color: var(--darkGray);
+}
+
+.service .serviceLower .serviceLowerTop p{
+    color: var(--lightBlack);
+    font-weight: 600;
+}
+.service .serviceLower .serviceLowerTop span{
+    color: var(--primaryCopper);
+    font-weight: 500;
+}
+
+.service .serviceLower .servicePrice{
+    color: var(--secondaryBlue);
+    font-size: 1.8rem;
+    margin-right: 5px;
+}
+.service .serviceLower .serviceDiscount{
+    color: var(--darkGray);
+    text-decoration: line-through;
+    font-size: 1.2rem;
+}
+
+
+
+
+
+
+/* **************** SETTINGS **************** */
+
+.settingsDiv{
+    padding: 50px 0px;
+}
+
+.settingsDiv .settingsContent{
+    padding: 50px;
+    background: var(--white);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.settingsDiv .becomeSellerDiv .section{
+    width: 100%;
+}
+.settingsDiv .becomeSellerDiv,
+.settingsDiv .becomeSellerDiv .becomeSellerContent{
+    padding: 0;
+}
+
+.settingsDiv .sellerSettings .primaryHeading{
+    margin-bottom: 15px;
+}
+
+.settingsDiv .changePassDiv{
+    width: 100%;
+    margin: 10px 0px;
+    user-select: none;
+}
+
+.settingsDiv .changePassDiv .upper{
+    display: flex;
+    justify-content: space-between;
+    border-top: 2px solid var(--gray);
+    border-bottom: 2px solid var(--gray);
+    padding: 10px;
+    cursor: pointer;
+    background: transparent;
+    transition: 0.1s;
+}
+.settingsDiv .changePassDiv .upper:hover{
+    background: var(--extraLightGray);
+}
+.settingsDiv .changePassDiv .upper .icon{
+    width: 25px;
+    height: 25px;
+}
+.settingsDiv .changePassDiv .lower{
+    margin-top: 20px;
+}
+.settingsDiv .changePassDiv .lower .secondaryBtn{
+    margin-top: 10px;
+}
+
+
+
+
+
+/* **************** CATEGORIES PAGE **************** */
+
+.categoriesDiv{
+    padding: 50px 0px;
+}
+.categoriesDiv .categoriesContent{
+    background: var(--white);
+    border-radius: 8px;
+    padding: 50px;
+}
+.categoriesDiv .serviceCatsDiv{
+    margin-top: 50px;
+}
+
+.categoriesDiv .categories{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 20px 0px;
+}
+.categoriesDiv .categories .category{
+    cursor: pointer;
+    border-bottom: 1px solid var(--gray);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--black);
+}
+.categoriesDiv .categories .category:hover{
+    background: var(--lightGray);
+}
+.categoriesDiv .categories .category .count{
+    color: var(--darkGray);
+    font-size: 0.9rem;
+}
+.categoriesDiv .categories .category i{
+    color: var(--darkGray);
+}
+
+
+
+/* **************** PRODUCTS & SERVICES PAGES **************** */
+
+.servicesDiv,
+.productsDiv{
+    margin: 50px 0px;
+}
+
+.servicesDiv .servicesContent,
+.productsDiv .productsContent{
+    display: flex;
+    justify-content: space-between;
+    gap: 60px;
+}
+
+.servicesDiv .filters,
+.productsDiv .filters{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 18%;
+}
+.servicesDiv .filters .filter,
+.productsDiv .filters .filter{
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.servicesDiv .filters .filter .row,
+.productsDiv .filters .filter .row{
+    color: var(--lightBlack);
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.1s;
+}
+.servicesDiv .filters .filter .row:hover,
+.productsDiv .filters .filter .row:hover{
+    color: var(--black);
+}
+.servicesDiv .filters .filter .row input,
+.productsDiv .filters .filter .row input{
+    margin-right: 5px;
+}
+.servicesDiv .filters .filter .active,
+.productsDiv .filters .filter .active{
+    color: var(--primaryCopper) !important;
+}
+
+.servicesDiv .left .categoryFilter .seeMore,
+.productsDiv .left .categoryFilter .seeMore{
+    cursor: pointer;
+    color: var(--primaryCopper);
+}
+.servicesDiv .left .ratingFilter .rating,
+.productsDiv .left .ratingFilter .rating{
+    display: flex;
+    gap: 2px;
+}
+.servicesDiv .left .ratingFilter .rating .up,
+.productsDiv .left .ratingFilter .rating .up{
+    margin-left: 10px;
+}
+
+.servicesDiv .right,
+.productsDiv .right{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 75%;
+}
+
+.servicesDiv .right .activeFilters ,
+.productsDiv .right .activeFilters {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.servicesDiv .right .activeFilters .filterTag ,
+.productsDiv .right .activeFilters .filterTag {
+    display: flex;
+    align-items: center;
+    background-color: var(--lightGray);
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+
+.servicesDiv .right .activeFilters .filterTag button ,
+.productsDiv .right .activeFilters .filterTag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+    margin-left: 10px;
+}
+
+.servicesDiv .right .resultsFound span,
+.productsDiv .right .resultsFound span{
+    color: var(--primaryCopper);
+    font-weight: 500;
+}
+
+.servicesDiv .right .services,
+.productsDiv .right .products{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 20px 0px;
+    margin-bottom: 50px;
+    gap: 25px;
+}
+.servicesDiv .right .services .service,
+.productsDiv .right .products .product{
+    width: 100%;
+}
+
+
+
+
+/* **************** WISHLIST PAGE **************** */
+
+.tableDiv .rows .row .field .cartCheck{
+    color: var(--success);
+}
+.tableDiv .rows .row .field .cartCheck:hover{
+    cursor: not-allowed;
+    color: var(--success);
+}
+
+.tableDiv .rows .row .field .arrowRight{
+    background: var(--lightGray);
+    border-radius: 50%;
+    padding: 3px;
+    transition: 0.1s;
+}
+.tableDiv .rows .row .field .arrowRight:hover{
+    background: var(--gray);
+}
+
+
+.tableDiv .rows .row .titleField .imgDiv{
+    width: 15%;
+    height: 100%;
+}
+.tableDiv .rows .row .titleField .imgDiv img{
+    width: 100%;
+}
+
+.tableDiv .rows .row .categoryField{
+    color: var(--primaryCopper);
+    cursor: pointer;
+    gap: 5px;   
+}
+
+.tableDiv .rows .row .sellerField{
+    cursor: pointer;
+    font-weight: 500;
+    gap: 5px;
+}
+
+
+
+/* **************** CART PAGE **************** */
+
+.cartDiv{
+    padding: 50px 0px;
+}
+
+.cartDiv .cartContent .section{
+    display: flex;
+    justify-content: space-between;
+}
+
+.cartDiv .left{
+    background: var(--white);
+    border-radius: 8px;
+    width: 70%;
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cartDiv .left .secondaryHeading .totalItems{
+    font-size: 1rem;
+    color: var(--darkGray);
+    margin-left: 5px;
+}
+
+.cartDiv .left .cartProducts{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.cartDiv .left .cartProducts .cartElem{
+    display: flex;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.cartDiv .left .cartProducts .cartElem .imgDiv{
+    width: 120px;
+    height: 120px;
+}
+.cartDiv .left .cartProducts .cartElem .imgDiv img{
+    width: 100%;
+    height: 100%;
+}
+
+.cartDiv .left .cartProducts .cartElem .cartElemContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+}
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop{
+    display: flex;
+    justify-content: space-between;
+}
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop .title{
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: inherit;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 1.5em;
+    width: 88%;
+}
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop .icon{
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    color: var(--darkGray);
+    transition: 0.1s;
+}
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop .icon:hover{
+    color: var(--black);
+}
+.cartDiv .left .cartProducts .cartElem .cartElemContent .shippingFee span{
+    color: var(--primaryCopper);
+}
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom{
+    display: flex;
+    justify-content: space-between;
+}
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .cartCountBtn{
+    width: 20%;
+    height: 80%;
+}
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .cartCountBtn p{
+    font-size: 14px;
+}
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .price{
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primaryCopper);
+}
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .price span{
+    font-size: 1.2rem;
+    color: var(--darkGray);
+    font-weight: 300;
+    text-decoration: line-through;
+    margin-right: 15px;
+}
+
+.cartDiv .summary{
+    background: var(--white);
+    border-radius: 8px;
+    width: 25%;
+    height: fit-content;
+    padding: 20px 30px;
+}
+.cartDiv .summary .summaryContent{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.cartDiv .summary .summaryContent .row{
+    display: flex;
+    justify-content: space-between;
+}
+.cartDiv .summary .summaryContent .row .subTotal{
+    color: var(--primaryCopper);
+}
+
+
+
+
+
+/* **************** POST REQUEST PAGE **************** */
+
+.postRequestDiv .requestRow .offersField{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px !important;
+    color: var(--primaryCopper);
+    font-weight: 600;
+    cursor: pointer;
+}
+.postRequestDiv .offersModalDiv .offersModelContent{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.postRequestDiv .rows .row .field .icon{
+    width: 18px;
+    height: 18px;
+}
+
+
+.offersModalDiv .popupContent{
+    min-width: 80%;
+}
+
+.offersModalDiv .offersRows .tableContent .header .title,
+.offersModalDiv .offersRows .tableContent .rows .row .titleField{
+    width: 400%;
+    font-size: 0.9rem;
+}
+
+.offersModalDiv .offersRows .tableContent .header .seller{
+    width: 150%;
+}
+.offersModalDiv .offersRows .tableContent .rows .row .sellerField{
+    width: 150%;
+    cursor: pointer;
+}
+
+.offersModalDiv .offersRows .tableContent .rows .row .field{
+    align-items: start;
+}
+.offersModalDiv .offersRows .tableContent .rows .row .field .icon{
+    margin-top: 3px;
+    width: 22px;
+    height: 22px;
+}
+
+
+
+
+
+/* **************** CHECKOUT PAGE **************** */
+
+.checkoutDiv{
+    padding: 50px 0px;
+}
+.checkoutDiv .checkoutContent{
+    display: flex;
+    justify-content: space-between;
+}
+
+.checkoutDiv .billingInfo{
+    padding: 20px 30px;
+    width: 60%;
+    background: var(--white);
+    height: fit-content;
+    border-radius: 8px;
+}
+.checkoutDiv .orderSummary{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px 30px;
+    width: 37%;
+    height: fit-content;
+    background: var(--white);
+    border-radius: 8px;
+}
+
+.checkoutDiv .orderSummary .item{
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+}
+.checkoutDiv .orderSummary .item .imgDiv{
+    width: 90px;
+}
+.checkoutDiv .orderSummary .item .imgDiv img{
+    width: 100%;
+    border-radius: 8px;
+}
+
+.checkoutDiv .orderSummary .item .itemContent{
+    width: 80%;
+}
+.checkoutDiv .orderSummary .item .itemContent .price{
+    color: var(--primaryCopper);
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+.checkoutDiv .orderSummary .row{
+    display: flex;
+    justify-content: space-between;
+}
+
+.checkoutDiv .orderSummary .row .subTotal{
+    color: var(--primaryCopper);
+}
+
+.paymentMethodsDiv{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 15px 0px;
+}
+.paymentMethodsDiv .paymentOptions{
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.paymentMethodsDiv .paymentOptions .paymentOption{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--gray);
+    padding: 40px;
+    cursor: pointer;
+    width: 100%;
+    transition: 0.2s;
+    border-radius: 8px;
+}
+.paymentMethodsDiv .paymentOptions .paymentOption.selected{
+    background: var(--primaryBlue);
+}
+.paymentMethodsDiv .paymentOptions .paymentOption:not(.selected):hover{
+    background: var(--lightGray);
+}
+.paymentMethodsDiv .paymentOptions .paymentOption .icon{
+    width: 40px;
+    height: 40px;
+    color: var(--secondaryBlue);
+}
+.paymentMethodsDiv .paymentOptions .paymentOption.selected .icon{
+    color: var(--white);
+}
+
+
+
+
+
+
+
+/* *************** SERVICE DETAILS PAGE **************** */
+
+
+.serviceDetailsDiv{
+    margin: 100px 0px;
+}
+.serviceDetailsDiv .serviceDetailsContent{
+    display: flex;
+    flex-direction: column;
+}
+
+.serviceDetailsDiv .serviceInfo{
+    display: flex;
+    justify-content: space-between;
+}
+
+.serviceDetailsDiv .serviceInfo .serviceImages{
+    width: 40%;
+}
+
+.serviceDetailsDiv .serviceInfo .serviceImages .serviceThumbnail{
+    width: 100%;
+    border-radius: 8px;
+}
+
+.serviceDetailsDiv .serviceInfo .serviceImages .serviceGalleryDiv{
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: left;
+}
+
+.serviceDetailsDiv .serviceInfo .serviceImages .serviceGalleryDiv img{
+    width: 15%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.serviceDetailsDiv .serviceInfo .info{
+    width: 52%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.serviceDetailsDiv .serviceInfo .info .ratingsDiv{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.serviceDetailsDiv .serviceInfo .info .title{
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.serviceDetailsDiv .serviceInfo .info .sellerInfo{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.serviceDetailsDiv .serviceInfo .info .sellerInfo img{
+    width: 30px;
+    border-radius: 50%;
+}
+.serviceDetailsDiv .serviceInfo .info .sellerInfo a{
+    color: var(--black);
+}
+
+.serviceDetailsDiv .serviceInfo .info .category{
+    color: var(--primaryCopper);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.serviceDetailsDiv .serviceInfo .info .servicePrice{
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+}
+.serviceDetailsDiv .serviceInfo .info .servicePrice .salesPrice{
+    font-size: 1.8rem;
+    color: var(--primaryCopper);
+}
+.serviceDetailsDiv .serviceInfo .info .servicePrice .price{
+    color: var(--darkGray);
+    text-decoration: line-through;
+    font-size: 1.2rem;
+    margin-left: 10px;
+}
+.serviceDetailsDiv .serviceInfo .info .servicePrice .off{
+    color: var(--white);
+    background-color: var(--primaryBlue);
+    padding: 8px 15px;
+}
+
+.serviceDetailsDiv .serviceInfo .info .serviceActions{
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+}
+.serviceDetailsDiv .serviceInfo .info .serviceActions .moreActions{
+    display: flex;
+    gap: 15px;
+}
+
+.serviceDetailsDiv .serviceInfo .info .serviceActions .addToWishlistBtn{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--primaryCopper);
+    cursor: pointer;
+}
+
+.serviceDetailsDiv .packages{
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 80px 0px;
+}
+.serviceDetailsDiv .packages .packageBox{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: var(--white);
+    border-radius: 8px;
+    min-width: 30%;
+    max-width: 40%;
+    height: fit-content;
+}
+.serviceDetailsDiv .packages .packageBox .upper{
+    text-align: center;
+    padding-top: 15px;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+.serviceDetailsDiv .packages .packageBox .BASIC{
+    color: var(--danger);
+}
+.serviceDetailsDiv .packages .packageBox .STANDARD{
+    color: var(--secondaryBlue);
+}
+.serviceDetailsDiv .packages .packageBox .ULTIMATE{
+    color: var(--warning);
+}
+.serviceDetailsDiv .packages .packageBox .lower{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 10px 30px;
+    padding-bottom: 25px;
+}
+.serviceDetailsDiv .packages .packageBox .lower .title{
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+.serviceDetailsDiv .packages .packageBox .lower .info{
+    display: flex;
+    justify-content: space-between;
+    color: var(--lightBlackPrimary);
+    font-weight: 500;
+    align-items: center;
+}
+.serviceDetailsDiv .packages .packageBox .lower .info .priceDetails{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.serviceDetailsDiv .packages .packageBox .lower .info .priceDetails .discount{
+    color: var(--darkGray);
+    text-decoration: line-through;
+    font-size: 1.2rem;
+}
+.serviceDetailsDiv .packages .packageBox .lower .info .priceDetails .price{
+    color: var(--white);
+    background: var(--lightBlackPrimary);
+    padding: 6px 20px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+}
+.serviceDetailsDiv .aboutService,
+.serviceDetailsDiv .aboutSeller{
+    background: var(--white);
+    padding: 20px 30px;
+    margin-bottom: 80px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.serviceDetailsDiv .aboutSeller .upper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.serviceDetailsDiv .aboutSeller .upper .sellerProfile{
+    display: flex;
+    gap: 25px;
+    font-size: 0.9rem;
+    align-items: center;
+}
+.serviceDetailsDiv .aboutSeller .upper .sellerProfile .imgDiv{
+    width: 80px;
+    height: 80px;
+}
+.serviceDetailsDiv .aboutSeller .upper .sellerProfile .imgDiv img{
+    width: 100%;
+    border-radius: 50%;
+}
+.serviceDetailsDiv .aboutSeller .upper .sellerProfile .profileInfo{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.serviceDetailsDiv .aboutSeller .upper .sellerProfile .profileInfo .username{
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--lightBlackPrimary);
+}
+.serviceDetailsDiv .aboutSeller .upper .sellerProfile .profileInfo .username:hover{
+    color: var(--black);
+}
+.serviceDetailsDiv .aboutSeller .upper .sellerProfile .profileInfo .ratingsDiv{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.serviceDetailsDiv .aboutSeller .upper .sellerInfo{
+    display: flex;
+    gap: 80px;
+    margin-right: 20px;
+}
+.serviceDetailsDiv .aboutSeller .upper .sellerInfo .col p{
+    font-size: 0.85rem;
+}
+.serviceDetailsDiv .sampleProvisionsDiv{
+    margin: 0;
+    margin-bottom: 80px;
+}
+
+
+
+
+/* *************** REQUIREMENTS PAGE **************** */
+
+.requirementsDiv{
+    margin: 50px 0px;
+}
+.requirementsDiv .requirementsContent{
+    background: var(--white);
+    padding: 20px 40px;
+}
+
+
+
+
+
+/* *************** CHAT PAGE **************** */
+
+.chatDiv{
+    margin: 50px 0px;
+}
+.chatDiv .chatContent{
+    background: var(--white);
+    border-radius: 8px;
+    display: flex;
+    height: 110vh;
+}
+.chatDiv .icon{
+    cursor: pointer;
+    color: var(--darkGray);
+    transition: 0.2s;
+}
+.chatDiv .icon:hover{
+    color: var(--black);
+}
+.chatDiv .content{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.chatDiv .chatsList,
+.chatDiv .chatRoom,
+.chatDiv .otherInfo {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.chatDiv .chatsList {
+    width: 30%;
+    border-right: 2px solid var(--lightGray);
+}
+
+.chatDiv .chatRoom {
+    position: relative;
+    width: 40%;
+    border-right: 2px solid var(--lightGray);
+}
+
+.chatDiv .otherInfo {
+    width: 30%;
+}
+
+.chatDiv .header{
+    padding: 20px 30px;
+    border-bottom: 2px solid var(--lightGray);
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+.chatDiv .header .highlight{
+    border-radius: 50%;
+    background: var(--secondaryCopper);
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primaryCopper);
+    font-size: 0.8rem;
+}
+.chatDiv .chatsList .header{
+    justify-content: center;
+    gap: 15px;
+}
+.chatDiv .chatRoom .header{
+    gap: 15px;
+}
+.chatDiv .chatRoom .header img{
+    width: 30px;
+    border-radius: 50%;
+}
+.chatDiv .otherInfo .header{
+    justify-content: space-between;
+}
+
+.chatDiv .chatsList .chatBoxes{
+    padding: 20px 30px;
+    height: 100%;
+    overflow-y: auto;
+}
+.chatDiv .chatsList .chatBoxes .chatBox{
+    display: flex;
+    gap: 15px;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 8px;
+}
+.chatDiv .chatsList .chatBoxes .active{
+    background: var(--lightGray);
+}
+.chatDiv .chatsList .chatBoxes .chatBox .imgDiv{
+    width: 50px;
+}
+.chatDiv .chatsList .chatBoxes .chatBox .imgDiv img{
+    width: 100%;
+    border-radius: 10px;
+}
+.chatDiv .chatsList .chatBoxes .chatBox .lastMessage{
+    font-size: 0.7rem;
+    color: var(--darkGray);
+    margin-top: 5px;
+}
+
+.chatDiv .chatRoom .content{
+    padding: 20px 0px;
+}
+.chatDiv .chatRoom .messages{
+    height: 100%;
+    overflow-y: auto;
+}
+
+.chatDiv .chatRoom .messages .message{
+    padding: 5px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.chatDiv .chatRoom .messages .message .senderName{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.chatDiv .chatRoom .messages .message .senderName span{
+    color: var(--darkGray);
+    font-size: 0.7rem;
+    font-weight: 300;
+}
+
+.chatDiv .chatRoom .messages .message.received{
+    background: var(--extraLightGray);
+    padding: 10px 30px;
+}
+
+.chatDiv .chatRoom .messages .message.received .senderName{
+    color: var(--primaryCopper);
+}
+
+
+.chatDiv .chatRoom .messages .message .documentBox {
+    display: flex;
+    align-items: center;
+    background-color: var(--primaryBlue);
+    padding: 12px 20px;
+    border-radius: 8px;
+    width: fit-content;
+    color: var(--white);
+    gap: 15px;
+}
+
+.chatDiv .chatRoom .messages .message .documentBox .fileInfo a {
+    color: var(--secondaryCopper);
+}
+
+.chatDiv .chatRoom .writeMessageDiv{
+    height: fit-content;
+    background: var(--lightGray);
+    width: 100%;
+    padding: 10px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.chatDiv .chatRoom .writeMessageDiv .upper input{
+    border: none;
+    outline: none;
+    background: var(--lightGray);
+    width: 100%;
+}
+.chatDiv .chatRoom .writeMessageDiv .lower{
+    display: flex;
+    justify-content: space-between;
+}
+.chatDiv .chatRoom .writeMessageDiv .lower .left{
+    display: flex;
+    align-items: center;
+}
+.chatDiv .chatRoom .writeMessageDiv .lower .left .attachIcon{
+    margin-right: 15px;
+}
+.chatDiv .chatRoom .writeMessageDiv .lower .left #fileInput{
+    display: none;
+}
+
+.chatDiv .chatRoom .writeMessageDiv .filePreview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--lightBlack);
+}
+
+.chatDiv .chatRoom .writeMessageDiv .filePreview p {
+    margin: 0;
+    font-weight: 500;
+}
+
+.chatDiv .chatRoom .writeMessageDiv .filePreview .removeFileIcon{
+    cursor: pointer;
+}
+
+.chatDiv .chatRoom .messages .offerMessage{
+    border: 1px solid var(--gray);
+    background: var(--extraLightGray);
+}
+
+.chatDiv .chatRoom .messages .offerMessage .upper,
+.chatDiv .chatRoom .messages .offerMessage .middle,
+.chatDiv .chatRoom .messages .offerMessage .bottom,
+.chatDiv .chatRoom .messages .offerMessage .buttonsDiv{
+    padding: 10px 20px;
+}
+
+.chatDiv .chatRoom .messages .offerMessage .upper{
+    border-bottom: 1px solid var(--gray);
+    display: flex;
+    align-items: center;
+}
+.chatDiv .chatRoom .messages .offerMessage .upper .price{
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primaryCopper);
+    margin-left: 20px;
+}
+.chatDiv .chatRoom .messages .offerMessage .bottom{
+    border-top: 1px solid var(--gray);
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
+.chatDiv .chatRoom .messages .offerMessage .bottom .row{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.chatDiv .chatRoom .messages .offerMessage .buttonsDiv{
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: right;
+}
+.chatDiv .chatRoom .messages .offerMessage .buttonsDiv a{
+    font-size: 0.75rem;
+    padding: 6px 18px;
+}
+
+.chatDiv .otherInfo .participantDetails{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 30px;
+}
+.chatDiv .otherInfo .participantDetails .row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chatDiv .nothingFound{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+.chatDiv .nothingFound .icon{
+    width: 100px;
+    height: 100px;
+    color: var(--darkGray);
+}
+
+.chatDiv .otherInfo .sampleProvisionsDiv{
+    margin: 10px 0px;
+}
+
+.chatDiv .otherInfo .sampleProvisionsDiv .sampleProvisionsLower .productsDiv{
+    padding: 0px 20px;
+}
+.chatDiv .otherInfo .sampleProvisionsDiv .sampleProvisionsLower .productsDiv .product{
+    width: 100%;
+}
+.chatDiv .otherInfo .sampleProvisionsDiv .sampleProvisionsLower .productsDiv .service{
+    width: 100%;
+}
+.chatDiv .popupDiv .showQuoteModelContent{
+    width: 55%;
+}
+
+
+
+
+
+/* *************** CONTACT PAGE **************** */
+
+.contactDiv .contactContent{
+    background: var(--white);
+    border-radius: 8px;
+    margin: 50px 0px;
+    padding: 50px;
+}
+
+
+
+
+/* *************** PROFILE PAGE **************** */
+
+.profileDiv{
+    padding-bottom: 100px;
+}
+.profileDiv .bg{
+    height: 18vh;
+    width: 100%;
+    background: var(--secondaryBlue);
+    position: relative;
+}
+.profileDiv .bg img{
+    position: absolute;
+    width: 150px;
+    bottom: -60%;
+    left: 45%;
+}
+
+.profileDiv .profileContent{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 120px;
+}
+
+.profileDiv .profileContent .upper{
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+}
+
+.profileDiv .profileContent .upper .sellerInfo,
+.profileDiv .profileContent .upper .aboutSeller{
+    height: fit-content;
+    padding: 20px 30px;
+    border-radius: 8px;
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 30%;
+}
+
+.profileDiv .profileContent .upper .sellerInfo .row{
+    display: flex;
+    justify-content: space-between;
+}

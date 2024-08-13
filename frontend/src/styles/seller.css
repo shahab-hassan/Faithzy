@@ -1,0 +1,734 @@
+/* ********************* SELLER HEADER ********************* */
+
+.sellerHeaderDiv{
+    background-color: var(--primaryBlue);
+    color: white;
+    /* height: 13vh; */
+}
+
+
+.sellerHeaderDiv .sellerHeaderContent, 
+.sellerHeaderDiv .sellerHeaderContent, .sellerHeaderActions,
+.sellerHeaderDiv .sellerHeaderContent, .sellerHeaderActions, .leftActions,
+.sellerHeaderDiv .sellerHeaderContent, .sellerHeaderActions, .rightActions,
+
+.sellerHeaderDiv .sellerHeaderContent nav ul
+
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.sellerHeaderDiv .sellerHeaderContent{
+    padding: 30px 0px;
+    justify-content: space-between;
+}
+
+.sellerHeaderActions{
+    gap: 50px;
+}
+.sellerHeaderActions i{
+    font-size: 20px;    
+    cursor: pointer;
+    color: var(--gray);
+    transition: 0.1s;
+}
+.sellerHeaderActions i:hover{
+    color: var(--white);
+}
+
+.sellerHeaderActions .leftActions,
+.sellerHeaderActions .rightActions
+{
+    gap: 25px;
+}
+.sellerHeaderActions .leftActions i{
+    color: var(--secondaryCopper);
+    transition: 0.1s;
+}
+.sellerHeaderActions .leftActions i:hover{
+    color: var(--secondaryCopperDark);
+}
+
+.sellerHeaderActions .rightActions{
+    border: 1px solid var(--primaryCopper);
+    border-radius: 8px;
+    padding: 12px 25px;
+    background-color: var(--secondaryBlue);
+}
+
+.sellerHeaderDiv .sellerHeaderContent nav ul
+{
+    gap: 40px;
+}
+
+
+
+
+/* ********************* BECOME A SELLER PAGE ********************* */
+
+.becomeSellerDiv{
+    padding: 50px 0px
+}
+
+.becomeSellerDiv .becomeSellerContent{
+    background-color: white;
+    border-radius: 8px;
+    padding: 50px 0px;
+}
+
+.becomeSellerDiv form{
+    margin: 30px 0px;
+}
+
+.becomeSellerDiv form .inputDiv .uploadDiv {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    margin: 20px 0px;
+}
+
+.becomeSellerDiv form .inputDiv .uploadDiv img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.becomeSellerDiv form .inputDiv .uploadInput{
+    display: none;
+}  
+
+
+
+
+
+/* ********************* CREATE PRODUCT PAGE ********************* */
+
+.createProductDiv {
+    padding: 50px 0px;
+  }
+  
+.createProductDiv .createProductContent {
+    background-color: white;
+    border-radius: 8px;
+    padding: 50px;
+}
+  
+.createProductDiv .createProductDetails {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 50px;
+    margin-top: 30px;
+}
+  
+.createProductDiv .createProductDetails form {
+    /* flex: 1; */
+    width: 70%;
+}
+  
+.createProductDiv .createProductDetails .createProductGallery {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 20px;
+    width: 23%;
+}
+  
+.createProductDiv .createProductDetails .createProductGallery .productThumbnailContent,
+.createProductDiv .createProductDetails .createProductGallery .productGalleryContent {
+    width: 300px;
+    height: 300px;
+    border: 1px dashed  var(--darkGray);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.createProductDiv .createProductDetails .createProductGallery .productGalleryContent {
+    height: fit-content;
+}
+  
+.createProductDiv .createProductDetails .createProductGallery .productThumbnailContent .uploadLabel{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: var(--gray);
+    border-radius: 8px;
+    cursor: pointer;
+}
+.createProductDiv .createProductDetails .createProductGallery .productThumbnailContent .uploadLabel img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.createProductDiv .createProductDetails .createProductGallery .productThumbnailContent input{
+    display: none;
+}
+.createProductDiv .createProductDetails .createProductGallery .productGalleryContent input{
+    display: none;
+}
+
+.createProductDiv .createProductDetails .createProductGallery .productGalleryContent .galleryImages{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+    gap: 10px;
+    cursor: pointer;
+}
+.createProductDiv .createProductDetails .createProductGallery .productGalleryContent .galleryImages:has(.uploadIcon){
+    justify-content: center;
+}
+
+.createProductDiv .createProductDetails .createProductGallery .productGalleryContent .galleryImages img{
+    width: 58px;
+    height: 58px;
+    object-fit: cover;
+}
+
+.createProductDiv .createProductDetails .createProductGallery .productGalleryUpper,
+.createProductDiv .createProductDetails .createProductGallery .productThumbnailUpper
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.createProductDiv .createProductDetails .createProductGallery .clearBtn{
+    cursor: pointer;
+}
+
+
+
+
+
+/* ********************* SELLER BASIC DETAILS COMPONENT ********************* */
+
+.sellerBasicDetailsDiv{
+    position: relative;
+    margin-top: 100px;
+}
+
+.sellerBasicDetailsDiv .profileImageDiv{
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    top: -10%;
+    left: 44.5%;
+}
+.sellerBasicDetailsDiv .profileImageDiv img{
+    width: 100%;
+    height: 100%;
+}
+
+.sellerBasicDetailsDiv .sellerBasicDetailsContent{
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    border-radius: 8px;
+    padding: 40px 50px;
+    gap: 50px;
+}
+
+.sellerBasicDetailsDiv .upper{
+    display: flex;
+    justify-content: space-around;
+    height: 200px;
+}
+
+.sellerBasicDetailsDiv .upperLeft,
+.sellerBasicDetailsDiv .upperRight
+{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    width: 35%;
+}
+
+.sellerBasicDetailsDiv .upperLeft a{
+    width: 100%;
+    text-align: center;
+}
+.sellerBasicDetailsDiv .upperLeft .previewProfileBtn{
+    margin-top: 10px;
+}
+
+.sellerBasicDetailsDiv .upperRight div{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
+
+
+
+/* ********************* SELLER PRODUCTS ********************* */
+
+.sellerProductsDiv{
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.sellerProductsDiv .sellerProductsHeader{
+    background: var(--white);
+    border-radius: 8px;
+    padding: 20px 25px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sellerProductsDiv .sellerProductsHeader .primaryBtn{
+    height: 50px;   
+    width: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.sellerProductsDiv .sellerProducts{
+    display: flex;
+    justify-content: left;
+    gap: 17.5px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+
+
+
+/* **************** SELLER PRODUCT CARD **************** */
+
+.sellerProductCardDiv {
+    padding: 10px;
+    /* width: 266px; */
+    width: 19%;
+    border-radius: 8px;
+    background-color: var(--white);
+    box-shadow: 0.1px 0.1px 10px 1px var(--gray);
+    user-select: none;
+}
+
+.sellerProductCardDiv .productImgDiv{
+    width: 100%;
+    height: 250px;
+}
+
+.sellerProductCardDiv .productImgDiv img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.sellerProductCardDiv .productUpper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    color: var(--primaryCopper);
+    font-size: 0.85rem;
+}
+
+.sellerProductCardDiv .productUpper .ellipsis{
+    position: relative;
+    font-size: 22px;
+    color: var(--darkGray);
+    margin-right: 8px;
+    cursor: pointer;
+    transition: 0.1s;
+}
+.sellerProductCardDiv .productUpper .ellipsis i:hover{
+    color: var(--black);
+}
+
+.sellerProductCardDiv .productUpper .ellipsis .optionsMenu{
+    position: absolute;
+    background-color: white;
+    box-shadow: 0.1px 0.1px 10px 1px var(--gray);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0px;
+    width: 500%;
+    text-align: center;
+    font-size: 0.8rem;
+    top: 100%;
+    right: 0;
+}
+.sellerProductCardDiv .productUpper .ellipsis .optionsMenu a{
+    color: var(--darkGray);
+    transition: 0.1s;
+}
+.sellerProductCardDiv .productUpper .ellipsis .optionsMenu a:hover{
+    color: var(--black);
+}
+
+.sellerProductCardDiv .productTitle {
+    font-size: 1rem;
+    color: var(--black);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: inherit;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 3em;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+
+.sellerProductCardDiv .productLower{
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sellerProductCardDiv .productLower .productLowerTop{
+    display: flex;
+    align-items: center;
+}
+.sellerProductCardDiv .productLower .productLowerBottom{
+    display: flex;
+    gap: 15px;
+    justify-content: right;
+    align-items: baseline;
+}
+
+.sellerProductCardDiv .productLower .productLowerTop{
+    font-size: 0.9rem;
+    gap: 5px;
+}
+
+.sellerProductCardDiv .productLower .productLowerTop p{
+    color: var(--lightBlack);
+    font-weight: 600;
+}
+.sellerProductCardDiv .productLower .productLowerTop span{
+    color: var(--primaryCopper);
+    font-weight: 500;
+}
+
+.sellerProductCardDiv .productLower .productPrice{
+    color: var(--secondaryBlue);
+    font-size: 1.8rem;
+    margin-right: 5px;
+}
+.sellerProductCardDiv .productLower .productDiscount{
+    color: var(--darkGray);
+    text-decoration: line-through;
+    font-size: 1.2rem;
+}
+
+
+
+
+/* ********************* CREATE SERVICE PAGE ********************* */
+
+.createServiceDiv{
+    padding: 50px 0px;
+}
+
+.createServiceDiv .createServiceContent{
+    padding: 50px;
+    background: var(--white);
+    border-radius: 8px;
+}
+
+.createServiceDiv .form{
+    margin-top: 30px;
+}
+
+.createServiceDiv .servicePackagesDiv{
+    display: flex;
+    align-items: top;
+    justify-content: space-between;
+    margin: 50px 0px;
+    height: 100%;
+    gap: 40px;
+}
+.createServiceDiv .verticalLine{
+    height: 410px;
+}
+.createServiceDiv .servicePackagesDiv .servicePackage .secondaryHeading{
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.createServiceDiv .form .reqQuestions{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0px;
+}
+.createServiceDiv .form .reqQuestions .reqQuestion{
+    display: flex;
+    justify-content: space-between;
+}
+.createServiceDiv .form .reqQuestions .reqQuestion, .icons .icon{
+    cursor: pointer;
+    color: var(--darkGray);
+    margin-left: 15px;
+}
+.createServiceDiv .form .requirementsDiv{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: right;
+    align-items: end;
+}
+.createServiceDiv .form .requirementsDiv button{
+    width: fit-content;
+}
+
+
+
+
+
+/* ********************* Gallery Component ********************* */
+
+.galleryDiv{
+    width: 100%;
+}
+
+.galleryDiv .galleryContent {
+    width: 100%;
+    height: fit-content;
+    border: 1px dashed  var(--darkGray);
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.galleryDiv .galleryContent  input{
+    display: none;
+}
+
+.galleryDiv .galleryContent .galleryImages{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-wrap: wrap;
+    gap: 10px;
+    cursor: pointer;
+    width: 100%;
+}
+.galleryDiv .galleryContent .galleryImages:has(.uploadIcon){
+    justify-content: center;
+}
+
+.galleryDiv .galleryContent .galleryImages img{
+    width: 17%;
+    max-height: 200px;
+    object-fit: contain;
+}
+
+.galleryDiv .galleryUpper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.galleryDiv .galleryUpper .imagesLimit{
+    color: var(--darkGray);
+    font-size: 0.9rem;
+}
+.galleryDiv .galleryUpper .clearBtn{
+    cursor: pointer;
+}
+
+
+
+
+
+
+/* ********************* SELLER SERVICES ********************* */
+
+.sellerServicesDiv{
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.sellerServicesDiv .sellerServicesHeader{
+    background: var(--white);
+    border-radius: 8px;
+    padding: 20px 25px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sellerServicesDiv .sellerServicesHeader .primaryBtn{
+    height: 50px;   
+    width: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.sellerServicesDiv .sellerServices{
+    display: flex;
+    justify-content: left;
+    gap: 17.5px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+
+
+
+/* **************** SELLER SERVICE CARD **************** */
+
+.sellerServiceCardDiv {
+    padding: 10px;
+    /* width: 266px; */
+    width: 19%;
+    border-radius: 8px;
+    background-color: var(--white);
+    box-shadow: 0.1px 0.1px 10px 1px var(--gray);
+    user-select: none;
+}
+
+.sellerServiceCardDiv .serviceImgDiv{
+    width: 100%;
+    height: 180px;
+}
+
+.sellerServiceCardDiv .serviceImgDiv img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.sellerServiceCardDiv .serviceUpper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    color: var(--primaryCopper);
+    font-size: 0.85rem;
+}
+
+.sellerServiceCardDiv .serviceUpper .ellipsis{
+    position: relative;
+    font-size: 22px;
+    color: var(--darkGray);
+    margin-right: 8px;
+    cursor: pointer;
+    transition: 0.1s;
+}
+.sellerServiceCardDiv .serviceUpper .ellipsis i:hover{
+    color: var(--black);
+}
+
+.sellerServiceCardDiv .serviceUpper .ellipsis .optionsMenu{
+    position: absolute;
+    background-color: white;
+    box-shadow: 0.1px 0.1px 10px 1px var(--gray);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0px;
+    width: 500%;
+    text-align: center;
+    font-size: 0.8rem;
+    top: 100%;
+    right: 0;
+}
+.sellerServiceCardDiv .serviceUpper .ellipsis .optionsMenu a{
+    color: var(--darkGray);
+    transition: 0.1s;
+}
+.sellerServiceCardDiv .serviceUpper .ellipsis .optionsMenu a:hover{
+    color: var(--black);
+}
+
+.sellerServiceCardDiv .serviceTitle {
+    font-size: 1rem;
+    color: var(--black);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: inherit;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 3em;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+
+.sellerServiceCardDiv .serviceLower{
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* .sellerServiceCardDiv .serviceLower .serviceLowerTop{
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    gap: 5px;
+} */
+
+.sellerServiceCardDiv .serviceLower .serviceLowerBottom{
+    display: flex;
+    gap: 15px;
+    justify-content: right;
+    align-items: baseline;
+}
+
+/* .sellerServiceCardDiv .serviceLower .serviceLowerTop p{
+    color: var(--lightBlack);
+    font-weight: 600;
+} */
+
+/* .sellerServiceCardDiv .serviceLower .serviceLowerTop span{
+    color: var(--primaryCopper);
+    font-weight: 500;
+} */
+
+.sellerServiceCardDiv .serviceLower .servicePrice{
+    color: var(--secondaryBlue);
+    font-size: 1.8rem;
+    margin-right: 5px;
+}
+.sellerServiceCardDiv .serviceLower .serviceDiscount{
+    color: var(--darkGray);
+    text-decoration: line-through;
+    font-size: 1.2rem;
+}
+
+
+
+
+/* ********************* TRADELEAD PAGE ********************* */
+
+.requestDetailsModelDiv .requestDetailsModelContent{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.requestDetailsModelDiv .requestDetailsModelContent .categorySpan{
+    color: var(--primaryCopper);
+}

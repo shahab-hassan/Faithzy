@@ -1,0 +1,489 @@
+/* ********************* ORDERS PAGE ********************* */
+
+.ordersDiv{
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.ordersDiv .upper{
+    margin-bottom: 30px;
+    background: white;
+    padding: 20px 0px;
+    border-radius: 8px;
+}
+
+.ordersDiv .upper .section{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ordersDiv .upper .upperRight{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.ordersDiv .orders{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.ordersDiv .orders .subOrders{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+
+
+
+
+/* ********************* SELLER & BUYER PRODUCT ORDER CARD ********************* */
+
+.sellerProductOrderCard,
+.buyerProductOrderCard{
+    background: var(--white);
+    padding: 0px 30px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+}
+
+.sellerProductOrderCard .order,
+.buyerProductOrderCard .order{
+    display: flex;
+    justify-content: space-between;
+}
+.sellerProductOrderCard .actionsDiv,
+.buyerProductOrderCard .actionsDiv{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 0.9rem;
+    margin: 15px 0px;
+}
+.sellerProductOrderCard .actionsDiv a,
+.buyerProductOrderCard .actionsDiv a,
+.sellerProductOrderCard .actionsDiv div,
+.buyerProductOrderCard .actionsDiv div{
+    color: var(--lightBlack);
+    font-weight: 500;
+    transition: 0.2s;
+    cursor: pointer;
+}
+.sellerProductOrderCard .actionsDiv a:hover,
+.buyerProductOrderCard .actionsDiv a:hover,
+.sellerProductOrderCard .actionsDiv div:hover,
+.buyerProductOrderCard .actionsDiv div:hover{
+    color: var(--black);
+    font-weight: 500;
+}
+.sellerProductOrderCard .order .left,
+.buyerProductOrderCard .order .left{
+    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0px;
+}
+.sellerProductOrderCard .order .left .leftLeft,
+.buyerProductOrderCard .order .left .leftLeft{
+    display: flex;
+    gap: 15px;
+    min-width: 50%;
+    max-width: 55%;
+}
+.sellerProductOrderCard .order .left .leftLeft .imgDiv,
+.buyerProductOrderCard .order .left .leftLeft .imgDiv{
+    width: 90px;
+}
+.sellerProductOrderCard .order .left .leftLeft .imgDiv img,
+.buyerProductOrderCard .order .left .leftLeft .imgDiv img{
+    border-radius: 8px;
+    width: 100%;
+}
+.sellerProductOrderCard .order .left .leftLeft .productInfo,
+.buyerProductOrderCard .order .left .leftLeft .productInfo{
+    width: 100%;
+}
+.sellerProductOrderCard .order .left .leftLeft .category,
+.buyerProductOrderCard .order .left .leftLeft .category{
+    color: var(--primaryCopper);
+    font-weight: 500;
+}
+.sellerProductOrderCard .order .left .leftRight,
+.buyerProductOrderCard .order .left .leftRight{
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    gap: 60px;
+    min-width: 25%;
+}
+.sellerProductOrderCard .order .left .leftRight .column,
+.buyerProductOrderCard .order .left .leftRight .column{
+    text-align: center;
+}
+.sellerProductOrderCard .order .left .leftRight .column p,
+.buyerProductOrderCard .order .left .leftRight .column p{
+    font-size: 1.2rem;
+    color: var(--darkGray);
+}
+.sellerProductOrderCard .order .left .leftRight .column a,
+.sellerProductOrderCard .order .left .leftRight .column div,
+.buyerProductOrderCard .order .left .leftRight .column a,
+.buyerProductOrderCard .order .left .leftRight .column div{
+    font-weight: 600;
+    color: var(--black);
+}
+.sellerProductOrderCard .order .right,
+.buyerProductOrderCard .order .right{
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 20px 0px;
+    border-left: 2px solid var(--lightGray);
+}
+.sellerProductOrderCard .order .right .price,
+.buyerProductOrderCard .order .right .price{
+    color: var(--primaryCopper);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+
+
+
+
+
+/* ********************* PRODUCT ORDER DETAILS PAGE ********************* */
+
+.orderDetailsDiv{
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+.orderDetailsDiv .orderDetailsContent{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.orderDetailsDiv .orders .upper{
+    background: var(--primaryBlue);
+    color: var(--white);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--lightGray);
+    font-size: 0.9rem;
+}
+.orderDetailsDiv .orders:has(.buyerProductOrderDetailsCard) .upper{
+    border-radius: 8px;
+}
+.orderDetailsDiv .orders .upper .upperLeft .orderId{
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+}
+.orderDetailsDiv .orders .upper .upperRight{
+    font-size: 1.8rem;
+    color: var(--secondaryCopper);
+    font-weight: 500;
+}
+
+.sellerProductOrderDetailsCard{
+    border-radius: 8px;
+    background: var(--white);
+    padding: 0px 40px;
+}
+.sellerProductOrderDetailsCard .left,
+.buyerProductOrderDetailsCard .left{
+    width: 100% !important;
+}
+
+.sellerProductOrderDetailsCard .actionsDiv div,
+.buyerProductOrderDetailsCard .actionsDiv div{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    user-select: none;
+}
+
+.buyerProductOrderDetailsCard{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+.buyerProductOrderDetailsCard .buyerProductOrderCard{
+    padding: 0px 40px;
+}
+
+.orderDetailsDiv .billingInfo{
+    background: var(--white);
+    border-radius: 8px;
+    padding: 20px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.orderDetailsDiv .billingInfo .buyerDetails{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.orderDetailsDiv .billingInfo .buyerDetails .row{
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+
+
+.orderDetailsDiv .orderStatusDetails{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.orderDetailsDiv .orderStatusDetails .trackOrderRow{
+    position: relative;
+    padding-left: 40px;
+}
+.orderDetailsDiv .orderStatusDetails .trackOrderRow::before{
+    position: absolute;
+    content: "";
+    width: 25px;
+    height: 25px;
+    background: var(--secondaryCopper);
+    border-radius: 50%;
+    top: 0%;
+    left: 0px;
+}
+.orderDetailsDiv .orderStatusDetails .trackOrderRow::after{
+    position: absolute;
+    content: "";
+    width: 2px;
+    height: 50%;
+    background: var(--secondaryCopper);
+    top: 24px;
+    left: 12px;
+}
+
+.orderDetailsDiv .orderStatusDetails .inputDiv .dropdownPlus{
+    width: 100%;
+    margin: 10px 0px;
+}
+.orderDetailsDiv .orderStatusDetails .inputDiv .actions{
+    display: flex;
+    justify-content: space-between;
+}
+.orderDetailsDiv .orderStatusDetails .actionsB{
+    display: flex;
+    justify-content: right;
+    gap: 15px;
+}
+
+
+
+
+
+/* ********************* SERVICE ORDER DETAILS PAGE ********************* */
+
+.serviceOrderDetailsDiv{
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+.serviceOrderDetailsDiv .serviceOrderDetailsContent{
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    width: 100%;
+}
+.serviceOrderDetailsDiv .serviceOrderDetailsContent button{
+    font-size: 0.7rem;
+}
+.serviceOrderDetailsDiv .left{
+    width: 62%;
+    background: var(--white);
+    border-radius: 8px;
+    padding: 20px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    height: fit-content;
+    padding-bottom: 50px;
+}
+
+.serviceOrderDetailsDiv .right{
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.serviceOrderDetailsDiv .right .orderDetails,
+.serviceOrderDetailsDiv .right .timeRemaining{
+    background: var(--white);
+    border-radius: 8px;
+    padding: 20px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.serviceOrderDetailsDiv .right .orderDetails .posting{
+    display: flex;
+    gap: 15px;
+}
+.serviceOrderDetailsDiv .right .orderDetails .posting .imgDiv{
+    width: 100px;
+}
+.serviceOrderDetailsDiv .right .orderDetails .posting .imgDiv img{
+    width: 100%;
+}
+.serviceOrderDetailsDiv .right .orderDetails .posting .singleLineText{
+    height: 3rem;
+    -webkit-line-clamp: 2;
+    line-clamp: inherit;
+}
+.serviceOrderDetailsDiv .right .orderDetails .details,
+.serviceOrderDetailsDiv .right .timeRemaining .details{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.serviceOrderDetailsDiv .right .orderDetails .details div,
+.serviceOrderDetailsDiv .right .timeRemaining .details div{
+    display: flex;
+    justify-content: space-between;
+}
+.serviceOrderDetailsDiv .right .orderDetails .details div strong,
+.serviceOrderDetailsDiv .right .timeRemaining .details div strong{
+    color: var(--lightBlackPrimary);
+    font-weight: 600;
+}
+.serviceOrderDetailsDiv .right .orderDetails .username{
+    cursor: pointer;
+}
+.serviceOrderDetailsDiv .right .orderDetails .actions,
+.serviceOrderDetailsDiv .right .timeRemaining .actions{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+.serviceOrderDetailsDiv .right .orderDetails .actions button,
+.serviceOrderDetailsDiv .right .timeRemaining .actions button{
+    width: 100%;
+}
+.serviceOrderDetailsDiv .right .timeRemaining .countdownBox{
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    margin: 10px;
+}
+.serviceOrderDetailsDiv .right .timeRemaining .countdownBox div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.serviceOrderDetailsDiv .right .timeRemaining .countdownBox div strong{
+    font-size: 1.5rem;
+}
+.serviceOrderDetailsDiv .right .timeRemaining .countdownBox .pastDue{
+    color: var(--danger);
+}
+
+.serviceOrderDetailsDiv .left .history{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+.serviceOrderDetailsDiv .left .history .activity{
+    position: relative;
+    padding-left: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.serviceOrderDetailsDiv .left .history .activity .horizontalLine{
+    margin-top: 8px;
+}
+.serviceOrderDetailsDiv .left .history .activity::before{
+    position: absolute;
+    content: "";
+    top: 5px;
+    left: 0;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: var(--secondaryCopper);
+}
+.serviceOrderDetailsDiv .left .history .activity::after{
+    position: absolute;
+    content: "";
+    top: 30px;
+    left: 12px;
+    width: 2px;
+    height: 100%;
+    background: var(--secondaryCopper);
+}
+.serviceOrderDetailsDiv .left .history .activity.lastElem::after{
+    top: 0;
+    height: 0%;
+}
+.serviceOrderDetailsDiv .left .history .activity .upper{
+    display: flex;
+    justify-content: space-between;
+}
+.serviceOrderDetailsDiv .left .history .activity .title{
+    font-weight: 500;
+    padding: 4px 0px;
+    max-width: 90%;
+    font-size: 0.95rem;
+}
+.serviceOrderDetailsDiv .left .history .activity .actionBy{
+    color: var(--primaryCopper);
+}
+.serviceOrderDetailsDiv .left .history .activity .time{
+    color: var(--darkGray);
+    font-size: 0.85rem;
+}
+.serviceOrderDetailsDiv .left .history .activity .showDetails{
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    color: var(--darkGray);
+}
+.serviceOrderDetailsDiv .left .history .activity .details{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 0.85rem;
+}
+.serviceOrderDetailsDiv .left .history .activity .details .detailsBtns{
+    display: flex;
+    gap: 10px;
+    width: fit-content;
+    margin-top: 10px;
+}
+.serviceOrderDetailsDiv .left .history .activity .details .reqsActivity .question{
+    font-weight: 500;
+}
+
+.serviceOrderDetailsDiv .left .history .activity .details .deliveryImages{
+    display: flex;
+    justify-content: left;
+    gap: 10px;
+}
+.serviceOrderDetailsDiv .left .history .activity .details .deliveryImages img{
+    width: 50px;
+}

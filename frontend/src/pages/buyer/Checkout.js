@@ -1,0 +1,468 @@
+import React from 'react'
+import axios from "axios"
+import { useSearchParams } from 'react-router-dom'
+import { enqueueSnackbar } from "notistack";
+import { FaPaypal } from "react-icons/fa";
+import { BsStripe } from "react-icons/bs";
+import { useNavigate } from 'react-router-dom';
+
+import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
+
+function Checkout() {
+
+  const token = localStorage.getItem("token");
+  const [searchParams] = useSearchParams();
+
+  const [items, setItems] = React.useState(null);
+  const [summary, setSummary] = React.useState({ price: 0, shipping: 0, total: 0, tax: 0, subtotal: 0 });
+  
+  const [serviceItem, setServiceItem] = React.useState(null);
+  const [serviceSummary, setServiceSummary] = React.useState({ salesPrice: 0, tax: 0, total: 0, days: 0});
+
+  const [customItem, setCustomItem] = React.useState(null);
+
+  const [paymentMethod, setPaymentMethod] = React.useState("stripe");
+
+  const stripe = useStripe();
+  const elements = useElements();
+  const [loading, setLoading] = React.useState(false);
+
+  const navigate = useNavigate();
+
+  const [billingInfo, setBillingInfo] = React.useState({
+    firstName: "",
+    lastName: "",
+    address: "",
+    country: "",
+    state: "",
+    city: "",
+    zipCode: "",
+    email: "",
+    phoneNumber: "",
+    note: ""
+  });
+
+  React.useEffect(() => {
+
+    const fromCart = searchParams.get("cart") === "true";
+    const productId = searchParams.get("p");
+    const serviceId = searchParams.get("s");
+    const messageId = searchParams.get("c");
+
+    if (fromCart) {
+      axios.get("http://localhost:5000/api/v1/carts", { headers: { Authorization: `Bearer ${token}` } })
+        .then(response => {
+          if (response.data.success) {
+            setItems(response.data.cart.products);
+            updateSummary(response.data.cart.products);
+          }
+        })
+        .catch(e => {
+          console.log(e);
+          enqueueSnackbar(e.response.data.error || "Something went wrong!", { variant: "error" });
+        })
+    }
+    else if (productId) {
+
+      const id = productId.split("_")[0];
+      const count = productId.split("_")[1];
+
+      axios.get(`http://localhost:5000/api/v1/products/product/${id}`)
+        .then(response => {
+          if (response.data.success) {
+            const item = {
+              product: response.data.product,
+              count: count
+            }
+            setItems([item]);
+            updateSummary([item]);
+          }
+        })
+
+        .catch(e => {
+          console.log(e);
+          enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
+        })
+    } 
+    else if (serviceId) {
+
+      const pkgIndex = serviceId.split("_")[0];
+      const id = serviceId.split("_")[1];
+
+      axios.get(`http://localhost:5000/api/v1/services/service/${id}`)
+        .then(response => {
+          if (response.data.success) {
+            const service = { service: response.data.service, pkgIndex: Number(pkgIndex) };
+            setServiceItem(service);
+            updateServiceSummary(service);
+          }
+        })
+        .catch(e => {
+          console.log(e);
+          enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
+        })
+    }
+    else if(messageId){
+      axios.get(`http://localhost:5000/api/v1/chats/offer/details/${messageId}`, { headers: { Authorization: `Bearer ${token}` } })
+        .then(response => {
+          if (response.data.success) {
+            const offer = response.data.offer;
+            if(offer.quoteType === "product")
+              updateCustomSummary(offer);
+            else
+              updateServiceCustomSummary(offer);
+            setCustomItem(offer);
+          }
+        })
+        .catch(e => {
+          console.log(e);
+          enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
+        })
+    }
+  }, [searchParams]);
+
+  const updateSummary = (products) => {
+
+    let price = 0, shipping = 0, total = 0, tax = 0;
+
+    products.forEach(item => {
+
+      const myItem = item.product;
+      const count = item.count;
+
+      price += myItem.salesPrice * count;
+      shipping += parseFloat(myItem.shippingFees);
+    });
+
+    total = price + shipping;
+    tax = total * 0.09;
+    const subtotal = total + tax;
+
+    setSummary({ price, shipping, total, tax, subtotal });
+  };
+
+  const updateServiceSummary = (serviceItem) => {
+
+    const pkg = serviceItem.service.packages[serviceItem.pkgIndex];
+
+    let salesPrice = 0, tax = 0, total = 0, days = 0;
+
+    salesPrice = pkg.salesPrice;
+    tax = salesPrice*0.05;
+    total = salesPrice + tax;
+    days = pkg.deliveryDays;
+
+    setServiceSummary({ salesPrice, tax, total, days });
+  }
+
+  const updateCustomSummary = (offer) => {
+
+    let price = 0, shipping = 0, total = 0, tax = 0;
+
+    price = offer.offerAmount;
+    shipping += parseFloat(offer.shippingFee);
+
+    total = price + shipping;
+    tax = total * 0.09;
+    const subtotal = total + tax;
+
+    setSummary({ price, shipping, total, tax, subtotal });
+  };
+
+  const updateServiceCustomSummary = (offer) => {
+
+    let salesPrice = 0, tax = 0, total = 0, days = 0;
+
+    salesPrice = offer.offerAmount;
+    tax = salesPrice*0.05;
+    total = salesPrice + tax;
+    days = offer.duration;
+
+    setServiceSummary({ salesPrice, tax, total, days });
+  }
+
+  const handlePlaceOrder = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if (!stripe || !elements) {
+      return;
+    }
+
+    const cardElement = elements.getElement(CardNumberElement);
+
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: 'card',
+      card: cardElement,
+    });
+
+    if (error) {
+      enqueueSnackbar(error.message, { variant: 'error' });
+      setLoading(false);
+      return;
+    }
+
+    let convertedItem = null;
+    if(customItem){
+      if(customItem.quoteType === "product"){
+        convertedItem = [{
+          product: customItem.productId,
+          count: customItem.quantity
+        }]
+        convertedItem[0].product.salesPrice = summary.price;
+        convertedItem[0].product.shippingFees = summary.shipping;
+      }
+      else if(customItem.quoteType === "service"){
+        convertedItem = {
+          pkg: {
+            name: "CUSTOM",
+            title: customItem.title,
+            description: customItem.description,
+            deliveryDays: customItem.duration 
+          },
+          service: customItem.serviceId,
+        }
+      }
+    }
+
+    const orderData = {
+      items: items || serviceItem || convertedItem,
+      summary: (items || (customItem && customItem.quoteType === "product"))? summary : serviceSummary,
+      paymentMethod: 'stripe',
+      billingInfo
+    };
+
+    try {
+      const { data } = await axios.post(`http://localhost:5000/api/v1/orders/${(items || (customItem && customItem.quoteType === "product"))? "product":"service"}/order`, orderData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      const clientSecret = data.clientSecret;
+
+      const { paymentIntent, error: stripeError } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: paymentMethod.id
+      });
+
+      if (stripeError) {
+        enqueueSnackbar(stripeError.message, { variant: 'error' });
+        setLoading(false);
+        return;
+      }
+
+      if (paymentIntent.status === 'succeeded') {
+        enqueueSnackbar("Order placed successfully!", { variant: 'success' });
+        navigate(`${(items || (customItem && customItem.quoteType === "product"))? "/orders" : "/requirements/"+data.order._id}`)
+        setLoading(false);
+      }
+    } catch (e) {
+      console.error(e);
+      enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: 'error' });
+      setLoading(false);
+    }
+  };
+
+  const handleChange = (e) => {
+    setBillingInfo({ ...billingInfo, [e.target.name]: e.target.value });
+  }
+
+  const itemElems = items ? items.map((item, index) => {
+
+    let myItem = item.product;
+    let count = item.count;
+
+    return <div key={index} className="item">
+      <div className="imgDiv">
+        <img src={`http://localhost:5000/${myItem.productImages ? myItem.productImages[0] : ""}`} alt="Error" />
+      </div>
+      <div className="itemContent">
+        <p className='singleLineText'>{myItem.title}</p>
+        <p className='price'>{count} x ${myItem.salesPrice}</p>
+      </div>
+    </div>
+  }) : "Nothing to show here"
+
+
+  const serviceElem = serviceItem ? <div className="item">
+      <div className="imgDiv">
+        <img src={`http://localhost:5000/${serviceItem.service?.serviceImages[0]}`} alt="Error" />
+      </div>
+      <div className="itemContent">
+        <p className='singleLineText'>{serviceItem.service.title}</p>
+        <p className='price'>{serviceItem.service.packages[serviceItem.pkgIndex].name} - ${serviceItem.service.packages[serviceItem.pkgIndex].salesPrice}</p>
+      </div>
+    </div>
+   : "Nothing to show here"
+
+   const customElem = customItem ? <div className="item">
+      <div className="imgDiv">
+        <img src={`http://localhost:5000/${customItem.productId? customItem.productId.productImages[0] : customItem.serviceId.serviceImages[0]}`} alt="Error" />
+      </div>
+      <div className="itemContent">
+        <p className='singleLineText'>{customItem.title}</p>
+        {customItem.quoteType === "product" && <p className='price'>Quantity: {customItem.quantity}</p>}
+        {customItem.quoteType === "service" && <p className='price'>CUSTOM - ${customItem.offerAmount}</p>}
+      </div>
+    </div>
+    : "Nothing to show here"
+
+
+  if(!items && !serviceItem && !customItem) return <div>Loading...</div>
+
+  return (
+    <div className='checkoutDiv'>
+      <section className="section">
+        <div className="checkoutContent">
+
+          <div className="billingInfo form">
+
+            <h2 className="secondaryHeading"><span>{(items || (customItem && customItem.quoteType === "product"))? "Billing" : "Buyer"}</span> Info</h2>
+
+            <div className="inputDiv">
+              <div className="inputInnerDiv">
+                <label>First Name</label>
+                <input type="text" className='inputField' placeholder='Enter First Name' name="firstName" onChange={handleChange} />
+              </div>
+              <div className="inputInnerDiv">
+                <label>Last Name</label>
+                <input type="text" className='inputField' placeholder='Enter Last Name' name="lastName" onChange={handleChange} />
+              </div>
+            </div>
+
+            <div className="inputDiv">
+              <div className="inputInnerDiv">
+                <label>Country</label>
+                <input type="text" className='inputField' placeholder='Enter your Country Name' name="country" onChange={handleChange} />
+              </div>
+              <div className="inputInnerDiv">
+                <label>City</label>
+                <input type="text" className='inputField' placeholder='Enter your City' name="city" onChange={handleChange} />
+              </div>
+            </div>
+
+            {(items || (customItem && customItem.quoteType === "product")) && <><div className="inputDiv">
+              <label>Address</label>
+              <textarea className='inputField' placeholder='Enter Address' name="address" onChange={handleChange} />
+            </div>
+
+            <div className="inputDiv">
+              <div className="inputInnerDiv">
+                <label>Region/State</label>
+                <input type="text" className='inputField' placeholder='Enter State' name="state" onChange={handleChange} />
+              </div>
+              <div className="inputInnerDiv">
+                <label>Zip Code</label>
+                <input type="Number" className='inputField' placeholder='Enter Zip Code' name="zipCode" onChange={handleChange} />
+              </div>
+            </div></>}
+
+            <div className="inputDiv">
+              <div className="inputInnerDiv">
+                <label>Email</label>
+                <input type="email" className='inputField' placeholder='Enter Email' name="email" onChange={handleChange} />
+              </div>
+              <div className="inputInnerDiv">
+                <label>Phone Number</label>
+                <input type="Number" className='inputField' placeholder='Enter Phone Number' name="phoneNumber" onChange={handleChange} />
+              </div>
+            </div>
+
+
+            <div className="horizontalLine"></div>
+
+            <div className="paymentMethodsDiv">
+              <h2 className="secondaryHeading">Choose <span>Payment</span> Method</h2>
+              <div className="paymentOptions">
+                <div className={`stripe paymentOption ${paymentMethod === 'stripe' ? 'selected' : ''}`} onClick={() => setPaymentMethod('stripe')}><BsStripe className='icon' /></div>
+                <div className={`paypal paymentOption ${paymentMethod === 'paypal' ? 'selected' : ''}`} onClick={() => setPaymentMethod('paypal')}><FaPaypal className='icon' /></div>
+              </div>
+              <form className='form'>
+
+                <div className="inputDiv">
+                  <label>Card Number</label>
+                  <CardNumberElement className="inputField" />
+                </div>
+
+                <div className="inputDiv">
+
+                  <div className="inputInnerDiv">
+                    <label>Expiry Date</label>
+                    <CardExpiryElement className="inputField" />
+                  </div>
+
+                  <div className="inputInnerDiv">
+                    <label>CVC</label>
+                    <CardCvcElement className="inputField" />
+                  </div>
+
+                </div>
+
+              </form>
+            </div>
+
+            {(items || (customItem && customItem.quoteType === "product")) && <><div className="horizontalLine"></div>
+
+            <div className="inputDiv">
+              <label>Any Special Note? (optional)</label>
+              <textarea className='inputField' placeholder='Enter note for delivery' name="note" onChange={handleChange} />
+            </div></>}
+          </div>
+
+          <div className="orderSummary">
+
+            <h2 className="secondaryHeading"><span>Order</span> Summary</h2>
+
+            <div className="horizontalLine"></div>
+
+            {items? itemElems : serviceItem? serviceElem : customElem}
+
+            <div className="horizontalLine"></div>
+
+            <div className='row'>
+              <p>Sales Price</p>
+              <strong>${(items || (customItem && customItem.quoteType === "product"))? summary.price.toFixed(2) : serviceSummary.salesPrice.toFixed(2)}</strong>
+            </div>
+
+            <div className='row'>
+              <p>{(items || (customItem && customItem.quoteType === "product"))? "Shipping Fee" : "Tax (5%)"}</p>
+              <strong>${(items || (customItem && customItem.quoteType === "product"))? summary.shipping.toFixed(2) : serviceSummary.tax.toFixed(2)}</strong>
+            </div>
+
+            {(items || (customItem && customItem.quoteType === "product")) && <><div className="horizontalLine"></div>
+
+            <div className='row'>
+              <p>SubTotal</p>
+              <strong>${summary.total.toFixed(2)}</strong>
+            </div>
+
+            <div className='row'>
+              <p>Tax (9%)</p>
+              <strong>${summary.tax.toFixed(2)}</strong>
+            </div></>}
+
+            <div className="horizontalLine"></div>
+
+            <div className='row'>
+              <p>Total</p>
+              <strong className='subTotal'>${(items || (customItem && customItem.quoteType === "product"))? summary.subtotal.toFixed(2) : serviceSummary.total.toFixed(2)}</strong>
+            </div>
+
+            {!(items || (customItem && customItem.quoteType === "product")) && <div className='row'>
+              <p>Delivery Time</p>
+              <strong>{serviceSummary.days} days</strong>
+            </div>}
+
+            <button className='primaryBtn' disabled={!stripe || loading} type="submit" onClick={handlePlaceOrder}>
+              {loading ? "Processing..." : `Pay $${(items || (customItem && customItem.quoteType === "product"))? summary.subtotal : serviceSummary.total}`}
+            </button>
+
+            <p>By placing an order, you agree to our Terms and Conditions</p>
+
+          </div>
+
+        </div>
+      </section>
+    </div>
+  )
+}
+
+export default Checkout

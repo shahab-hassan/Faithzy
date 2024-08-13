@@ -1,0 +1,99 @@
+const mongoose = require('mongoose');
+
+const productOrder = new mongoose.Schema({
+  sellerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Seller', required: true },
+  productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+  count: { type: Number, default: 1 },
+  salesPrice: {type: Number, required: true},
+  shippingFees: {type: Number, required: true, default: 0},
+  status: { type: [{ name: String, createdAt: Date}], required: true, default: [{name: "Active", createdAt: Date.now()}]},
+  cancellationReason: String
+})
+
+const productOrderSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+
+  products: [productOrder],
+
+  summary: {
+    price: Number,
+    shipping: Number,
+    total: Number,
+    tax: Number,
+    subtotal: Number
+  },
+  paymentMethod: {
+    type: String,
+    enum: ['stripe', 'paypal'],
+    required: true
+  },
+  billingInfo: {
+    firstName: String,
+    lastName: String,
+    address: String,
+    country: String,
+    state: String,
+    city: String,
+    zipCode: String,
+    email: String,
+    phoneNumber: String,
+    note: String
+  },
+  clientSecret: String
+}, {timestamps: true});
+
+
+const historySchema = new mongoose.Schema({ 
+  name: {type: String, required: true, enum: ["orderPlaced", "requirementsRequired", "requirementsSubmitted", "orderStarted", "extensionRequested", "extensionAccepted", "extensionDeclined", "deliverySent", "deliveryAccepted", "askedForRevision", "cancellationSent", "cancellationAccepted", "cancellationDeclined"]}, 
+  message: {type: String, required: true },
+  description: {type: {text: String, images: [String], extensionDays: Number}}, 
+  role: {type: String, enum: ["Buyer", "Seller"]}, 
+  isDone: {type: Boolean}, 
+  createdAt: {type: Date}
+})
+
+const serviceOrder = new mongoose.Schema({
+  sellerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Seller', required: true },
+  serviceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Service' },
+  pkg: {type: {name: String, title: String, description: String, deliveryDays: Number}},
+  status: { type: [{ name: String, createdAt: Date}], required: true, default: [{name: "Active", createdAt: Date.now()}]},
+  history: [historySchema],
+  cancellationReason: String
+})
+
+const serviceOrderSchema = new mongoose.Schema({
+
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+
+  service: serviceOrder,
+
+  summary: {
+    salesPrice: Number,
+    tax: Number,
+    total: Number,
+  },
+  paymentMethod: { type: String, enum: ['stripe', 'paypal'], required: true },
+
+  buyerInfo: {
+    firstName: String,
+    lastName: String,
+    country: String,
+    city: String,
+    email: String,
+    phoneNumber: String
+  },
+  answers: [String],
+  clientSecret: String
+}, {timestamps: true});
+
+
+
+
+
+const productOrderModel = mongoose.model('ProductOrder', productOrderSchema);
+const serviceOrderModel = mongoose.model('ServiceOrder', serviceOrderSchema);
+module.exports = {productOrderModel, serviceOrderModel};
