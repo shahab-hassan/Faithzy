@@ -28,17 +28,27 @@ exports.getMySellerServices = asyncHandler(async (req, res) => {
 
 exports.getSellerServicesById = asyncHandler(async (req, res) => {
   try {
-    const allServices = await serviceModel.find({ sellerId: req.params.id})
+    const page = parseInt(req.query.page) || 1;
+    const limit = 5;
+    
+    const allServices = await serviceModel.find({ sellerId: req.params.id })
+      .skip((page - 1) * limit)
+      .limit(limit);
+    
+    const totalSellerServices = await serviceModel.countDocuments({ sellerId: req.params.id });
+    const totalPages = Math.ceil(totalSellerServices / limit);
 
     res.status(200).json({
       success: true,
-      allServices
+      allServices,
+      totalPages,
     });
   } catch (e) {
     res.status(400);
-    throw new Error(e);
+    throw new Error(e.message);
   }
 });
+
 
 exports.getService = asyncHandler(async (req, res)=>{
 

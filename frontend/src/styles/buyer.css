@@ -3,7 +3,7 @@
 .buyerHeaderDiv{
     background-color: var(--primaryBlue);
     color: white;
-    height: 21vh;
+    /* height: 21vh; */
 }
 
 .buyerHeaderDiv .buyerHeaderContent{
@@ -2131,7 +2131,7 @@
 .profileDiv .profileContent{
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 50px;
     margin-top: 120px;
 }
 
@@ -2156,4 +2156,17 @@
 .profileDiv .profileContent .upper .sellerInfo .row{
     display: flex;
     justify-content: space-between;
+}
+
+.profileDiv .sellerServices .services,
+.profileDiv .sellerProducts .products{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    margin: 20px 0px;
+}
+.profileDiv .sellerServices .services .service,
+.profileDiv .sellerProducts .products .product{
+    width: 100%;
 }

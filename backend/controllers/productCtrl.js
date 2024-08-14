@@ -28,9 +28,18 @@ exports.getMySellerProducts = asyncHandler(async (req, res)=>{
 })
 
 exports.getSellerProductsById = asyncHandler(async (req, res)=>{
-    let allProducts;
+    let allProducts, totalPages;
     try{
-        allProducts = await productModel.find({sellerId: req.params.id});
+        const page = parseInt(req.query.page) || 1;
+        const limit = 5;
+
+        allProducts = await productModel.find({sellerId: req.params.id})
+        .skip((page - 1) * limit)
+        .limit(limit);
+
+        const totalSellerProducts = await productModel.countDocuments({ sellerId: req.params.id });
+        totalPages = Math.ceil(totalSellerProducts / limit);
+
     }
     catch(e){
         res.status(400)
@@ -38,7 +47,8 @@ exports.getSellerProductsById = asyncHandler(async (req, res)=>{
     }
     res.status(200).json({
         success: true,
-        allProducts
+        allProducts,
+        totalPages
     })
 })
 

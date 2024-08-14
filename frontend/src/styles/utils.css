@@ -311,6 +311,12 @@ label span{
     font-weight: 600;
 }
 
+.ratingsDiv{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
 
 /* **************** CHECKBOX **************** */
 
