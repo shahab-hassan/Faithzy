@@ -147,7 +147,7 @@ function ServiceDetails() {
                             </div>
                             <div className='moreActions'>
                                 <button className="contactSellerBtn primaryBtn2" onClick={handleCheckPackagesClick}>Check Packages</button>
-                                <Link className='buyNowBtn primaryBtn' to={`/chat/?p=${service.sellerId.userId._id}`}>
+                                <Link className='buyNowBtn primaryBtn' to={`/chat?p=${service.sellerId.userId._id}`}>
                                     <p>{"Contact Me >"}</p>
                                     {/* <i className="fa-solid fa-arrow-right"></i> */}
                                 </Link>

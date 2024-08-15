@@ -2,6 +2,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const asyncHandler = require("express-async-handler");
 
 const createPaymentIntent = async (amount) => {
+    amount = parseInt(amount);
     try {
       const paymentIntent = await stripe.paymentIntents.create({
         amount,

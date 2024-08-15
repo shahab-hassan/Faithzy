@@ -154,7 +154,7 @@ function ProductDetails() {
                 <p>{isInCart ? "REMOVE FROM CART" : "ADD TO CART"}</p>
                   <i className="fa-solid fa-cart-shopping"></i>
                 </div>
-                <Link className="contactSellerBtn primaryBtn2">CONTACT SELLER</Link>
+                <Link to={`/chat?p=${product?.sellerId?.userId?._id}`} className="contactSellerBtn primaryBtn2">CONTACT SELLER</Link>
               </div>
 
               <div className="addToWishlistBtn" onClick={(e) => handleWishlistClick(e)}>

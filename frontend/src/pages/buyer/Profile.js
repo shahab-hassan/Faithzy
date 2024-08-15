@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
 import { FaStar } from "react-icons/fa";
@@ -65,6 +65,13 @@ function Profile() {
 
     }, [id, crrProductPage]);
 
+
+    const formatJoinedDate = (date)=>{
+        const d = new Date(date);
+        const monthName = d.toLocaleString('default', { month: 'long' });
+        return `${monthName}, ${d.getFullYear()}`;
+    }
+    
     return (
         <div className='profileDiv'>
             <section className="bg">
@@ -83,9 +90,10 @@ function Profile() {
                             </div></div>
                             <div className="horizontalLine"></div>
                             <div className="row"><span>Country</span><span className='fw600'>{seller?.country}</span></div>
-                            <div className="row"><span>Joined</span><span className='fw600'>{"hello"}</span></div>
+                            <div className="row"><span>Joined</span><span className='fw600'>{formatJoinedDate(seller?.createdAt)}</span></div>
                             <div className="horizontalLine"></div>
                             <div className="row"><span>Languages</span><span className='fw600'>{seller?.languages}</span></div>
+                            <Link to={`/chat?p=${seller?.userId?._id}`} class="primaryBtn">Contact Me</Link>
                         </div>
                         <div className="aboutSeller">
                             <h2 className="secondaryHeading"><span>About</span> Me</h2>
