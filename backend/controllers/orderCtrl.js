@@ -69,7 +69,7 @@ exports.createServiceOrder = asyncHandler(async (req, res) => {
   
   const userId = req.user._id;
   const { items, summary, paymentMethod, billingInfo } = req.body;
-
+  
   const serviceItem = items;
   const {firstName, lastName, country, city, email, phoneNumber} = billingInfo;
   const buyerInfo = {firstName, lastName, country, city, email, phoneNumber};
@@ -94,10 +94,11 @@ exports.createServiceOrder = asyncHandler(async (req, res) => {
     }
   }
 
+
   let serviceOrder = {
       sellerId: serviceItem.service.sellerId?._id || serviceItem.service.sellerId,
       serviceId: serviceItem.service._id,
-      pkg: serviceItem.pkgIndex? serviceItem.service.packages[serviceItem.pkgIndex] : serviceItem.pkg,
+      pkg: serviceItem.pkg? serviceItem.pkg : serviceItem.service.packages[serviceItem.pkgIndex] ,
   }
 
   const amount = summary.total * 100;

@@ -145,7 +145,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
       ))}
 
       <div className="actionsB">
-        <button className='primaryBtn'>Contact Seller</button>
+        <Link to={`/chat?p=${showStatusDetails?.productId?.sellerId?.userId?._id}`} className='primaryBtn'>Contact Seller</Link>
         <button className='secondaryBtn' 
                 disabled={showStatusDetails.status[showStatusDetails.status.length-1].name === "InDispute"}>
           Start Dispute

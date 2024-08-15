@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md"
@@ -385,7 +385,6 @@ function ServiceOrderDetails({ isBuyer }) {
     </div>
   });
 
-
   if (!order) return <div>Loading...</div>;
 
   const startedOn = formatDate(order.createdAt);
@@ -429,7 +428,7 @@ function ServiceOrderDetails({ isBuyer }) {
                   <div><p>You will Get</p><strong>${(order.summary.salesPrice - (order.summary.salesPrice * 0.12)).toFixed(2)}</strong></div></>}
               </div>
               <div className="actions">
-                <button className='primaryBtn'>{`Contact ${isBuyer ? "Seller" : "Buyer"} >`}</button>
+                <Link to={`/chat?p=${!isBuyer? order?.userId?._id : order?.service?.serviceId?.sellerId?.userId?._id}`} className='primaryBtn'>{`Contact ${isBuyer ? "Seller" : "Buyer"}`}</Link>
                 <button className='secondaryBtn' disabled={crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Cancelled"}>Start Dispute</button>
                 <button className='dangerBtn' onClick={() => setShowCancelModel(true)} disabled={cancellationPending || crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Cancelled"}>{isBuyer ? "Cancel Order" : "Ask to Cancel"}</button>
               </div>

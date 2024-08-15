@@ -380,8 +380,11 @@
     gap: 10px;
 }
 .serviceOrderDetailsDiv .right .orderDetails .actions button,
-.serviceOrderDetailsDiv .right .timeRemaining .actions button{
+.serviceOrderDetailsDiv .right .timeRemaining .actions button,
+.serviceOrderDetailsDiv .right .orderDetails .actions a,
+.serviceOrderDetailsDiv .right .timeRemaining .actions a{
     width: 100%;
+    font-size: 0.7rem;
 }
 .serviceOrderDetailsDiv .right .timeRemaining .countdownBox{
     display: flex;
