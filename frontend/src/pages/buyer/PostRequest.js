@@ -7,6 +7,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { FaEye } from "react-icons/fa6";
 import RequestDetails from '../../components/common/RequestDetails';
 import { MdMessage } from "react-icons/md";
+import { Link } from 'react-router-dom';
 
 function PostRequest() {
     const [buyerRequests, setBuyerRequests] = useState([]);
@@ -108,8 +109,8 @@ function PostRequest() {
                             <div className="titleField field">{offer.coverLetter}</div>
                             <p className="field priceField">${offer.price}</p>
                             <p className="field">{offer.duration} days</p>
-                            <p className="field sellerField">{offer.sellerId.username + " >"}</p>
-                            <p className="field"><MdMessage className='icon' /></p>
+                            <Link to={`/profile/${offer?.sellerId?.sellerId}`} className="field sellerField">{offer.sellerId.username + " >"}</Link>
+                            <Link to={`/chat?p=${offer?.sellerId?._id}`} className="field"><MdMessage className='icon' /></Link>
                         </div>
                     </div>
                 </div>

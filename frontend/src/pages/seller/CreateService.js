@@ -354,7 +354,7 @@ function CreateService() {
                             {serviceDetails.questions.length > 0 && <div className="reqQuestions">
                                 {addedQuestions}
                             </div>}
-                            <div className="requirementsDiv">
+                            <div className="addReq">
                                 <input 
                                     type="text" 
                                     className="inputField" 

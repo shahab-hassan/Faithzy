@@ -66,7 +66,7 @@ function Wishlist() {
             <MdKeyboardArrowRight />
           </Link>
           <div className="sellerField field">
-            <p>{wishlist.sellerId.userId.username}</p>
+            <Link to={`/profile/${wishlist?.sellerId?._id}`}>{wishlist.sellerId.userId.username}</Link>
             <MdKeyboardArrowRight />
           </div>
           <div className="priceField field">

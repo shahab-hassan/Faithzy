@@ -77,7 +77,18 @@ body {
     margin: auto;
 }
 
+a{
+    color: var(--lightBlackPrimary);
+    transition: 0.1s;
+}
+a:hover{
+    color: var(--black);
+}
+
 .white {
+    color: var(--white);
+}
+.white:hover {
     color: var(--white);
 }
 

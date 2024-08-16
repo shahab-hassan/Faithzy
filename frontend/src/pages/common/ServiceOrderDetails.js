@@ -417,8 +417,8 @@ function ServiceOrderDetails({ isBuyer }) {
                 <p className="singleLineText">{order.service.serviceId.title}</p>
               </div>
               <div className="details">
-                {isBuyer && <div><p>Seller</p><strong className='username'>{usernames[1] + " >"}</strong></div>}
-                {!isBuyer && <div><p>Buyer</p><strong className='username'>{usernames[0] + " >"}</strong></div>}
+                {isBuyer && <div><p>Seller</p><Link to={`/profile/${order?.service?.serviceId?.sellerId?._id}`} className='username'>{usernames[1] + " >"}</Link></div>}
+                {!isBuyer && <div><p>Buyer</p><strong className='username'>{usernames[0]}</strong></div>}
                 <div><p>Order ID</p><strong>#{order._id}</strong></div>
                 <div><p>Status</p><strong>{order.service.status[order.service.status.length - 1].name}</strong></div>
                 <div><p>Price</p><strong>${(order.summary.salesPrice).toFixed(2)}</strong></div>

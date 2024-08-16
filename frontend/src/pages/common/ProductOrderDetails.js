@@ -185,7 +185,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
               <div className="leftRight">
                 <div className="column">
                   <p><FaUserCircle className='icon' /></p>
-                  <Link>{order.userId?.username + " >"}</Link>
+                  <p>{order.userId?.username}</p>
                 </div>
                 <div className="column">
                 <p><FaBasketShopping className='icon'/></p>
@@ -232,7 +232,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
                 <div className="leftRight">
                   <div className="column">
                     <p><FaShop className='icon' /></p>
-                    <Link>{product.productId.sellerId.userId?.username + " >"}</Link>
+                    <Link to={`/profile/${product?.productId?.sellerId?._id}`}>{product.productId.sellerId.userId?.username + " >"}</Link>
                   </div>
                   <div className="column">
                     <p><FaBasketShopping className='icon' /></p>

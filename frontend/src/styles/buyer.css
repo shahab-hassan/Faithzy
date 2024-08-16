@@ -1817,6 +1817,11 @@
 .chatDiv .icon:hover{
     color: var(--black);
 }
+
+.chatDiv a{
+    color: var(--primaryCopper);
+}
+
 .chatDiv .content{
     display: flex;
     flex-direction: column;
@@ -2151,6 +2156,9 @@
     flex-direction: column;
     gap: 10px;
     min-width: 30%;
+}
+.profileDiv .profileContent .upper .aboutSeller{
+    flex: 1;
 }
 
 .profileDiv .profileContent .upper .sellerInfo .row{

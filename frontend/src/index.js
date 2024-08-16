@@ -7,6 +7,7 @@ import "./styles/utils.css"
 import "./styles/buyer.css"
 import "./styles/seller.css"
 import "./styles/common.css"
+import "./styles/admin.css"
 import { AuthProvider } from "./utils/AuthContext"
 
 ReactDOM.createRoot(document.getElementById("root")).render(

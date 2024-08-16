@@ -483,19 +483,19 @@
     display: flex;
     justify-content: space-between;
 }
-.createServiceDiv .form .reqQuestions .reqQuestion, .icons .icon{
+.createServiceDiv .form .reqQuestions .reqQuestion .icons .icon{
     cursor: pointer;
     color: var(--darkGray);
     margin-left: 15px;
 }
-.createServiceDiv .form .requirementsDiv{
+.createServiceDiv .form .addReq{
     display: flex;
     flex-direction: column;
     gap: 10px;
     justify-content: right;
     align-items: end;
 }
-.createServiceDiv .form .requirementsDiv button{
+.createServiceDiv .form .addReq button{
     width: fit-content;
 }
 

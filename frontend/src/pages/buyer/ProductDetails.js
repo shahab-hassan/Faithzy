@@ -123,7 +123,7 @@ function ProductDetails() {
 
               <div className="sellerInfo">
                 <img src={product.sellerId && `http://localhost:5000/${product.sellerId.profileImage}`} alt="Error" />
-                <Link>{product && product.sellerId && product.sellerId.userId.username}</Link>
+                <Link to={`/profile/${product?.sellerId?._id}`}>{product && product.sellerId && product.sellerId.userId.username + " >"}</Link>
               </div>
 
               <div className="productInfo">

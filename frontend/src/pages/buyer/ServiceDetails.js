@@ -126,7 +126,7 @@ function ServiceDetails() {
 
                         <div className="sellerInfo">
                             <img src={service.sellerId && `http://localhost:5000/${service.sellerId.profileImage}`} alt="Error" />
-                            <Link>{service && service.sellerId && service.sellerId.userId?.username + " >"}</Link>
+                            <Link to={`/profile/${service?.sellerId?._id}`}>{service && service.sellerId && service.sellerId.userId?.username + " >"}</Link>
                         </div>
 
                         <Link to={`/services/${service.category}`} className='category'>{service.category + " >"}</Link>                        
@@ -181,7 +181,7 @@ function ServiceDetails() {
                                     <FaStar className='starIconFilled' />
                                     <span>{`${"4.7"} (${"178"})`}</span>
                                 </div>
-                                <p className='username'>@{service.sellerId.userId.username + " >"}</p>
+                                <Link to={`/profile/${service?.sellerId?._id}`} className='username'>@{service.sellerId.userId.username + " >"}</Link>
                             </div>
                         </div>
                         <div className="sellerInfo">

@@ -1,3 +1,3 @@
 *** Overview ***: 
-
-- Reverted back to Windows 10. Making sure everything is upto date!
+- Buyers can access and view seller profile from all links
+- Getting Started with Admin Panel

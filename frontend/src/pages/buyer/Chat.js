@@ -346,7 +346,7 @@ const ChatPage = () => {
                             <>
                                 <div className="header">
                                     <img src={selectedParticipant?.role === "seller" ? `http://localhost:5000/${selectedParticipant?.sellerId?.profileImage}` : "/assets/images/seller.png"} alt="Profile" />
-                                    <div>{selectedParticipant?._id === user?._id ? "You - Personal Chat" : selectedParticipant?.username}</div>
+                                    <Link to={`/profile/${selectedParticipant?.sellerId?._id}`} >{selectedParticipant?._id === user?._id ? "You - Personal Chat" : selectedParticipant?.username}</Link>
                                 </div>
                                 <div className="messages content">
                                     {messages.map((msg, index) => (
@@ -449,7 +449,7 @@ const ChatPage = () => {
                                     <FaEllipsisV className='icon' />
                                 </div>
                                 <div className="participantDetails content">
-                                    <h2 className="secondaryHeading">About <span>@{selectedParticipant.username}</span></h2>
+                                    <h2 className="secondaryHeading">About <Link to={`/profile/${selectedParticipant?.sellerId?._id}`}>@{selectedParticipant.username}</Link></h2>
                                     {selectedParticipant.role === "seller" && <><div className="row"><p>Name</p><div className='fw600'>{selectedParticipant.sellerId.fullName}</div></div>
                                         <div className="row"><p>Ratings</p><div className='fw600 sellerRatings'>
                                             <FaStar className='starIconFilled' />
