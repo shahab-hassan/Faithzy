@@ -1,6 +1,3 @@
 *** Overview ***: 
 
-- Completed Profile Page
---- Complete Seller Details
---- All Seller Services with Pagination
---- All Seller Products with Pagination
+- Reverted back to Windows 10. Making sure everything is upto date!
