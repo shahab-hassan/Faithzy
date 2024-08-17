@@ -97,6 +97,9 @@
 .adminEmployeesDiv .tableDiv{
     padding: 0;
 }
+.adminEmployeesDiv .addNewModelDiv .popupContent{
+    min-width: 60%;
+}
 .adminEmployeesDiv .tableDiv .id,
 .adminEmployeesDiv .tableDiv .idField{
     width: 150% !important;
@@ -112,4 +115,27 @@
 .adminEmployeesDiv .dropdownPlus{
     width: 100%;
     margin: 5px 0px;
+}
+.adminEmployeesDiv .editEditorAccess{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 10px 0px;
+}
+.adminEmployeesDiv .editEditorAccess .accessBtn{
+    display: flex;
+    justify-content: space-between;
+    margin: 0px 15px;
+}
+.adminEmployeesDiv .editEditorAccess .accessBtn .dropdownPlus{
+    width: fit-content;
+    margin: 0;
+}
+.adminEmployeesDiv .showDetailsModelDiv .row{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.adminEmployeesDiv .showDetailsModelDiv .accessTo{
+    margin-top: 5px;
+    font-size: 0.9rem;
 }

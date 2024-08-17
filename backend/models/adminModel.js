@@ -2,8 +2,15 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 
 const adminSchema = mongoose.Schema({
-    email: {type: String, required: true},
-    password: {type: String, minLength: [8, "Password should be greater than 8 characters"], select: false, required: true},
+    email: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    password: { type: String, required: true },
+    role: { type: String, required: true, enum: ['Moderator', 'Editor'] },
+    access: {
+        type: Map,
+        of: String, // 'View' or 'Edit'
+        default: {}
+    },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
 },
@@ -12,7 +19,7 @@ const adminSchema = mongoose.Schema({
     }
 )
 
-adminSchema.methods.getResetPasswordToken = function() {
+adminSchema.methods.getResetPasswordToken = function () {
     const resetToken = crypto.randomBytes(20).toString("hex");
 
     this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
@@ -28,6 +35,6 @@ adminSchema.methods.getResetPasswordToken = function() {
 //     this.password = await bcrypt.hash(this.password, 10);
 //     next();
 // });
-  
+
 
 module.exports = mongoose.model("Admin", adminSchema);
