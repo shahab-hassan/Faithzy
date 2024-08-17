@@ -42,7 +42,7 @@
 
 body {
     background: var(--primaryBg);
-    min-height: 105vh;
+    min-height: 100vh;
 }
 
 .fw500{
@@ -298,6 +298,25 @@ a:hover{
     resize: vertical;
     min-height: 120px;
 }
+
+.form .inputDiv .passwordFieldUpper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form .inputDiv .passwordFieldUpper .hidePasswordBtn{
+    color: var(--lightBlackPrimary);
+    cursor: pointer;
+    font-size: 0.95rem;
+    margin-right: 5px;
+    transition: 0.1s;
+} 
+.form .inputDiv .passwordFieldUpper .hidePasswordBtn:hover{
+    color: var(--black);
+}
+
+
 label{
     font-weight: 500;
 }
@@ -687,4 +706,10 @@ label span{
 }
 .tableDiv .rows .row .field .icon:hover{
     color: var(--black);
+}
+
+.tableDiv .totalRows{
+    font-size: 1rem;
+    color: var(--darkGray);
+    margin-left: 5px;
 }

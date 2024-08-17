@@ -5,9 +5,11 @@ import AdminHeader from "../components/admin/AdminHeader.js"
 
 function Layout() {
   return (
-    <div>
+    <div className='admin'>
         <AdminHeader/>
-        <Outlet/>
+        <div className="adminDiv">
+          <Outlet/>
+        </div>
     </div>
   )
 }

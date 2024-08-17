@@ -8,7 +8,9 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
 
     const [isLogin, setIsLogin] = useState(false);
+    const [isAdminLogin, setIsAdminLogin] = useState(null);
     const [user, setUser] = useState(null);
+    const [admin, setAdmin] = useState(null);
     const navigate = useNavigate();
     
     const fetchUserData = async () => {
@@ -33,6 +35,33 @@ export const AuthProvider = ({ children }) => {
             }
         }
     };
+
+    const fetchAdminData = async () => {
+        const token = localStorage.getItem('adminToken');
+        if (token) {
+            try {
+                const response = await axios.get("http://localhost:5000/api/v1/admins/admin/checkAdminLogin", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                if (response.data.isLogin) {
+                    setIsAdminLogin(true);
+                    setAdmin(response.data.admin);
+                } else {
+                    setIsAdminLogin(false);
+                    setAdmin(null);
+                }
+            } catch (error) {
+                setIsAdminLogin(false);
+                setAdmin(null);
+            }
+        }
+        else{
+            setIsAdminLogin(false);
+            setAdmin(null);
+        }
+    };
     
     useEffect(() => {
 
@@ -42,6 +71,7 @@ export const AuthProvider = ({ children }) => {
           }
 
         fetchUserData();
+        fetchAdminData();
 
     }, []);
 
@@ -49,6 +79,12 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('token', token);
         setIsLogin(true);
         fetchUserData();
+    };
+
+    const adminLogin = (token) => {
+        localStorage.setItem('adminToken', token);
+        setIsAdminLogin(true);
+        fetchAdminData();
     };
 
     const logout = () => {
@@ -64,7 +100,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ isLogin, user, login, logout, fetchUserData }}>
+        <AuthContext.Provider value={{ isLogin, user, login, logout, fetchUserData, fetchAdminData, adminLogin, isAdminLogin, admin }}>
             {children}
         </AuthContext.Provider>
     );

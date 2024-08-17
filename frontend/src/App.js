@@ -35,8 +35,11 @@ import ServiceOrderDetails from './pages/common/ServiceOrderDetails.js';
 import ChatPage from './pages/buyer/Chat.js';
 import Contact from './pages/buyer/Contact.js';
 import Profile from './pages/buyer/Profile';
-import AdminLayout from "./layouts/AdminLayout";
+
+import AdminProtectedRoute from './utils/AdminProtectedRoute.js';
 import AdminLogin from "./pages/admin/AdminLogin.js";
+import AdminDashboard from './pages/admin/AdminDashboard.js';
+import Employees from './pages/admin/Employees.js';
 
 function App() {
 
@@ -93,10 +96,12 @@ function App() {
                     <Route path="/resetPassword/:token" element={<ResetPassword />} />
                     <Route path='/requirements/:orderId' element={<Requirements />} />
                     <Route path='/seller/becomeaseller' element={<BecomeSeller />} />
+                    <Route path='/ftzy-admin/login' element={<AdminLogin />} />
                 </Route>
 
-                <Route element={<AdminLayout />}>
-                    <Route path="/ftzy-admin/login" element={<AdminLogin />} />
+                <Route element={<AdminProtectedRoute />}>
+                    <Route path="/ftzy-admin/dashboard" element={<AdminDashboard />} />
+                    <Route path="/ftzy-admin/employees" element={<Employees />} />
                 </Route>
 
             </Routes>

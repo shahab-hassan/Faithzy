@@ -492,29 +492,15 @@
     width: 100%;
 }
 
-.registerDiv .registerContent .registerRight .registerRightLower .inputDiv .passwordFieldUpper,
-.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .passwordFieldUpper
-{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.registerDiv .registerContent .registerRight .registerRightLower .inputDiv .hidePasswordBtn,
 .registerDiv .registerContent .registerRight .registerRightLower .inputDiv .passInstructions,
-.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .hidePasswordBtn,
 .loginDiv .loginContent .loginRight .loginRightLower .inputDiv .forgotPasswordBtn
 {
     color: var(--darkGray);
     font-size: 0.85rem;
 } 
-
-.registerDiv .registerContent .registerRight .registerRightLower .inputDiv .hidePasswordBtn,
-.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .hidePasswordBtn{
-    cursor: pointer;
-    font-size: 0.95rem;
-    margin-right: 5px;
-}
+.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .forgotPasswordBtn:hover{
+    color: var(--black);
+} 
 
 .registerDiv .registerContent .registerRight .registerRightLower .inputDiv .primaryBtn,
 .loginDiv .loginContent .loginRight .loginRightLower .inputDiv .primaryBtn

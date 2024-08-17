@@ -37,7 +37,7 @@ function Register() {
             </div>
           </div> */}
 
-          <form className="registerRight" onSubmit={registerUser}>
+          <form className="registerRight form" onSubmit={registerUser}>
             <h1 className='primaryHeading signUpHeading'>Sign<span>Up</span></h1>
             <ThirdPartyLogin />
             <div className="orLine">OR</div>

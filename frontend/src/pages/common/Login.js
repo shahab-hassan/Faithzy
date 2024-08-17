@@ -48,7 +48,7 @@ function Login() {
             <h1 className='primaryHeading loginHeading'>Log<span>In</span></h1>
             <ThirdPartyLogin />
             <div className="orLine">OR</div>
-            <form className="loginRightLower" onSubmit={loginUser}>
+            <form className="loginRightLower form" onSubmit={loginUser}>
               <h3 className='secondaryHeading'>Login with your email address</h3>
               <div className='inputDiv'>
                 <label htmlFor="email">Email</label>

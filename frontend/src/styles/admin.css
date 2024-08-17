@@ -1,0 +1,115 @@
+.admin{
+    height: 100vh;
+    background: var(--extraLightGray);
+    display: flex;
+    overflow: hidden;
+}
+.admin .adminDiv{
+    width: 82%;
+    padding: 40px 30px;
+    overflow-y: auto;
+    height: 100vh;
+}
+
+
+/* ****************************** LOGIN PAGE ****************************** */
+
+.adminLoginDiv{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.adminLoginDiv .adminLoginContent{
+    background: var(--white);
+    border-radius: 8px;
+    height: fit-content;
+    min-width: 50%;
+    padding: 30px 50px;
+}
+.adminLoginDiv .adminLoginContent .primaryHeading,
+.adminLoginDiv .adminLoginContent .primaryBtn{
+    width: 100%;
+    text-align: center;
+}
+
+
+
+
+/* ****************************** HEADER PAGE ****************************** */
+
+.adminHeaderDiv{
+    position: sticky;
+    background: var(--lightGray);
+    height: 100vh;
+    top: 0;
+    left: 0;
+    width: 18%;
+    padding: 30px 20px;
+}
+.adminHeaderDiv .horizontalLine{
+    background: var(--gray);
+}
+
+.adminHeaderDiv .adminHeaderContent{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+.adminHeaderDiv .adminHeaderContent .faithzyLogoDiv{
+    margin: auto;
+    width: 90px;
+    height: 90px;
+}
+
+.adminHeaderDiv .adminHeaderContent .mainMenu{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.adminHeaderDiv .adminHeaderContent .mainMenu li a{
+    position: relative;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.adminHeaderDiv .adminHeaderContent .mainMenu li a.activeLi{
+    color: var(--black);
+    font-weight: 600;
+}
+.adminHeaderDiv .adminHeaderContent .mainMenu li a.activeLi::before{
+    position: absolute;
+    top: 10%;
+    left: -5%;
+    background: var(--black);
+    width: 2%;
+    height: 80%;
+    content: "";
+    border-radius: 8px;
+}
+
+
+
+
+/* ****************************** EMPLOYEES PAGE ****************************** */
+
+.adminEmployeesDiv .tableDiv{
+    padding: 0;
+}
+.adminEmployeesDiv .tableDiv .id,
+.adminEmployeesDiv .tableDiv .idField{
+    width: 150% !important;
+}
+.adminEmployeesDiv .tableDiv .rows .row .titleField .title{
+    width: 90%;
+}
+.adminEmployeesDiv .tableDiv .rows .row .icon{
+    width: 15px !important;
+    height: 15px !important;
+}
+
+.adminEmployeesDiv .dropdownPlus{
+    width: 100%;
+    margin: 5px 0px;
+}
