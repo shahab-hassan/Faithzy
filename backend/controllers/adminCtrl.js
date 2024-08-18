@@ -7,9 +7,10 @@ const adminModel = require("../models/adminModel")
 const sendEmail = require("../utils/sendEmail")
 
 exports.getAdmins = asyncHandler(async (req, res) => {
-    const admins = await adminModel.find({ email: { $ne: "admin@gmail.com" } });
-    return res.status(200).json({ success: true, admins: admins.reverse() });
+    const admins = await adminModel.find({ email: { $ne: "admin@gmail.com" } }).sort({ updatedAt: -1 });
+    return res.status(200).json({ success: true, admins });
 });
+
 
 exports.addNewAdmin = asyncHandler(async (req, res) => {
     const { email, name, password, role, access } = req.body;
@@ -45,6 +46,33 @@ exports.addNewAdmin = asyncHandler(async (req, res) => {
     });
 });
 
+exports.updateAdmin = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { email, name, role, access, password } = req.body;
+
+
+    let admin = await adminModel.findById(id);
+    if (!admin) {
+        res.status(404);
+        throw new Error("Admin not found!");
+    }
+
+    admin.email = email || admin.email;
+    admin.name = name || admin.name;
+    admin.role = role || admin.role;
+    admin.access = role === 'Editor' ? access : undefined;
+
+    if (password) {
+        admin.password = await bcrypt.hash(password, 10);
+    }
+
+    await admin.save();
+
+    res.status(200).json({
+        success: true,
+        admin
+    });
+});
 
 exports.loginAdmin = asyncHandler(async (req, res) => {
 

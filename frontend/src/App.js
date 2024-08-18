@@ -40,6 +40,7 @@ import AdminProtectedRoute from './utils/AdminProtectedRoute.js';
 import AdminLogin from "./pages/admin/AdminLogin.js";
 import AdminDashboard from './pages/admin/AdminDashboard.js';
 import Employees from './pages/admin/Employees.js';
+import AdminTerms from './pages/admin/AdminTerms.js';
 
 function App() {
 
@@ -102,6 +103,7 @@ function App() {
                 <Route element={<AdminProtectedRoute />}>
                     <Route path="/ftzy-admin/dashboard" element={<AdminDashboard />} />
                     <Route path="/ftzy-admin/employees" element={<Employees />} />
+                    <Route path="/ftzy-admin/terms" element={<AdminTerms />} />
                 </Route>
 
             </Routes>

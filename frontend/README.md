@@ -1,5 +1,7 @@
 *** Overview ***: 
-- Working on Admin Panel:
---- New Admin can be added
---- Any admin can be deleted
---- Details of Admin can be Seen
+
+- Completed Employees Page of Admin Panel:
+--- Admin Details can be Edited
+--- Fixed multiple bugs
+
+- Created and completed Terms & Conditions Page of Admin Panel

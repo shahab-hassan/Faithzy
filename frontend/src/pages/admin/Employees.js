@@ -1,18 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { FaEye } from 'react-icons/fa6';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 import Dropdown from '../../components/common/Dropdown';
+import { AuthContext } from "../../utils/AuthContext";
 
 function Employees() {
+
+  const { admin } = useContext(AuthContext);
+
   const [admins, setAdmins] = React.useState([]);
   const [showAddNewModel, setShowAddNewModel] = React.useState(false);
   const [showDetailsModel, setShowDetailsModel] = React.useState(null);
   const [passwordHidden, setPasswordHidden] = React.useState(true);
   const [selectedRole, setSelectedRole] = React.useState('Moderator');
   const [pageAccess, setPageAccess] = React.useState({});
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [editAdmin, setEditAdmin] = React.useState(null);
   const [newEmployee, setNewEmployee] = React.useState({
     email: '',
     name: '',
@@ -33,8 +39,27 @@ function Employees() {
       });
   }, []);
 
+  const handleOpenAddNewForm = () => {
+    setIsEditing(false);
+    setNewEmployee({
+      email: '',
+      name: '',
+      password: ''
+    });
+    setSelectedRole('Moderator');
+    setPageAccess({});
+    setShowAddNewModel(true);
+  };
+
   const handleAddNewEmployee = (e) => {
+
     e.preventDefault();
+
+    if (selectedRole === "Editor")
+      if (Object.keys(pageAccess).length < 1) {
+        enqueueSnackbar("Editor requires at least 1 page access", { variant: "warning" });
+        return;
+      }
 
     const token = localStorage.getItem('adminToken');
     const newAdminData = {
@@ -59,7 +84,52 @@ function Employees() {
       });
   };
 
+  const handleOpenEditForm = (adminData) => {
+    setEditAdmin(adminData);
+    setSelectedRole(adminData.role);
+    setPageAccess(adminData.access || {});
+    setNewEmployee({
+      email: adminData.email,
+      name: adminData.name,
+      password: ''
+    });
+    setIsEditing(true);
+    setShowAddNewModel(true);
+  };
+
+  const handleEditEmployee = (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem('adminToken');
+    const updatedAdminData = {
+      ...newEmployee,
+      role: selectedRole,
+      access: selectedRole === 'Editor' ? pageAccess : undefined
+    };
+
+    axios
+      .put(`http://localhost:5000/api/v1/admins/admin/update/${editAdmin._id}`, updatedAdminData, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then((response) => {
+        if (response.data.success) {
+          setAdmins((prevAdmins) => [
+            response.data.admin,
+            ...prevAdmins.filter((admin) => admin._id !== editAdmin._id)
+          ]);
+          setShowAddNewModel(false);
+          setIsEditing(false);
+          enqueueSnackbar('Employee updated successfully!', { variant: 'success' });
+        }
+      })
+      .catch((e) => {
+        enqueueSnackbar(e.response?.data?.error || 'Something went wrong!', { variant: 'error' });
+      });
+  };
+
   const handleDeleteAdmin = (adminId) => {
+    if (!window.confirm("You are removing an Employee... Are you sure you want to continue?"))
+      return;
     const token = localStorage.getItem('adminToken');
     axios
       .delete(`http://localhost:5000/api/v1/admins/admin/delete/${adminId}`, {
@@ -76,7 +146,6 @@ function Employees() {
       });
   };
 
-
   const handleInputChange = (e) => {
     setNewEmployee((prev) => ({
       ...prev,
@@ -85,11 +154,19 @@ function Employees() {
   };
 
   const handlePageAccessChange = (page, checked, action) => {
-    setPageAccess((prev) => ({
-      ...prev,
-      [page]: checked ? action : null
-    }));
+    setPageAccess((prev) => {
+      const updatedAccess = { ...prev };
+
+      if (checked) {
+        updatedAccess[page] = action;
+      } else {
+        delete updatedAccess[page];
+      }
+
+      return updatedAccess;
+    });
   };
+
 
   const adminPages = [
     'Dashboard',
@@ -140,33 +217,33 @@ function Employees() {
   const showEditorAccesses = showDetailsModel && showDetailsModel.role === "Editor" && (
     <div className='accessTo'>
       {Object.entries(showDetailsModel.access)
-        .filter(([page, access]) => access !== null)
         .map(([page, access]) => `${page} (Can ${access})`)
         .join(", ")}
     </div>
   );
 
 
-  const employeesElems = admins.length > 0? admins.map((admin, index) => (
-      <div key={index}>
-        <div className="requestRow row">
-          <div className="titleField field">
-            <p className="title">{admin.email}</p>
-          </div>
-          <p className="idField field">#{admin._id}</p>
-          <p className="nameField field">{admin.name}</p>
-          <p className="accessField field">{admin.role}</p>
-          <div className="actionsField field">
-            <FaEye className="icon" onClick={() => setShowDetailsModel(admin)} />
-            <FaEdit className="icon" />
-            <FaTrash className="icon" onClick={() => handleDeleteAdmin(admin._id)} />
-
-          </div>
+  const employeesElems = admins.length > 0 ? admins.map((item, index) => (
+    <div key={index}>
+      <div className="requestRow row">
+        <div className="titleField field">
+          <p className="title">{item.email}</p>
         </div>
-        {admins.length > 1 && admins.length - 1 !== index && <div className="horizontalLine"></div>}
+        <p className="idField field">#{item._id}</p>
+        <p className="nameField field">{item.name}</p>
+        <p className="accessField field">{item.role}</p>
+        <div className="actionsField field">
+          <FaEye className="icon" onClick={() => setShowDetailsModel(item)} />
+          {admin._id !== item._id && <><FaEdit className="icon" onClick={() => handleOpenEditForm(item)} />
+            <FaTrash className="icon" onClick={() => handleDeleteAdmin(item._id)} /></>}
+
+        </div>
       </div>
-    ))
+      {admins.length > 1 && admins.length - 1 !== index && <div className="horizontalLine"></div>}
+    </div>
+  ))
     : <div className="row">Nothing to show here...</div>;
+
 
   return (
     <div className="adminEmployeesDiv">
@@ -179,9 +256,7 @@ function Employees() {
                 All <span>Employees</span>
                 <span className="totalRows">- {(admins.length < 10 && '0') + admins.length}</span>
               </h2>
-              <button className="primaryBtn" onClick={() => setShowAddNewModel(true)}>
-                Add New Employee
-              </button>
+              <button className="primaryBtn" onClick={handleOpenAddNewForm}>Add New Employee</button>
             </div>
             <div className="header">
               <p className="title">Email</p>
@@ -199,11 +274,9 @@ function Employees() {
       {showAddNewModel && (
         <div className="popupDiv addNewModelDiv">
           <div className="popupContent">
-            <form className="form" onSubmit={handleAddNewEmployee}>
+            <form className="form" onSubmit={isEditing ? handleEditEmployee : handleAddNewEmployee}>
               <div className="inputDiv">
-                <label>
-                  Email <span>*</span>
-                </label>
+                <label>Email <span>*</span></label>
                 <input
                   type="email"
                   className="inputField"
@@ -215,9 +288,7 @@ function Employees() {
                 />
               </div>
               <div className="inputDiv">
-                <label>
-                  Name <span>*</span>
-                </label>
+                <label>Name <span>*</span></label>
                 <input
                   type="text"
                   className="inputField"
@@ -239,9 +310,7 @@ function Employees() {
               </div>
               <div className="inputDiv">
                 <div className="passwordFieldUpper">
-                  <label htmlFor="password">
-                    Create Password <span>*</span>
-                  </label>
+                  <label htmlFor="password">{isEditing ? "Create New Password" : <>Create Password <span>*</span></>}</label>
                   <div
                     className="hidePasswordBtn"
                     onClick={() => setPasswordHidden((oldValue) => !oldValue)}
@@ -256,18 +325,19 @@ function Employees() {
                   value={newEmployee.password}
                   onChange={handleInputChange}
                   placeholder="Enter Password"
-                  required
+                  required={!isEditing}
                 />
               </div>
               <div className="buttonsDiv">
                 <button className="primaryBtn" type="submit">
-                  Add Employee
+                  {isEditing ? 'Save Changes' : 'Add Employee'}
                 </button>
                 <button className="secondaryBtn" type="button" onClick={() => setShowAddNewModel(false)}>
                   Close
                 </button>
               </div>
             </form>
+
           </div>
           <div className="popupCloseBtn">
             <IoIosCloseCircleOutline className="icon" onClick={() => setShowAddNewModel(false)} />

@@ -39,6 +39,7 @@ app.use("/api/v1/tradeleads", require("./routes/tradeleadRoute.js"));
 app.use("/api/v1/orders", require("./routes/orderRoute.js"));
 app.use("/api/v1/chats", require("./routes/chatRoute.js"));
 app.use("/api/v1/admins", require("./routes/adminRoute.js"));
+app.use("/api/v1/settings/admin", require("./routes/adminSettingsRoute.js"));
 
 app.use(errorHandler);
 

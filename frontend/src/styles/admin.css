@@ -139,3 +139,21 @@
     margin-top: 5px;
     font-size: 0.9rem;
 }
+
+
+
+
+
+
+/* ****************************** ADMIN TERMS & CONDITIONS PAGE ****************************** */
+
+.adminTermsDiv textarea{
+    width: 100%;
+    background: var(--white);
+    padding: 20px 30px;
+    margin-bottom: 20px;
+    min-height: 70vh;
+    border: 1px solid var(--gray);
+    outline: none;
+    border-radius: 8px;
+}

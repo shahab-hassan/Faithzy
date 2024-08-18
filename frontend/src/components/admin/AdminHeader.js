@@ -33,7 +33,7 @@ function AdminHeader() {
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaCreditCard className='icon'/>Payments</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaNetworkWired className='icon'/>Social Media Links</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaMoneyBill className='icon'/>Fee</NavLink></li>
-            <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><BsFileEarmarkRuledFill className='icon'/>Terms & Conditions</NavLink></li>
+            <li><NavLink to="/ftzy-admin/terms" className={(v)=>`${v.isActive? "activeLi": ""}`}><BsFileEarmarkRuledFill className='icon'/>Terms & Conditions</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><HiUsers className='icon'/>Disputes</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaEnvelope className='icon'/>Chats</NavLink></li>
             <li><NavLink to="/ftzy-admin/employees" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaUsers className='icon'/>Employees</NavLink></li>
