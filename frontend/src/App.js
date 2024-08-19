@@ -43,6 +43,7 @@ import Employees from './pages/admin/Employees.js';
 import AdminTerms from './pages/admin/AdminTerms.js';
 import SocialLinks from './pages/admin/AdminSocialLinks.js';
 import AdminCategories from './pages/admin/AdminCategories.js';
+import Coupons from './pages/admin/Coupons.js';
 
 function App() {
 
@@ -108,6 +109,7 @@ function App() {
                     <Route path="/ftzy-admin/terms" element={<AdminTerms />} />
                     <Route path="/ftzy-admin/social" element={<SocialLinks />} />
                     <Route path="/ftzy-admin/categories" element={<AdminCategories />} />
+                    <Route path="/ftzy-admin/coupons" element={<Coupons />} />
                 </Route>
 
             </Routes>

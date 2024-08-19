@@ -143,7 +143,7 @@ function AdminCategories() {
                     <div className="tableContent">
                         <div className="upper">
                             <h2 className="secondaryHeading">
-                                <span>All </span>Categories
+                                <span>{filterType} </span>Categories
                                 <span className="totalRows">- {(categories.length < 10 && '0') + categories.length}</span>
                             </h2>
                             <div className="upperRight">

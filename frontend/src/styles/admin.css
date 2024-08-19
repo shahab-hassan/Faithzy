@@ -199,9 +199,21 @@
 
 
 
-/* ****************************** ADMIN SOCIAL LINKS PAGE ****************************** */
+/* ****************************** ADMIN CATEGORIES PAGE ****************************** */
 
 .adminCategoriesDiv .popupDiv .dropdownPlus{
     margin: 5px 0px;
+    width: 100%;
+}
+
+
+
+
+
+/* ****************************** ADMIN COUPONS PAGE ****************************** */
+
+.adminCouponsDiv .detailsModelDiv .details .row{
+    display: flex;
+    justify-content: space-between;
     width: 100%;
 }

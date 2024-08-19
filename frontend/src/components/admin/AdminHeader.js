@@ -25,7 +25,7 @@ function AdminHeader() {
           <ul className="mainMenu">
             <li><NavLink to="/ftzy-admin/dashboard" className={(v)=>`${v.isActive? "activeLi": ""}`}><MdAnalytics className='icon'/>Dashboard</NavLink></li>
             <li><NavLink to="/ftzy-admin/categories" className={(v)=>`${v.isActive? "activeLi": ""}`}><BiSolidCategoryAlt className='icon'/>Categories</NavLink></li>
-            <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><RiCoupon2Fill className='icon'/>Coupons</NavLink></li>
+            <li><NavLink to="/ftzy-admin/coupons" className={(v)=>`${v.isActive? "activeLi": ""}`}><RiCoupon2Fill className='icon'/>Coupons</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><TbTruckDelivery className='icon'/>Orders</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaShop className='icon'/>Sellers</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaUserCircle className='icon'/>Buyers</NavLink></li>
