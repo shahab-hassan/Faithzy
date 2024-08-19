@@ -2,9 +2,14 @@ const asyncHandler = require("express-async-handler");
 const Category = require("../models/categoryModel");
 
 
+exports.getCategories = asyncHandler(async (req, res) => {
+    const categories = await Category.find({}).sort({ updatedAt: -1 });
+    res.status(200).json({ success: true, categories });
+});
+
 exports.getAllCategories = asyncHandler(async (req, res) => {
-    const productCategories = await Category.find({type: "product"});
-    const serviceCategories = await Category.find({type: "service"});
+    const productCategories = await Category.find({ type: "product" });
+    const serviceCategories = await Category.find({ type: "service" });
     res.status(200).json({ success: true, productCategories, serviceCategories });
 });
 
@@ -91,7 +96,7 @@ exports.deleteCategory = asyncHandler(async (req, res) => {
         throw new Error("Category not found");
     }
 
-    await category.remove();
+    await Category.deleteOne({ _id: id });
 
     res.status(200).json({ success: true, message: "Category removed" });
 });

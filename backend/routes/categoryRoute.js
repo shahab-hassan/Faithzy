@@ -10,8 +10,10 @@ const {
     addCategory,
     updateCategory,
     deleteCategory,
+    getCategories,
 } = require("../controllers/categoryCtrl");
 
+router.get("/", getCategories);
 router.get("/all", getAllCategories);
 router.get("/product/all", getAllProductCategories);
 router.get("/service/all", getAllServiceCategories);

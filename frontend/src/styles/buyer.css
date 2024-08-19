@@ -248,11 +248,11 @@
     font-size: 1.2rem;
 }
 
-.buyerFooterDiv .footerContent .footerLower .socialIcons{
+.buyerFooterDiv .footerContent .footerLower .footerIconsDiv{
     display: flex;
     gap: 15px;
 }
-.buyerFooterDiv .footerContent .footerLower .socialIcons i{
+.buyerFooterDiv .footerContent .footerLower .socialIcons .icon{
     cursor: pointer;
 }
 

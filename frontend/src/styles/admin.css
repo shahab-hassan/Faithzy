@@ -11,6 +11,26 @@
     height: 100vh;
 }
 
+.admin .adminDiv .tableDiv{
+    padding: 0;
+}
+.admin .adminDiv .tableDiv .upper .upperRight{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.admin .adminDiv .tableDiv .id,
+.admin .adminDiv .tableDiv .idField{
+    width: 150% !important;
+}
+.admin .adminDiv .tableDiv .rows .row .titleField .title{
+    width: 90%;
+}
+.admin .adminDiv .tableDiv .rows .row .icon{
+    width: 15px !important;
+    height: 15px !important;
+}
+
 
 /* ****************************** LOGIN PAGE ****************************** */
 
@@ -94,22 +114,8 @@
 
 /* ****************************** EMPLOYEES PAGE ****************************** */
 
-.adminEmployeesDiv .tableDiv{
-    padding: 0;
-}
 .adminEmployeesDiv .addNewModelDiv .popupContent{
     min-width: 60%;
-}
-.adminEmployeesDiv .tableDiv .id,
-.adminEmployeesDiv .tableDiv .idField{
-    width: 150% !important;
-}
-.adminEmployeesDiv .tableDiv .rows .row .titleField .title{
-    width: 90%;
-}
-.adminEmployeesDiv .tableDiv .rows .row .icon{
-    width: 15px !important;
-    height: 15px !important;
 }
 
 .adminEmployeesDiv .dropdownPlus{
@@ -156,4 +162,46 @@
     border: 1px solid var(--gray);
     outline: none;
     border-radius: 8px;
+}
+
+
+
+
+/* ****************************** ADMIN SOCIAL LINKS PAGE ****************************** */
+
+.socialLinksDiv .horizontalLine{
+    margin-top: 10px;
+}
+.socialLinksDiv .row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+}
+.socialLinksDiv .socialCheckInput{
+    cursor: pointer;
+}
+.socialLinksDiv .row .platformName{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--lightBlackPrimary);
+}
+.socialLinksDiv .row .socialInput{
+    width: 85%;
+    padding: 8px 20px;
+    outline: none;
+    border: 1px solid var(--gray);
+    border-radius: 8px;
+}
+
+
+
+
+/* ****************************** ADMIN SOCIAL LINKS PAGE ****************************** */
+
+.adminCategoriesDiv .popupDiv .dropdownPlus{
+    margin: 5px 0px;
+    width: 100%;
 }

@@ -41,6 +41,8 @@ import AdminLogin from "./pages/admin/AdminLogin.js";
 import AdminDashboard from './pages/admin/AdminDashboard.js';
 import Employees from './pages/admin/Employees.js';
 import AdminTerms from './pages/admin/AdminTerms.js';
+import SocialLinks from './pages/admin/AdminSocialLinks.js';
+import AdminCategories from './pages/admin/AdminCategories.js';
 
 function App() {
 
@@ -104,6 +106,8 @@ function App() {
                     <Route path="/ftzy-admin/dashboard" element={<AdminDashboard />} />
                     <Route path="/ftzy-admin/employees" element={<Employees />} />
                     <Route path="/ftzy-admin/terms" element={<AdminTerms />} />
+                    <Route path="/ftzy-admin/social" element={<SocialLinks />} />
+                    <Route path="/ftzy-admin/categories" element={<AdminCategories />} />
                 </Route>
 
             </Routes>

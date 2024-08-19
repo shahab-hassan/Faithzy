@@ -24,14 +24,14 @@ function AdminHeader() {
 
           <ul className="mainMenu">
             <li><NavLink to="/ftzy-admin/dashboard" className={(v)=>`${v.isActive? "activeLi": ""}`}><MdAnalytics className='icon'/>Dashboard</NavLink></li>
-            <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><BiSolidCategoryAlt className='icon'/>Categories</NavLink></li>
+            <li><NavLink to="/ftzy-admin/categories" className={(v)=>`${v.isActive? "activeLi": ""}`}><BiSolidCategoryAlt className='icon'/>Categories</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><RiCoupon2Fill className='icon'/>Coupons</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><TbTruckDelivery className='icon'/>Orders</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaShop className='icon'/>Sellers</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaUserCircle className='icon'/>Buyers</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaSackDollar className='icon'/>Revenue</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaCreditCard className='icon'/>Payments</NavLink></li>
-            <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaNetworkWired className='icon'/>Social Media Links</NavLink></li>
+            <li><NavLink to="/ftzy-admin/social" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaNetworkWired className='icon'/>Social Media Links</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaMoneyBill className='icon'/>Fee</NavLink></li>
             <li><NavLink to="/ftzy-admin/terms" className={(v)=>`${v.isActive? "activeLi": ""}`}><BsFileEarmarkRuledFill className='icon'/>Terms & Conditions</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><HiUsers className='icon'/>Disputes</NavLink></li>

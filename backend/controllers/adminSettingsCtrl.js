@@ -12,7 +12,7 @@ exports.getTerms = asyncHandler(async (req, res) => {
             throw new Error("Terms not found!");
         }
 
-        res.status(200).json({success: true, terms: settings.terms});
+        res.status(200).json({ success: true, terms: settings.terms });
 
     } catch (err) {
         res.status(500);
@@ -41,4 +41,36 @@ exports.createOrUpdateTerms = asyncHandler(async (req, res) => {
         success: true,
         terms: settings.terms
     });
+});
+
+
+exports.getSocialLinks = asyncHandler(async (req, res) => {
+    const settings = await adminSettingsModel.findOne({}, 'socialLinks');
+
+    if (!settings || !settings.socialLinks) {
+        res.status(404);
+        throw new Error("Social links not found!");
+    }
+
+    res.status(200).json({ success: true, socialLinks: settings.socialLinks });
+});
+
+exports.createOrUpdateSocialLinks = asyncHandler(async (req, res) => {
+    const { socialLinks } = req.body;
+
+    if (!socialLinks || Object.keys(socialLinks).length === 0) {
+        res.status(400);
+        throw new Error("At least one social link is required!");
+    }
+
+    let settings = await adminSettingsModel.findOne();
+
+    if (settings) {
+        settings.socialLinks = socialLinks;
+        settings = await settings.save();
+    } else {
+        settings = await adminSettingsModel.create({ socialLinks });
+    }
+
+    res.status(200).json({ success: true, socialLinks: settings.socialLinks });
 });

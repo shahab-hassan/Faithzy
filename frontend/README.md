@@ -1,7 +1,4 @@
 *** Overview ***: 
 
-- Completed Employees Page of Admin Panel:
---- Admin Details can be Edited
---- Fixed multiple bugs
-
-- Created and completed Terms & Conditions Page of Admin Panel
+- Created and Completed Social Links Page
+- Created and Complete Categories Page
