@@ -1468,6 +1468,13 @@
     margin-top: 5px;
 }
 
+.checkoutDiv .orderSummary .promoCodeBox{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+}
+
 .checkoutDiv .orderSummary .row{
     display: flex;
     justify-content: space-between;

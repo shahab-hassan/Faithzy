@@ -4,9 +4,15 @@ const productOrder = new mongoose.Schema({
   sellerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Seller', required: true },
   productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
   count: { type: Number, default: 1 },
-  salesPrice: {type: Number, required: true},
-  shippingFees: {type: Number, required: true, default: 0},
-  status: { type: [{ name: String, createdAt: Date}], required: true, default: [{name: "Active", createdAt: Date.now()}]},
+  sellerToGet: {
+    salesPrice: Number,
+    shippingFees: Number,
+    subtotal: Number,
+    tax: Number,
+    total: Number
+  },
+  promoSalesPrice: { type: Number, required: true },
+  status: { type: [{ name: String, createdAt: Date }], required: true, default: [{ name: "Active", createdAt: Date.now() }] },
   cancellationReason: String
 })
 
@@ -20,11 +26,14 @@ const productOrderSchema = new mongoose.Schema({
   products: [productOrder],
 
   summary: {
-    price: Number,
-    shipping: Number,
-    total: Number,
-    tax: Number,
-    subtotal: Number
+    paidByBuyer: {
+      totalSalesPrice: Number,
+      totalShipping: Number,
+      subtotal: Number,
+      tax: Number,
+      total: Number,
+      promoDiscount: Number
+    }
   },
   paymentMethod: {
     type: String,
@@ -44,23 +53,23 @@ const productOrderSchema = new mongoose.Schema({
     note: String
   },
   clientSecret: String
-}, {timestamps: true});
+}, { timestamps: true });
 
 
-const historySchema = new mongoose.Schema({ 
-  name: {type: String, required: true, enum: ["orderPlaced", "requirementsRequired", "requirementsSubmitted", "orderStarted", "extensionRequested", "extensionAccepted", "extensionDeclined", "deliverySent", "deliveryAccepted", "askedForRevision", "cancellationSent", "cancellationAccepted", "cancellationDeclined"]}, 
-  message: {type: String, required: true },
-  description: {type: {text: String, images: [String], extensionDays: Number}}, 
-  role: {type: String, enum: ["Buyer", "Seller"]}, 
-  isDone: {type: Boolean}, 
-  createdAt: {type: Date}
+const historySchema = new mongoose.Schema({
+  name: { type: String, required: true, enum: ["orderPlaced", "requirementsRequired", "requirementsSubmitted", "orderStarted", "extensionRequested", "extensionAccepted", "extensionDeclined", "deliverySent", "deliveryAccepted", "askedForRevision", "cancellationSent", "cancellationAccepted", "cancellationDeclined"] },
+  message: { type: String, required: true },
+  description: { type: { text: String, images: [String], extensionDays: Number } },
+  role: { type: String, enum: ["Buyer", "Seller"] },
+  isDone: { type: Boolean },
+  createdAt: { type: Date }
 })
 
 const serviceOrder = new mongoose.Schema({
   sellerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Seller', required: true },
   serviceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Service' },
-  pkg: {type: {name: String, title: String, description: String, deliveryDays: Number}},
-  status: { type: [{ name: String, createdAt: Date}], required: true, default: [{name: "Active", createdAt: Date.now()}]},
+  pkg: { type: { name: String, title: String, description: String, deliveryDays: Number } },
+  status: { type: [{ name: String, createdAt: Date }], required: true, default: [{ name: "Active", createdAt: Date.now() }] },
   history: [historySchema],
   cancellationReason: String
 })
@@ -72,9 +81,16 @@ const serviceOrderSchema = new mongoose.Schema({
   service: serviceOrder,
 
   summary: {
-    salesPrice: Number,
-    tax: Number,
-    total: Number,
+    paidByBuyer: {
+      salesPrice: Number,
+      tax: Number,
+      total: Number,
+    },
+    sellerToGet: {
+      salesPrice: Number,
+      tax: Number,
+      total: Number,
+    }
   },
   paymentMethod: { type: String, enum: ['stripe', 'paypal'], required: true },
 
@@ -88,7 +104,7 @@ const serviceOrderSchema = new mongoose.Schema({
   },
   answers: [String],
   clientSecret: String
-}, {timestamps: true});
+}, { timestamps: true });
 
 
 
@@ -96,4 +112,4 @@ const serviceOrderSchema = new mongoose.Schema({
 
 const productOrderModel = mongoose.model('ProductOrder', productOrderSchema);
 const serviceOrderModel = mongoose.model('ServiceOrder', serviceOrderSchema);
-module.exports = {productOrderModel, serviceOrderModel};
+module.exports = { productOrderModel, serviceOrderModel };

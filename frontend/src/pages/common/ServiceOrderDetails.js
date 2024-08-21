@@ -328,7 +328,7 @@ function ServiceOrderDetails({ isBuyer }) {
       <div><strong>Description: </strong>{activity.description.text}</div>
 
       <div className='deliveryImages'>{activity.description.images.map((img, index) => {
-        return <img key={index} src={`http://localhost:5000/${img}`} alt="Error" style={{cursor: "pointer" }} onClick={()=> setShowImageModel(img)} />
+        return <img key={index} src={`http://localhost:5000/${img}`} alt="Error" style={{ cursor: "pointer" }} onClick={() => setShowImageModel(img)} />
       })}</div>
 
       {isBuyer && !activity.isDone && <div className='detailsBtns'>
@@ -417,18 +417,24 @@ function ServiceOrderDetails({ isBuyer }) {
                 <p className="singleLineText">{order.service.serviceId.title}</p>
               </div>
               <div className="details">
+
                 {isBuyer && <div><p>Seller</p><Link to={`/profile/${order?.service?.serviceId?.sellerId?._id}`} className='username'>{usernames[1] + " >"}</Link></div>}
                 {!isBuyer && <div><p>Buyer</p><strong className='username'>{usernames[0]}</strong></div>}
+
                 <div><p>Order ID</p><strong>#{order._id}</strong></div>
                 <div><p>Status</p><strong>{order.service.status[order.service.status.length - 1].name}</strong></div>
-                <div><p>Price</p><strong>${(order.summary.salesPrice).toFixed(2)}</strong></div>
-                {isBuyer && <><div><p>Service Fee (5%)</p><strong>${(order.summary.tax).toFixed(2)}</strong></div>
-                  <div><p>You Paid</p><strong>${(order.summary.total).toFixed(2)}</strong></div></>}
-                {!isBuyer && <><div><p>Service Fee (12%)</p><strong>${(order.summary.salesPrice * 0.12).toFixed(2)}</strong></div>
-                  <div><p>You will Get</p><strong>${(order.summary.salesPrice - (order.summary.salesPrice * 0.12)).toFixed(2)}</strong></div></>}
+
+                {isBuyer && <><div><p>Price</p><strong>${(order.summary.paidByBuyer.salesPrice).toFixed(2)}</strong></div>
+                  <div><p>Service Fee (5%)</p><strong>${(order.summary.paidByBuyer.tax).toFixed(2)}</strong></div>
+                  <div><p>You Paid</p><strong>${(order.summary.paidByBuyer.total).toFixed(2)}</strong></div></>}
+
+                {!isBuyer && <><div><p>Price</p><strong>${(order.summary.sellerToGet.salesPrice).toFixed(2)}</strong></div>
+                  <div><p>Service Fee (12%)</p><strong>-${(order.summary.sellerToGet.tax).toFixed(2)}</strong></div>
+                  <div><p>You will Get</p><strong>${(order.summary.sellerToGet.total).toFixed(2)}</strong></div></>}
+
               </div>
               <div className="actions">
-                <Link to={`/chat?p=${!isBuyer? order?.userId?._id : order?.service?.serviceId?.sellerId?.userId?._id}`} className='primaryBtn'>{`Contact ${isBuyer ? "Seller" : "Buyer"}`}</Link>
+                <Link to={`/chat?p=${!isBuyer ? order?.userId?._id : order?.service?.serviceId?.sellerId?.userId?._id}`} className='primaryBtn'>{`Contact ${isBuyer ? "Seller" : "Buyer"}`}</Link>
                 <button className='secondaryBtn' disabled={crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Cancelled"}>Start Dispute</button>
                 <button className='dangerBtn' onClick={() => setShowCancelModel(true)} disabled={cancellationPending || crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Cancelled"}>{isBuyer ? "Cancel Order" : "Ask to Cancel"}</button>
               </div>

@@ -93,7 +93,7 @@ const Orders = ({ pageType }) => {
                 </div>
               </div>
               <div className="right">
-                <div className="price">${order.summary.price}</div>
+                <div className="price">${product.promoSalesPrice}</div>
                 <Link to={`/chat?p=${product?.productId?.sellerId?.userId?._id}`} className='secondaryBtn'>{"Contact Seller >"}</Link>
               </div>
             </div>
@@ -147,7 +147,7 @@ const Orders = ({ pageType }) => {
                 </div>
               </div>
               <div className="right">
-                <div className="price">${order.summary.price}</div>
+                <div className="price">${product.sellerToGet.salesPrice}</div>
                 <Link to={`/chat?p=${order?.userId?._id}`} className='secondaryBtn'>{"Contact Buyer >"}</Link>
               </div>
             </div>
@@ -203,7 +203,7 @@ const Orders = ({ pageType }) => {
               </div>
             </div>
             <div className="right">
-              <div className="price">${order.summary.salesPrice}</div>
+              <div className="price">${order.summary.paidByBuyer.salesPrice}</div>
               <Link to={`/chat?p=${crrService.serviceId?.sellerId?.userId?._id}`} className='secondaryBtn'>{"Contact Seller >"}</Link>
             </div>
           </div>
@@ -259,7 +259,7 @@ const Orders = ({ pageType }) => {
               </div>
             </div>
             <div className="right">
-              <div className="price">${order.summary.salesPrice}</div>
+              <div className="price">${order.summary.sellerToGet.salesPrice}</div>
               <Link to={`/chat?p=${order.userId?._id}`} className='secondaryBtn'>{"Contact Buyer >"}</Link>
             </div>
           </div>

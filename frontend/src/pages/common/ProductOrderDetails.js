@@ -273,7 +273,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
                   <span>Order Placed on: {new Date(order.createdAt).toLocaleString()}</span>
                 </div>
               </div>
-              <div className="upperRight">${isBuyer? order.summary.price : (subOrder.salesPrice)}</div>
+              <div className="upperRight">${isBuyer? order.summary.paidByBuyer.total : (subOrder.sellerToGet.total)}</div>
             </div>
 
             <div className="lower">
@@ -331,24 +331,24 @@ const ProductOrderDetails = ({ isBuyer }) => {
               </div>
               <div className="row">
                 <strong>Price</strong>
-                <p>${isBuyer? order.summary.price : subOrder.salesPrice}</p>
+                <p>${isBuyer? order.summary.paidByBuyer.totalSalesPrice : subOrder.sellerToGet.salesPrice}</p>
               </div>
               <div className="row">
                 <strong>Shipping Fees</strong>
-                <p>${isBuyer? order.summary.shipping : subOrder.shippingFees}</p>
+                <p>${isBuyer? order.summary.paidByBuyer.totalShipping : subOrder.sellerToGet.shippingFees}</p>
               </div>
               <div className="row">
                 <strong>SubTotal</strong>
-                <p>${isBuyer? order.summary.total : subOrder.salesPrice + subOrder.shippingFees}</p>
+                <p>${isBuyer? order.summary.paidByBuyer.subtotal : subOrder.sellerToGet.subtotal}</p>
               </div>
               <div className="row">
                 <strong>Tax (9%)</strong>
-                <p>{isBuyer? "$"+order.summary.tax : "-$"+((subOrder.salesPrice + subOrder.shippingFees)*0.09).toFixed(2)}</p>
+                <p>{isBuyer? "$"+order.summary.paidByBuyer.tax : "-$"+(subOrder.sellerToGet.tax).toFixed(2)}</p>
               </div>
               <div className="horizontalLine"></div>
               <div className="row">
                 <strong>{isBuyer? "You Paid":"You will Get"}</strong>
-                <p>${isBuyer? order.summary.subtotal : (subOrder.salesPrice + subOrder.shippingFees - (subOrder.salesPrice + subOrder.shippingFees)*0.09).toFixed(2)}</p>
+                <p>${isBuyer? order.summary.paidByBuyer.total : (subOrder.sellerToGet.total).toFixed(2)}</p>
               </div>
             </div>
           </div>

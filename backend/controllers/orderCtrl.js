@@ -33,17 +33,29 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
   
   const products = items;
   
+  
   let allProducts = products.map(product => {
+    const salesPrice = product.product.salesPrice;
+    const shippingFees = product.product.shippingFees;
+    const subtotal = salesPrice + shippingFees;
+    const tax = subtotal * 0.09;
+    const total = subtotal - tax;
     return {
       sellerId: product.product.sellerId?._id || product.product.sellerId,
       productId: product.product._id,
       count: product.count,
-      shippingFees: product.product.shippingFees,
-      salesPrice: product.product.salesPrice,
+      sellerToGet: {
+        salesPrice: salesPrice,
+        shippingFees: shippingFees,
+        subtotal: subtotal,
+        tax: tax,
+        total: total
+      },
+      promoSalesPrice: Number(summary.paidByBuyer.promoDiscount) !== 0? product.product.salesPrice - (product.product.salesPrice * (summary.paidByBuyer.promoDiscount)/100) : product.product.salesPrice
     }
   })
 
-  const amount = summary.subtotal * 100;
+  const amount = summary.paidByBuyer.total * 100;
   const paymentIntent = await createPaymentIntent(amount);
 
   const newOrder = new productOrderModel({
@@ -101,7 +113,7 @@ exports.createServiceOrder = asyncHandler(async (req, res) => {
       pkg: serviceItem.pkg? serviceItem.pkg : serviceItem.service.packages[serviceItem.pkgIndex] ,
   }
 
-  const amount = summary.total * 100;
+  const amount = summary.paidByBuyer.total * 100;
   const paymentIntent = await createPaymentIntent(amount);
 
   const newOrder = new serviceOrderModel({
@@ -624,4 +636,3 @@ exports.respondToCancellation = asyncHandler(async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
-

@@ -14,10 +14,13 @@ function Checkout() {
   const [searchParams] = useSearchParams();
 
   const [items, setItems] = React.useState(null);
-  const [summary, setSummary] = React.useState({ price: 0, shipping: 0, total: 0, tax: 0, subtotal: 0 });
-  
+  const [summary, setSummary] = React.useState({ paidByBuyer: { totalSalesPrice: 0, totalShipping: 0, subtotal: 0, tax: 0, total: 0, promoDiscount: 0 } });
+
   const [serviceItem, setServiceItem] = React.useState(null);
-  const [serviceSummary, setServiceSummary] = React.useState({ salesPrice: 0, tax: 0, total: 0, days: 0});
+  const [serviceSummary, setServiceSummary] = React.useState({
+    paidByBuyer: {salesPrice: 0, tax: 0, total: 0},
+    sellerToGet: {salesPrice: 0, tax: 0, total: 0}
+  });
 
   const [customItem, setCustomItem] = React.useState(null);
 
@@ -28,6 +31,9 @@ function Checkout() {
   const [loading, setLoading] = React.useState(false);
 
   const navigate = useNavigate();
+
+  const [couponCode, setCouponCode] = React.useState('');
+  const [appliedCoupon, setAppliedCoupon] = React.useState(null);
 
   const [billingInfo, setBillingInfo] = React.useState({
     firstName: "",
@@ -83,7 +89,7 @@ function Checkout() {
           console.log(e);
           enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
         })
-    } 
+    }
     else if (serviceId) {
 
       const pkgIndex = serviceId.split("_")[0];
@@ -102,12 +108,12 @@ function Checkout() {
           enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
         })
     }
-    else if(messageId){
+    else if (messageId) {
       axios.get(`http://localhost:5000/api/v1/chats/offer/details/${messageId}`, { headers: { Authorization: `Bearer ${token}` } })
         .then(response => {
           if (response.data.success) {
             const offer = response.data.offer;
-            if(offer.quoteType === "product")
+            if (offer.quoteType === "product")
               updateCustomSummary(offer);
             else
               updateServiceCustomSummary(offer);
@@ -119,66 +125,95 @@ function Checkout() {
           enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
         })
     }
-  }, [searchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, token]);
 
-  const updateSummary = (products) => {
+  const updateSummary = (products, couponDiscount) => {
 
-    let price = 0, shipping = 0, total = 0, tax = 0;
+    let paidByBuyer = { totalSalesPrice: 0, totalShipping: 0, subtotal: 0, tax: 0, total: 0, promoDiscount: 0 };
 
     products.forEach(item => {
 
       const myItem = item.product;
       const count = item.count;
 
-      price += myItem.salesPrice * count;
-      shipping += parseFloat(myItem.shippingFees);
+      paidByBuyer.totalSalesPrice += myItem.salesPrice * count;
+
+      paidByBuyer.totalShipping += parseFloat(myItem.shippingFees);
     });
 
-    total = price + shipping;
-    tax = total * 0.09;
-    const subtotal = total + tax;
+    if (couponDiscount || appliedCoupon) {
+      paidByBuyer.totalSalesPrice -= (paidByBuyer.totalSalesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
+      paidByBuyer.promoDiscount = couponDiscount || appliedCoupon.discount;
+    }
 
-    setSummary({ price, shipping, total, tax, subtotal });
+    paidByBuyer.subtotal = paidByBuyer.totalSalesPrice + paidByBuyer.totalShipping;
+
+    paidByBuyer.tax = paidByBuyer.subtotal * 0.09;
+
+    paidByBuyer.total = paidByBuyer.subtotal + paidByBuyer.tax;
+
+    setSummary({ paidByBuyer });
   };
 
-  const updateServiceSummary = (serviceItem) => {
+  const updateServiceSummary = (serviceItem, couponDiscount) => {
 
     const pkg = serviceItem.service.packages[serviceItem.pkgIndex];
 
-    let salesPrice = 0, tax = 0, total = 0, days = 0;
+    let paidByBuyer = {salesPrice: 0, tax: 0, total: 0};
+    let sellerToGet = {salesPrice: 0, tax: 0, total: 0}
 
-    salesPrice = pkg.salesPrice;
-    tax = salesPrice*0.05;
-    total = salesPrice + tax;
-    days = pkg.deliveryDays;
+    paidByBuyer.salesPrice = pkg.salesPrice;
+    sellerToGet.salesPrice = pkg.salesPrice;
 
-    setServiceSummary({ salesPrice, tax, total, days });
+    if (couponDiscount || appliedCoupon)
+      paidByBuyer.salesPrice -= (paidByBuyer.salesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
+
+    paidByBuyer.tax = paidByBuyer.salesPrice * 0.05;
+    sellerToGet.tax = sellerToGet.salesPrice * 0.12;
+
+    paidByBuyer.total = paidByBuyer.salesPrice + paidByBuyer.tax;
+    sellerToGet.total = sellerToGet.salesPrice - sellerToGet.tax;
+
+    setServiceSummary({ paidByBuyer, sellerToGet });
   }
 
-  const updateCustomSummary = (offer) => {
+  const updateCustomSummary = (offer, couponDiscount) => {
 
-    let price = 0, shipping = 0, total = 0, tax = 0;
+    let paidByBuyer = { totalSalesPrice: 0, totalShipping: 0, subtotal: 0, tax: 0, total: 0, promoDiscount: 0 };
 
-    price = offer.offerAmount;
-    shipping += parseFloat(offer.shippingFee);
+    paidByBuyer.totalSalesPrice = offer.offerAmount;
 
-    total = price + shipping;
-    tax = total * 0.09;
-    const subtotal = total + tax;
+    if (couponDiscount || appliedCoupon)
+      paidByBuyer.totalSalesPrice -= (paidByBuyer.totalSalesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
 
-    setSummary({ price, shipping, total, tax, subtotal });
+    paidByBuyer.totalShipping += parseFloat(offer.shippingFee);
+
+    paidByBuyer.subtotal = paidByBuyer.totalSalesPrice + paidByBuyer.totalShipping;
+    paidByBuyer.tax = paidByBuyer.subtotal * 0.09;
+    paidByBuyer.total = paidByBuyer.subtotal + paidByBuyer.tax;
+
+    setSummary({ paidByBuyer });
   };
 
-  const updateServiceCustomSummary = (offer) => {
+  const updateServiceCustomSummary = (offer, couponDiscount) => {
 
-    let salesPrice = 0, tax = 0, total = 0, days = 0;
+    let paidByBuyer = {salesPrice: 0, tax: 0, total: 0};
+    let sellerToGet = {salesPrice: 0, tax: 0, total: 0}
 
-    salesPrice = offer.offerAmount;
-    tax = salesPrice*0.05;
-    total = salesPrice + tax;
-    days = offer.duration;
+    paidByBuyer.salesPrice = offer.offerAmount;
+    sellerToGet.salesPrice = offer.offerAmount;
 
-    setServiceSummary({ salesPrice, tax, total, days });
+    if (couponDiscount || appliedCoupon)
+      paidByBuyer.salesPrice -= (paidByBuyer.salesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
+
+    paidByBuyer.tax = paidByBuyer.salesPrice * 0.05;
+    sellerToGet.tax = sellerToGet.salesPrice * 0.12;
+
+    paidByBuyer.total = paidByBuyer.salesPrice + paidByBuyer.tax;
+    sellerToGet.total = sellerToGet.salesPrice - sellerToGet.tax;
+
+    setServiceSummary({paidByBuyer, sellerToGet});
   }
 
   const handlePlaceOrder = async (e) => {
@@ -203,22 +238,22 @@ function Checkout() {
     }
 
     let convertedItem = null;
-    if(customItem){
-      if(customItem.quoteType === "product"){
+    if (customItem) {
+      if (customItem.quoteType === "product") {
         convertedItem = [{
           product: customItem.productId,
           count: customItem.quantity
         }]
-        convertedItem[0].product.salesPrice = summary.price;
-        convertedItem[0].product.shippingFees = summary.shipping;
+        convertedItem[0].product.salesPrice = summary.paidByBuyer.totalSalesPrice;
+        convertedItem[0].product.shippingFees = summary.paidByBuyer.totalShipping;
       }
-      else if(customItem.quoteType === "service"){
+      else if (customItem.quoteType === "service") {
         convertedItem = {
           pkg: {
             name: "CUSTOM",
             title: customItem.title,
             description: customItem.description,
-            deliveryDays: customItem.duration 
+            deliveryDays: customItem.duration
           },
           service: customItem.serviceId,
         }
@@ -227,13 +262,13 @@ function Checkout() {
 
     const orderData = {
       items: items || serviceItem || convertedItem,
-      summary: (items || (customItem && customItem.quoteType === "product"))? summary : serviceSummary,
+      summary: (items || (customItem && customItem.quoteType === "product")) ? summary : serviceSummary,
       paymentMethod: 'stripe',
       billingInfo
     };
 
     try {
-      const { data } = await axios.post(`http://localhost:5000/api/v1/orders/${(items || (customItem && customItem.quoteType === "product"))? "product":"service"}/order`, orderData, {
+      const { data } = await axios.post(`http://localhost:5000/api/v1/orders/${(items || (customItem && customItem.quoteType === "product")) ? "product" : "service"}/order`, orderData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -251,7 +286,7 @@ function Checkout() {
 
       if (paymentIntent.status === 'succeeded') {
         enqueueSnackbar("Order placed successfully!", { variant: 'success' });
-        navigate(`${(items || (customItem && customItem.quoteType === "product"))? "/orders" : "/requirements/"+data.order._id}`)
+        navigate(`${(items || (customItem && customItem.quoteType === "product")) ? "/orders" : "/requirements/" + data.order._id}`)
         setLoading(false);
       }
     } catch (e) {
@@ -264,6 +299,54 @@ function Checkout() {
   const handleChange = (e) => {
     setBillingInfo({ ...billingInfo, [e.target.name]: e.target.value });
   }
+
+  const handleCouponClick = () => {
+
+    if (appliedCoupon) {
+      setAppliedCoupon(null);
+      setCouponCode('');
+
+      if (items)
+        updateSummary(items);
+      else if (serviceItem)
+        updateServiceSummary(serviceItem);
+      else if (customItem) {
+        if (customItem.quoteType === "product")
+          updateCustomSummary(customItem);
+        else if (customItem.quoteType === "service")
+          updateServiceCustomSummary(customItem);
+      }
+
+      enqueueSnackbar("Coupon removed!", { variant: "info" });
+    }
+    else {
+      axios.post("http://localhost:5000/api/v1/coupons/apply", { code: couponCode }, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(response => {
+          if (response.data.success) {
+            const coupon = response.data.coupon;
+            setAppliedCoupon(coupon);
+
+            if (items)
+              updateSummary(items, coupon.discount);
+            else if (serviceItem)
+              updateServiceSummary(serviceItem, coupon.discount);
+            else if (customItem) {
+              if (customItem.quoteType === "product")
+                updateCustomSummary(customItem, coupon.discount);
+              else if (customItem.quoteType === "service")
+                updateServiceCustomSummary(customItem, coupon.discount);
+            }
+
+            enqueueSnackbar("Coupon Applied!", { variant: "success" });
+          }
+        })
+        .catch(e => {
+          enqueueSnackbar(e.response.data.error || "Invalid coupon code!", { variant: "error" });
+        });
+    }
+  };
 
   const itemElems = items ? items.map((item, index) => {
 
@@ -281,32 +364,31 @@ function Checkout() {
     </div>
   }) : "Nothing to show here"
 
-
   const serviceElem = serviceItem ? <div className="item">
-      <div className="imgDiv">
-        <img src={`http://localhost:5000/${serviceItem.service?.serviceImages[0]}`} alt="Error" />
-      </div>
-      <div className="itemContent">
-        <p className='singleLineText'>{serviceItem.service.title}</p>
-        <p className='price'>{serviceItem.service.packages[serviceItem.pkgIndex].name} - ${serviceItem.service.packages[serviceItem.pkgIndex].salesPrice}</p>
-      </div>
+    <div className="imgDiv">
+      <img src={`http://localhost:5000/${serviceItem.service?.serviceImages[0]}`} alt="Error" />
     </div>
-   : "Nothing to show here"
+    <div className="itemContent">
+      <p className='singleLineText'>{serviceItem.service.title}</p>
+      <p className='price'>{serviceItem.service.packages[serviceItem.pkgIndex].name} - ${serviceItem.service.packages[serviceItem.pkgIndex].salesPrice}</p>
+    </div>
+  </div>
+    : "Nothing to show here"
 
-   const customElem = customItem ? <div className="item">
-      <div className="imgDiv">
-        <img src={`http://localhost:5000/${customItem.productId? customItem.productId.productImages[0] : customItem.serviceId.serviceImages[0]}`} alt="Error" />
-      </div>
-      <div className="itemContent">
-        <p className='singleLineText'>{customItem.title}</p>
-        {customItem.quoteType === "product" && <p className='price'>Quantity: {customItem.quantity}</p>}
-        {customItem.quoteType === "service" && <p className='price'>CUSTOM - ${customItem.offerAmount}</p>}
-      </div>
+  const customElem = customItem ? <div className="item">
+    <div className="imgDiv">
+      <img src={`http://localhost:5000/${customItem.productId ? customItem.productId.productImages[0] : customItem.serviceId.serviceImages[0]}`} alt="Error" />
     </div>
+    <div className="itemContent">
+      <p className='singleLineText'>{customItem.title}</p>
+      {customItem.quoteType === "product" && <p className='price'>Quantity: {customItem.quantity}</p>}
+      {customItem.quoteType === "service" && <p className='price'>CUSTOM - ${customItem.offerAmount}</p>}
+    </div>
+  </div>
     : "Nothing to show here"
 
 
-  if(!items && !serviceItem && !customItem) return <div>Loading...</div>
+  if (!items && !serviceItem && !customItem) return <div>Loading...</div>
 
   return (
     <div className='checkoutDiv'>
@@ -315,7 +397,7 @@ function Checkout() {
 
           <div className="billingInfo form">
 
-            <h2 className="secondaryHeading"><span>{(items || (customItem && customItem.quoteType === "product"))? "Billing" : "Buyer"}</span> Info</h2>
+            <h2 className="secondaryHeading"><span>{(items || (customItem && customItem.quoteType === "product")) ? "Billing" : "Buyer"}</span> Info</h2>
 
             <div className="inputDiv">
               <div className="inputInnerDiv">
@@ -344,16 +426,16 @@ function Checkout() {
               <textarea className='inputField' placeholder='Enter Address' name="address" onChange={handleChange} />
             </div>
 
-            <div className="inputDiv">
-              <div className="inputInnerDiv">
-                <label>Region/State</label>
-                <input type="text" className='inputField' placeholder='Enter State' name="state" onChange={handleChange} />
-              </div>
-              <div className="inputInnerDiv">
-                <label>Zip Code</label>
-                <input type="Number" className='inputField' placeholder='Enter Zip Code' name="zipCode" onChange={handleChange} />
-              </div>
-            </div></>}
+              <div className="inputDiv">
+                <div className="inputInnerDiv">
+                  <label>Region/State</label>
+                  <input type="text" className='inputField' placeholder='Enter State' name="state" onChange={handleChange} />
+                </div>
+                <div className="inputInnerDiv">
+                  <label>Zip Code</label>
+                  <input type="Number" className='inputField' placeholder='Enter Zip Code' name="zipCode" onChange={handleChange} />
+                </div>
+              </div></>}
 
             <div className="inputDiv">
               <div className="inputInnerDiv">
@@ -401,10 +483,10 @@ function Checkout() {
 
             {(items || (customItem && customItem.quoteType === "product")) && <><div className="horizontalLine"></div>
 
-            <div className="inputDiv">
-              <label>Any Special Note? (optional)</label>
-              <textarea className='inputField' placeholder='Enter note for delivery' name="note" onChange={handleChange} />
-            </div></>}
+              <div className="inputDiv">
+                <label>Any Special Note? (optional)</label>
+                <textarea className='inputField' placeholder='Enter note for delivery' name="note" onChange={handleChange} />
+              </div></>}
           </div>
 
           <div className="orderSummary">
@@ -413,46 +495,63 @@ function Checkout() {
 
             <div className="horizontalLine"></div>
 
-            {items? itemElems : serviceItem? serviceElem : customElem}
+            {items ? itemElems : serviceItem ? serviceElem : customElem}
 
             <div className="horizontalLine"></div>
 
             <div className='row'>
               <p>Sales Price</p>
-              <strong>${(items || (customItem && customItem.quoteType === "product"))? summary.price.toFixed(2) : serviceSummary.salesPrice.toFixed(2)}</strong>
+              <strong>${(items || (customItem && customItem.quoteType === "product")) ? summary.paidByBuyer.totalSalesPrice.toFixed(2) : serviceSummary.paidByBuyer.salesPrice.toFixed(2)}</strong>
             </div>
 
-            <div className='row'>
-              <p>{(items || (customItem && customItem.quoteType === "product"))? "Shipping Fee" : "Tax (5%)"}</p>
-              <strong>${(items || (customItem && customItem.quoteType === "product"))? summary.shipping.toFixed(2) : serviceSummary.tax.toFixed(2)}</strong>
+            <div className="inputDiv promoCodeBox">
+              <input
+                type="text"
+                className='inputField'
+                placeholder='Enter Promo Code'
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value)}
+                disabled={appliedCoupon}
+              />
+              <button className='secondaryBtn' onClick={handleCouponClick}>{appliedCoupon ? "Remove" : "Apply"}</button>
             </div>
 
-            {(items || (customItem && customItem.quoteType === "product")) && <><div className="horizontalLine"></div>
+            {appliedCoupon && <div className='row'>
+              <p>Coupon Applied</p>
+              <strong>{appliedCoupon.discount}% Discount</strong>
+            </div>}
+
+            <div className="horizontalLine"></div>
 
             <div className='row'>
+              <p>{(items || (customItem && customItem.quoteType === "product")) ? "Shipping Fee" : "Tax (5%)"}</p>
+              <strong>${(items || (customItem && customItem.quoteType === "product")) ? summary.paidByBuyer.totalShipping.toFixed(2) : serviceSummary.paidByBuyer.tax.toFixed(2)}</strong>
+            </div>
+
+            {(items || (customItem && customItem.quoteType === "product")) && <> <div className='row'>
               <p>SubTotal</p>
-              <strong>${summary.total.toFixed(2)}</strong>
+              <strong>${summary.paidByBuyer.subtotal.toFixed(2)}</strong>
             </div>
 
-            <div className='row'>
-              <p>Tax (9%)</p>
-              <strong>${summary.tax.toFixed(2)}</strong>
-            </div></>}
+              <div className='row'>
+                <p>Tax (9%)</p>
+                <strong>${summary.paidByBuyer.tax.toFixed(2)}</strong>
+              </div></>}
 
             <div className="horizontalLine"></div>
 
             <div className='row'>
               <p>Total</p>
-              <strong className='subTotal'>${(items || (customItem && customItem.quoteType === "product"))? summary.subtotal.toFixed(2) : serviceSummary.total.toFixed(2)}</strong>
+              <strong className='subTotal'>${(items || (customItem && customItem.quoteType === "product")) ? summary.paidByBuyer.total.toFixed(2) : serviceSummary.paidByBuyer.total.toFixed(2)}</strong>
             </div>
 
             {!(items || (customItem && customItem.quoteType === "product")) && <div className='row'>
               <p>Delivery Time</p>
-              <strong>{serviceSummary.days} days</strong>
+              <strong>{serviceItem? serviceItem.service.packages[serviceItem.pkgIndex].deliveryDays : customItem.duration} days</strong>
             </div>}
 
             <button className='primaryBtn' disabled={!stripe || loading} type="submit" onClick={handlePlaceOrder}>
-              {loading ? "Processing..." : `Pay $${(items || (customItem && customItem.quoteType === "product"))? summary.subtotal : serviceSummary.total}`}
+              {loading ? "Processing..." : `Pay $${(items || (customItem && customItem.quoteType === "product")) ? summary.paidByBuyer.total.toFixed(2) : serviceSummary.paidByBuyer.total.toFixed(2)}`}
             </button>
 
             <p>By placing an order, you agree to our Terms and Conditions</p>

@@ -10,7 +10,8 @@ const {
     getScheduledCoupons,
     createCoupon,
     updateCoupon,
-    deleteCoupon
+    deleteCoupon,
+    applyCoupon
 } = require('../controllers/couponCtrl');
 
 
@@ -27,5 +28,7 @@ router.post('/new', authorizeAdmin, createCoupon);
 router.put('/:id', authorizeAdmin, updateCoupon);
 
 router.delete('/:id', authorizeAdmin, deleteCoupon);
+
+router.post('/apply', applyCoupon);
 
 module.exports = router;

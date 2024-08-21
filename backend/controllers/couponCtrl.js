@@ -3,7 +3,7 @@ const Coupon = require('../models/couponModel');
 
 // Get all coupons
 exports.getAllCoupons = asyncHandler(async (req, res) => {
-    const coupons = await Coupon.find();
+    const coupons = await Coupon.find({}).sort({ updatedAt: -1 });
     res.json({ success: true, coupons });
 });
 
@@ -30,14 +30,14 @@ exports.getScheduledCoupons = asyncHandler(async (req, res) => {
 // Create a new coupon
 exports.createCoupon = asyncHandler(async (req, res) => {
     const { code, discount, minToApply, expiry, isSchedule, scheduledDate } = req.body;
-    const newCoupon = await Coupon.create({ code, discount, minToApply, expiry, isSchedule, scheduledDate: isSchedule? scheduledDate : "", status: isSchedule? "Scheduled":"Active" });
+    const newCoupon = await Coupon.create({ code, discount, minToApply, expiry, isSchedule, scheduledDate: isSchedule ? scheduledDate : "", status: isSchedule ? "Scheduled" : "Active" });
     res.json({ success: true, coupon: newCoupon });
 });
 
 // Update a coupon
 exports.updateCoupon = asyncHandler(async (req, res) => {
     const { code, discount, minToApply, expiry, isSchedule, scheduledDate } = req.body;
-    const updatedCoupon = await Coupon.findByIdAndUpdate(req.params.id, { code, discount, minToApply, expiry, isSchedule, scheduledDate: isSchedule? scheduledDate : "", status: isSchedule? "Scheduled":"Active" }, { new: true });
+    const updatedCoupon = await Coupon.findByIdAndUpdate(req.params.id, { code, discount, minToApply, expiry, isSchedule, scheduledDate: isSchedule ? scheduledDate : "", status: isSchedule ? "Scheduled" : "Active" }, { new: true });
     res.json({ success: true, coupon: updatedCoupon });
 });
 
@@ -45,4 +45,16 @@ exports.updateCoupon = asyncHandler(async (req, res) => {
 exports.deleteCoupon = asyncHandler(async (req, res) => {
     await Coupon.findByIdAndDelete(req.params.id);
     res.json({ success: true });
+});
+
+exports.applyCoupon = asyncHandler(async (req, res) => {
+    const { code } = req.body;
+
+    const coupon = await Coupon.findOne({ code });
+    if (!coupon) {
+        return res.status(400).json({ success: false, error: "Invalid coupon code!" });
+    }
+
+    return res.status(200).json({ success: true, coupon });
+
 });

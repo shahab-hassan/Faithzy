@@ -83,8 +83,9 @@ function Coupons() {
             .then((response) => {
                 if (response.data.success) {
                     const updatedCoupon = response.data.coupon;
-                    const updatedCoupons = coupons.map(c => c._id === selectedCoupon._id ? updatedCoupon : c);
-                    setCoupons(updatedCoupons);
+                    const otherCoupons = coupons.filter(c => c._id !== selectedCoupon._id);
+                    otherCoupons.unshift(updatedCoupon);
+                    setCoupons(otherCoupons);
                     enqueueSnackbar('Coupon updated successfully!', { variant: 'success' });
                     setShowAddNewModal(false);
                     setIsEditing(false);
@@ -313,11 +314,13 @@ function Coupons() {
                                 <div>Expiry Date:</div>
                                 <div className="fw600">{new Date(selectedCoupon.expiry).toLocaleDateString()}</div>
                             </div>
-                            {/* {selectedCoupon.scheduledDate && <p><strong>Scheduled Date:</strong> {new Date(selectedCoupon.scheduledDate).toLocaleDateString()}</p>} */}
                             <div className='row'>
                                 <div>Status:</div>
                                 <div className="fw600">{selectedCoupon.status}</div>
                             </div>
+                            {selectedCoupon.isSchedule && <div className='row'><div>Scheduled Date:</div> <div className='fw600'>{new Date(selectedCoupon.scheduledDate).toLocaleDateString()}</div></div>}
+                            <div className='row'><div>Coupon Creation Date:</div> <div className='fw600'>{new Date(selectedCoupon.createdAt).toLocaleDateString()}</div></div>
+                            <div className='row'><div>Last Updated On:</div> <div className='fw600'>{new Date(selectedCoupon.updatedAt).toLocaleDateString()}</div></div>
                         </div>
                         <div className="buttonsDiv">
                             <button className="secondaryBtn" type="button" onClick={() => setShowDetailsModal(false)}>Close</button>
