@@ -13,6 +13,33 @@ const adminSettingsSchema = new mongoose.Schema({
         tiktok: { type: String },
         linkedin: { type: String },
     },
+    fees: {
+        seller: {
+            product: { type: Number, default: 0 },
+            service: { type: Number, default: 0 },
+        },
+        paidSeller: {
+            product: { type: Number, default: 0 },
+            service: { type: Number, default: 0 },
+        },
+        buyer: {
+            product: { type: Number, default: 0 },
+            service: { type: Number, default: 0 },
+        },
+    },
+    membership: {
+        threeMonths: { type: Number, default: 0 },
+        sixMonths: { type: Number, default: 0 },
+        nineMonths: { type: Number, default: 0 },
+        offerDiscount: { type: Boolean, default: false },
+        discountType: { type: String, enum: ['onAllPlans', 'individualDiscount'], default: 'onAllPlans' },
+        discounts: {
+            allPlans: { discount: { type: Number }, expiryDate: { type: Date } },
+            threeMonths: { discount: { type: Number }, expiryDate: { type: Date } },
+            sixMonths: { discount: { type: Number }, expiryDate: { type: Date } },
+            nineMonths: { discount: { type: Number }, expiryDate: { type: Date } },
+        }
+    },
 }, {
     timestamps: true
 });

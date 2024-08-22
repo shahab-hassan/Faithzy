@@ -220,3 +220,68 @@
 .adminCouponsDiv .detailsModelDiv .buttonsDiv{
     margin-top: 20px;
 }
+
+
+
+
+
+/* ****************************** ADMIN FEE MANAGEMENT PAGE ****************************** */
+
+.adminFeeDiv .adminFeeContent{
+    display: flex;
+    gap: 30px;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.adminFeeDiv .adminFeeContent .left{
+    min-width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.adminFeeDiv .adminFeeContent .box{
+    width: 100%;
+    background: var(--white);
+    border-radius: 8px;
+    height: fit-content;
+}
+.adminFeeDiv .adminFeeContent .box .secondaryHeading{
+    color: var(--white);
+}
+.adminFeeDiv .adminFeeContent .box .secondaryHeading span{
+    color: var(--secondaryCopper);;
+}
+.adminFeeDiv .adminFeeContent .box .secondaryBtn{
+    margin-top: 10px;
+}
+
+.adminFeeDiv .adminFeeContent .box .upper{
+    padding: 10px 18px;
+    background: var(--primaryBlue);
+    color: var(--white);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.adminFeeDiv .adminFeeContent .box .lower{
+    padding: 20px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.adminFeeDiv .adminFeeContent .box .lower .buttonsDiv{
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    justify-content: right;
+}
+.adminFeeDiv .adminFeeContent .right .lower .discountType{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    justify-content: center;
+}
+.adminFeeDiv .adminFeeContent .right .lower .discountType .radioBtn{
+    display: flex;
+    gap: 5px;
+}

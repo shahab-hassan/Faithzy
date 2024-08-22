@@ -74,3 +74,38 @@ exports.createOrUpdateSocialLinks = asyncHandler(async (req, res) => {
 
     res.status(200).json({ success: true, socialLinks: settings.socialLinks });
 });
+
+exports.getAdminFeesAndMembership = asyncHandler(async (req, res) => {
+    const settings = await adminSettingsModel.findOne();
+    res.status(200).json({success: true, fees: settings.fees, membership: settings.membership});
+});
+
+exports.updateAdminFees = asyncHandler(async (req, res) => {
+    const { fees } = req.body;
+
+    let settings = await adminSettingsModel.findOne();
+
+    if (!settings) {
+        settings = new adminSettingsModel({ fees });
+    } else {
+        settings.fees = { ...settings.fees, ...fees };
+    }
+
+    await settings.save();
+    res.status(200).json({ success: true, message: 'Fees updated successfully' });
+});
+
+exports.updateAdminMembership = asyncHandler(async (req, res) => {
+    const { membership } = req.body;
+
+    let settings = await adminSettingsModel.findOne();
+
+    if (!settings) {
+        settings = new adminSettingsModel({ membership });
+    } else {
+        settings.membership = { ...settings.membership, ...membership };
+    }
+
+    await settings.save();
+    res.status(200).json({ success: true, message: 'Fees updated successfully' });
+});

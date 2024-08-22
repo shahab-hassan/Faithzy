@@ -362,6 +362,9 @@ label span{
 .checkboxDiv label{
     cursor: pointer;
 }
+.checkboxDiv label{
+    cursor: pointer;
+}
 .checkbox {
     -webkit-appearance: none;
     appearance: inherit;
@@ -370,7 +373,7 @@ label span{
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    border: 2px solid black;
+    border: 2px solid var(--black);
     margin-right: 8px;
     margin-bottom: 3px;
     position: relative;
@@ -378,9 +381,15 @@ label span{
     cursor: pointer;
 }
 .checkbox:checked{
-    background: black;
+    background: var(--black);
     content: "✓";
-    color: white;
+    color: var(--white);
+}
+.checkbox:disabled{
+    background: var(--gray);
+    border: 2px solid var(--gray);
+    cursor: auto;
+    content: "✓";
 }
 
 .checkbox:checked::after{
@@ -390,7 +399,7 @@ label span{
 	top: 0px;
 	left: 3px;
     font-weight: bolder;
-	color: white;
+	color: var(--white);
 }
 
 .optionsContainer{
@@ -400,7 +409,7 @@ label span{
 
 .optionsContainer .optionsMenu{
     position: absolute;
-    background-color: white;
+    background-color: var(--white);
     display: flex;
     flex-direction: column;
     gap: 10px;

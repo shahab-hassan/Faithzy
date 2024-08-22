@@ -44,6 +44,7 @@ import AdminTerms from './pages/admin/AdminTerms.js';
 import SocialLinks from './pages/admin/AdminSocialLinks.js';
 import AdminCategories from './pages/admin/AdminCategories.js';
 import Coupons from './pages/admin/Coupons.js';
+import AdminFee from './pages/admin/AdminFee.js';
 
 function App() {
 
@@ -110,6 +111,7 @@ function App() {
                     <Route path="/ftzy-admin/social" element={<SocialLinks />} />
                     <Route path="/ftzy-admin/categories" element={<AdminCategories />} />
                     <Route path="/ftzy-admin/coupons" element={<Coupons />} />
+                    <Route path="/ftzy-admin/fee" element={<AdminFee />} />
                 </Route>
 
             </Routes>
