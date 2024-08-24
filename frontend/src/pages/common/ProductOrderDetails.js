@@ -342,7 +342,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
                 <p>${isBuyer? order.summary.paidByBuyer.subtotal : subOrder.sellerToGet.subtotal}</p>
               </div>
               <div className="row">
-                <strong>Tax (9%)</strong>
+                <strong>Tax</strong>
                 <p>{isBuyer? "$"+order.summary.paidByBuyer.tax : "-$"+(subOrder.sellerToGet.tax).toFixed(2)}</p>
               </div>
               <div className="horizontalLine"></div>

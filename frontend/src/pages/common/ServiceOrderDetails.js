@@ -425,11 +425,11 @@ function ServiceOrderDetails({ isBuyer }) {
                 <div><p>Status</p><strong>{order.service.status[order.service.status.length - 1].name}</strong></div>
 
                 {isBuyer && <><div><p>Price</p><strong>${(order.summary.paidByBuyer.salesPrice).toFixed(2)}</strong></div>
-                  <div><p>Service Fee (5%)</p><strong>${(order.summary.paidByBuyer.tax).toFixed(2)}</strong></div>
+                  <div><p>Service Fee</p><strong>${(order.summary.paidByBuyer.tax).toFixed(2)}</strong></div>
                   <div><p>You Paid</p><strong>${(order.summary.paidByBuyer.total).toFixed(2)}</strong></div></>}
 
                 {!isBuyer && <><div><p>Price</p><strong>${(order.summary.sellerToGet.salesPrice).toFixed(2)}</strong></div>
-                  <div><p>Service Fee (12%)</p><strong>-${(order.summary.sellerToGet.tax).toFixed(2)}</strong></div>
+                  <div><p>Service Fee</p><strong>-${(order.summary.sellerToGet.tax).toFixed(2)}</strong></div>
                   <div><p>You will Get</p><strong>${(order.summary.sellerToGet.total).toFixed(2)}</strong></div></>}
 
               </div>

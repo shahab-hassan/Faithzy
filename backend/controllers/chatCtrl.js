@@ -90,6 +90,7 @@ exports.getOfferDetails = asyncHandler(async (req, res) => {
         })
         .populate({
             path: 'chats.messages.offer.productId chats.messages.offer.serviceId',
+            populate: { path: 'sellerId' }
         });
 
         if (!chat) {

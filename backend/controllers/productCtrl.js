@@ -4,7 +4,7 @@ const productModel = require("../models/productModel");
 const recentlyViewedModel = require("../models/recentlyViewedModel")
 const categoryModel = require('../models/categoryModel');
 
-exports.getAllProducts = asyncHandler(async (req, res)=>{
+exports.getAllProducts = asyncHandler(async (req, res) => {
     const allProducts = await productModel.find({});
     res.status(200).json({
         success: true,
@@ -12,12 +12,12 @@ exports.getAllProducts = asyncHandler(async (req, res)=>{
     })
 })
 
-exports.getMySellerProducts = asyncHandler(async (req, res)=>{
+exports.getMySellerProducts = asyncHandler(async (req, res) => {
     let allProducts;
-    try{
-        allProducts = await productModel.find({sellerId: req.user.sellerId});
+    try {
+        allProducts = await productModel.find({ sellerId: req.user.sellerId });
     }
-    catch(e){
+    catch (e) {
         res.status(400)
         throw new Error(e);
     }
@@ -27,21 +27,21 @@ exports.getMySellerProducts = asyncHandler(async (req, res)=>{
     })
 })
 
-exports.getSellerProductsById = asyncHandler(async (req, res)=>{
+exports.getSellerProductsById = asyncHandler(async (req, res) => {
     let allProducts, totalPages;
-    try{
+    try {
         const page = parseInt(req.query.page) || 1;
         const limit = 5;
 
-        allProducts = await productModel.find({sellerId: req.params.id})
-        .skip((page - 1) * limit)
-        .limit(limit);
+        allProducts = await productModel.find({ sellerId: req.params.id })
+            .skip((page - 1) * limit)
+            .limit(limit);
 
         const totalSellerProducts = await productModel.countDocuments({ sellerId: req.params.id });
         totalPages = Math.ceil(totalSellerProducts / limit);
 
     }
-    catch(e){
+    catch (e) {
         res.status(400)
         throw new Error(e);
     }
@@ -52,18 +52,17 @@ exports.getSellerProductsById = asyncHandler(async (req, res)=>{
     })
 })
 
-exports.getProduct = asyncHandler(async (req, res)=>{
+exports.getProduct = asyncHandler(async (req, res) => {
 
     const product = await productModel.findById(req.params.id).populate({
         path: 'sellerId',
-        select: 'userId profileImage',
         populate: {
             path: 'userId',
             select: 'username',
         }
-      });
+    });
 
-    if(!product){
+    if (!product) {
         res.status(404)
         throw new Error("Product not found!")
     }
@@ -74,17 +73,17 @@ exports.getProduct = asyncHandler(async (req, res)=>{
     })
 })
 
-exports.createProduct = asyncHandler(async (req, res)=>{
+exports.createProduct = asyncHandler(async (req, res) => {
 
     try {
-        let { title, description, category, stock, price, discountPercent, 
+        let { title, description, category, stock, price, discountPercent,
             discountDays, salesPrice, amountToGet, shippingFees, tags
         } = req.body;
-        
+
         const productImages = req.files ? [req.files.productThumbnail[0].path, ...req.files.productGallery.map(file => file.path)] : [];
 
         let status = ["new", "freeSeller"]
-        if(Number(discountPercent) !== 0)
+        if (Number(discountPercent) !== 0)
             status.push("discounted");
 
         const product = new productModel({
@@ -103,7 +102,7 @@ exports.createProduct = asyncHandler(async (req, res)=>{
             tags,
             status
         });
-        
+
         await categoryModel.findOneAndUpdate(
             { name: category },
             { $inc: { count: 1 } }
@@ -121,88 +120,88 @@ exports.createProduct = asyncHandler(async (req, res)=>{
         res.status(400)
         throw new Error(e)
     }
-    
+
 })
 
 exports.updateProduct = asyncHandler(async (req, res) => {
     let product = await productModel.findById(req.params.id);
-  
+
     if (!product) {
-      res.status(404);
-      throw new Error("Product not found!");
+        res.status(404);
+        throw new Error("Product not found!");
     }
-  
+
     if (product.sellerId.toString() !== req.user.sellerId._id.toString()) {
-      res.status(403);
-      throw new Error('You are not authorized to update this product');
+        res.status(403);
+        throw new Error('You are not authorized to update this product');
     }
-  
+
     try {
-      let { title, description, category, stock, price, discountPercent, discountDays, salesPrice, amountToGet, shippingFees, tags } = req.body;
+        let { title, description, category, stock, price, discountPercent, discountDays, salesPrice, amountToGet, shippingFees, tags } = req.body;
 
-      let updatedImages = product.productImages;
+        let updatedImages = product.productImages;
 
-      if (req.files) {
-          if(req.files.productThumbnail)
-            updatedImages.splice(0, 1, req.files.productThumbnail[0].path);
-          if(req.files.productGallery)
-            updatedImages = [updatedImages[0], ...req.files.productGallery.map(file => file.path)];
+        if (req.files) {
+            if (req.files.productThumbnail)
+                updatedImages.splice(0, 1, req.files.productThumbnail[0].path);
+            if (req.files.productGallery)
+                updatedImages = [updatedImages[0], ...req.files.productGallery.map(file => file.path)];
         }
 
-      let status = product.status;
-  
-      if (Number(discountPercent) !== 0 && !status.includes("discounted")) status.push("discounted");
-  
-      let index = status.indexOf("discounted");
-      if ((Number(discountPercent) === 0) && index > -1) status.splice(index, 1);
-  
-      const updatedProduct = await productModel.findByIdAndUpdate(
-        req.params.id,
-        {
-          productImages: updatedImages,
-          title,
-          description,
-          category,
-          stock,
-          price,
-          discountPercent,
-          discountDays,
-          salesPrice,
-          amountToGet,
-          shippingFees,
-          tags,
-          status
-        },
-        { new: true }
-      );
+        let status = product.status;
 
-      if(product.category !== category){
-        await categoryModel.findOneAndUpdate(
-            { name: product.category },
-            { $inc: { count: -1 } }
+        if (Number(discountPercent) !== 0 && !status.includes("discounted")) status.push("discounted");
+
+        let index = status.indexOf("discounted");
+        if ((Number(discountPercent) === 0) && index > -1) status.splice(index, 1);
+
+        const updatedProduct = await productModel.findByIdAndUpdate(
+            req.params.id,
+            {
+                productImages: updatedImages,
+                title,
+                description,
+                category,
+                stock,
+                price,
+                discountPercent,
+                discountDays,
+                salesPrice,
+                amountToGet,
+                shippingFees,
+                tags,
+                status
+            },
+            { new: true }
         );
-        await categoryModel.findOneAndUpdate(
-            { name: category },
-            { $inc: { count: 1 } }
-        );
-      }
-  
-      res.status(200).json({
-        success: true,
-        message: "Product Updated",
-        product: updatedProduct
-      });
+
+        if (product.category !== category) {
+            await categoryModel.findOneAndUpdate(
+                { name: product.category },
+                { $inc: { count: -1 } }
+            );
+            await categoryModel.findOneAndUpdate(
+                { name: category },
+                { $inc: { count: 1 } }
+            );
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Product Updated",
+            product: updatedProduct
+        });
     } catch (e) {
-      res.status(400);
-      throw new Error(e);
+        res.status(400);
+        throw new Error(e);
     }
-  });
+});
 
-exports.deleteProduct = asyncHandler(async (req, res)=>{
+exports.deleteProduct = asyncHandler(async (req, res) => {
 
     let product = await productModel.findById(req.params.id);
 
-    if(!product){
+    if (!product) {
         res.status(404)
         throw new Error("Product not found!")
     }
@@ -225,11 +224,11 @@ exports.deleteProduct = asyncHandler(async (req, res)=>{
     })
 })
 
-exports.getRecentlyViewedProducts = asyncHandler(async (req, res)=>{
+exports.getRecentlyViewedProducts = asyncHandler(async (req, res) => {
 
     let recentlyViewed = [];
 
-    if(req.user)
+    if (req.user)
         recentlyViewed = await recentlyViewedModel.findOne({ userId: req.user._id }).populate('viewedProducts');
 
     res.status(200).json({
@@ -270,7 +269,7 @@ exports.getCategoryProducts = asyncHandler(async (req, res) => {
     if (minPrice !== undefined) filter.salesPrice = { $gte: Number(minPrice) };
     if (maxPrice !== undefined) filter.salesPrice = { ...filter.salesPrice, $lte: Number(maxPrice) };
     if (rating !== undefined && Number(rating) > 0) filter.rating = { $gte: Number(rating) };
-    else if(rating !== undefined && Number(rating) === 0) filter.rating = {$lte: Number(rating)};
+    else if (rating !== undefined && Number(rating) === 0) filter.rating = { $lte: Number(rating) };
 
     const products = await productModel.find(filter)
         .skip((page - 1) * limit)

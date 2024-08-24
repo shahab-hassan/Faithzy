@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const { productOrderModel, serviceOrderModel } = require("../models/orderModel");
 const { createPaymentIntent } = require('../controllers/paymentCtrl');
-// const cartModel = require("../models/cartModel");
+const adminSettingsModel = require("../models/adminSettingsModel");
 
 exports.createProductOrder = asyncHandler(async (req, res) => {
   
@@ -30,15 +30,23 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
     }
   }
 
-  
   const products = items;
-  
-  
+
+  const settings = await adminSettingsModel.findOne();
+  const feesObj = settings.fees;
+
   let allProducts = products.map(product => {
-    const salesPrice = product.product.salesPrice;
+
+    let fee = 0;
+    if(product.product.sellerId?.sellerType === "Free")
+      fee = feesObj.seller.product;
+    else
+      fee = feesObj.paidSeller.product;
+
+    const salesPrice = products.length>1? product.product.salesPrice * product.count : product.product.salesPrice;
     const shippingFees = product.product.shippingFees;
     const subtotal = salesPrice + shippingFees;
-    const tax = subtotal * 0.09;
+    const tax = subtotal * (Number(fee)/100);
     const total = subtotal - tax;
     return {
       sellerId: product.product.sellerId?._id || product.product.sellerId,

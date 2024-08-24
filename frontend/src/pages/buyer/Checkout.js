@@ -18,8 +18,8 @@ function Checkout() {
 
   const [serviceItem, setServiceItem] = React.useState(null);
   const [serviceSummary, setServiceSummary] = React.useState({
-    paidByBuyer: {salesPrice: 0, tax: 0, total: 0},
-    sellerToGet: {salesPrice: 0, tax: 0, total: 0}
+    paidByBuyer: { salesPrice: 0, tax: 0, total: 0 },
+    sellerToGet: { salesPrice: 0, tax: 0, total: 0 }
   });
 
   const [customItem, setCustomItem] = React.useState(null);
@@ -47,6 +47,26 @@ function Checkout() {
     phoneNumber: "",
     note: ""
   });
+
+  const [feesObj, setFeesObj] = React.useState({
+    seller: { product: 0, service: 0 },
+    paidSeller: { product: 0, service: 0 },
+    buyer: { product: 0, service: 0 }
+  });
+
+  React.useEffect(()=>{
+
+    axios.get("http://localhost:5000/api/v1/settings/admin/feesAndMembership")
+    .then(response => {
+      if (response.data.success)
+        setFeesObj(response.data.fees);
+    })
+    .catch(e => {
+      console.log(e);
+      enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
+    })
+
+  }, [])
 
   React.useEffect(() => {
 
@@ -126,7 +146,7 @@ function Checkout() {
         })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, token]);
+  }, [searchParams, token, feesObj]);
 
   const updateSummary = (products, couponDiscount) => {
 
@@ -149,7 +169,7 @@ function Checkout() {
 
     paidByBuyer.subtotal = paidByBuyer.totalSalesPrice + paidByBuyer.totalShipping;
 
-    paidByBuyer.tax = paidByBuyer.subtotal * 0.09;
+    paidByBuyer.tax = paidByBuyer.subtotal * (Number(feesObj.buyer.product) / 100);
 
     paidByBuyer.total = paidByBuyer.subtotal + paidByBuyer.tax;
 
@@ -160,8 +180,8 @@ function Checkout() {
 
     const pkg = serviceItem.service.packages[serviceItem.pkgIndex];
 
-    let paidByBuyer = {salesPrice: 0, tax: 0, total: 0};
-    let sellerToGet = {salesPrice: 0, tax: 0, total: 0}
+    let paidByBuyer = { salesPrice: 0, tax: 0, total: 0 };
+    let sellerToGet = { salesPrice: 0, tax: 0, total: 0 }
 
     paidByBuyer.salesPrice = pkg.salesPrice;
     sellerToGet.salesPrice = pkg.salesPrice;
@@ -169,8 +189,8 @@ function Checkout() {
     if (couponDiscount || appliedCoupon)
       paidByBuyer.salesPrice -= (paidByBuyer.salesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
 
-    paidByBuyer.tax = paidByBuyer.salesPrice * 0.05;
-    sellerToGet.tax = sellerToGet.salesPrice * 0.12;
+    paidByBuyer.tax = paidByBuyer.salesPrice * (Number(feesObj?.buyer?.service) / 100);
+    sellerToGet.tax = sellerToGet.salesPrice * (serviceItem.service.sellerId?.sellerType === "Free" ? (Number(feesObj?.seller?.service) / 100) : (Number(feesObj?.paidSeller?.service) / 100));
 
     paidByBuyer.total = paidByBuyer.salesPrice + paidByBuyer.tax;
     sellerToGet.total = sellerToGet.salesPrice - sellerToGet.tax;
@@ -190,7 +210,7 @@ function Checkout() {
     paidByBuyer.totalShipping += parseFloat(offer.shippingFee);
 
     paidByBuyer.subtotal = paidByBuyer.totalSalesPrice + paidByBuyer.totalShipping;
-    paidByBuyer.tax = paidByBuyer.subtotal * 0.09;
+    paidByBuyer.tax = paidByBuyer.subtotal * (Number(feesObj?.buyer?.product) / 100);
     paidByBuyer.total = paidByBuyer.subtotal + paidByBuyer.tax;
 
     setSummary({ paidByBuyer });
@@ -198,8 +218,8 @@ function Checkout() {
 
   const updateServiceCustomSummary = (offer, couponDiscount) => {
 
-    let paidByBuyer = {salesPrice: 0, tax: 0, total: 0};
-    let sellerToGet = {salesPrice: 0, tax: 0, total: 0}
+    let paidByBuyer = { salesPrice: 0, tax: 0, total: 0 };
+    let sellerToGet = { salesPrice: 0, tax: 0, total: 0 }
 
     paidByBuyer.salesPrice = offer.offerAmount;
     sellerToGet.salesPrice = offer.offerAmount;
@@ -207,13 +227,13 @@ function Checkout() {
     if (couponDiscount || appliedCoupon)
       paidByBuyer.salesPrice -= (paidByBuyer.salesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
 
-    paidByBuyer.tax = paidByBuyer.salesPrice * 0.05;
-    sellerToGet.tax = sellerToGet.salesPrice * 0.12;
+    paidByBuyer.tax = paidByBuyer.salesPrice * (Number(feesObj?.buyer?.service) / 100);
+    sellerToGet.tax = sellerToGet.salesPrice * (offer.serviceId.sellerId?.sellerType === "Free" ? (Number(feesObj?.seller?.service) / 100) : (Number(feesObj?.paidSeller?.service) / 100));
 
     paidByBuyer.total = paidByBuyer.salesPrice + paidByBuyer.tax;
     sellerToGet.total = sellerToGet.salesPrice - sellerToGet.tax;
 
-    setServiceSummary({paidByBuyer, sellerToGet});
+    setServiceSummary({ paidByBuyer, sellerToGet });
   }
 
   const handlePlaceOrder = async (e) => {
@@ -524,7 +544,7 @@ function Checkout() {
             <div className="horizontalLine"></div>
 
             <div className='row'>
-              <p>{(items || (customItem && customItem.quoteType === "product")) ? "Shipping Fee" : "Tax (5%)"}</p>
+              <p>{(items || (customItem && customItem.quoteType === "product")) ? "Shipping Fee" : `Tax (${feesObj?.buyer?.service}%)`}</p>
               <strong>${(items || (customItem && customItem.quoteType === "product")) ? summary.paidByBuyer.totalShipping.toFixed(2) : serviceSummary.paidByBuyer.tax.toFixed(2)}</strong>
             </div>
 
@@ -534,7 +554,7 @@ function Checkout() {
             </div>
 
               <div className='row'>
-                <p>Tax (9%)</p>
+                <p>Tax ({feesObj?.buyer?.product}%)</p>
                 <strong>${summary.paidByBuyer.tax.toFixed(2)}</strong>
               </div></>}
 
@@ -547,7 +567,7 @@ function Checkout() {
 
             {!(items || (customItem && customItem.quoteType === "product")) && <div className='row'>
               <p>Delivery Time</p>
-              <strong>{serviceItem? serviceItem.service.packages[serviceItem.pkgIndex].deliveryDays : customItem.duration} days</strong>
+              <strong>{serviceItem ? serviceItem.service.packages[serviceItem.pkgIndex].deliveryDays : customItem.duration} days</strong>
             </div>}
 
             <button className='primaryBtn' disabled={!stripe || loading} type="submit" onClick={handlePlaceOrder}>

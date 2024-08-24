@@ -5,20 +5,21 @@ const cartModel = require("../models/cartModel");
 
 exports.getCarts = asyncHandler(async (req, res) => {
   const userId = req.user._id;
-  const cart = await cartModel.findOne({ userId }).populate('products.product');
 
-  // if (!cart) {
-  //   return res.status(404).json({
-  //     success: false,
-  //     message: 'Cart not found'
-  //   });
-  // }
+  const cart = await cartModel.findOne({ userId })
+    .populate({
+      path: 'products.product',
+      populate: {
+        path: 'sellerId',
+      }
+    });
 
   res.status(200).json({
     success: true,
     cart
   });
 });
+
 
 
 
