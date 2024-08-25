@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 const upload = require("../config/multer");
-const { authorized, authorizedRoles } = require("../middlewares/authorization");
+const { authorized, authorizedRoles, authorizeAdmin } = require("../middlewares/authorization");
 
 const { getAllSellers, getSeller, createSeller, updateSeller, deleteSeller } = require("../controllers/sellerCtrl");
 
-router.get("/all/", getAllSellers);
+router.get("/all/", authorizeAdmin, getAllSellers);
 
 // router.get('/seller/user/:userId', authorized, getSellerByUserId);
 

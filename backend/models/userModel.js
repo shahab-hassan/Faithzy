@@ -34,6 +34,7 @@ const userSchema = mongoose.Schema({
     facebookId: {
         type: String,
     },
+    userStatus: { type: String, enum: ['Active', 'Blocked'], default: "Active" },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
 },

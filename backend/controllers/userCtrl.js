@@ -8,49 +8,60 @@ const userModel = require("../models/userModel")
 const sendToken = require("../utils/sendToken")
 const sendEmail = require("../utils/sendEmail")
 
-exports.getUser = asyncHandler(async (req, res)=>{
+exports.getUser = asyncHandler(async (req, res) => {
     const user = await userModel.findById(req.params.id).populate("sellerId");
-    if (!user){
-      res.status(404)
-      throw new Error ("User not found!");
+    if (!user) {
+        res.status(404)
+        throw new Error("User not found!");
     }
     return res.status(200).json({ success: true, user });
 })
 
-exports.registerUser = asyncHandler(async(req, res)=>{
-    
-    let {username, email, password, confirmPass, role} = req.body;
+exports.getAllUsers = asyncHandler(async (req, res) => {
+    const { filterType } = req.query;
+    let query = {};
 
-    if(!username || !email || !password || !confirmPass){
+    if (filterType === 'Active') query.userStatus = 'Active';
+    else if (filterType === 'Blocked') query.userStatus = 'Blocked';
+
+    const allUsers = await userModel.find(query).populate('sellerId').sort({ updatedAt: -1 });
+    res.status(200).json({ success: true, allUsers });
+})
+
+exports.registerUser = asyncHandler(async (req, res) => {
+
+    let { username, email, password, confirmPass, role } = req.body;
+
+    if (!username || !email || !password || !confirmPass) {
         res.status(400)
         throw new Error("All fields are required!")
     }
-    
-    if(await userModel.findOne({username})){
+
+    if (await userModel.findOne({ username })) {
         res.status(400)
         throw new Error("Username already taken!")
     }
-    if(await userModel.findOne({email})){
+    if (await userModel.findOne({ email })) {
         res.status(400)
         throw new Error("Email is already registered!")
     }
-    if(password.length<8){
+    if (password.length < 8) {
         res.status(400)
         throw new Error("Use 8 or more characters with a mix of letters, numbers & symbols!")
     }
 
-    if(password !== confirmPass){
+    if (password !== confirmPass) {
         res.status(400)
         throw new Error("Passwords do not match...")
     }
-    
+
     let hashPassword = await bcrypt.hash(password, 10);
-    
+
     let newUser;
-    try{
-        newUser = await userModel.create({username, email, password: hashPassword, role});
+    try {
+        newUser = await userModel.create({ username, email, password: hashPassword, role });
     }
-    catch(e){
+    catch (e) {
         res.status(400)
         throw new Error(e)
     }
@@ -61,25 +72,30 @@ exports.registerUser = asyncHandler(async(req, res)=>{
     })
 })
 
-exports.loginUser = asyncHandler(async (req, res)=>{
+exports.loginUser = asyncHandler(async (req, res) => {
 
-    let {email, password} = req.body;
+    let { email, password } = req.body;
 
-    if(!email || !password){
+    if (!email || !password) {
         res.status(400)
         throw new Error("All fields are Required!")
     }
 
-    let user = await userModel.findOne({email}).select("+password");
+    let user = await userModel.findOne({ email }).select("+password");
 
-    if(!user){
+    if (!user) {
         res.status(401)
         throw new Error("Email is not registered...")
     }
 
+    if (user.userStatus === 'Blocked') {
+        res.status(403)
+        throw new Error("Your account has been blocked!");
+    }
+
     const isPasswordMatched = await bcrypt.compare(password, user.password)
 
-    if(!isPasswordMatched){
+    if (!isPasswordMatched) {
         res.status(401)
         throw new Error("Incorrect email or password!");
     }
@@ -88,7 +104,7 @@ exports.loginUser = asyncHandler(async (req, res)=>{
 
 })
 
-exports.logoutUser = asyncHandler(async (req, res)=>{
+exports.logoutUser = asyncHandler(async (req, res) => {
     res.cookie("token", null, {
         expires: new Date(Date.now()),
         httpOnly: true
@@ -167,45 +183,45 @@ exports.resetPassword = asyncHandler(async (req, res) => {
 
 exports.onGoogleLoginSuccess = (req, res, next) => {
     passport.authenticate('google', { failureRedirect: '/login' }, (err, user, info) => {
-      if (err || !user) {
-        return res.redirect('/login');
-      }
-      req.logIn(user, (err) => {
-        if (err) {
-          return res.redirect('/login');
+        if (err || !user) {
+            return res.redirect('/login');
         }
-        const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN_SECRET, { expiresIn: process.env.JWT_TOKEN_EXPIRY });
-        res.redirect(`http://localhost:3000/?token=${token}`);
-      });
+        req.logIn(user, (err) => {
+            if (err) {
+                return res.redirect('/login');
+            }
+            const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN_SECRET, { expiresIn: process.env.JWT_TOKEN_EXPIRY });
+            res.redirect(`http://localhost:3000/?token=${token}`);
+        });
     })(req, res, next);
 }
 
 exports.onFacebookLoginSuccess = (req, res, next) => {
     passport.authenticate('facebook', { failureRedirect: '/login' }, (err, user, info) => {
-      if (err || !user) {
-        return res.redirect('/login');
-      }
-      req.logIn(user, (err) => {
-        if (err) {
-          return res.redirect('/login');
+        if (err || !user) {
+            return res.redirect('/login');
         }
-        const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN_SECRET, { expiresIn: process.env.JWT_TOKEN_EXPIRY });
-        res.redirect(`http://localhost:3000/?token=${token}`);
-      });
+        req.logIn(user, (err) => {
+            if (err) {
+                return res.redirect('/login');
+            }
+            const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN_SECRET, { expiresIn: process.env.JWT_TOKEN_EXPIRY });
+            res.redirect(`http://localhost:3000/?token=${token}`);
+        });
     })(req, res, next);
-  }
+}
 
 exports.updateEmailAndUsername = asyncHandler(async (req, res) => {
-    const {userId} = req.params;
+    const { userId } = req.params;
     const user = await userModel.findById(userId);
-    if(!user){
+    if (!user) {
         res.status(404)
         throw new Error("User not found!")
     }
     user.username = req.body.username;
     user.email = req.body.email;
     await user.save();
-    res.status(200).json({success: true, message: 'User updated!'})
+    res.status(200).json({ success: true, message: 'User updated!' })
 })
 
 exports.updatePassword = asyncHandler(async (req, res) => {
@@ -243,4 +259,20 @@ exports.updatePassword = asyncHandler(async (req, res) => {
     await user.save();
 
     res.status(200).json({ success: true, message: "Password updated successfully!" });
+});
+
+exports.blockUser =  asyncHandler(async (req, res) => {
+    try {
+        const user = await userModel.findById(req.body.userId);
+        if (!user)
+            return res.status(404).json({ success: false, message: "User not found!" });
+        if(!req.body.isBlocked)
+            user.userStatus = 'Blocked';
+        else
+            user.userStatus = 'Active';
+        await user.save();
+        res.status(200).json({ success: true, message: "User blocked successfully!" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Server error!" });
+    }
 });

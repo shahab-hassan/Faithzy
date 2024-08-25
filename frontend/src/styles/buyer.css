@@ -2158,6 +2158,19 @@
     display: flex;
     justify-content: space-between;
 }
+.profileDiv .profileContent .upper .sellerInfo .buttonsDiv{
+    margin-top: 10px;
+}
+.profileDiv .profileContent .upper .sellerInfo .buttonsDiv .btnsForAdmin{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.profileDiv .profileContent .upper .sellerInfo .buttonsDiv .btnsForAdmin div{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
 
 .profileDiv .sellerServices .services,
 .profileDiv .sellerProducts .products{

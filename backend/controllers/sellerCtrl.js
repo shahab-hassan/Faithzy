@@ -3,7 +3,7 @@ const sellerModel = require('../models/sellerModel');
 const userModel = require('../models/userModel');
 
 exports.createSeller = asyncHandler(async (req, res) => {
-  if(req.user.role === "seller"){
+  if (req.user.role === "seller") {
     res.status(400);
     throw new Error("You are already a seller!");
   }
@@ -39,13 +39,36 @@ exports.createSeller = asyncHandler(async (req, res) => {
 
 exports.getAllSellers = asyncHandler(async (req, res) => {
   try {
-    const allSellers = await sellerModel.find().populate('userId', '-password');
+    const { filterType } = req.query;
+    let sellerQuery = {};
+    let userQuery = {};
+
+    if (filterType === 'Paid') sellerQuery.sellerType = 'Paid';
+    else if (filterType === 'Free') sellerQuery.sellerType = 'Free';
+
+    if (filterType === 'Active') userQuery.userStatus = 'Active';
+    else if (filterType === 'Blocked') userQuery.userStatus = 'Blocked';
+
+    const users = await userModel.find(userQuery).select('_id');
+
+    const userIds = users.map(user => user._id);
+
+    if (userIds.length > 0) {
+      sellerQuery.userId = { $in: userIds };
+    } else {
+      return res.status(200).json({ success: true, allSellers: [] });
+    }
+
+    const allSellers = await sellerModel.find(sellerQuery).populate('userId', '-password');
+
     res.status(200).json({ success: true, allSellers });
   } catch (error) {
     res.status(400);
     throw new Error(error);
   }
 });
+
+
 
 exports.getSeller = asyncHandler(async (req, res) => {
   try {

@@ -1,3 +1,4 @@
 *** Overview ***: 
 
-- Set up Fees to reflect on User side, fetched from database
+- Created and Completed Admin Sellers Page with Blocking Functionality
+- Created and Completed Admin Buyers Page with Blocking Functionality

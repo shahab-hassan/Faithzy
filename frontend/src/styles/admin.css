@@ -30,6 +30,10 @@
     width: 15px !important;
     height: 15px !important;
 }
+.admin .adminDiv .tableDiv .rows .row .arrowRight{
+    width: 20px !important;
+    height: 20px !important;
+}
 
 
 /* ****************************** LOGIN PAGE ****************************** */

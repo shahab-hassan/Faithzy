@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
-const { registerUser, loginUser, logoutUser, resetPasswordRequest, resetPassword, onGoogleLoginSuccess, onFacebookLoginSuccess, updateEmailAndUsername, updatePassword, getUser } = require("../controllers/userCtrl");
-const { authorized } = require("../middlewares/authorization");
+const { registerUser, loginUser, logoutUser, resetPasswordRequest, resetPassword, onGoogleLoginSuccess, onFacebookLoginSuccess, updateEmailAndUsername, updatePassword, getUser, getAllUsers, blockUser } = require("../controllers/userCtrl");
+const { authorized, authorizeAdmin } = require("../middlewares/authorization");
 const userModel = require("../models/userModel")
 
 router.post("/register", registerUser);
@@ -22,6 +22,10 @@ router.get('/login/facebook', passport.authenticate('facebook', { scope: ['email
 router.get('/login/facebook/callback', onFacebookLoginSuccess);
 
 router.get('/getUser/:id', authorized, getUser);
+
+router.get('/all', authorizeAdmin, getAllUsers);
+
+router.put('/block/', authorizeAdmin, blockUser);
 
 
 router.get('/checkLogin', authorized, async (req, res) => {

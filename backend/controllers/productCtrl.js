@@ -31,7 +31,7 @@ exports.getSellerProductsById = asyncHandler(async (req, res) => {
     let allProducts, totalPages;
     try {
         const page = parseInt(req.query.page) || 1;
-        const limit = 5;
+        const limit = req.query.isAdminLogin? 4 : 5;
 
         allProducts = await productModel.find({ sellerId: req.params.id })
             .skip((page - 1) * limit)
