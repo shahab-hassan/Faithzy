@@ -11,7 +11,13 @@ const productOrder = new mongoose.Schema({
     tax: Number,
     total: Number
   },
-  promoSalesPrice: { type: Number, required: true },
+  buyerPaid: {
+    salesPrice: Number,
+    shippingFees: Number,
+    subtotal: Number,
+    tax: Number,
+    total: Number
+  },
   status: { type: [{ name: String, createdAt: Date }], required: true, default: [{ name: "Active", createdAt: Date.now() }] },
   cancellationReason: String
 })
@@ -85,6 +91,7 @@ const serviceOrderSchema = new mongoose.Schema({
       salesPrice: Number,
       tax: Number,
       total: Number,
+      promoDiscount: Number
     },
     sellerToGet: {
       salesPrice: Number,

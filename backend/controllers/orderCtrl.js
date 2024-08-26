@@ -4,13 +4,13 @@ const { createPaymentIntent } = require('../controllers/paymentCtrl');
 const adminSettingsModel = require("../models/adminSettingsModel");
 
 exports.createProductOrder = asyncHandler(async (req, res) => {
-  
+
   const userId = req.user._id;
   const { items, summary, paymentMethod, billingInfo } = req.body;
 
-  if(req.user.sellerId?.toString() !== undefined){
-    for(let item of items){
-      if((item.product.sellerId?._id === req.user.sellerId?.toString()) || (item.product.sellerId === req.user.sellerId?.toString())){
+  if (req.user.sellerId?.toString() !== undefined) {
+    for (let item of items) {
+      if ((item.product.sellerId?._id === req.user.sellerId?.toString()) || (item.product.sellerId === req.user.sellerId?.toString())) {
         res.status(400);
         throw new Error("You cannot place Order!")
       }
@@ -38,16 +38,23 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
   let allProducts = products.map(product => {
 
     let fee = 0;
-    if(product.product.sellerId?.sellerType === "Free")
+    if (product.product.sellerId?.sellerType === "Free")
       fee = feesObj.seller.product;
     else
       fee = feesObj.paidSeller.product;
 
-    const salesPrice = products.length>1? product.product.salesPrice * product.count : product.product.salesPrice;
+    const salesPrice = products.length > 1 ? product.product.salesPrice * product.count : product.product.salesPrice;
     const shippingFees = product.product.shippingFees;
     const subtotal = salesPrice + shippingFees;
-    const tax = subtotal * (Number(fee)/100);
+    const tax = subtotal * (Number(fee) / 100);
     const total = subtotal - tax;
+    const promoDiscount = Number(summary.paidByBuyer.promoDiscount) / 100;
+
+    const buyerSalesPrice = salesPrice * (1 - promoDiscount);
+    const buyerSubtotal = buyerSalesPrice + shippingFees;
+    const buyerTax = buyerSubtotal * (Number(feesObj.buyer.product) / 100);
+    const buyerTotal = buyerSubtotal + buyerTax;
+
     return {
       sellerId: product.product.sellerId?._id || product.product.sellerId,
       productId: product.product._id,
@@ -59,7 +66,13 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
         tax: tax,
         total: total
       },
-      promoSalesPrice: Number(summary.paidByBuyer.promoDiscount) !== 0? product.product.salesPrice - (product.product.salesPrice * (summary.paidByBuyer.promoDiscount)/100) : product.product.salesPrice
+      buyerPaid: {
+        salesPrice: buyerSalesPrice,
+        shippingFees: shippingFees,
+        subtotal: buyerSubtotal,
+        tax: buyerTax,
+        total: buyerTotal
+      }
     }
   })
 
@@ -86,16 +99,16 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
 });
 
 exports.createServiceOrder = asyncHandler(async (req, res) => {
-  
+
   const userId = req.user._id;
   const { items, summary, paymentMethod, billingInfo } = req.body;
-  
-  const serviceItem = items;
-  const {firstName, lastName, country, city, email, phoneNumber} = billingInfo;
-  const buyerInfo = {firstName, lastName, country, city, email, phoneNumber};
 
-  if(req.user.sellerId?.toString() !== undefined){
-    if((serviceItem.service.sellerId?._id === req.user.sellerId?.toString()) || (serviceItem.service.sellerId === req.user.sellerId?.toString())){
+  const serviceItem = items;
+  const { firstName, lastName, country, city, email, phoneNumber } = billingInfo;
+  const buyerInfo = { firstName, lastName, country, city, email, phoneNumber };
+
+  if (req.user.sellerId?.toString() !== undefined) {
+    if ((serviceItem.service.sellerId?._id === req.user.sellerId?.toString()) || (serviceItem.service.sellerId === req.user.sellerId?.toString())) {
       res.status(400);
       throw new Error("You cannot place Order!")
     }
@@ -116,9 +129,9 @@ exports.createServiceOrder = asyncHandler(async (req, res) => {
 
 
   let serviceOrder = {
-      sellerId: serviceItem.service.sellerId?._id || serviceItem.service.sellerId,
-      serviceId: serviceItem.service._id,
-      pkg: serviceItem.pkg? serviceItem.pkg : serviceItem.service.packages[serviceItem.pkgIndex] ,
+    sellerId: serviceItem.service.sellerId?._id || serviceItem.service.sellerId,
+    serviceId: serviceItem.service._id,
+    pkg: serviceItem.pkg ? serviceItem.pkg : serviceItem.service.packages[serviceItem.pkgIndex],
   }
 
   const amount = summary.paidByBuyer.total * 100;
@@ -133,7 +146,7 @@ exports.createServiceOrder = asyncHandler(async (req, res) => {
     clientSecret: paymentIntent.client_secret,
   });
 
-  
+
   newOrder.service.history.unshift({
     name: "orderPlaced",
     message: "placed the Order!",
@@ -171,18 +184,18 @@ exports.createServiceOrder = asyncHandler(async (req, res) => {
 exports.getBuyerProductOrder = asyncHandler(async (req, res) => {
 
   const order = await productOrderModel.findById(req.params.id)
-  .populate({
-    path: 'products.productId',
-    select: 'title category productImages',
-    populate: {
-      path: 'sellerId',
-      select: 'userId',
+    .populate({
+      path: 'products.productId',
+      select: 'title category productImages',
       populate: {
-        path: 'userId',
-        select: 'username'
+        path: 'sellerId',
+        select: 'userId',
+        populate: {
+          path: 'userId',
+          select: 'username'
+        }
       }
-    }
-  });
+    });
 
   if (!order || order.userId.toString() !== req.user._id.toString()) {
     res.status(404)
@@ -190,6 +203,49 @@ exports.getBuyerProductOrder = asyncHandler(async (req, res) => {
   } else {
     res.status(200).json({ success: true, order });
   }
+});
+
+exports.getAllOrders = asyncHandler(async (req, res) => {
+  const { ordersType = 'Products' } = req.query;
+  let orders = [];
+
+  if (ordersType === 'Products') {
+
+    orders = await productOrderModel.find()
+      .populate('userId', 'username email userStatus')
+      .populate({
+        path: 'products.sellerId',
+        select: 'userId',
+        populate: {
+          path: 'userId',
+          select: 'username'
+        }
+      })
+      .populate('products.productId', 'title category')
+      .sort({updatedAt: -1});
+
+  } 
+  
+  else if (ordersType === 'Services') {
+
+    orders = await serviceOrderModel.find()
+      .populate('userId', 'username email userStatus')
+      .populate({
+        path: 'service.sellerId',
+        select: 'userId',
+        populate: {
+          path: 'userId',
+          select: 'username'
+        }
+      })
+      .populate('service.serviceId', 'title category')
+      .sort({updatedAt: -1});
+  }
+
+  res.json({
+    success: true,
+    orders,
+  });
 });
 
 exports.getBuyerProductOrders = asyncHandler(async (req, res) => {
@@ -211,18 +267,18 @@ exports.getBuyerProductOrders = asyncHandler(async (req, res) => {
 exports.getBuyerServiceOrder = asyncHandler(async (req, res) => {
 
   const order = await serviceOrderModel.findById(req.params.id)
-  .populate({
-    path: 'service.serviceId',
-    select: 'title category serviceImages questions',
-    populate: {
-      path: 'sellerId',
-      select: 'userId fullName',
+    .populate({
+      path: 'service.serviceId',
+      select: 'title category serviceImages questions',
       populate: {
-        path: 'userId',
-        select: 'username'
+        path: 'sellerId',
+        select: 'userId fullName',
+        populate: {
+          path: 'userId',
+          select: 'username'
+        }
       }
-    }
-  });
+    });
 
   const usernames = [req.user.username, order.service.serviceId.sellerId.userId.username];
 
@@ -253,8 +309,8 @@ exports.getBuyerServiceOrders = asyncHandler(async (req, res) => {
 exports.getSellerProductOrder = asyncHandler(async (req, res) => {
 
   const order = await productOrderModel.findById(req.params.id)
-  .populate('userId', 'username')
-  .populate('products.productId')
+    .populate('userId', 'username')
+    .populate('products.productId')
 
   if (!order || !order.products.some(p => p.sellerId.toString() === req.user.sellerId.toString())) {
     res.status(404)
@@ -276,8 +332,8 @@ exports.getSellerProductOrders = asyncHandler(async (req, res) => {
 exports.getSellerServiceOrder = asyncHandler(async (req, res) => {
 
   const order = await serviceOrderModel.findById(req.params.id)
-  .populate('userId', 'username')
-  .populate('service.serviceId')
+    .populate('userId', 'username')
+    .populate('service.serviceId')
 
   const usernames = [order.userId.username, req.user.username];
 
@@ -349,7 +405,7 @@ exports.cancelProductOrder = async (req, res) => {
     if (currentStatus === 'Delivered') {
       return res.status(400).json({ success: false, error: "Cannot cancel a delivered order" });
     }
-    else if(currentStatus === "Cancelled"){
+    else if (currentStatus === "Cancelled") {
       return res.status(400).json({ success: false, error: "Order is already Cancelled" });
     }
 
@@ -378,7 +434,7 @@ exports.saveServiceOrderAnswers = async (req, res) => {
     order.answers = answers;
 
     order.service.history.forEach((activity, index) => {
-      if(activity.name === "requirementsRequired"){
+      if (activity.name === "requirementsRequired") {
         order.service.history[index] = {
           name: "requirementsSubmitted",
           message: "submitted Requirements",
@@ -428,7 +484,7 @@ exports.sendExtensionRequest = async (req, res) => {
 
     order.service.history.unshift({
       name: 'extensionRequested',
-      message: `sent ${(extendedDays<10 && "0") + extendedDays} days extension request until: ${newDeliveryDate.toLocaleString()}`,
+      message: `sent ${(extendedDays < 10 && "0") + extendedDays} days extension request until: ${newDeliveryDate.toLocaleString()}`,
       description: { text: extensionReason, images: [], extensionDays: extendedDays },
       role: 'Seller',
       isDone: false,
@@ -465,16 +521,16 @@ exports.respondToExtensionRequest = asyncHandler(async (req, res) => {
 
       order.service.history.unshift({
         name: 'extensionAccepted',
-        message: `accepted ${(extensionDays<10 && "0") + extensionDays} days extension request`,
+        message: `accepted ${(extensionDays < 10 && "0") + extensionDays} days extension request`,
         role: 'Buyer',
         isDone: true,
         createdAt: new Date()
       });
-    } 
+    }
     else if (response === 'decline') {
       order.service.history.unshift({
         name: 'extensionDeclined',
-        message: `declined ${(extensionDays<10 && "0") + extensionDays} extension request`,
+        message: `declined ${(extensionDays < 10 && "0") + extensionDays} extension request`,
         role: 'Buyer',
         isDone: true,
         createdAt: new Date()
@@ -514,7 +570,7 @@ exports.sendDelivery = async (req, res) => {
       isDone: false,
       createdAt: new Date()
     });
-    order.service.status.push({name: "Delivered", createdAt: Date.now()})
+    order.service.status.push({ name: "Delivered", createdAt: Date.now() })
 
     await order.save();
     res.status(200).json({ success: true, order });
@@ -540,7 +596,7 @@ exports.respondToDelivery = asyncHandler(async (req, res) => {
     }
 
     if (response === 'accept') {
-      order.service.status.push({name: "Completed", createdAt: Date.now()});
+      order.service.status.push({ name: "Completed", createdAt: Date.now() });
       order.service.history.unshift({
         name: 'deliveryAccepted',
         message: `accepted delivery. The order has been completed!`,
@@ -548,9 +604,9 @@ exports.respondToDelivery = asyncHandler(async (req, res) => {
         isDone: true,
         createdAt: new Date()
       });
-    } 
+    }
     else if (response === 'decline') {
-      order.service.status.push({name: "Active", createdAt: Date.now()});
+      order.service.status.push({ name: "Active", createdAt: Date.now() });
       order.service.history.unshift({
         name: 'askedForRevision',
         message: `asked for Revision!`,
@@ -586,7 +642,7 @@ exports.sendCancellationRequest = async (req, res) => {
     order.service.history.unshift({
       name: 'cancellationSent',
       message: `asked to cancel order!`,
-      description: { text: cancellationReason},
+      description: { text: cancellationReason },
       role: 'Seller',
       isDone: false,
       createdAt: new Date()
@@ -616,7 +672,7 @@ exports.respondToCancellation = asyncHandler(async (req, res) => {
     }
 
     if (response === 'accept') {
-      order.service.status.push({name: "Cancelled", createdAt: Date.now()});
+      order.service.status.push({ name: "Cancelled", createdAt: Date.now() });
       order.service.history.unshift({
         name: 'cancellationAccepted',
         message: `agreed to cancel. The order has been cancelled`,
@@ -624,7 +680,7 @@ exports.respondToCancellation = asyncHandler(async (req, res) => {
         isDone: true,
         createdAt: new Date()
       });
-    } 
+    }
     else if (response === 'decline') {
       order.service.history.unshift({
         name: 'cancellationDeclined',

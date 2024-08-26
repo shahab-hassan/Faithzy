@@ -29,15 +29,19 @@ const {
   respondToDelivery,
 
   sendCancellationRequest,
-  respondToCancellation
+  respondToCancellation,
+  
+  getAllOrders
 
 } = require("../controllers/orderCtrl");
-const { authorized, authorizedRoles } = require("../middlewares/authorization");
+const { authorized, authorizedRoles, authorizeAdmin } = require("../middlewares/authorization");
 
 const router = express.Router();
 
 router.post("/product/order", authorized, createProductOrder);
 router.post("/service/order", authorized, createServiceOrder);
+
+router.get("/admin/all", authorizeAdmin, getAllOrders);
 
 router.get("/buyer/product/all", authorized, getBuyerProductOrders);
 router.get("/buyer/product/:id", authorized, getBuyerProductOrder);

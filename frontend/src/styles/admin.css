@@ -10,6 +10,12 @@
     overflow-y: auto;
     height: 100vh;
 }
+.admin .adminDiv .primaryBtn,
+.admin .adminDiv .secondaryBtn,
+.admin .adminDiv .dangerBtn,
+.admin .adminDiv .primaryBtn2{
+    font-size: 0.85rem;
+}
 
 .admin .adminDiv .tableDiv{
     padding: 0;
@@ -288,4 +294,34 @@
 .adminFeeDiv .adminFeeContent .right .lower .discountType .radioBtn{
     display: flex;
     gap: 5px;
+}
+
+
+
+
+
+/* ****************************** ADMIN ORDERS MANAGEMENT PAGE ****************************** */
+
+.adminOrdersDiv .tableDiv .header .title,
+.adminOrdersDiv .tableDiv .rows .row .titleField{
+    width: 220%;
+}
+.adminOrdersDiv .tableDiv .rows .row .titleField .title{
+    width: 100% !important;
+}
+.adminOrdersDiv .popupDiv .rows{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+.adminOrdersDiv .popupDiv .rows .row{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.adminOrdersDiv .popupDiv .contactBuyerBtnDiv{
+    display: flex;
+    justify-content: right;
+    width: 100%;
 }

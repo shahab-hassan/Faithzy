@@ -18,7 +18,7 @@ function Checkout() {
 
   const [serviceItem, setServiceItem] = React.useState(null);
   const [serviceSummary, setServiceSummary] = React.useState({
-    paidByBuyer: { salesPrice: 0, tax: 0, total: 0 },
+    paidByBuyer: { salesPrice: 0, tax: 0, total: 0, promoDiscount: 0 },
     sellerToGet: { salesPrice: 0, tax: 0, total: 0 }
   });
 
@@ -186,8 +186,10 @@ function Checkout() {
     paidByBuyer.salesPrice = pkg.salesPrice;
     sellerToGet.salesPrice = pkg.salesPrice;
 
-    if (couponDiscount || appliedCoupon)
+    if (couponDiscount || appliedCoupon){
       paidByBuyer.salesPrice -= (paidByBuyer.salesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
+      paidByBuyer.promoDiscount = couponDiscount || appliedCoupon.discount;
+    }
 
     paidByBuyer.tax = paidByBuyer.salesPrice * (Number(feesObj?.buyer?.service) / 100);
     sellerToGet.tax = sellerToGet.salesPrice * (serviceItem.service.sellerId?.sellerType === "Free" ? (Number(feesObj?.seller?.service) / 100) : (Number(feesObj?.paidSeller?.service) / 100));
@@ -204,8 +206,10 @@ function Checkout() {
 
     paidByBuyer.totalSalesPrice = offer.offerAmount;
 
-    if (couponDiscount || appliedCoupon)
+    if (couponDiscount || appliedCoupon){
       paidByBuyer.totalSalesPrice -= (paidByBuyer.totalSalesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
+      paidByBuyer.promoDiscount = couponDiscount || appliedCoupon.discount;
+    }
 
     paidByBuyer.totalShipping += parseFloat(offer.shippingFee);
 
@@ -224,8 +228,10 @@ function Checkout() {
     paidByBuyer.salesPrice = offer.offerAmount;
     sellerToGet.salesPrice = offer.offerAmount;
 
-    if (couponDiscount || appliedCoupon)
+    if (couponDiscount || appliedCoupon){
       paidByBuyer.salesPrice -= (paidByBuyer.salesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
+      paidByBuyer.promoDiscount = couponDiscount || appliedCoupon.discount;
+    }
 
     paidByBuyer.tax = paidByBuyer.salesPrice * (Number(feesObj?.buyer?.service) / 100);
     sellerToGet.tax = sellerToGet.salesPrice * (offer.serviceId.sellerId?.sellerType === "Free" ? (Number(feesObj?.seller?.service) / 100) : (Number(feesObj?.paidSeller?.service) / 100));

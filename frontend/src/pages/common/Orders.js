@@ -93,7 +93,7 @@ const Orders = ({ pageType }) => {
                 </div>
               </div>
               <div className="right">
-                <div className="price">${product.promoSalesPrice}</div>
+                <div className="price">${product.buyerPaid.salesPrice}</div>
                 <Link to={`/chat?p=${product?.productId?.sellerId?.userId?._id}`} className='secondaryBtn'>{"Contact Seller >"}</Link>
               </div>
             </div>

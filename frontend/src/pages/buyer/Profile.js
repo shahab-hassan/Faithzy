@@ -129,7 +129,7 @@ function Profile() {
                                     <Link class="primaryBtn">Contact Seller</Link>
                                     <div>
                                         <Link class="primaryBtn2">Send Email</Link>
-                                        <div onClick={() => handleBlockUser(seller?.userId?._id, seller?.userId?.userStatus === "Blocked")} class="secondaryBtn">{seller?.userId?.userStatus === "Blocked"? "UnBlock Seller" : "Block Seller"}</div>
+                                        <button onClick={() => handleBlockUser(seller?.userId?._id, seller?.userId?.userStatus === "Blocked")} class="secondaryBtn">{seller?.userId?.userStatus === "Blocked"? "UnBlock Seller" : "Block Seller"}</button>
                                     </div>
                                 </div>
                                 : <Link to={`/chat?p=${seller?.userId?._id}`} class="primaryBtn">Contact Me</Link>}
