@@ -67,3 +67,13 @@ exports.authorizedRoles = (...roles) => {
         next();
     }
 }
+
+
+exports.combinedAuthorization = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (authHeader && authHeader.startsWith("Admin"))
+        this.authorizeAdmin(req, res, next);
+    else
+        this.authorized(req, res, next);
+};

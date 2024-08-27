@@ -325,3 +325,15 @@
     justify-content: right;
     width: 100%;
 }
+
+
+
+
+
+
+
+/* ****************************** ADMIN CHATS PAGE ****************************** */
+
+.admin .adminDiv .chatDiv{
+    margin: 0;
+}

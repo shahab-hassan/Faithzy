@@ -119,6 +119,7 @@ function App() {
                     <Route path="/ftzy-admin/buyers" element={<AdminBuyers />} />
                     <Route path='/ftzy-admin/sellers/:id' element={<Profile />} />
                     <Route path='/ftzy-admin/orders' element={<AdminOrders />} />
+                    <Route path='/ftzy-admin/chats' element={<ChatPage />} />
                 </Route>
 
             </Routes>

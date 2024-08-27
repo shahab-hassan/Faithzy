@@ -35,7 +35,7 @@ function AdminHeader() {
             <li><NavLink to="/ftzy-admin/fee" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaMoneyBill className='icon'/>Fee</NavLink></li>
             <li><NavLink to="/ftzy-admin/terms" className={(v)=>`${v.isActive? "activeLi": ""}`}><BsFileEarmarkRuledFill className='icon'/>Terms & Conditions</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><HiUsers className='icon'/>Disputes</NavLink></li>
-            <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaEnvelope className='icon'/>Chats</NavLink></li>
+            <li><NavLink to="/ftzy-admin/chats" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaEnvelope className='icon'/>Chats</NavLink></li>
             <li><NavLink to="/ftzy-admin/employees" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaUsers className='icon'/>Employees</NavLink></li>
           </ul>
 

@@ -4,7 +4,7 @@ const path = require('path');
 const asyncHandler = require('express-async-handler');
 
 exports.sendMessage = asyncHandler(async (req, res) => {
-    const { senderId, receiverId, text, offer } = req.body;
+    let { senderId, receiverId, text, offer, isParticipantAdmin } = req.body;
 
     const message = {
         senderId,
@@ -16,9 +16,9 @@ exports.sendMessage = asyncHandler(async (req, res) => {
         const parsedOffer = JSON.parse(offer);
 
         if (parsedOffer.quoteType === 'product') {
-            parsedOffer.serviceId = null; // Ensure serviceId is null if quoteType is product
+            parsedOffer.serviceId = null;
         } else if (parsedOffer.quoteType === 'service') {
-            parsedOffer.productId = null; // Ensure productId is null if quoteType is service
+            parsedOffer.productId = null;
         }
 
         message.offer = parsedOffer;
@@ -32,12 +32,75 @@ exports.sendMessage = asyncHandler(async (req, res) => {
     try {
         let senderChat = await Chat.findOne({ userId: senderId });
         if (!senderChat) {
-            senderChat = new Chat({ userId: senderId, chats: [] });
+            senderChat = new Chat({ isAdmin: false, userId: senderId, chats: [] });
         }
 
-        let senderReceiverChat = senderChat.chats.find(c => c.participantId.toString() === receiverId);
+        console.log("here");
+        let senderReceiverChat = senderChat.chats.find(c => c.participantId?.toString() === receiverId || c.adminParticipantId?.toString() === receiverId);
         if (!senderReceiverChat) {
-            senderReceiverChat = { participantId: receiverId, messages: [message] };
+
+            if (isParticipantAdmin === "true")
+                senderReceiverChat = { isParticipantAdmin: true, adminParticipantId: receiverId, messages: [message] };
+            else
+                senderReceiverChat = { isParticipantAdmin: false, participantId: receiverId, messages: [message] };
+
+            senderChat.chats.push(senderReceiverChat);
+        } else {
+            senderReceiverChat.messages.push(message);
+        }
+        await senderChat.save();
+
+
+
+        if (senderId.toString() !== receiverId.toString()) {
+            let receiverChat = await Chat.findOne(isParticipantAdmin === "true"? { adminId: receiverId } : { userId: receiverId });
+            if (!receiverChat) {
+                if(isParticipantAdmin === "true")
+                    receiverChat = new Chat({ isAdmin: true, adminId: receiverId, chats: [] });
+                else
+                    receiverChat = new Chat({ isAdmin: false, userId: receiverId, chats: [] });
+            }
+
+            let receiverSenderChat = receiverChat.chats.find(c => c.participantId?.toString() === senderId || c.adminParticipantId?.toString() === senderId);
+            if (!receiverSenderChat) {
+                receiverSenderChat = { isParticipantAdmin: false, participantId: senderId, messages: [message] };
+                receiverChat.chats.push(receiverSenderChat);
+            } else {
+                receiverSenderChat.messages.push(message);
+            }
+            await receiverChat.save();
+            io.to(getReceiverSocketId(receiverId)).emit('receiveMessage', message);
+        }
+
+        res.status(200).json({ success: true, message });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+exports.adminSendMessage = asyncHandler(async (req, res) => {
+    const { senderId, receiverId, text } = req.body;
+
+    const message = {
+        senderId,
+        text,
+        timestamp: new Date(),
+    };
+
+    if (req.file) {
+        message.fileUrl = path.join('uploads', req.file.filename);
+        message.fileType = req.file.mimetype;
+    }
+
+    try {
+        let senderChat = await Chat.findOne({ adminId: senderId });
+        if (!senderChat) {
+            senderChat = new Chat({ isAdmin: true, adminId: senderId, chats: [] });
+        }
+
+        let senderReceiverChat = senderChat.chats.find(c => c.participantId?.toString() === receiverId);
+        if (!senderReceiverChat) {
+            senderReceiverChat = { isParticipantAdmin: false, participantId: receiverId, messages: [message] };
             senderChat.chats.push(senderReceiverChat);
         } else {
             senderReceiverChat.messages.push(message);
@@ -47,12 +110,12 @@ exports.sendMessage = asyncHandler(async (req, res) => {
         if (senderId.toString() !== receiverId.toString()) {
             let receiverChat = await Chat.findOne({ userId: receiverId });
             if (!receiverChat) {
-                receiverChat = new Chat({ userId: receiverId, chats: [] });
+                receiverChat = new Chat({ isAdmin: false, userId: receiverId, chats: [] });
             }
 
-            let receiverSenderChat = receiverChat.chats.find(c => c.participantId.toString() === senderId);
+            let receiverSenderChat = receiverChat.chats.find(c => c.participantId?.toString() === senderId || c.adminParticipantId?.toString() === senderId);
             if (!receiverSenderChat) {
-                receiverSenderChat = { participantId: senderId, messages: [message] };
+                receiverSenderChat = { isParticipantAdmin: true, adminParticipantId: senderId, messages: [message] };
                 receiverChat.chats.push(receiverSenderChat);
             } else {
                 receiverSenderChat.messages.push(message);
@@ -70,10 +133,36 @@ exports.sendMessage = asyncHandler(async (req, res) => {
 exports.getUserChats = asyncHandler(async (req, res) => {
     const { userId } = req.params;
     try {
-        const chat = await Chat.findOne({ userId })
+        const chat = await Chat.findOne({ userId });
+        if (!chat)
+            return res.status(200).json({ success: true, chats: [] });
+
+        if (chat.chats.some(c => c.participantId)) {
+            await chat.populate({
+                path: 'chats.participantId',
+                populate: { path: 'sellerId' }
+            });
+        }
+
+        if (chat.chats.some(c => c.adminParticipantId)) {
+            await chat.populate({
+                path: 'chats.adminParticipantId',
+            });
+        }
+
+        res.status(200).json({ success: true, chats: chat.chats.reverse() });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+exports.getAdminChats = asyncHandler(async (req, res) => {
+    const { adminId } = req.params;
+    try {
+        const chat = await Chat.findOne({ adminId })
             .populate({
                 path: 'chats.participantId',
-                populate: { path: 'sellerId'}
+                populate: { path: 'sellerId' }
             });
         res.status(200).json({ success: true, chats: chat ? chat.chats.reverse() : [] });
     } catch (error) {
@@ -88,10 +177,10 @@ exports.getOfferDetails = asyncHandler(async (req, res) => {
         const chat = await Chat.findOne({
             'chats.messages._id': messageId
         })
-        .populate({
-            path: 'chats.messages.offer.productId chats.messages.offer.serviceId',
-            populate: { path: 'sellerId' }
-        });
+            .populate({
+                path: 'chats.messages.offer.productId chats.messages.offer.serviceId',
+                populate: { path: 'sellerId' }
+            });
 
         if (!chat) {
             return res.status(404).json({ success: false, message: 'Offer not found' });

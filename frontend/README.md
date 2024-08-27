@@ -1,3 +1,3 @@
 *** Overview ***: 
 
-- Created and Completed Admin Orders Page
+- Created and Completed Admin Chats Page

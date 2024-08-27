@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { CgAttachment } from "react-icons/cg";
-import { FaEllipsisV, FaUsersSlash } from "react-icons/fa";
+import { FaUsersSlash } from "react-icons/fa";
 import { IoIosChatboxes, IoMdStopwatch } from "react-icons/io";
 import { TbInboxOff, TbTruckDelivery } from "react-icons/tb";
 import { FaStar } from "react-icons/fa";
@@ -18,9 +18,10 @@ import { MdOutlineLocalOffer } from "react-icons/md";
 import { FaBasketShopping } from "react-icons/fa6";
 
 const token = localStorage.getItem('token');
+const adminToken = localStorage.getItem('adminToken');
 let userId = null;
-if (token) {
-    const decodedToken = jwtDecode(token);
+if (token || adminToken) {
+    const decodedToken = jwtDecode(token || adminToken);
     userId = decodedToken.id;
 }
 
@@ -29,9 +30,10 @@ const socket = io('http://localhost:5000', {
 });
 
 const ChatPage = () => {
-    const { user } = useContext(AuthContext);
+    const { user, admin } = useContext(AuthContext);
     const [chats, setChats] = useState([]);
     const [selectedParticipant, setSelectedParticipant] = useState(null);
+    const [isParticipantAdmin, setIsParticipantAdmin] = useState(false);
     const [messages, setMessages] = useState([]);
     const [message, setMessage] = useState("");
     const [searchParams] = useSearchParams();
@@ -55,7 +57,7 @@ const ChatPage = () => {
     useEffect(() => {
         const paramsId = searchParams.get("p");
         if (paramsId) {
-            axios.get(`http://localhost:5000/api/v1/auth/getUser/${paramsId}`, { headers: { Authorization: `Bearer ${token}` } })
+            axios.get(`http://localhost:5000/api/v1/auth/getUser/${paramsId}`)
                 .then(response => {
                     if (response.data.success) {
                         setSelectedParticipant(response.data.user);
@@ -69,17 +71,17 @@ const ChatPage = () => {
     }, [searchParams]);
 
     useEffect(() => {
-        if (!user) return;
+        if (!user && !admin) return;
 
-        axios.get(`http://localhost:5000/api/v1/chats/userChats/${user._id}`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`http://localhost:5000/api/v1/chats/${user? "userChats":"adminChats"}/${user? user._id : admin._id}`, { headers: { Authorization: `Bearer ${user? token : adminToken}` } })
             .then(response => {
                 if (response.data.success) {
                     const chatsFetched = response.data.chats;
                     if (selectedParticipant) {
-                        const dbChats = chatsFetched.find(c => c.participantId._id === selectedParticipant._id);
-                        const localChats = chats.find(c => c.participantId._id === selectedParticipant._id);
+                        const dbChats = chatsFetched.find(c => (c.participantId?._id || c.adminParticipantId?._id) === selectedParticipant?._id);
+                        const localChats = chats.find(c => (c.participantId?._id || c.participantId?._id) === selectedParticipant?._id);
                         if (!dbChats && !localChats)
-                            setChats([{ participantId: selectedParticipant, messages: [] }, ...chatsFetched]);
+                            setChats([{ adminParticipantId: isParticipantAdmin? selectedParticipant : null,  participantId: isParticipantAdmin? null : selectedParticipant, messages: [] }, ...chatsFetched]);
                     }
                     else
                         setChats(chatsFetched);
@@ -105,16 +107,16 @@ const ChatPage = () => {
     }, [selectedParticipant]);
 
     useEffect(() => {
-        if (!user) return;
+        if (!user && !admin) return;
         if (selectedParticipant) {
-            axios.get(`http://localhost:5000/api/v1/chats/userChats/${user._id}`, { headers: { Authorization: `Bearer ${token}` } })
+            axios.get(`http://localhost:5000/api/v1/chats/${user? "userChats" : "adminChats"}/${user? user._id : admin._id}`, { headers: { Authorization: `Bearer ${user? token : adminToken}` } })
                 .then(response => {
                     if (response.data.success) {
                         const updatedChats = response.data.chats;
-                        const dbChats = updatedChats.find(c => c.participantId._id === selectedParticipant._id);
-                        const localChats = updatedChats.find(c => c.participantId._id === selectedParticipant._id);
+                        const dbChats = updatedChats.find(c => (c.participantId?._id || c.adminParticipantId?._id) === selectedParticipant?._id);
+                        const localChats = updatedChats.find(c => (c.participantId?._id || c.adminParticipantId?._id) === selectedParticipant?._id);
                         if (!dbChats && !localChats) {
-                            setChats([{ participantId: selectedParticipant, messages: [] }, ...chats, ...updatedChats]);
+                            setChats([{ adminParticipantId: isParticipantAdmin? selectedParticipant : null, participantId: isParticipantAdmin? null : selectedParticipant, messages: [] }, ...chats, ...updatedChats]);
                             setMessages([]);
                         } else {
                             setChats(updatedChats);
@@ -137,16 +139,17 @@ const ChatPage = () => {
         if (!message.trim() && !file) return;
 
         const formData = new FormData();
-        formData.append('senderId', user._id);
+        formData.append('senderId', user? user?._id : admin?._id);
         formData.append('receiverId', selectedParticipant._id);
         formData.append('text', message);
+        formData.append('isParticipantAdmin', isParticipantAdmin);
         if (file)
             formData.append('file', file);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/chats/sendMessage', formData, {
+            const response = await axios.post(`http://localhost:5000/api/v1/chats/sendMessage/${user?"user":"admin"}`, formData, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Admin ${user? token : adminToken}`,
                     'Content-Type': 'multipart/form-data'
                 }
             });
@@ -155,7 +158,7 @@ const ChatPage = () => {
                 setMessages(prevMessages => [...prevMessages, response.data.message]);
                 setChats(prevChats => {
                     const updatedChats = prevChats.map(chat => {
-                        if (chat.participantId._id === selectedParticipant._id) {
+                        if ((chat.participantId?._id || chat.adminParticipantId?._id) === selectedParticipant._id) {
                             return { ...chat, messages: [...chat.messages, response.data.message] };
                         }
                         return chat;
@@ -181,7 +184,11 @@ const ChatPage = () => {
     };
 
     const selectChat = (chat) => {
-        setSelectedParticipant(chat.participantId);
+        setSelectedParticipant(chat.participantId || chat.adminParticipantId);
+        if(chat.adminParticipantId && chat.isParticipantAdmin)
+            setIsParticipantAdmin(true);
+        else
+            setIsParticipantAdmin(false);
     };
 
     const formatDate = (date) => {
@@ -196,7 +203,7 @@ const ChatPage = () => {
         const formattedDate = new Date(date).toLocaleDateString(undefined, options);
         const formattedTime = new Date(date).toLocaleTimeString(undefined, timeOptions);
         return `${formattedTime} - ${formattedDate}`;
-      };
+    };
 
     const renderDocumentIcon = (fileType) => {
         if (fileType === 'application/pdf')
@@ -211,7 +218,7 @@ const ChatPage = () => {
         await axios.get(`http://localhost:5000/api/v1/${quoteType + "s"}/seller/${quoteType === "product" ? "myProducts" : "myServices"}/all`, { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 if (response.data.success) {
-                    if (quoteType === "product"){
+                    if (quoteType === "product") {
                         setOfferDetails(prev => ({
                             ...prev,
                             productId: response.data.allProducts[0]._id,
@@ -219,7 +226,7 @@ const ChatPage = () => {
                         }))
                         setQuoteItems(response.data.allProducts)
                     }
-                    else{
+                    else {
                         setOfferDetails(prev => ({
                             ...prev,
                             serviceId: response.data.allServices[0]._id,
@@ -246,9 +253,9 @@ const ChatPage = () => {
     }
 
     const handleOfferChange = (e) => {
-        if(e.target.name === "productId" || e.target.name === "serviceId"){
+        if (e.target.name === "productId" || e.target.name === "serviceId") {
             const item = JSON.parse(e.target.value);
-            setOfferDetails({ ...offerDetails, [e.target.name]: item._id, title: item.title});
+            setOfferDetails({ ...offerDetails, [e.target.name]: item._id, title: item.title });
         }
         else
             setOfferDetails({ ...offerDetails, [e.target.name]: e.target.value });
@@ -300,12 +307,13 @@ const ChatPage = () => {
                 enqueueSnackbar(error?.response?.data?.error || "Failed to send offer!", { variant: "error" });
             });
     };
+    console.log(selectedParticipant);
 
-    if (!user) return <div>Loading</div>
+    if (!user && !admin) return <div>Loading</div>
 
     return (
         <div className="chatDiv">
-            <section className="section">
+            <section className={user && "section"}>
                 <div className="chatContent">
 
                     <div className="chatsList">
@@ -316,19 +324,19 @@ const ChatPage = () => {
                         <div className="chatBoxes content">
                             {chats.length > 0 ? chats.map(chat => (
                                 <div
-                                    key={chat.participantId._id}
-                                    className={`chatBox ${chat.participantId._id === selectedParticipant?._id ? "active" : ""}`}
+                                    key={chat.participantId?._id || chat.adminParticipantId?._id}
+                                    className={`chatBox ${(selectedParticipant && (chat.participantId?._id === selectedParticipant?._id || chat.adminParticipantId?._id === selectedParticipant?._id)) ? "active" : ""}`}
                                     onClick={() => selectChat(chat)}
                                 >
                                     <div className="imgDiv">
-                                        <img src={chat.participantId?.role === "seller" ? `http://localhost:5000/${chat?.participantId.sellerId?.profileImage}` : "/assets/images/seller.png"} alt="Profile" />
+                                        <img src={chat.participantId?.role === "seller" ? `http://localhost:5000/${chat?.participantId.sellerId?.profileImage}` : chat.adminParticipantId? "/assets/images/logo.svg" : "/assets/images/seller.png"} alt="Profile" />
                                     </div>
                                     <div>
-                                        <div className='fw600'>{chat.participantId._id === user._id ? "You - Personal Chat" : chat.participantId.username}</div>
+                                        <div className='fw600'>{chat.participantId?._id === user?._id ? "You - Personal Chat" : chat.participantId? chat.participantId?.username : "Admin"}</div>
                                         <p className='lastMessage'>
-                                            {messages.length > 0 && chat.participantId._id === selectedParticipant?._id ?
-                                                messages[messages.length - 1]?.offer ? "Custom Offer" : messages[messages.length - 1]?.text !== ""?  messages[messages.length - 1]?.text : "File" :
-                                                chat.messages[chat.messages.length - 1]?.offer? "Custom Offer" : chat.messages[chat.messages.length - 1]?.text !== ""? chat.messages[chat.messages.length - 1]?.text : "File"}
+                                            {messages.length > 0 && (chat.participantId?._id === selectedParticipant?._id || chat.adminParticipantId?._id === selectedParticipant?._id) ?
+                                                messages[messages.length - 1]?.offer ? "Custom Offer" : messages[messages.length - 1]?.text !== "" ? messages[messages.length - 1]?.text : "File" :
+                                                chat.messages[chat.messages.length - 1]?.offer ? "Custom Offer" : chat.messages[chat.messages.length - 1]?.text !== "" ? chat.messages[chat.messages.length - 1]?.text : "File"}
                                         </p>
                                     </div>
                                 </div>
@@ -345,17 +353,17 @@ const ChatPage = () => {
                         {selectedParticipant ? (
                             <>
                                 <div className="header">
-                                    <img src={selectedParticipant?.role === "seller" ? `http://localhost:5000/${selectedParticipant?.sellerId?.profileImage}` : "/assets/images/seller.png"} alt="Profile" />
-                                    <Link to={`/profile/${selectedParticipant?.sellerId?._id}`} >{selectedParticipant?._id === user?._id ? "You - Personal Chat" : selectedParticipant?.username}</Link>
+                                    <img src={selectedParticipant?.role === "seller" ? `http://localhost:5000/${selectedParticipant?.sellerId?.profileImage}` : isParticipantAdmin? "/assets/images/logo.svg" : "/assets/images/seller.png"} alt="Profile" />
+                                    <Link to={!isParticipantAdmin && `/profile/${selectedParticipant?.sellerId?._id}`} >{selectedParticipant?._id === user?._id ? "You - Personal Chat" : isParticipantAdmin? "Admin" : selectedParticipant?.username}</Link>
                                 </div>
                                 <div className="messages content">
                                     {messages.map((msg, index) => (
-                                        <div key={index} className={msg.senderId === user._id ? "message sent" : "message received"}>
+                                        <div key={index} className={msg.senderId === (user? user?._id : admin?._id) ? "message sent" : "message received"}>
                                             <div className='senderName fw600 lightBlackPrimary fs09'>
-                                                <div>{msg.senderId === user._id ? "You" : selectedParticipant.username}</div>
+                                                <div>{msg.senderId === (user? user?._id : admin?._id) ? "You" : isParticipantAdmin? "Admin" : selectedParticipant.username}</div>
                                                 <span className='messageTime'>{formatDateTime(msg.timestamp)}</span>
                                             </div>
-                                            <div>{msg.offer? "Custom Offer:" : msg.text}</div>
+                                            <div>{msg.offer ? "Custom Offer:" : msg.text}</div>
                                             {msg.fileUrl && (
                                                 <div className="fileBox">
                                                     {msg.fileType.startsWith('image/') && (
@@ -384,12 +392,12 @@ const ChatPage = () => {
                                                     </div>
                                                     <div className="middle">{msg.offer.description}</div>
                                                     <div className="bottom">
-                                                        <div className='row'><MdOutlineLocalOffer className='icon' / >{msg.offer.quoteType.charAt(0).toUpperCase() + msg.offer.quoteType.slice(1)}</div>
-                                                        {msg.offer.quoteType === "product" && <div className='row'><FaBasketShopping className='icon' / >{(msg.offer.quantity < 10 && "0") + msg.offer.quantity} (Quantity)</div>}
-                                                        {msg.offer.quoteType === "product" && <div className='row'><TbTruckDelivery className='icon' / >${msg.offer.shippingFee} Shipping Fees</div>}
-                                                        {msg.offer.quoteType === "service" && <div className='row'><IoMdStopwatch className='icon' / >{(msg.offer.duration < 10 && "0") + msg.offer.duration} delivery days</div>}
+                                                        <div className='row'><MdOutlineLocalOffer className='icon' />{msg.offer.quoteType.charAt(0).toUpperCase() + msg.offer.quoteType.slice(1)}</div>
+                                                        {msg.offer.quoteType === "product" && <div className='row'><FaBasketShopping className='icon' />{(msg.offer.quantity < 10 && "0") + msg.offer.quantity} (Quantity)</div>}
+                                                        {msg.offer.quoteType === "product" && <div className='row'><TbTruckDelivery className='icon' />${msg.offer.shippingFee} Shipping Fees</div>}
+                                                        {msg.offer.quoteType === "service" && <div className='row'><IoMdStopwatch className='icon' />{(msg.offer.duration < 10 && "0") + msg.offer.duration} delivery days</div>}
                                                     </div>
-                                                    {msg.senderId !== user?._id && <div className="buttonsDiv">
+                                                    {msg.senderId !== (user? user?._id : admin?._id) && <div className="buttonsDiv">
                                                         <Link to={`/checkout?c=${msg._id}`} className="primaryBtn2">Place Order</Link>
                                                     </div>}
                                                 </div>
@@ -425,7 +433,7 @@ const ChatPage = () => {
                                                     onChange={handleFileChange}
                                                 />
                                             </div>
-                                            {user.role === "seller" && <button className='secondaryBtn' onClick={handleOpenQuoteModel}>Create an offer</button>}
+                                            {user && user?.role === "seller" && !isParticipantAdmin && <button className='secondaryBtn' onClick={handleOpenQuoteModel}>Create an offer</button>}
                                         </div>
                                         <div className="right">
                                             <button className='primaryBtn' onClick={sendMessage}>Send</button>
@@ -446,10 +454,10 @@ const ChatPage = () => {
                             <>
                                 <div className="header">
                                     <div>Other Info</div>
-                                    <FaEllipsisV className='icon' />
+                                    {/* <FaEllipsisV className='icon' /> */}
                                 </div>
                                 <div className="participantDetails content">
-                                    <h2 className="secondaryHeading">About <Link to={`/profile/${selectedParticipant?.sellerId?._id}`}>@{selectedParticipant.username}</Link></h2>
+                                    {!isParticipantAdmin && <><h2 className="secondaryHeading">About <Link to={`/profile/${selectedParticipant?.sellerId?._id}`}>@{selectedParticipant.username}</Link></h2>
                                     {selectedParticipant.role === "seller" && <><div className="row"><p>Name</p><div className='fw600'>{selectedParticipant.sellerId.fullName}</div></div>
                                         <div className="row"><p>Ratings</p><div className='fw600 sellerRatings'>
                                             <FaStar className='starIconFilled' />
@@ -460,8 +468,8 @@ const ChatPage = () => {
                                     <div className="row"><p>Member Since</p><div className='fw600'>
                                         {formatDate(selectedParticipant?.role === "seller" ? selectedParticipant?.sellerId?.createdAt : selectedParticipant?.createdAt)}
                                     </div></div>
-                                    <div className="horizontalLine"></div>
-                                    <SampleProvisions pre="chat" />
+                                    <div className="horizontalLine"></div></>}
+                                    {user && <SampleProvisions pre="chat" />}
                                 </div>
                             </>
                         ) : (
@@ -581,7 +589,7 @@ const ChatPage = () => {
                 </div>
             }
 
-        </div>  
+        </div>
     );
 };
 

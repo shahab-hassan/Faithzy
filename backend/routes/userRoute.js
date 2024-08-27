@@ -21,7 +21,7 @@ router.get('/login/facebook', passport.authenticate('facebook', { scope: ['email
 
 router.get('/login/facebook/callback', onFacebookLoginSuccess);
 
-router.get('/getUser/:id', authorized, getUser);
+router.get('/getUser/:id', getUser);
 
 router.get('/all', authorizeAdmin, getAllUsers);
 

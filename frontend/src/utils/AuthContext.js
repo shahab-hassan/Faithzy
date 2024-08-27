@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [admin, setAdmin] = useState(null);
     const navigate = useNavigate();
-    
+
     const fetchUserData = async () => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -57,18 +57,18 @@ export const AuthProvider = ({ children }) => {
                 setAdmin(null);
             }
         }
-        else{
+        else {
             setIsAdminLogin(false);
             setAdmin(null);
         }
     };
-    
+
     useEffect(() => {
 
         if (localStorage.getItem('loggedOut')) {
             enqueueSnackbar("Logged out Successfully!", { variant: "success" });
             localStorage.removeItem('loggedOut');
-          }
+        }
 
         fetchUserData();
         fetchAdminData();
@@ -79,12 +79,18 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('token', token);
         setIsLogin(true);
         fetchUserData();
+        localStorage.removeItem('adminToken');
+        setIsAdminLogin(false)
+        setAdmin(null)
     };
 
     const adminLogin = (token) => {
         localStorage.setItem('adminToken', token);
         setIsAdminLogin(true);
         fetchAdminData();
+        localStorage.removeItem('token');
+        setIsLogin(false);
+        setUser(null);
     };
 
     const logout = () => {
