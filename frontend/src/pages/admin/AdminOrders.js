@@ -173,6 +173,10 @@ function AdminOrders({pre}) {
                                     <div className="fw600">{openedOrder.summary.paidByBuyer.promoDiscount}% Discount</div>
                                 </div>}
                                 <div className="row">
+                                    <div>Payment Method</div>
+                                    <div className="fw600">{openedOrder.paymentMethod.charAt(0).toUpperCase() + openedOrder.paymentMethod.slice(1)}</div>
+                                </div>
+                                <div className="row">
                                     <div>Sales Price</div>
                                     <div className="fw600">${(openedSubOrder.buyerPaid.salesPrice).toFixed(2)}</div>
                                 </div>
@@ -198,6 +202,10 @@ function AdminOrders({pre}) {
                                     <div>Coupon Applied</div>
                                     <div className="fw600">{openedOrder.summary.paidByBuyer.promoDiscount}% Discount</div>
                                 </div>}
+                                <div className="row">
+                                    <div>Payment Method</div>
+                                    <div className="fw600">{openedOrder.paymentMethod.charAt(0).toUpperCase() + openedOrder.paymentMethod.slice(1)}</div>
+                                </div>
                                 <div className="row">
                                     <div>Sales Price</div>
                                     <div className="fw600">${(openedOrder.summary.paidByBuyer.salesPrice).toFixed(2)}</div>

@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
 
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+
 function Checkout() {
 
   const token = localStorage.getItem("token");
@@ -54,17 +56,17 @@ function Checkout() {
     buyer: { product: 0, service: 0 }
   });
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
 
     axios.get("http://localhost:5000/api/v1/settings/admin/feesAndMembership")
-    .then(response => {
-      if (response.data.success)
-        setFeesObj(response.data.fees);
-    })
-    .catch(e => {
-      console.log(e);
-      enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
-    })
+      .then(response => {
+        if (response.data.success)
+          setFeesObj(response.data.fees);
+      })
+      .catch(e => {
+        console.log(e);
+        enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
+      })
 
   }, [])
 
@@ -186,7 +188,7 @@ function Checkout() {
     paidByBuyer.salesPrice = pkg.salesPrice;
     sellerToGet.salesPrice = pkg.salesPrice;
 
-    if (couponDiscount || appliedCoupon){
+    if (couponDiscount || appliedCoupon) {
       paidByBuyer.salesPrice -= (paidByBuyer.salesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
       paidByBuyer.promoDiscount = couponDiscount || appliedCoupon.discount;
     }
@@ -206,7 +208,7 @@ function Checkout() {
 
     paidByBuyer.totalSalesPrice = offer.offerAmount;
 
-    if (couponDiscount || appliedCoupon){
+    if (couponDiscount || appliedCoupon) {
       paidByBuyer.totalSalesPrice -= (paidByBuyer.totalSalesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
       paidByBuyer.promoDiscount = couponDiscount || appliedCoupon.discount;
     }
@@ -228,7 +230,7 @@ function Checkout() {
     paidByBuyer.salesPrice = offer.offerAmount;
     sellerToGet.salesPrice = offer.offerAmount;
 
-    if (couponDiscount || appliedCoupon){
+    if (couponDiscount || appliedCoupon) {
       paidByBuyer.salesPrice -= (paidByBuyer.salesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
       paidByBuyer.promoDiscount = couponDiscount || appliedCoupon.discount;
     }
@@ -315,6 +317,31 @@ function Checkout() {
         navigate(`${(items || (customItem && customItem.quoteType === "product")) ? "/orders" : "/requirements/" + data.order._id}`)
         setLoading(false);
       }
+    } catch (e) {
+      console.error(e);
+      enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: 'error' });
+      setLoading(false);
+    }
+  };
+
+  const handlePayPalPayment = async (details) => {
+    const { id } = details;
+    const orderData = {
+      items: items || serviceItem || customItem,
+      summary: (items || (customItem && customItem.quoteType === "product")) ? summary : serviceSummary,
+      paymentMethod: 'paypal',
+      billingInfo,
+      paypalOrderId: id,
+    };
+
+    try {
+      const { data } = await axios.post(`http://localhost:5000/api/v1/orders/${(items || (customItem && customItem.quoteType === "product")) ? "product" : "service"}/order`, orderData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      enqueueSnackbar("Order placed successfully!", { variant: 'success' });
+      navigate(`${(items || (customItem && customItem.quoteType === "product")) ? "/orders" : "/requirements/" + data.order._id}`);
+      setLoading(false);
     } catch (e) {
       console.error(e);
       enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: 'error' });
@@ -479,11 +506,13 @@ function Checkout() {
 
             <div className="paymentMethodsDiv">
               <h2 className="secondaryHeading">Choose <span>Payment</span> Method</h2>
+
               <div className="paymentOptions">
-                <div className={`stripe paymentOption ${paymentMethod === 'stripe' ? 'selected' : ''}`} onClick={() => setPaymentMethod('stripe')}><BsStripe className='icon' /></div>
-                <div className={`paypal paymentOption ${paymentMethod === 'paypal' ? 'selected' : ''}`} onClick={() => setPaymentMethod('paypal')}><FaPaypal className='icon' /></div>
+                <div className={`stripe paymentOption ${paymentMethod === 'stripe' ? 'selected' : ''}`} onClick={() => setPaymentMethod('stripe')}><BsStripe className='icon' /><div>Stripe</div></div>
+                <div className={`paypal paymentOption ${paymentMethod === 'paypal' ? 'selected' : ''}`} onClick={() => enqueueSnackbar("Paypal is not available at the moment!", {variant: "info"})}><FaPaypal className='icon' /><div>Paypal</div></div>
               </div>
-              <form className='form'>
+
+              {paymentMethod === "stripe" && <form className='form'>
 
                 <div className="inputDiv">
                   <label>Card Number</label>
@@ -504,7 +533,28 @@ function Checkout() {
 
                 </div>
 
-              </form>
+              </form>}
+
+              {paymentMethod === 'paypal' && (
+                <PayPalScriptProvider options={{ "client-id": "AWZnBAn9Ac3p_uN6xbz3ZHLJQWRe_aVSF5HDiL8dWcyLUIANoHzeLAX0H4jtBgpsUB_ErVioR4ROJe6C" }}>
+                  <PayPalButtons
+                    style={{ layout: 'vertical' }}
+                    createOrder={(data, actions) => {
+                      return actions.order.create({
+                        purchase_units: [{
+                          amount: {
+                            value: summary.paidByBuyer.total.toString()
+                          }
+                        }]
+                      });
+                    }}
+                    onApprove={(data, actions) => {
+                      return actions.order.capture().then(handlePayPalPayment);
+                    }}
+                  />
+                </PayPalScriptProvider>
+              )}
+
             </div>
 
             {(items || (customItem && customItem.quoteType === "product")) && <><div className="horizontalLine"></div>

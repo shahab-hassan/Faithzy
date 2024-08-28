@@ -1501,6 +1501,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 10px;
     border: 1px solid var(--gray);
     padding: 40px;
     cursor: pointer;
@@ -1510,6 +1511,7 @@
 }
 .paymentMethodsDiv .paymentOptions .paymentOption.selected{
     background: var(--primaryBlue);
+    color: var(--white);
 }
 .paymentMethodsDiv .paymentOptions .paymentOption:not(.selected):hover{
     background: var(--lightGray);

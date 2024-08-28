@@ -48,6 +48,7 @@ import AdminFee from './pages/admin/AdminFee.js';
 import AdminSellers from './pages/admin/AdminSellers.js';
 import AdminBuyers from './pages/admin/AdminBuyers.js';
 import AdminOrders from './pages/admin/AdminOrders.js';
+import AdminRevenue from './pages/admin/AdminRevenue.js';
 
 function App() {
 
@@ -120,6 +121,7 @@ function App() {
                     <Route path='/ftzy-admin/sellers/:id' element={<Profile />} />
                     <Route path='/ftzy-admin/orders' element={<AdminOrders />} />
                     <Route path='/ftzy-admin/chats' element={<ChatPage />} />
+                    <Route path='/ftzy-admin/revenue' element={<AdminRevenue />} />
                 </Route>
 
             </Routes>

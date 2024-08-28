@@ -29,7 +29,7 @@ function AdminHeader() {
             <li><NavLink to="/ftzy-admin/orders" className={(v)=>`${v.isActive? "activeLi": ""}`}><TbTruckDelivery className='icon'/>Orders</NavLink></li>
             <li><NavLink to="/ftzy-admin/sellers" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaShop className='icon'/>Sellers</NavLink></li>
             <li><NavLink to="/ftzy-admin/buyers" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaUserCircle className='icon'/>Buyers</NavLink></li>
-            <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaSackDollar className='icon'/>Revenue</NavLink></li>
+            <li><NavLink to="/ftzy-admin/revenue" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaSackDollar className='icon'/>Revenue</NavLink></li>
             <li><NavLink to="/" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaCreditCard className='icon'/>Payments</NavLink></li>
             <li><NavLink to="/ftzy-admin/social" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaNetworkWired className='icon'/>Social Media Links</NavLink></li>
             <li><NavLink to="/ftzy-admin/fee" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaMoneyBill className='icon'/>Fee</NavLink></li>

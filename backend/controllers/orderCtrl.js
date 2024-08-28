@@ -6,7 +6,7 @@ const adminSettingsModel = require("../models/adminSettingsModel");
 exports.createProductOrder = asyncHandler(async (req, res) => {
 
   const userId = req.user._id;
-  const { items, summary, paymentMethod, billingInfo } = req.body;
+  const { items, summary, paymentMethod, billingInfo, paypalOrderId } = req.body;
 
   if (req.user.sellerId?.toString() !== undefined) {
     for (let item of items) {
@@ -72,12 +72,16 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
         subtotal: buyerSubtotal,
         tax: buyerTax,
         total: buyerTotal
-      }
+      },
+      netProfit: buyerTotal - total
     }
   })
 
-  const amount = summary.paidByBuyer.total * 100;
-  const paymentIntent = await createPaymentIntent(amount);
+  let paymentIntent;
+  if (paymentMethod === 'stripe') {
+    const amount = summary.paidByBuyer.total * 100;
+    paymentIntent = await createPaymentIntent(amount);
+  }
 
   const newOrder = new productOrderModel({
     userId,
@@ -85,7 +89,8 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
     summary,
     paymentMethod,
     billingInfo,
-    clientSecret: paymentIntent.client_secret,
+    clientSecret: paymentMethod === 'stripe' ? paymentIntent.client_secret : undefined,
+    paypalOrderId: paymentMethod === 'paypal' ? paypalOrderId : undefined,
   });
 
   await newOrder.save();
@@ -111,7 +116,7 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
 exports.createServiceOrder = asyncHandler(async (req, res) => {
 
   const userId = req.user._id;
-  const { items, summary, paymentMethod, billingInfo } = req.body;
+  const { items, summary, paymentMethod, billingInfo, paypalOrderId } = req.body;
 
   const serviceItem = items;
   const { firstName, lastName, country, city, email, phoneNumber } = billingInfo;
@@ -144,16 +149,21 @@ exports.createServiceOrder = asyncHandler(async (req, res) => {
     pkg: serviceItem.pkg ? serviceItem.pkg : serviceItem.service.packages[serviceItem.pkgIndex],
   }
 
-  const amount = summary.paidByBuyer.total * 100;
-  const paymentIntent = await createPaymentIntent(amount);
+  let paymentIntent;
+  if (paymentMethod === 'stripe') {
+    const amount = summary.paidByBuyer.total * 100;
+    paymentIntent = await createPaymentIntent(amount);
+  }
 
   const newOrder = new serviceOrderModel({
     userId,
     service: serviceOrder,
     summary,
     paymentMethod,
+    netProfit: summary.paidByBuyer.total - summary.sellerToGet.total,
     buyerInfo,
-    clientSecret: paymentIntent.client_secret,
+    clientSecret: paymentMethod === 'stripe' ? paymentIntent.client_secret : undefined,
+    paypalOrderId: paymentMethod === 'paypal' ? paypalOrderId : undefined,
   });
 
 
@@ -400,8 +410,9 @@ exports.updateProductOrderStatus = async (req, res) => {
     if (newStatus === 'Delivered' && currentStatus === 'Active') {
       subOrder.status.push({ name: 'Shipped', createdAt: new Date() });
     }
-
+    
     subOrder.status.push({ name: newStatus, createdAt: new Date() });
+    subOrder.crrStatus = newStatus; 
 
     if (newStatus === "Delivered") {
       await adminSettingsModel.findOneAndUpdate(
@@ -443,6 +454,7 @@ exports.cancelProductOrder = async (req, res) => {
     }
 
     subOrder.status.push({ name: 'Cancelled', createdAt: new Date() });
+    subOrder.crrStatus = 'Cancelled';
     await adminSettingsModel.findOneAndUpdate(
       {},
       {
@@ -614,6 +626,7 @@ exports.sendDelivery = async (req, res) => {
       createdAt: new Date()
     });
     order.service.status.push({ name: "Delivered", createdAt: Date.now() })
+    order.service.crrStatus = 'Delivered';
     await adminSettingsModel.findOneAndUpdate(
       {},
       { $inc: { activeOrders: -1 } },
@@ -644,6 +657,7 @@ exports.respondToDelivery = asyncHandler(async (req, res) => {
 
     if (response === 'accept') {
       order.service.status.push({ name: "Completed", createdAt: Date.now() });
+      order.service.crrStatus = 'Completed';
       order.service.history.unshift({
         name: 'deliveryAccepted',
         message: `accepted delivery. The order has been completed!`,
@@ -664,6 +678,7 @@ exports.respondToDelivery = asyncHandler(async (req, res) => {
     }
     else if (response === 'decline') {
       order.service.status.push({ name: "Active", createdAt: Date.now() });
+      order.service.crrStatus = "Active"
       await adminSettingsModel.findOneAndUpdate(
         {},
         { $inc: { activeOrders: 1 } },
@@ -735,6 +750,7 @@ exports.respondToCancellation = asyncHandler(async (req, res) => {
 
     if (response === 'accept') {
       order.service.status.push({ name: "Cancelled", createdAt: Date.now() });
+      order.service.crrStatus = "Cancelled"
       order.service.history.unshift({
         name: 'cancellationAccepted',
         message: `agreed to cancel. The order has been cancelled`,

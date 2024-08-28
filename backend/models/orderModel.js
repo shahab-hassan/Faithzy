@@ -19,6 +19,8 @@ const productOrder = new mongoose.Schema({
     total: Number
   },
   status: { type: [{ name: String, createdAt: Date }], required: true, default: [{ name: "Active", createdAt: Date.now() }] },
+  crrStatus: {type: String, required: true, default: "Active"},
+  netProfit: {type: Number, required: true, default: 0},
   cancellationReason: String
 })
 
@@ -76,6 +78,7 @@ const serviceOrder = new mongoose.Schema({
   serviceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Service' },
   pkg: { type: { name: String, title: String, description: String, deliveryDays: Number } },
   status: { type: [{ name: String, createdAt: Date }], required: true, default: [{ name: "Active", createdAt: Date.now() }] },
+  crrStatus: {type: String, required: true, default: "Active"},
   history: [historySchema],
   cancellationReason: String
 })
@@ -99,6 +102,9 @@ const serviceOrderSchema = new mongoose.Schema({
       total: Number,
     }
   },
+  
+  netProfit: {type: Number, required: true, default: 0},
+  
   paymentMethod: { type: String, enum: ['stripe', 'paypal'], required: true },
 
   buyerInfo: {
@@ -107,14 +113,12 @@ const serviceOrderSchema = new mongoose.Schema({
     country: String,
     city: String,
     email: String,
-    phoneNumber: String
+    phoneNumber: String,
+    paypalOrderId: String,
   },
   answers: [String],
   clientSecret: String
 }, { timestamps: true });
-
-
-
 
 
 const productOrderModel = mongoose.model('ProductOrder', productOrderSchema);
