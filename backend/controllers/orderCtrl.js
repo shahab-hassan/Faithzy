@@ -90,6 +90,16 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
 
   await newOrder.save();
 
+  await adminSettingsModel.findOneAndUpdate(
+    {},
+    {
+      $inc: {
+        activeOrders: products.length
+      }
+    },
+    { new: true, upsert: true }
+  );
+
 
   // if (products.some(product => product.product)) {
   //   await cartModel.findOneAndUpdate({ userId }, { products: [] });
@@ -163,6 +173,12 @@ exports.createServiceOrder = asyncHandler(async (req, res) => {
     createdAt: new Date()
   });
 
+  await adminSettingsModel.findOneAndUpdate(
+    {},
+    { $inc: { activeOrders: 1 } },
+    { new: true, upsert: true }
+  );
+
   newOrder.service.history.unshift({
     name: "requirementsRequired",
     message: "has some questions for you to answer!",
@@ -206,8 +222,9 @@ exports.getBuyerProductOrder = asyncHandler(async (req, res) => {
 });
 
 exports.getAllOrders = asyncHandler(async (req, res) => {
-  const { ordersType = 'Products' } = req.query;
+  const { ordersType = 'Products', pre } = req.query;
   let orders = [];
+  const queryLimit = pre ? 10 : undefined;
 
   if (ordersType === 'Products') {
 
@@ -222,10 +239,11 @@ exports.getAllOrders = asyncHandler(async (req, res) => {
         }
       })
       .populate('products.productId', 'title category')
-      .sort({updatedAt: -1});
+      .sort({ updatedAt: -1 })
+      .limit(queryLimit);
 
-  } 
-  
+  }
+
   else if (ordersType === 'Services') {
 
     orders = await serviceOrderModel.find()
@@ -239,7 +257,8 @@ exports.getAllOrders = asyncHandler(async (req, res) => {
         }
       })
       .populate('service.serviceId', 'title category')
-      .sort({updatedAt: -1});
+      .sort({ updatedAt: -1 })
+      .limit(queryLimit);
   }
 
   res.json({
@@ -383,6 +402,20 @@ exports.updateProductOrderStatus = async (req, res) => {
     }
 
     subOrder.status.push({ name: newStatus, createdAt: new Date() });
+
+    if (newStatus === "Delivered") {
+      await adminSettingsModel.findOneAndUpdate(
+        {},
+        {
+          $inc: {
+            completedOrders: 1,
+            productsSold: 1,
+            activeOrders: -1
+          }
+        },
+        { new: true, upsert: true }
+      );
+    }
     await order.save();
 
     return res.status(200).json({ success: true, order });
@@ -410,6 +443,16 @@ exports.cancelProductOrder = async (req, res) => {
     }
 
     subOrder.status.push({ name: 'Cancelled', createdAt: new Date() });
+    await adminSettingsModel.findOneAndUpdate(
+      {},
+      {
+        $inc: {
+          cancelledOrders: 1,
+          activeOrders: -1
+        }
+      },
+      { new: true, upsert: true }
+    );
     subOrder.cancellationReason = cancellationReason;
     await order.save();
 
@@ -571,6 +614,10 @@ exports.sendDelivery = async (req, res) => {
       createdAt: new Date()
     });
     order.service.status.push({ name: "Delivered", createdAt: Date.now() })
+    await adminSettingsModel.findOneAndUpdate(
+      {},
+      { $inc: { activeOrders: -1 } },
+    );
 
     await order.save();
     res.status(200).json({ success: true, order });
@@ -604,9 +651,24 @@ exports.respondToDelivery = asyncHandler(async (req, res) => {
         isDone: true,
         createdAt: new Date()
       });
+      await adminSettingsModel.findOneAndUpdate(
+        {},
+        {
+          $inc: {
+            completedOrders: 1,
+            servicesDone: 1,
+          }
+        },
+        { new: true, upsert: true }
+      );
     }
     else if (response === 'decline') {
       order.service.status.push({ name: "Active", createdAt: Date.now() });
+      await adminSettingsModel.findOneAndUpdate(
+        {},
+        { $inc: { activeOrders: 1 } },
+        { new: true, upsert: true }
+      );
       order.service.history.unshift({
         name: 'askedForRevision',
         message: `asked for Revision!`,
@@ -680,6 +742,17 @@ exports.respondToCancellation = asyncHandler(async (req, res) => {
         isDone: true,
         createdAt: new Date()
       });
+      await adminSettingsModel.findOneAndUpdate(
+        {},
+        {
+          $inc: {
+            activeOrders: -1,
+            cancelledOrders: 1
+          }
+        },
+        { new: true, upsert: true }
+      );
+
     }
     else if (response === 'decline') {
       order.service.history.unshift({

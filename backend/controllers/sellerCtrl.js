@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const sellerModel = require('../models/sellerModel');
 const userModel = require('../models/userModel');
+const adminSettingsModel = require('../models/adminSettingsModel');
 
 exports.createSeller = asyncHandler(async (req, res) => {
   if (req.user.role === "seller") {
@@ -29,6 +30,12 @@ exports.createSeller = asyncHandler(async (req, res) => {
     await newSeller.save();
 
     await userModel.findByIdAndUpdate(req.user._id, { role: 'seller', sellerId: newSeller._id });
+
+    await adminSettingsModel.findOneAndUpdate(
+      {},
+      { $inc: { totalSellers: 1 } },
+      { new: true, upsert: true }
+    );
 
     res.status(201).json({ success: true, message: 'Seller profile created successfully!' });
   } catch (error) {
@@ -67,8 +74,6 @@ exports.getAllSellers = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
-
-
 
 exports.getSeller = asyncHandler(async (req, res) => {
   try {
@@ -131,6 +136,12 @@ exports.deleteSeller = asyncHandler(async (req, res) => {
     }
 
     await seller.remove();
+
+    await adminSettingsModel.findOneAndUpdate(
+      {},
+      { $inc: { totalSellers: -1 } }
+  );
+
     res.status(200).json({ success: true, message: 'Seller profile deleted successfully!' });
   } catch (error) {
     res.status(400);

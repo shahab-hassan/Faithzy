@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken")
 const passport = require("passport");
 
 const userModel = require("../models/userModel")
+const adminSettingsModel = require("../models/adminSettingsModel")
 const sendToken = require("../utils/sendToken")
 const sendEmail = require("../utils/sendEmail")
 
@@ -60,6 +61,11 @@ exports.registerUser = asyncHandler(async (req, res) => {
     let newUser;
     try {
         newUser = await userModel.create({ username, email, password: hashPassword, role });
+        await adminSettingsModel.findOneAndUpdate(
+            {},
+            { $inc: { registeredUsers: 1 } },
+            { new: true, upsert: true }
+        );
     }
     catch (e) {
         res.status(400)
@@ -261,12 +267,12 @@ exports.updatePassword = asyncHandler(async (req, res) => {
     res.status(200).json({ success: true, message: "Password updated successfully!" });
 });
 
-exports.blockUser =  asyncHandler(async (req, res) => {
+exports.blockUser = asyncHandler(async (req, res) => {
     try {
         const user = await userModel.findById(req.body.userId);
         if (!user)
             return res.status(404).json({ success: false, message: "User not found!" });
-        if(!req.body.isBlocked)
+        if (!req.body.isBlocked)
             user.userStatus = 'Blocked';
         else
             user.userStatus = 'Active';

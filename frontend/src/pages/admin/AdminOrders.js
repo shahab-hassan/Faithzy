@@ -6,7 +6,7 @@ import { enqueueSnackbar } from 'notistack';
 import { Link } from "react-router-dom"
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 
-function AdminOrders() {
+function AdminOrders({pre}) {
 
     const [orders, setOrders] = useState([]);
     const [ordersType, setOrdersType] = useState('Products');
@@ -24,7 +24,7 @@ function AdminOrders() {
             const token = localStorage.getItem('adminToken');
             axios.get(`http://localhost:5000/api/v1/orders/admin/all/`, {
                 headers: { Authorization: `Bearer ${token}` },
-                params: { ordersType }
+                params: { ordersType, pre }
             })
                 .then((response) => {
                     if (response.data.success)
@@ -37,7 +37,7 @@ function AdminOrders() {
         };
 
         fetchOrders();
-    }, [filterType, ordersType]);
+    }, [filterType, ordersType, pre]);
 
     useEffect(() => {
         if (filterType === 'All')
@@ -121,12 +121,13 @@ function AdminOrders() {
                     <div className="tableContent">
                         <div className="upper">
                             <h2 className="secondaryHeading">
-                                <span>{filterType} </span>Orders
+                                <span>{pre === "dashboard"? "Orders" : filterType} </span>{pre === "dashboard"? "Management": "Orders"}
                                 {/* <span className="totalRows">- {(filteredOrders.length < 10 && '0') + filteredOrders.length}</span> */}
                             </h2>
                             <div className="upperRight">
                                 <Dropdown options={ordersType === "Products" ? productFilters : serviceFilters} selected={filterType} onSelect={setFilterType} />
                                 <Dropdown options={["Products", "Services"]} onSelect={handleOrdersTypeChange} selected={ordersType} />
+                                {pre === "dashboard" && <Link to="/ftzy-admin/orders" className='secondaryBtn'>View All {">"}</Link>}
                             </div>
                         </div>
                         <div className="header">

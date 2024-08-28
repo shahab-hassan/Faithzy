@@ -40,6 +40,16 @@ const adminSettingsSchema = new mongoose.Schema({
             nineMonths: { discount: { type: Number }, expiryDate: { type: Date } },
         }
     },
+    completedOrders: {type: Number, default: 0},
+    productsSold: {type: Number, default: 0},
+    servicesDone: {type: Number, default: 0},
+    activeOrders: {type: Number, default: 0},
+    cancelledOrders: {type: Number, default: 0},
+    activeServices: {type: Number, default: 0},
+    activeProducts: {type: Number, default: 0},
+    registeredUsers: {type: Number, default: 0},
+    totalSellers: {type: Number, default: 0},
+    paidSellers: {type: Number, default: 0},
 }, {
     timestamps: true
 });

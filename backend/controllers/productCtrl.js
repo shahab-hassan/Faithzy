@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 const productModel = require("../models/productModel");
 const recentlyViewedModel = require("../models/recentlyViewedModel")
 const categoryModel = require('../models/categoryModel');
+const adminSettingsModel = require('../models/adminSettingsModel');
 
 exports.getAllProducts = asyncHandler(async (req, res) => {
     const allProducts = await productModel.find({});
@@ -31,7 +32,7 @@ exports.getSellerProductsById = asyncHandler(async (req, res) => {
     let allProducts, totalPages;
     try {
         const page = parseInt(req.query.page) || 1;
-        const limit = req.query.isAdminLogin? 4 : 5;
+        const limit = req.query.isAdminLogin ? 4 : 5;
 
         allProducts = await productModel.find({ sellerId: req.params.id })
             .skip((page - 1) * limit)
@@ -109,6 +110,12 @@ exports.createProduct = asyncHandler(async (req, res) => {
         );
 
         const newProduct = await product.save();
+
+        await adminSettingsModel.findOneAndUpdate(
+            {},
+            { $inc: { activeProducts: 1 } },
+            { new: true, upsert: true }
+        );
 
         res.status(200).json({
             success: true,
@@ -218,6 +225,11 @@ exports.deleteProduct = asyncHandler(async (req, res) => {
 
     await productModel.findByIdAndDelete(product._id);
 
+    await adminSettingsModel.findOneAndUpdate(
+        {},
+        { $inc: { activeProducts: -1 } }
+    );
+
     res.status(200).json({
         success: true,
         message: "Product Deleted successfully"
@@ -284,4 +296,3 @@ exports.getCategoryProducts = asyncHandler(async (req, res) => {
         totalPages: Math.ceil(totalProducts / limit),
     });
 });
-

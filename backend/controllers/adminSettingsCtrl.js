@@ -109,3 +109,32 @@ exports.updateAdminMembership = asyncHandler(async (req, res) => {
     await settings.save();
     res.status(200).json({ success: true, message: 'Fees updated successfully' });
 });
+
+exports.getGeneralDashboardInfo = asyncHandler(async (req, res) => {
+    try {
+
+        const settings = await adminSettingsModel.findOne({});
+
+        if (!settings) {
+            res.status(404);
+            throw new Error("Settings not found!");
+        }
+
+        res.status(200).json({ success: true, generalInfo: {
+            completedOrders: settings.completedOrders,
+            productsSold: settings.productsSold,
+            servicesDone: settings.servicesDone,
+            activeOrders: settings.activeOrders,
+            cancelledOrders: settings.cancelledOrders,
+            activeServices: settings.activeServices,
+            activeProducts: settings.activeProducts,
+            registeredUsers: settings.registeredUsers,
+            totalSellers: settings.totalSellers,
+            paidSellers: settings.paidSellers,
+        }});
+
+    } catch (err) {
+        res.status(500);
+        throw new Error(err);
+    }
+});

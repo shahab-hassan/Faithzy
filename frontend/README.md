@@ -1,3 +1,3 @@
 *** Overview ***: 
 
-- Created and Completed Admin Chats Page
+- Created and Completed Admin Dashboard Page

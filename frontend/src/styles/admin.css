@@ -1,42 +1,49 @@
-.admin{
+.admin {
     height: 100vh;
     background: var(--extraLightGray);
     display: flex;
     overflow: hidden;
 }
-.admin .adminDiv{
+
+.admin .adminDiv {
     width: 82%;
     padding: 40px 30px;
     overflow-y: auto;
     height: 100vh;
 }
+
 .admin .adminDiv .primaryBtn,
 .admin .adminDiv .secondaryBtn,
 .admin .adminDiv .dangerBtn,
-.admin .adminDiv .primaryBtn2{
+.admin .adminDiv .primaryBtn2 {
     font-size: 0.85rem;
 }
 
-.admin .adminDiv .tableDiv{
+.admin .adminDiv .tableDiv {
     padding: 0;
 }
-.admin .adminDiv .tableDiv .upper .upperRight{
+
+.admin .adminDiv .tableDiv .upper .upperRight {
     display: flex;
     align-items: center;
     gap: 10px;
 }
+
 .admin .adminDiv .tableDiv .id,
-.admin .adminDiv .tableDiv .idField{
+.admin .adminDiv .tableDiv .idField {
     width: 150% !important;
 }
-.admin .adminDiv .tableDiv .rows .row .titleField .title{
+
+.admin .adminDiv .tableDiv .rows .row .titleField .title {
     width: 90%;
 }
-.admin .adminDiv .tableDiv .rows .row .icon{
+
+.admin .adminDiv .tableDiv .rows .row .icon {
     width: 15px !important;
     height: 15px !important;
 }
-.admin .adminDiv .tableDiv .rows .row .arrowRight{
+
+.admin .adminDiv .tableDiv .rows .row .arrowRight {
     width: 20px !important;
     height: 20px !important;
 }
@@ -44,22 +51,23 @@
 
 /* ****************************** LOGIN PAGE ****************************** */
 
-.adminLoginDiv{
+.adminLoginDiv {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100vh;
 }
 
-.adminLoginDiv .adminLoginContent{
+.adminLoginDiv .adminLoginContent {
     background: var(--white);
     border-radius: 8px;
     height: fit-content;
     min-width: 50%;
     padding: 30px 50px;
 }
+
 .adminLoginDiv .adminLoginContent .primaryHeading,
-.adminLoginDiv .adminLoginContent .primaryBtn{
+.adminLoginDiv .adminLoginContent .primaryBtn {
     width: 100%;
     text-align: center;
 }
@@ -69,7 +77,7 @@
 
 /* ****************************** HEADER PAGE ****************************** */
 
-.adminHeaderDiv{
+.adminHeaderDiv {
     position: sticky;
     background: var(--lightGray);
     height: 100vh;
@@ -78,37 +86,42 @@
     width: 18%;
     padding: 30px 20px;
 }
-.adminHeaderDiv .horizontalLine{
+
+.adminHeaderDiv .horizontalLine {
     background: var(--gray);
 }
 
-.adminHeaderDiv .adminHeaderContent{
+.adminHeaderDiv .adminHeaderContent {
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
-.adminHeaderDiv .adminHeaderContent .faithzyLogoDiv{
+
+.adminHeaderDiv .adminHeaderContent .faithzyLogoDiv {
     margin: auto;
     width: 90px;
     height: 90px;
 }
 
-.adminHeaderDiv .adminHeaderContent .mainMenu{
+.adminHeaderDiv .adminHeaderContent .mainMenu {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
-.adminHeaderDiv .adminHeaderContent .mainMenu li a{
+
+.adminHeaderDiv .adminHeaderContent .mainMenu li a {
     position: relative;
     display: flex;
     gap: 8px;
     align-items: center;
 }
-.adminHeaderDiv .adminHeaderContent .mainMenu li a.activeLi{
+
+.adminHeaderDiv .adminHeaderContent .mainMenu li a.activeLi {
     color: var(--black);
     font-weight: 600;
 }
-.adminHeaderDiv .adminHeaderContent .mainMenu li a.activeLi::before{
+
+.adminHeaderDiv .adminHeaderContent .mainMenu li a.activeLi::before {
     position: absolute;
     top: 10%;
     left: -5%;
@@ -124,34 +137,39 @@
 
 /* ****************************** EMPLOYEES PAGE ****************************** */
 
-.adminEmployeesDiv .addNewModelDiv .popupContent{
+.adminEmployeesDiv .addNewModelDiv .popupContent {
     min-width: 60%;
 }
 
-.adminEmployeesDiv .dropdownPlus{
+.adminEmployeesDiv .dropdownPlus {
     width: 100%;
     margin: 5px 0px;
 }
-.adminEmployeesDiv .editEditorAccess{
+
+.adminEmployeesDiv .editEditorAccess {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     margin: 10px 0px;
 }
-.adminEmployeesDiv .editEditorAccess .accessBtn{
+
+.adminEmployeesDiv .editEditorAccess .accessBtn {
     display: flex;
     justify-content: space-between;
     margin: 0px 15px;
 }
-.adminEmployeesDiv .editEditorAccess .accessBtn .dropdownPlus{
+
+.adminEmployeesDiv .editEditorAccess .accessBtn .dropdownPlus {
     width: fit-content;
     margin: 0;
 }
-.adminEmployeesDiv .showDetailsModelDiv .row{
+
+.adminEmployeesDiv .showDetailsModelDiv .row {
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
-.adminEmployeesDiv .showDetailsModelDiv .accessTo{
+
+.adminEmployeesDiv .showDetailsModelDiv .accessTo {
     margin-top: 5px;
     font-size: 0.9rem;
 }
@@ -163,7 +181,7 @@
 
 /* ****************************** ADMIN TERMS & CONDITIONS PAGE ****************************** */
 
-.adminTermsDiv textarea{
+.adminTermsDiv textarea {
     width: 100%;
     background: var(--white);
     padding: 20px 30px;
@@ -179,26 +197,30 @@
 
 /* ****************************** ADMIN SOCIAL LINKS PAGE ****************************** */
 
-.socialLinksDiv .horizontalLine{
+.socialLinksDiv .horizontalLine {
     margin-top: 10px;
 }
-.socialLinksDiv .row{
+
+.socialLinksDiv .row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
     width: 100%;
 }
-.socialLinksDiv .socialCheckInput{
+
+.socialLinksDiv .socialCheckInput {
     cursor: pointer;
 }
-.socialLinksDiv .row .platformName{
+
+.socialLinksDiv .row .platformName {
     display: flex;
     align-items: center;
     gap: 10px;
     color: var(--lightBlackPrimary);
 }
-.socialLinksDiv .row .socialInput{
+
+.socialLinksDiv .row .socialInput {
     width: 85%;
     padding: 8px 20px;
     outline: none;
@@ -211,7 +233,7 @@
 
 /* ****************************** ADMIN CATEGORIES PAGE ****************************** */
 
-.adminCategoriesDiv .popupDiv .dropdownPlus{
+.adminCategoriesDiv .popupDiv .dropdownPlus {
     margin: 5px 0px;
     width: 100%;
 }
@@ -222,12 +244,13 @@
 
 /* ****************************** ADMIN COUPONS PAGE ****************************** */
 
-.adminCouponsDiv .detailsModelDiv .details .row{
+.adminCouponsDiv .detailsModelDiv .details .row {
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
-.adminCouponsDiv .detailsModelDiv .buttonsDiv{
+
+.adminCouponsDiv .detailsModelDiv .buttonsDiv {
     margin-top: 20px;
 }
 
@@ -237,35 +260,41 @@
 
 /* ****************************** ADMIN FEE MANAGEMENT PAGE ****************************** */
 
-.adminFeeDiv .adminFeeContent{
+.adminFeeDiv .adminFeeContent {
     display: flex;
     gap: 30px;
     justify-content: space-between;
     margin-top: 20px;
 }
-.adminFeeDiv .adminFeeContent .left{
+
+.adminFeeDiv .adminFeeContent .left {
     min-width: 40%;
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
-.adminFeeDiv .adminFeeContent .box{
+
+.adminFeeDiv .adminFeeContent .box {
     width: 100%;
     background: var(--white);
     border-radius: 8px;
     height: fit-content;
 }
-.adminFeeDiv .adminFeeContent .box .secondaryHeading{
+
+.adminFeeDiv .adminFeeContent .box .secondaryHeading {
     color: var(--white);
 }
-.adminFeeDiv .adminFeeContent .box .secondaryHeading span{
-    color: var(--secondaryCopper);;
+
+.adminFeeDiv .adminFeeContent .box .secondaryHeading span {
+    color: var(--secondaryCopper);
+    ;
 }
-.adminFeeDiv .adminFeeContent .box .secondaryBtn{
+
+.adminFeeDiv .adminFeeContent .box .secondaryBtn {
     margin-top: 10px;
 }
 
-.adminFeeDiv .adminFeeContent .box .upper{
+.adminFeeDiv .adminFeeContent .box .upper {
     padding: 10px 18px;
     background: var(--primaryBlue);
     color: var(--white);
@@ -273,25 +302,28 @@
     border-top-right-radius: 8px;
 }
 
-.adminFeeDiv .adminFeeContent .box .lower{
+.adminFeeDiv .adminFeeContent .box .lower {
     padding: 20px 18px;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-.adminFeeDiv .adminFeeContent .box .lower .buttonsDiv{
+
+.adminFeeDiv .adminFeeContent .box .lower .buttonsDiv {
     display: flex;
     gap: 15px;
     width: 100%;
     justify-content: right;
 }
-.adminFeeDiv .adminFeeContent .right .lower .discountType{
+
+.adminFeeDiv .adminFeeContent .right .lower .discountType {
     display: flex;
     align-items: center;
     gap: 30px;
     justify-content: center;
 }
-.adminFeeDiv .adminFeeContent .right .lower .discountType .radioBtn{
+
+.adminFeeDiv .adminFeeContent .right .lower .discountType .radioBtn {
     display: flex;
     gap: 5px;
 }
@@ -303,24 +335,28 @@
 /* ****************************** ADMIN ORDERS MANAGEMENT PAGE ****************************** */
 
 .adminOrdersDiv .tableDiv .header .title,
-.adminOrdersDiv .tableDiv .rows .row .titleField{
+.adminOrdersDiv .tableDiv .rows .row .titleField {
     width: 220%;
 }
-.adminOrdersDiv .tableDiv .rows .row .titleField .title{
+
+.adminOrdersDiv .tableDiv .rows .row .titleField .title {
     width: 100% !important;
 }
-.adminOrdersDiv .popupDiv .rows{
+
+.adminOrdersDiv .popupDiv .rows {
     display: flex;
     flex-direction: column;
     gap: 8px;
     width: 100%;
 }
-.adminOrdersDiv .popupDiv .rows .row{
+
+.adminOrdersDiv .popupDiv .rows .row {
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
-.adminOrdersDiv .popupDiv .contactBuyerBtnDiv{
+
+.adminOrdersDiv .popupDiv .contactBuyerBtnDiv {
     display: flex;
     justify-content: right;
     width: 100%;
@@ -334,6 +370,60 @@
 
 /* ****************************** ADMIN CHATS PAGE ****************************** */
 
-.admin .adminDiv .chatDiv{
+.admin .adminDiv .chatDiv {
     margin: 0;
+}
+
+
+
+
+
+/* ****************************** ADMIN DASHBOARD PAGE ****************************** */
+
+.adminDashboardDiv .dashboardOverview {
+    display: flex;
+    gap: 20px;
+}
+
+.adminDashboardDiv .dashboardOverview .overviewBox {
+    border-radius: 8px;
+    background: var(--white);
+    padding: 15px 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.adminDashboardDiv .dashboardOverview .overviewBox .secondaryHeading {
+    font-size: 1rem;
+}
+
+.adminDashboardDiv .dashboardOverview .overviewBox .value {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.adminDashboardDiv .dashboardOverview .left,
+.adminDashboardDiv .dashboardOverview .right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.adminDashboardDiv .dashboardOverview .left .overviewBoxA .row,
+.adminDashboardDiv .dashboardOverview .right .overviewBoxA .row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.adminDashboardDiv .dashboardOverview .left .leftBottom,
+.adminDashboardDiv .dashboardOverview .right .rightTop {
+    display: flex;
+    gap: 20px;
+}
+
+.adminDashboardDiv .adminOrdersDiv {
+    margin: 40px 0px;
 }
