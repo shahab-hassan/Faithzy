@@ -1,5 +1,5 @@
 const adminSettingsModel = require('../models/adminSettingsModel');
-const {productOrderModel, serviceOrderModel} = require('../models/orderModel');
+const { productOrderModel, serviceOrderModel } = require('../models/orderModel');
 const asyncHandler = require('express-async-handler');
 
 
@@ -142,57 +142,34 @@ exports.getGeneralDashboardInfo = asyncHandler(async (req, res) => {
     }
 });
 
-// exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
-//     const { filter } = req.query;
-
-//     // Calculate the start date based on the filter
-//     const dateMap = {
-//         '7d': 7,
-//         '30d': 30,
-//         '90d': 180,
-//         'lifetime': 360
-//     };
-
-//     const startDate = new Date();
-//     startDate.setDate(startDate.getDate() - dateMap[filter]);
-
-//     const orders = await serviceOrderModel.find({
-//         createdAt: { $gte: startDate }
-//     }).select('createdAt netProfit summary');
-
-//     const revenueData = orders.map(order => ({
-//         date: order.createdAt,
-//         total: order.summary.paidByBuyer.total
-//     }));
-
-//     const netProfitData = orders.map(order => ({
-//         date: order.createdAt,
-//         total: order.summary.netProfit
-//     }));
-
-//     res.json({ revenue: revenueData, netProfit: netProfitData });
-// });
-
-
 exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
-    const { filter } = req.query;
+    const { filter, startDate: customStartDate, endDate: customEndDate } = req.query;
 
-    const dateMap = {
-        '7d': 7,
-        '30d': 30,
-        '90d': 90,
-        'lifetime': 360
-    };
+    let startDate, endDate;
 
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - dateMap[filter]);
-    
+    if (filter === 'custom') {
+        startDate = new Date(customStartDate);
+        endDate = new Date(customEndDate);
+    } else if (filter === 'lifetime') {
+        startDate = new Date('2024-08-01');
+    } else {
+        const dateMap = {
+            '7d': 7,
+            '30d': 30,
+            '90d': 90
+        };
+
+        startDate = new Date();
+        startDate.setDate(startDate.getDate() - (dateMap[filter]-1));
+        endDate = new Date(); 
+    }
+
+
     const dateRange = {};
-    for (let i = 1; i <= dateMap[filter]; i++) {
-        const date = new Date();
-        date.setDate(startDate.getDate() + i);
-        dateRange[date.toISOString().split('T')[0]] = { revenue: 0, profit: 0 };
-        console.log(date.getDate());
+    let currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+        dateRange[currentDate.toISOString().split('T')[0]] = { revenue: 0, profit: 0 };
+        currentDate.setDate(currentDate.getDate() + 1);
     }
 
     const productOrders = await productOrderModel.aggregate([
@@ -202,7 +179,7 @@ exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
         {
             $match: {
                 "products.crrStatus": "Delivered",
-                "updatedAt": { $gte: startDate }
+                "updatedAt": { $gte: startDate, $lte: endDate }
             }
         },
         {
@@ -225,7 +202,7 @@ exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
         {
             $match: {
                 "service.crrStatus": "Completed",
-                "updatedAt": { $gte: startDate }
+                "updatedAt": { $gte: startDate, $lte: endDate }
             }
         },
         {
@@ -244,7 +221,7 @@ exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
         }
     ]);
 
-    let totalRevenue = 0, fromOrders = 0, fromMemberships=0, fromBoosts=0, newUsers=0, netProfit = 0;
+    let totalRevenue = 0, fromOrders = 0, fromMemberships = 0, fromBoosts = 0, newUsers = 0, netProfit = 0;
 
     const orders = [...productOrders, ...serviceOrders];
     orders.forEach(order => {
@@ -267,5 +244,9 @@ exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
         total: dateRange[date].profit
     }));
 
-    res.json({ generalData: {totalRevenue, fromOrders, fromMemberships, fromBoosts, newUsers, netProfit}, revenue: revenueData, netProfit: netProfitData });
+    res.json({
+        generalData: { totalRevenue, fromOrders, fromMemberships, fromBoosts, newUsers, netProfit },
+        revenue: revenueData,
+        netProfit: netProfitData
+    });
 });

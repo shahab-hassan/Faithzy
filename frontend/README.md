@@ -1,5 +1,4 @@
 *** Overview ***: 
 
-- Created and Completed Admin Revenue Page (80% Done)
---- Had to fix some issues
---- Currently not showing New Users, and Paid Memeberships and Boosts Revenue 
+- Fixed Filtering Issues in Admin Revenue Page
+- Created and Designed Seller Upgrade Page. Functionality is yet to be done!

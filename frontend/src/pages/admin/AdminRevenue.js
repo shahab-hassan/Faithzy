@@ -18,19 +18,23 @@ const AdminRevenue = () => {
     const [revenueData, setRevenueData] = useState([]);
     const [netProfitData, setNetProfitData] = useState([]);
     const [filter, setFilter] = useState('7d');
-    
-    console.log(filter);
+    const [customStartDate, setCustomStartDate] = useState('');
+    const [customEndDate, setCustomEndDate] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await axios.get(`http://localhost:5000/api/v1/settings/admin/revenue?filter=${filter}`);
+            let url = `http://localhost:5000/api/v1/settings/admin/revenue?filter=${filter}`;
+            if (filter === 'custom') {
+                url += `&startDate=${customStartDate}&endDate=${customEndDate}`;
+            }
+            const response = await axios.get(url);
             setGeneralData(response.data.generalData);
             setRevenueData(response.data.revenue);
             setNetProfitData(response.data.netProfit);
         };
 
         fetchData();
-    }, [filter]);
+    }, [filter, customStartDate, customEndDate]);
 
     const revenueChartData = {
         labels: revenueData.map(data => data.date),
@@ -109,12 +113,26 @@ const AdminRevenue = () => {
 
                 <div className="header">
                     <h1 className="primaryHeading"><span>Revenue</span> & <span>Profit</span></h1>
-                    <select onChange={e => setFilter(e.target.value)} className='dropdownPlus'>
-                        <option value="7d">Last 7 days</option>
-                        <option value="30d">Last 30 days</option>
-                        <option value="90d">Last 90 days</option>
-                        <option value="lifetime">Lifetime</option>
-                    </select>
+                    <div className="headerRight">
+
+                        {filter === 'custom' && (
+                            <div className="customDateRange">
+                                <label>Start Date:</label>
+                                <input type="date" value={customStartDate} onChange={e => setCustomStartDate(e.target.value)} />
+                                <label>End Date:</label>
+                                <input type="date" value={customEndDate} onChange={e => setCustomEndDate(e.target.value)} />
+                            </div>
+                        )}
+
+                        <select onChange={e => setFilter(e.target.value)} className='dropdownPlus'>
+                            <option value="7d">Last 7 days</option>
+                            <option value="30d">Last 30 days</option>
+                            <option value="90d">Last 90 days</option>
+                            <option value="lifetime">Lifetime</option>
+                            <option value="custom">Custom</option>
+                        </select>
+
+                    </div>
                 </div>
 
                 <div className="revenueOverviewDetails">

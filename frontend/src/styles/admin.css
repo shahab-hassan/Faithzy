@@ -440,6 +440,21 @@
     justify-content: space-between;
     margin-bottom: 25px;
 }
+.adminRevenueDiv .header .headerRight{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.adminRevenueDiv .header .headerRight .customDateRange label{
+    margin-left: 15px;
+}
+.adminRevenueDiv .header .headerRight .customDateRange input{
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--gray);
+    outline: none;
+    margin-left: 8px;
+}
 .adminRevenueDiv .revenueOverviewDetails{
     display: flex;
     gap: 20px;

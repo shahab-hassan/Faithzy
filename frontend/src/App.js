@@ -49,6 +49,7 @@ import AdminSellers from './pages/admin/AdminSellers.js';
 import AdminBuyers from './pages/admin/AdminBuyers.js';
 import AdminOrders from './pages/admin/AdminOrders.js';
 import AdminRevenue from './pages/admin/AdminRevenue.js';
+import Upgrade from './pages/seller/Upgrade.js';
 
 function App() {
 
@@ -99,6 +100,7 @@ function App() {
                     <Route path='/seller/orders' element={<Orders pageType="seller" />} />
                     <Route path='/seller/orders/product/orderDetails/:id/:subOrderId' element={<ProductOrderDetails isBuyer={false} />} />
                     <Route path='/seller/orders/posting/orderDetails/:id/' element={<ServiceOrderDetails isBuyer={false} />} />
+                    <Route path='/seller/upgrade' element={<Upgrade />} />
                 </Route>
 
                 <Route>

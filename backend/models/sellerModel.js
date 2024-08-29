@@ -18,6 +18,12 @@ const sellerSchema = new mongoose.Schema({
   selling: { type: String, required: true },
   languages: { type: [String], required: true },
   sellerType: { type: String, enum: ['Free', 'Paid'], default: "Free" },
+  plan: {type: {
+    duration: {type: Number},
+    price: {type: Number},
+    startDate: {type: Date},
+    endDate: {type: Date},
+  }},
   rating: { type: Number, default: 0 },
   noOfReviews: { type: Number, default: 0 },
   reviews: [reviewSchema],

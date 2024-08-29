@@ -732,3 +732,99 @@
 .requestDetailsModelDiv .requestDetailsModelContent .categorySpan{
     color: var(--primaryCopper);
 }
+
+
+
+
+
+
+
+/* ********************* UPGRADE PAGE ********************* */
+
+.upgradeDiv{
+    margin: 50px 0px;
+}
+.upgradeDiv .upgradeContent{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.upgradeDiv .upgradeContent .primaryHeading{
+    text-align: center;
+}
+.upgradeDiv .upgradeContent .timeLine{
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    justify-content: center;
+}
+.upgradeDiv .upgradeContent .timeLine div{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-content: center;
+}
+.upgradeDiv .upgradeContent .plans{
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+.upgradeDiv .upgradeContent .plans .plan{
+    width: 100%;
+    background: var(--white);
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    width: 30%;
+    border-radius: 8px;
+}
+.upgradeDiv .upgradeContent .plans .plan .price{
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+.upgradeDiv .upgradeContent .plans .plan .price span{
+    font-size: 1rem;
+    font-weight: 600;
+}
+.upgradeDiv .upgradeContent .plans .plan .rows{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 15px 0px;
+}
+.upgradeDiv .upgradeContent .plans .plan .rows .row{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.upgradeDiv .upgradeContent .plans .plan .rows .row .icon{
+    width: 18px;
+    height: 18px;
+    color: var(--success);
+}
+.upgradeDiv .upgradeContent .plans .plan .rows .notIncluded span{
+    color: var(--darkGray);
+    text-decoration: line-through;
+}
+.upgradeDiv .upgradeContent .plans .plan .rows .notIncluded .icon{
+    color: var(--danger);
+}
+.upgradeDiv .upgradeContent .premiumPlan{
+    color: var(--white);
+    background: var(--primaryBlue) !important;
+}
+.upgradeDiv .upgradeContent .premiumPlan .secondaryHeading{
+    color: var(--white) ;
+}
+.upgradeDiv .upgradeContent .premiumPlan .primaryBtn2{
+    color: var(--white) ;
+    border-color: var(--white);
+}
+.upgradeDiv .upgradeContent .plans .plan .buttonDiv{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
