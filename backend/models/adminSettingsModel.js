@@ -30,14 +30,14 @@ const adminSettingsSchema = new mongoose.Schema({
     membership: {
         threeMonths: { type: Number, default: 0 },
         sixMonths: { type: Number, default: 0 },
-        nineMonths: { type: Number, default: 0 },
+        twelveMonths: { type: Number, default: 0 },
         offerDiscount: { type: Boolean, default: false },
         discountType: { type: String, enum: ['onAllPlans', 'individualDiscount'], default: 'onAllPlans' },
         discounts: {
             allPlans: { discount: { type: Number }, expiryDate: { type: Date } },
             threeMonths: { discount: { type: Number }, expiryDate: { type: Date } },
             sixMonths: { discount: { type: Number }, expiryDate: { type: Date } },
-            nineMonths: { discount: { type: Number }, expiryDate: { type: Date } },
+            twelveMonths: { discount: { type: Number }, expiryDate: { type: Date } },
         }
     },
     completedOrders: {type: Number, default: 0},

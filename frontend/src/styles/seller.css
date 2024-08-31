@@ -822,6 +822,11 @@
     color: var(--white) ;
     border-color: var(--white);
 }
+.upgradeDiv .upgradeContent .premiumPlan .discountPercent,
+.upgradeDiv .upgradeContent .premiumPlan .discountExpiry span{
+    color: var(--secondaryCopper);
+    font-weight: 600;
+}
 .upgradeDiv .upgradeContent .plans .plan .buttonDiv{
     width: 70%;
     display: flex;

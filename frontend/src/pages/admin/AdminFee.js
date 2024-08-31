@@ -11,14 +11,14 @@ function AdminFee() {
     const [membership, setMembership] = useState({
         threeMonths: 0,
         sixMonths: 0,
-        nineMonths: 0,
+        twelveMonths: 0,
         offerDiscount: false,
         discountType: 'onAllPlans',
         discounts: {
             allPlans: { discount: 0, expiryDate: '' },
             threeMonths: { discount: 0, expiryDate: '' },
             sixMonths: { discount: 0, expiryDate: '' },
-            nineMonths: { discount: 0, expiryDate: '' }
+            twelveMonths: { discount: 0, expiryDate: '' }
         }
     });
     const [editMode, setEditMode] = useState({
@@ -49,7 +49,7 @@ function AdminFee() {
                             membershipData.discounts.allPlans.expiryDate = convertDate(membershipData.discounts.allPlans.expiryDate);
                             membershipData.discounts.threeMonths.expiryDate = convertDate(membershipData.discounts.threeMonths.expiryDate);
                             membershipData.discounts.sixMonths.expiryDate = convertDate(membershipData.discounts.sixMonths.expiryDate);
-                            membershipData.discounts.nineMonths.expiryDate = convertDate(membershipData.discounts.nineMonths.expiryDate);
+                            membershipData.discounts.twelveMonths.expiryDate = convertDate(membershipData.discounts.twelveMonths.expiryDate);
                         }
 
                         setMembership(membershipData);
@@ -176,7 +176,7 @@ function AdminFee() {
                 </div>
             );
         } else {
-            return ['threeMonths', 'sixMonths', 'nineMonths'].map((plan, index) => (
+            return ['threeMonths', 'sixMonths', 'twelveMonths'].map((plan, index) => (
                 <div className="inputDiv" key={index}>
                     <div className="inputInnerDiv">
                         <label>Discount on {(index + 1) * 3} Months Plan (%)</label>
@@ -308,11 +308,11 @@ function AdminFee() {
                             />
                         </div>
                         <div className="inputDiv">
-                            <label>9 Months ($)</label>
+                            <label>12 Months ($)</label>
                             <input
                                 type="number"
-                                name="nineMonths"
-                                value={membership.nineMonths}
+                                name="twelveMonths"
+                                value={membership.twelveMonths}
                                 onChange={handleMembershipChange}
                                 className='inputField'
                                 placeholder='Enter Price ($)'

@@ -1,4 +1,5 @@
 *** Overview ***: 
 
-- Fixed Filtering Issues in Admin Revenue Page
-- Created and Designed Seller Upgrade Page. Functionality is yet to be done!
+- Working on Seller Upgrade Page:
+--- Displaying correct details along with Discount
+--- Sellers can purchase plan and cancel membership but payment process is not intergrated

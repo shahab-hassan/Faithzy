@@ -19,7 +19,7 @@ const sellerSchema = new mongoose.Schema({
   languages: { type: [String], required: true },
   sellerType: { type: String, enum: ['Free', 'Paid'], default: "Free" },
   plan: {type: {
-    duration: {type: Number},
+    months: {type: Number},
     price: {type: Number},
     startDate: {type: Date},
     endDate: {type: Date},

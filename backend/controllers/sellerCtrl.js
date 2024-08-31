@@ -149,6 +149,17 @@ exports.deleteSeller = asyncHandler(async (req, res) => {
   }
 });
 
+exports.upgradeSellerPlan = asyncHandler(async (req, res) => {
+  const seller = await sellerModel.findByIdAndUpdate(req.params.id, { plan: req.body.plan }, { new: true });
+  res.status(200).json({ success: true, seller });
+});
+
+exports.cancelSellerPlan = asyncHandler(async (req, res) => {
+  const seller = await sellerModel.findByIdAndUpdate(req.params.id, { plan: null }, { new: true });
+  res.status(200).json({ success: true, seller });
+});
+
+
 
 
 

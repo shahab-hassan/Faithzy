@@ -4,7 +4,7 @@ const router = express.Router();
 const upload = require("../config/multer");
 const { authorized, authorizedRoles, authorizeAdmin } = require("../middlewares/authorization");
 
-const { getAllSellers, getSeller, createSeller, updateSeller, deleteSeller } = require("../controllers/sellerCtrl");
+const { getAllSellers, getSeller, createSeller, updateSeller, deleteSeller, upgradeSellerPlan, cancelSellerPlan } = require("../controllers/sellerCtrl");
 
 router.get("/all/", authorizeAdmin, getAllSellers);
 
@@ -30,5 +30,12 @@ router.post("/seller/new/", authorized, (req, res, next) => {
     createSeller(req, res, next);
   });
 });
+
+
+router.put('/plan/upgrade/:id', authorized, upgradeSellerPlan);
+
+router.put('/plan/cancel/:id', authorized, cancelSellerPlan);
+
+
 
 module.exports = router;
