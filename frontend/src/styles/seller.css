@@ -749,7 +749,8 @@
     flex-direction: column;
     gap: 30px;
 }
-.upgradeDiv .upgradeContent .primaryHeading{
+.upgradeDiv .upgradeContent .primaryHeading,
+.upgradeDiv .upgradeContent .secondaryHeading{
     text-align: center;
 }
 .upgradeDiv .upgradeContent .timeLine{
@@ -832,4 +833,46 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.upgradeDiv .upgradeCheckoutModelDiv .form{
+    width: 100%;
+}
+.upgradeDiv .upgradeCheckoutModelDiv .buttonsDiv{
+    margin-top: 15px;
+}
+
+.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions{
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    width: 100%;
+}
+
+.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid var(--gray);
+    padding: 40px;
+    cursor: pointer;
+    width: 100%;
+    transition: 0.2s;
+    border-radius: 8px;
+}
+.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption.selected{
+    background: var(--primaryBlue);
+    color: var(--white);
+}
+.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption:not(.selected):hover{
+    background: var(--lightGray);
+}
+.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption .icon{
+    width: 40px;
+    height: 40px;
+    color: var(--secondaryBlue);
+}
+.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption.selected .icon{
+    color: var(--white);
 }

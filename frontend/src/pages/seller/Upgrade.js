@@ -4,6 +4,10 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
 import { AuthContext } from "../../utils/AuthContext";
+import { IoIosCloseCircleOutline } from 'react-icons/io';
+import { BsStripe } from "react-icons/bs";
+import { FaPaypal } from "react-icons/fa";
+import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
 
 function Upgrade() {
 
@@ -14,8 +18,12 @@ function Upgrade() {
     const [discountedPrice, setDiscountedPrice] = useState(0);
     const [discountPercent, setDiscountPercent] = useState(null);
     const [discountExpiry, setDiscountExpiry] = useState(null);
-
+    const [showCheckoutModel, setShowCheckoutModel] = useState(false);
+    const [paymentMethod, setPaymentMethod] = React.useState("stripe");
     const token = localStorage.getItem("token");
+    const stripe = useStripe();
+    const elements = useElements();
+    const [loading, setLoading] = React.useState(false);
 
     useEffect(() => {
         if (!user) return;
@@ -42,7 +50,7 @@ function Upgrade() {
                 enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
             });
 
-    }, [user]);
+    }, [user, token]);
 
     const calculateDiscountedPrice = (months, membership) => {
         if (!membership) return;
@@ -70,28 +78,11 @@ function Upgrade() {
         calculateDiscountedPrice(months, membership);
     };
 
-    const handlePlanPurchase = () => {
-        const planData = {
-            months: selectedMonths,
-            price: discountedPrice,
-            startDate: new Date(),
-            endDate: new Date(new Date().setMonth(new Date().getMonth() + selectedMonths))
-        };
-
-        axios.put(`http://localhost:5000/api/v1/sellers/plan/upgrade/${user?.sellerId?._id}`, { plan: planData }, { headers: { Authorization: `Bearer ${token}` } })
-            .then(response => {
-                if (response.data.success) {
-                    setCurrentPlan(planData);
-                    enqueueSnackbar("Plan purchased successfully!", { variant: "success" });
-                }
-            })
-            .catch(e => {
-                console.log(e);
-                enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
-            });
-    };
-
     const handleCancelPlan = () => {
+
+        if (!window.confirm("You are ending your Paid Membership... Are you sure you want to continue?"))
+            return;
+
         axios.put(`http://localhost:5000/api/v1/sellers/plan/cancel/${user?.sellerId?._id}`, {}, { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 if (response.data.success) {
@@ -110,12 +101,75 @@ function Upgrade() {
         return new Date(date).toLocaleDateString(undefined, options);
     };
 
+    const handlePlanPurchase = async (e) => {
+
+        e.preventDefault();
+        setLoading(true);
+
+        if (!stripe || !elements) {
+            return;
+        }
+
+        const cardElement = elements.getElement(CardNumberElement);
+
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: cardElement,
+        });
+
+        if (error) {
+            enqueueSnackbar(error.message, { variant: 'error' });
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const planData = {
+                months: selectedMonths,
+                price: discountedPrice,
+                startDate: new Date(),
+                endDate: new Date(new Date().setMonth(new Date().getMonth() + selectedMonths)),
+                paymentMethod: 'stripe'
+            };
+            const { data } = await axios.put(`http://localhost:5000/api/v1/sellers/plan/upgrade/${user?.sellerId?._id}`, { plan: planData }, { headers: { Authorization: `Bearer ${token}` } })
+
+            const clientSecret = data.clientSecret;
+
+            const { paymentIntent, error: stripeError } = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: paymentMethod.id
+            });
+
+            if (stripeError) {
+                enqueueSnackbar(stripeError.message, { variant: 'error' });
+                setLoading(false);
+                return;
+            }
+
+            if (paymentIntent.status === 'succeeded') {
+                enqueueSnackbar("Premium Purchased Successfully!", { variant: 'success' });
+                setLoading(false);
+                setShowCheckoutModel(false);
+                setCurrentPlan(planData);
+            }
+        } catch (e) {
+            console.error(e);
+            enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: 'error' });
+            setLoading(false);
+        }
+    };
+
     return (
         <div className='upgradeDiv'>
             <section className="section">
                 <div className="upgradeContent">
 
                     <h1 className="primaryHeading"><span>UPGRADE</span> YOUR ACCOUNT</h1>
+                    {currentPlan && (
+                        <h1 className="secondaryHeading">
+                            You are already a <span>Paid Member</span>. Your <span>membership</span> expires on {formatDateTime(currentPlan.endDate)}.
+                        </h1>
+                    )}
+
 
                     <div className="timeLine">
                         <div>
@@ -202,7 +256,7 @@ function Upgrade() {
                                 </div>
                             </div>
                             <div className="buttonDiv">
-                                <button className='primaryBtn2' onClick={handlePlanPurchase} disabled={currentPlan}>{currentPlan? "Already Using" : "Buy Now"}</button>
+                                <button className='primaryBtn2' onClick={() => setShowCheckoutModel(true)} disabled={currentPlan}>{currentPlan && (currentPlan.months === selectedMonths) ? "Already Using" : "Buy Now"}</button>
                                 {currentPlan && <button className='dangerBtn' onClick={handleCancelPlan}>Cancel Membership</button>}
                             </div>
                             {discountExpiry && <div className="discountExpiry">Discount Ending On - <span>{formatDateTime(discountExpiry)}</span></div>}
@@ -211,6 +265,55 @@ function Upgrade() {
 
                 </div>
             </section>
+
+            {showCheckoutModel && (
+                <div className="popupDiv upgradeCheckoutModelDiv">
+                    <div className="popupContent">
+                        <div className="form">
+
+                            <h2 className="secondaryHeading">Choose <span>Payment</span> Method</h2>
+
+                            <div className="horizontalLine"></div>
+
+                            <div className="paymentOptions">
+                                <div className={`stripe paymentOption ${paymentMethod === 'stripe' ? 'selected' : ''}`} onClick={() => setPaymentMethod('stripe')}><BsStripe className='icon' /><div>Stripe</div></div>
+                                <div className={`paypal paymentOption ${paymentMethod === 'paypal' ? 'selected' : ''}`} onClick={() => enqueueSnackbar("Paypal is not available at the moment!", { variant: "info" })}><FaPaypal className='icon' /><div>Paypal</div></div>
+                            </div>
+
+                            {paymentMethod === "stripe" && <form className='form'>
+
+                                <div className="inputDiv">
+                                    <label>Card Number</label>
+                                    <CardNumberElement className="inputField" />
+                                </div>
+
+                                <div className="inputDiv">
+
+                                    <div className="inputInnerDiv">
+                                        <label>Expiry Date</label>
+                                        <CardExpiryElement className="inputField" />
+                                    </div>
+
+                                    <div className="inputInnerDiv">
+                                        <label>CVC</label>
+                                        <CardCvcElement className="inputField" />
+                                    </div>
+
+                                </div>
+
+                            </form>}
+                        </div>
+                        <div className="buttonsDiv">
+                            <button className="primaryBtn" type="submit" disabled={loading} onClick={handlePlanPurchase}>Pay ${discountedPrice}</button>
+                            <button className="secondaryBtn" onClick={() => setShowCheckoutModel(false)}>Close</button>
+                        </div>
+                        <div className="popupCloseBtn">
+                            <IoIosCloseCircleOutline className="icon" onClick={() => setShowCheckoutModel(false)} />
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }

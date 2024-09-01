@@ -23,6 +23,9 @@ const sellerSchema = new mongoose.Schema({
     price: {type: Number},
     startDate: {type: Date},
     endDate: {type: Date},
+    paymentMethod: { type: String, enum: ['stripe', 'paypal'], required: true },
+    paypalOrderId: String,
+    clientSecret: String
   }},
   rating: { type: Number, default: 0 },
   noOfReviews: { type: Number, default: 0 },

@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const sellerModel = require('../models/sellerModel');
 const userModel = require('../models/userModel');
 const adminSettingsModel = require('../models/adminSettingsModel');
+const { createPaymentIntent } = require("./paymentCtrl");
 
 exports.createSeller = asyncHandler(async (req, res) => {
   if (req.user.role === "seller") {
@@ -150,8 +151,27 @@ exports.deleteSeller = asyncHandler(async (req, res) => {
 });
 
 exports.upgradeSellerPlan = asyncHandler(async (req, res) => {
-  const seller = await sellerModel.findByIdAndUpdate(req.params.id, { plan: req.body.plan }, { new: true });
-  res.status(200).json({ success: true, seller });
+
+  const { months, price, startDate, endDate, paymentMethod } = req.body.plan;
+
+  let paymentIntent;
+  if (paymentMethod === 'stripe') {
+    const amount = price * 100;
+    paymentIntent = await createPaymentIntent(amount);
+  }
+
+  const plan = {
+    months,
+    price,
+    startDate,
+    endDate,
+    paymentMethod,
+    clientSecret: paymentMethod === 'stripe' ? paymentIntent.client_secret : undefined,
+    paypalOrderId: paymentMethod === 'paypal' ? paypalOrderId : undefined,
+  }
+
+  const seller = await sellerModel.findByIdAndUpdate(req.params.id, { plan }, { new: true });
+  res.status(200).json({ success: true, seller, clientSecret: paymentIntent.client_secret });
 });
 
 exports.cancelSellerPlan = asyncHandler(async (req, res) => {

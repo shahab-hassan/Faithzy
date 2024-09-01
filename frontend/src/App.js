@@ -27,7 +27,8 @@ import Cart from './pages/buyer/Cart.js';
 import PostRequest from './pages/buyer/PostRequest.js';
 import Tradelead from './pages/seller/Tradelead.js';
 import Orders from './pages/common/Orders.js';
-import StripeContainer from './utils/StripeContainer.js';
+import {CheckoutStripeContainer} from './utils/StripeContainer.js';
+import {UpgradeStripeContainer} from './utils/StripeContainer.js';
 import ProductOrderDetails from './pages/common/ProductOrderDetails.js';
 import ServiceDetails from './pages/buyer/ServiceDetails.js';
 import Requirements from './pages/buyer/Requirements.js';
@@ -49,7 +50,6 @@ import AdminSellers from './pages/admin/AdminSellers.js';
 import AdminBuyers from './pages/admin/AdminBuyers.js';
 import AdminOrders from './pages/admin/AdminOrders.js';
 import AdminRevenue from './pages/admin/AdminRevenue.js';
-import Upgrade from './pages/seller/Upgrade.js';
 
 function App() {
 
@@ -66,7 +66,7 @@ function App() {
                     <Route path='/categories' element={<Categories />} />
                     <Route path='/products/:categoryName' element={<Products />} />
                     <Route path='/services/:categoryName' element={<Services />} />
-                    <Route path='/checkout' element={<StripeContainer />} />
+                    <Route path='/checkout' element={<CheckoutStripeContainer />} />
                     <Route path='/postingDetails/:id' element={<ServiceDetails />} />
                     <Route path='/contact' element={<Contact />} />
                     <Route path='/profile/:id' element={<Profile />} />
@@ -100,7 +100,7 @@ function App() {
                     <Route path='/seller/orders' element={<Orders pageType="seller" />} />
                     <Route path='/seller/orders/product/orderDetails/:id/:subOrderId' element={<ProductOrderDetails isBuyer={false} />} />
                     <Route path='/seller/orders/posting/orderDetails/:id/' element={<ServiceOrderDetails isBuyer={false} />} />
-                    <Route path='/seller/upgrade' element={<Upgrade />} />
+                    <Route path='/seller/upgrade' element={<UpgradeStripeContainer />} />
                 </Route>
 
                 <Route>
