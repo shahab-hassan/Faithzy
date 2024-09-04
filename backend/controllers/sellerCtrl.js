@@ -150,6 +150,8 @@ exports.deleteSeller = asyncHandler(async (req, res) => {
   }
 });
 
+
+
 exports.upgradeSellerPlan = asyncHandler(async (req, res) => {
 
   const { months, price, startDate, endDate, paymentMethod } = req.body.plan;
@@ -170,12 +172,25 @@ exports.upgradeSellerPlan = asyncHandler(async (req, res) => {
     paypalOrderId: paymentMethod === 'paypal' ? paypalOrderId : undefined,
   }
 
-  const seller = await sellerModel.findByIdAndUpdate(req.params.id, { plan }, { new: true });
+  const seller = await sellerModel.findById(req.params.id);
+  if(!seller){
+    res.status(404);
+    throw new Error("Seller not found!");
+  }
+
+  seller.plan = plan;
+  seller.sellerType = "Paid";
+  seller.investment.push({in: "membership", of: price, on: new Date()});
+
+  seller.save();
+
   res.status(200).json({ success: true, seller, clientSecret: paymentIntent.client_secret });
 });
 
+
+
 exports.cancelSellerPlan = asyncHandler(async (req, res) => {
-  const seller = await sellerModel.findByIdAndUpdate(req.params.id, { plan: null }, { new: true });
+  const seller = await sellerModel.findByIdAndUpdate(req.params.id, { plan: null, sellerType: "Free" }, { new: true });
   res.status(200).json({ success: true, seller });
 });
 

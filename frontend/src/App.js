@@ -50,6 +50,8 @@ import AdminSellers from './pages/admin/AdminSellers.js';
 import AdminBuyers from './pages/admin/AdminBuyers.js';
 import AdminOrders from './pages/admin/AdminOrders.js';
 import AdminRevenue from './pages/admin/AdminRevenue.js';
+import AdminPayments from './pages/admin/AdminPayments.js';
+import AdminDisputes from './pages/admin/AdminDisputes.js';
 
 function App() {
 
@@ -124,6 +126,8 @@ function App() {
                     <Route path='/ftzy-admin/orders' element={<AdminOrders />} />
                     <Route path='/ftzy-admin/chats' element={<ChatPage />} />
                     <Route path='/ftzy-admin/revenue' element={<AdminRevenue />} />
+                    <Route path='/ftzy-admin/payments' element={<AdminPayments />} />
+                    <Route path='/ftzy-admin/disputes' element={<AdminDisputes />} />
                 </Route>
 
             </Routes>

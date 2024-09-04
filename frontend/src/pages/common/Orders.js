@@ -17,7 +17,7 @@ const Orders = ({ pageType }) => {
   const [selectedFilter, setSelectedFilter] = useState(pageType === "dashboard" ? "Active" : "All");
   const [ordersType, setOrdersType] = useState(searchParams.get("s") === "t" ? "Services" : "Products");
   const token = localStorage.getItem("token");
-  const productFilters = ["All", "Active", "Shipped", "Delivered", "Cancelled", "InDispute"];
+  const productFilters = ["All", "Active", "Shipped", "Delivered", "Completed", "On Hold", "Cancelled", "InDispute"];
   const serviceFilters = ["All", "Active", "Delivered", "Completed", "Cancelled", "Past Due", "InDispute"];
 
   useEffect(() => {

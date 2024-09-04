@@ -164,7 +164,7 @@ function Checkout() {
       paidByBuyer.totalShipping += parseFloat(myItem.shippingFees);
     });
 
-    if (couponDiscount || appliedCoupon) {
+    if (couponDiscount) {
       paidByBuyer.totalSalesPrice -= (paidByBuyer.totalSalesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
       paidByBuyer.promoDiscount = couponDiscount || appliedCoupon.discount;
     }
@@ -188,7 +188,7 @@ function Checkout() {
     paidByBuyer.salesPrice = pkg.salesPrice;
     sellerToGet.salesPrice = pkg.salesPrice;
 
-    if (couponDiscount || appliedCoupon) {
+    if (couponDiscount) {
       paidByBuyer.salesPrice -= (paidByBuyer.salesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
       paidByBuyer.promoDiscount = couponDiscount || appliedCoupon.discount;
     }
@@ -208,7 +208,7 @@ function Checkout() {
 
     paidByBuyer.totalSalesPrice = offer.offerAmount;
 
-    if (couponDiscount || appliedCoupon) {
+    if (couponDiscount) {
       paidByBuyer.totalSalesPrice -= (paidByBuyer.totalSalesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
       paidByBuyer.promoDiscount = couponDiscount || appliedCoupon.discount;
     }
@@ -230,7 +230,7 @@ function Checkout() {
     paidByBuyer.salesPrice = offer.offerAmount;
     sellerToGet.salesPrice = offer.offerAmount;
 
-    if (couponDiscount || appliedCoupon) {
+    if (couponDiscount) {
       paidByBuyer.salesPrice -= (paidByBuyer.salesPrice * Number(couponDiscount || appliedCoupon.discount) / 100)
       paidByBuyer.promoDiscount = couponDiscount || appliedCoupon.discount;
     }
@@ -589,7 +589,7 @@ function Checkout() {
                 onChange={(e) => setCouponCode(e.target.value)}
                 disabled={appliedCoupon}
               />
-              <button className='secondaryBtn' onClick={handleCouponClick}>{appliedCoupon ? "Remove" : "Apply"}</button>
+              <button className='secondaryBtn' disabled={!couponCode} onClick={handleCouponClick}>{appliedCoupon ? "Remove" : "Apply"}</button>
             </div>
 
             {appliedCoupon && <div className='row'>

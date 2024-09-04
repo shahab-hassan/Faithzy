@@ -27,6 +27,11 @@ const sellerSchema = new mongoose.Schema({
     paypalOrderId: String,
     clientSecret: String
   }},
+  investment: {type: [{
+    in: {type: String, enum: ["membership", "boosts"]},
+    of: {type: Number},
+    on: {type: Date}
+  }]},
   rating: { type: Number, default: 0 },
   noOfReviews: { type: Number, default: 0 },
   reviews: [reviewSchema],

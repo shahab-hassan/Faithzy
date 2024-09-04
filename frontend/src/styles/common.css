@@ -225,6 +225,20 @@
 .buyerProductOrderDetailsCard .buyerProductOrderCard{
     padding: 0px 40px;
 }
+.buyerProductOrderDetailsCard .statusAction,
+.sellerProductOrderDetailsCard .statusAction{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+.buyerProductOrderDetailsCard .statusAction .btns,
+.sellerProductOrderDetailsCard .statusAction .btns{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
 .orderDetailsDiv .billingInfo{
     background: var(--white);

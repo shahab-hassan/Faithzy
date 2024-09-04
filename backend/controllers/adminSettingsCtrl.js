@@ -1,5 +1,6 @@
 const adminSettingsModel = require('../models/adminSettingsModel');
 const { productOrderModel, serviceOrderModel } = require('../models/orderModel');
+const sellerModel = require('../models/sellerModel');
 const asyncHandler = require('express-async-handler');
 
 
@@ -152,6 +153,7 @@ exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
         endDate = new Date(customEndDate);
     } else if (filter === 'lifetime') {
         startDate = new Date('2024-08-01');
+        endDate = new Date();
     } else {
         const dateMap = {
             '7d': 7,
@@ -160,8 +162,8 @@ exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
         };
 
         startDate = new Date();
-        startDate.setDate(startDate.getDate() - (dateMap[filter]-1));
-        endDate = new Date(); 
+        startDate.setDate(startDate.getDate() - (dateMap[filter] - 1));
+        endDate = new Date();
     }
 
 
@@ -231,6 +233,53 @@ exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
             totalRevenue += order.revenue;
             fromOrders += order.revenue;
             netProfit += order.profit;
+        }
+    });
+
+    const sellerInvestments = await sellerModel.aggregate([
+        {
+            $unwind: "$investment"
+        },
+        {
+            $match: {
+                "investment.on": { $gte: startDate, $lte: endDate }
+            }
+        },
+        {
+            $project: {
+                date: {
+                    $dateToString: { format: "%Y-%m-%d", date: "$investment.on" }
+                },
+                type: "$investment.in",
+                amount: "$investment.of"
+            }
+        },
+        {
+            $group: {
+                _id: {
+                    date: "$date",
+                    type: "$type"
+                },
+                totalAmount: { $sum: "$amount" }
+            }
+        }
+    ]);
+
+    sellerInvestments.forEach(investment => {
+        const { date, type } = investment._id;
+        const amount = investment.totalAmount;
+
+        if (dateRange[date]) {
+            dateRange[date].revenue += amount;
+            dateRange[date].profit += amount;
+            totalRevenue += amount;
+            netProfit += amount;
+
+            if (type === 'membership') {
+                fromMemberships += amount;
+            } else if (type === 'boosts') {
+                fromBoosts += amount;
+            }
         }
     });
 

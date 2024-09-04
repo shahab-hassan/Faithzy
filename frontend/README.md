@@ -1,3 +1,3 @@
 *** Overview ***: 
 
-- Completed Seller Upgrade Page
+- Fixed some Bugs and Issues

@@ -43,7 +43,8 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
     else
       fee = feesObj.paidSeller.product;
 
-    const salesPrice = products.length > 1 ? product.product.salesPrice * product.count : product.product.salesPrice;
+    // const salesPrice = products.length > 1 ? product.product.salesPrice * product.count : product.product.salesPrice;
+    const salesPrice = product.product.salesPrice * product.count;
     const shippingFees = product.product.shippingFees;
     const subtotal = salesPrice + shippingFees;
     const tax = subtotal * (Number(fee) / 100);
@@ -410,23 +411,11 @@ exports.updateProductOrderStatus = async (req, res) => {
     if (newStatus === 'Delivered' && currentStatus === 'Active') {
       subOrder.status.push({ name: 'Shipped', createdAt: new Date() });
     }
-    
-    subOrder.status.push({ name: newStatus, createdAt: new Date() });
-    subOrder.crrStatus = newStatus; 
 
-    if (newStatus === "Delivered") {
-      await adminSettingsModel.findOneAndUpdate(
-        {},
-        {
-          $inc: {
-            completedOrders: 1,
-            productsSold: 1,
-            activeOrders: -1
-          }
-        },
-        { new: true, upsert: true }
-      );
-    }
+    subOrder.status.push({ name: newStatus, createdAt: new Date() });
+    subOrder.crrStatus = newStatus;
+
+
     await order.save();
 
     return res.status(200).json({ success: true, order });
@@ -436,9 +425,46 @@ exports.updateProductOrderStatus = async (req, res) => {
   }
 };
 
+exports.respondToProductOrderDelivery = asyncHandler(async (req, res) => {
+  const { orderId, productId, response } = req.body;
+  const order = await productOrderModel.findById(orderId);
+  if (!order) return res.status(404).json({ success: false, error: "Order not found" });
+
+  const subOrder = order.products.id(productId);
+  if (!subOrder) return res.status(404).json({ success: false, error: "Product not found in order" });
+
+  if (response === "yes") {
+    subOrder.status.push({ name: 'Completed', createdAt: new Date() });
+    subOrder.crrStatus = "Completed";
+
+    await adminSettingsModel.findOneAndUpdate(
+      {},
+      {
+        $inc: {
+          completedOrders: 1,
+          productsSold: 1,
+          activeOrders: -1
+        }
+      },
+      { new: true, upsert: true }
+    );
+
+  }
+  else if (response === "no") {
+    subOrder.status.push({ name: "Delivery Rejected (Buyer hasn't received Item yet)", createdAt: new Date() });
+    subOrder.status.push({ name: 'Shipped', createdAt: new Date() });
+    subOrder.crrStatus = "Shipped"
+  }
+
+  await order.save();
+
+  return res.status(200).json({ success: true, order });
+
+})
+
 exports.cancelProductOrder = async (req, res) => {
   try {
-    const { orderId, productId, cancellationReason } = req.body;
+    const { orderId, productId, cancellationReason, cancellationFrom } = req.body;
     const order = await productOrderModel.findById(orderId);
     if (!order) return res.status(404).json({ success: false, error: "Order not found" });
 
@@ -453,8 +479,32 @@ exports.cancelProductOrder = async (req, res) => {
       return res.status(400).json({ success: false, error: "Order is already Cancelled" });
     }
 
+    subOrder.status.push({ name: 'On Hold', createdAt: new Date() });
+    subOrder.crrStatus = 'On Hold';
+    subOrder.cancellationReason = cancellationReason;
+    subOrder.cancellationFrom = cancellationFrom;
+
+    await order.save();
+
+    return res.status(200).json({ success: true, order });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, error: "Server error" });
+  }
+};
+
+exports.responseToProductOrderCancellation = asyncHandler(async (req, res) => {
+  const { orderId, productId, response } = req.body;
+  const order = await productOrderModel.findById(orderId);
+  if (!order) return res.status(404).json({ success: false, error: "Order not found" });
+
+  const subOrder = order.products.id(productId);
+  if (!subOrder) return res.status(404).json({ success: false, error: "Product not found in order" });
+
+  if (response === "yes") {
     subOrder.status.push({ name: 'Cancelled', createdAt: new Date() });
-    subOrder.crrStatus = 'Cancelled';
+    subOrder.crrStatus = "Cancelled";
+
     await adminSettingsModel.findOneAndUpdate(
       {},
       {
@@ -465,15 +515,20 @@ exports.cancelProductOrder = async (req, res) => {
       },
       { new: true, upsert: true }
     );
-    subOrder.cancellationReason = cancellationReason;
-    await order.save();
 
-    return res.status(200).json({ success: true, order });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ success: false, error: "Server error" });
   }
-};
+  else if (response === "no") {
+    const previousStatus = subOrder.status[subOrder.status.length - 2].name;
+    subOrder.crrStatus = previousStatus
+    subOrder.status.push({ name: "Cancellation Request Rejected!", createdAt: new Date() });
+    subOrder.status.push({ name: previousStatus, createdAt: new Date() });
+  }
+
+  await order.save();
+
+  return res.status(200).json({ success: true, order });
+
+})
 
 exports.saveServiceOrderAnswers = async (req, res) => {
   try {
