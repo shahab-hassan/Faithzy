@@ -41,6 +41,7 @@ app.use("/api/v1/chats", require("./routes/chatRoute.js"));
 app.use("/api/v1/admins", require("./routes/adminRoute.js"));
 app.use("/api/v1/settings/admin", require("./routes/adminSettingsRoute.js"));
 app.use("/api/v1/coupons", require("./routes/couponRoute.js"));
+app.use("/api/v1/reviews", require("./routes/reviewRoute.js"));
 
 app.use(errorHandler);
 

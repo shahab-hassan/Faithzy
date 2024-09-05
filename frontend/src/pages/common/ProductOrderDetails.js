@@ -7,6 +7,8 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { FaUserCircle } from "react-icons/fa";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md"
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { FaStar } from "react-icons/fa";
+import LeaveReview from '../../components/common/LeaveReview';
 
 const ProductOrderDetails = ({ isBuyer }) => {
 
@@ -98,7 +100,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
         orderId: order._id,
         productId,
         cancellationReason,
-        cancellationFrom: isBuyer? "Buyer":"Seller"
+        cancellationFrom: isBuyer ? "Buyer" : "Seller"
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -134,6 +136,8 @@ const ProductOrderDetails = ({ isBuyer }) => {
 
   const orderStatusDetailsSeller = order && !isBuyer && subOrder && showStatusDetails && (
     <div className='orderStatusDetails'>
+
+      <LeaveReview subOrderId={subOrder._id} productId={showStatusDetails.productId} sellerId={showStatusDetails.sellerId} isBuyer={isBuyer} />
 
       <h2 className="secondaryHeading"><span>Order</span> Status</h2>
 
@@ -176,6 +180,8 @@ const ProductOrderDetails = ({ isBuyer }) => {
   const orderStatusDetailsBuyer = order && isBuyer && showStatusDetails && (
     <div className='orderStatusDetails'>
 
+      <LeaveReview productId={showStatusDetails.productId} sellerId={showStatusDetails.sellerId} isBuyer={isBuyer} />
+
       <h2 className="secondaryHeading"><span>Track</span> Order</h2>
 
       {showStatusDetails.status.map((status, index) => (
@@ -210,7 +216,6 @@ const ProductOrderDetails = ({ isBuyer }) => {
     </div>
   );
 
-
   const SellerProductOrder = order && !isBuyer && <div className="sellerProductOrderCard sellerProductOrderDetailsCard">
 
     <div>
@@ -220,25 +225,30 @@ const ProductOrderDetails = ({ isBuyer }) => {
         <div className="horizontalLine"></div>
       </div>}
 
-      {subOrder.status[subOrder.status.length - 1].name === "On Hold" && 
-          (subOrder.cancellationFrom === "Buyer" && !isBuyer) &&
-          <div className="statusAction">
-            <h2 className="secondaryHeading">{order.userId?.username} wants to <span>Cancel the Order!</span></h2>
-            <div><span className='fw600'>Reason: </span>{subOrder.cancellationReason}</div>
-            <p>Note: Clicking "Ok, Cancel" will cancel the Order and payment will be returned to Buyer!</p>
-            <div className="btns">
-              <button className='primaryBtn' onClick={() => handleResponseToCancellation(subOrder._id, "yes")}>Ok, cancel</button>
-              <button className='dangerBtn' onClick={() => handleResponseToCancellation(subOrder._id, "no")}>No, don't cancel</button>
-            </div>
-          <div className="horizontalLine"></div>
-          </div>}
+      {subOrder.status[subOrder.status.length - 1].name === "Completed" && <div className="statusAction">
+        <h2 className="secondaryHeading"><span>Congratulations!</span> You have earned <span>${subOrder.sellerToGet.total}</span>! You will receive your funds within 3 working days.</h2>
+        <div className="horizontalLine"></div>
+      </div>}
 
-          {subOrder.status[subOrder.status.length - 1].name === "On Hold" && 
-          (subOrder.cancellationFrom === "Seller" && !isBuyer) &&
-          <div className="statusAction">
-            <h2 className="secondaryHeading">Your <span>order cancellation</span> request has been sent to Buyer. Order will be <span>cancelled</span> once buyer accepts!</h2>
+      {subOrder.status[subOrder.status.length - 1].name === "On Hold" &&
+        (subOrder.cancellationFrom === "Buyer" && !isBuyer) &&
+        <div className="statusAction">
+          <h2 className="secondaryHeading">{order.userId?.username} wants to <span>Cancel the Order!</span></h2>
+          <div><span className='fw600'>Reason: </span>{subOrder.cancellationReason}</div>
+          <p>Note: Clicking "Ok, Cancel" will cancel the Order and payment will be returned to Buyer!</p>
+          <div className="btns">
+            <button className='primaryBtn' onClick={() => handleResponseToCancellation(subOrder._id, "yes")}>Ok, cancel</button>
+            <button className='dangerBtn' onClick={() => handleResponseToCancellation(subOrder._id, "no")}>No, don't cancel</button>
+          </div>
           <div className="horizontalLine"></div>
-          </div>}
+        </div>}
+
+      {subOrder.status[subOrder.status.length - 1].name === "On Hold" &&
+        (subOrder.cancellationFrom === "Seller" && !isBuyer) &&
+        <div className="statusAction">
+          <h2 className="secondaryHeading">Your <span>order cancellation</span> request has been sent to Buyer. Order will be <span>cancelled</span> once buyer accepts!</h2>
+          <div className="horizontalLine"></div>
+        </div>}
 
       <div className="order">
 
@@ -299,28 +309,28 @@ const ProductOrderDetails = ({ isBuyer }) => {
               <button className='primaryBtn' onClick={() => handleResponseToDelivery(product._id, "yes")}>Yes, Received</button>
               <button className='dangerBtn' onClick={() => handleResponseToDelivery(product._id, "no")}>Not Received</button>
             </div>
-          <div className="horizontalLine"></div>
+            <div className="horizontalLine"></div>
           </div>}
 
-          {product.status[product.status.length - 1].name === "On Hold" && 
-          (product.cancellationFrom === "Seller" && isBuyer) &&
-          <div className="statusAction">
-            <h2 className="secondaryHeading">{product.productId.sellerId.userId?.username} wants to <span>Cancel the Order!</span></h2>
-            <div><span className='fw600'>Reason: </span>{product.cancellationReason}</div>
-            <p>Note: Clicking "Ok, Cancel" will cancel the Order and payment will be returned to Buyer!</p>
-            <div className="btns">
-              <button className='primaryBtn' onClick={() => handleResponseToCancellation(product._id, "yes")}>Ok, cancel</button>
-              <button className='dangerBtn' onClick={() => handleResponseToCancellation(product._id, "no")}>No, don't cancel</button>
-            </div>
-          <div className="horizontalLine"></div>
-          </div>}
+          {product.status[product.status.length - 1].name === "On Hold" &&
+            (product.cancellationFrom === "Seller" && isBuyer) &&
+            <div className="statusAction">
+              <h2 className="secondaryHeading">{product.productId.sellerId.userId?.username} wants to <span>Cancel the Order!</span></h2>
+              <div><span className='fw600'>Reason: </span>{product.cancellationReason}</div>
+              <p>Note: Clicking "Ok, Cancel" will cancel the Order and payment will be returned to Buyer!</p>
+              <div className="btns">
+                <button className='primaryBtn' onClick={() => handleResponseToCancellation(product._id, "yes")}>Ok, cancel</button>
+                <button className='dangerBtn' onClick={() => handleResponseToCancellation(product._id, "no")}>No, don't cancel</button>
+              </div>
+              <div className="horizontalLine"></div>
+            </div>}
 
-          {product.status[product.status.length - 1].name === "On Hold" && 
-          (product.cancellationFrom === "Buyer" && isBuyer) &&
-          <div className="statusAction">
-            <h2 className="secondaryHeading">Your <span>order cancellation</span> request has been sent to Seller. Order will be <span>cancelled</span> once seller accepts!</h2>
-          <div className="horizontalLine"></div>
-          </div>}
+          {product.status[product.status.length - 1].name === "On Hold" &&
+            (product.cancellationFrom === "Buyer" && isBuyer) &&
+            <div className="statusAction">
+              <h2 className="secondaryHeading">Your <span>order cancellation</span> request has been sent to Seller. Order will be <span>cancelled</span> once seller accepts!</h2>
+              <div className="horizontalLine"></div>
+            </div>}
 
           <div className="order">
             <div className="left">
