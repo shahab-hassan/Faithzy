@@ -119,7 +119,7 @@ function ServiceDetails() {
 
                         <div className='ratingsDiv'>
                             <FaStar className='starIconFilled' />
-                            <span>{`${service.rating} (${service.noOfReviews} users feedback)`}</span>
+                            <span>{`${service.rating.toFixed(1)} (${service.noOfReviews} users feedback)`}</span>
                         </div>
 
                         <p className="title">{service.title}</p>

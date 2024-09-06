@@ -117,7 +117,7 @@ function Profile() {
                             <div className="row"><span>Username</span><span className='fw600'>{seller?.userId?.username}</span></div>
                             <div className="row"><span>Rating</span><div className='ratingsDiv'>
                                 <FaStar className='starIconFilled' />
-                                <span className='fw600'>{`${4.8} (${108})`}</span>
+                                <span className='fw600'>{`${seller?.rating?.toFixed(1)} (${seller?.noOfReviews})`}</span>
                             </div></div>
                             <div className="horizontalLine"></div>
                             <div className="row"><span>Country</span><span className='fw600'>{seller?.country}</span></div>

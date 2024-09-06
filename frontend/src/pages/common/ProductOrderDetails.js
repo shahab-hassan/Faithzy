@@ -7,7 +7,6 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { FaUserCircle } from "react-icons/fa";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md"
 import { IoIosCloseCircleOutline } from "react-icons/io";
-import { FaStar } from "react-icons/fa";
 import LeaveReview from '../../components/common/LeaveReview';
 
 const ProductOrderDetails = ({ isBuyer }) => {
@@ -180,7 +179,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
   const orderStatusDetailsBuyer = order && isBuyer && showStatusDetails && (
     <div className='orderStatusDetails'>
 
-      <LeaveReview productId={showStatusDetails.productId} sellerId={showStatusDetails.sellerId} isBuyer={isBuyer} />
+      <LeaveReview subOrderId={showStatusDetails._id} productId={showStatusDetails.productId} sellerId={showStatusDetails.sellerId} isBuyer={isBuyer} />
 
       <h2 className="secondaryHeading"><span>Track</span> Order</h2>
 

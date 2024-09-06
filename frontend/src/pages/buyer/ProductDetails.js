@@ -116,7 +116,7 @@ function ProductDetails() {
 
               <div className='ratingsDiv'>
                 <FaStar className='starIconFilled' />
-                <span>{`${product.rating} (${product.noOfReviews} users feedback)`}</span>
+                <span>{`${product.rating.toFixed(1)} (${product.noOfReviews} users feedback)`}</span>
               </div>
 
               <p className="productTitle">{product.title}</p>

@@ -307,7 +307,6 @@ const ChatPage = () => {
                 enqueueSnackbar(error?.response?.data?.error || "Failed to send offer!", { variant: "error" });
             });
     };
-    console.log(selectedParticipant);
 
     if (!user && !admin) return <div>Loading</div>
 

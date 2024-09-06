@@ -504,3 +504,26 @@
 .serviceOrderDetailsDiv .left .history .activity .details .deliveryImages img{
     width: 50px;
 }
+
+.orderDetailsDiv .orderStatusDetails .leaveReviewDiv{
+    margin: 10px 0px;
+}
+.orderDetailsDiv .orderStatusDetails .leaveReviewDiv .leaveReviewContent{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.orderDetailsDiv .orderStatusDetails .leaveReviewDiv .leaveReviewContent .starsDiv{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.orderDetailsDiv .orderStatusDetails .leaveReviewDiv .leaveReviewContent .sellerReply{
+    margin-top: 8px;
+    background: var(--lightGray);
+    padding: 12px 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}

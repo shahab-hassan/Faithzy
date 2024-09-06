@@ -169,7 +169,6 @@ function Coupons() {
         : <div className="row">Nothing to show here...</div>;
 
     const getMinScheduledDate = () => {
-        console.log(newCoupon.expiry);
         if (!newCoupon.expiry) return today; // Return today's date if expiry is not set
 
         const expiryDate = new Date(newCoupon.expiry);

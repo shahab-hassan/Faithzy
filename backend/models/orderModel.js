@@ -22,7 +22,8 @@ const productOrder = new mongoose.Schema({
   crrStatus: {type: String, required: true, default: "Active"},
   netProfit: {type: Number, required: true, default: 0},
   cancellationReason: String,
-  cancellationFrom: {type: String, enum: ["Buyer", "Seller"]}
+  cancellationFrom: {type: String, enum: ["Buyer", "Seller"]},
+  isReviewSubmitted: {type: Boolean, default: false}
 })
 
 const productOrderSchema = new mongoose.Schema({

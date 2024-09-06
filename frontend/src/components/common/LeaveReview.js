@@ -10,9 +10,10 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
     const [reviewSubmitted, setReviewSubmitted] = useState(false);
     const [existingReview, setExistingReview] = useState(null);
     const [reply, setReply] = useState('');
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
-        axios.get(`/api/review/${productId}/${sellerId}`)
+        axios.get(`http://localhost:5000/api/v1/reviews/order/product/${sellerId}/${subOrderId}`, { headers: { Authorization: `Bearer ${token}` } })
             .then((response) => {
                 if (response.data.review) {
                     setExistingReview(response.data.review);
@@ -22,7 +23,7 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
             .catch((error) => {
                 console.error('Error fetching review:', error);
             });
-    }, [productId, sellerId]);
+    }, [token, sellerId, subOrderId]);
 
     const handleRatingSubmit = () => {
         if (!rating || comment.trim().length < 1) {
@@ -38,30 +39,33 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
             subOrderId
         };
 
-        axios.post(`/api/review`, reviewData)
+        axios.post(`http://localhost:5000/api/v1/reviews/product/new`, reviewData, { headers: { Authorization: `Bearer ${token}` } })
             .then((response) => {
                 enqueueSnackbar('Review submitted successfully!', { variant: 'success' });
                 setExistingReview(response.data.review);
                 setReviewSubmitted(true);
             })
-            .catch((error) => {
+            .catch((e) => {
+                console.log(e);
                 enqueueSnackbar('Error submitting review', { variant: 'error' });
             });
     };
 
     const handleReplySubmit = () => {
-        axios.put(`/api/review/reply/${existingReview._id}`, { reply })
+        axios.put(`http://localhost:5000/api/v1/reviews/review/reply/${subOrderId}`, { reply }, { headers: { Authorization: `Bearer ${token}` } })
             .then((response) => {
                 enqueueSnackbar('Reply added successfully!', { variant: 'success' });
                 setExistingReview(response.data.updatedReview);
             })
-            .catch((error) => {
+            .catch((e) => {
+                console.log(e);
                 enqueueSnackbar('Error submitting reply', { variant: 'error' });
             });
     };
 
     return (
         <div className="leaveReviewDiv">
+
             {isBuyer && !reviewSubmitted && (
                 <div className="leaveReviewContent">
 
@@ -72,24 +76,26 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
                             return (
                                 <FaStar
                                     key={index}
-                                    size={30}
+                                    size={40}
                                     onMouseEnter={() => setHover(ratingValue)}
                                     onMouseLeave={() => setHover(null)}
                                     onClick={() => setRating(ratingValue)}
                                     color={ratingValue <= (hover || rating) ? '#ffc107' : '#e4e5e9'}
+                                    style={{ cursor: "pointer" }}
                                     className="star"
                                 />
                             );
                         })}
                     </div>
-                    <textarea
-                        placeholder="Leave a comment"
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                    />
-                    <button onClick={handleRatingSubmit} className='primaryBtn'>
-                        Submit
-                    </button>
+                    <div className="form">
+                        <textarea
+                            placeholder="Leave a comment"
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            className='inputField'
+                        />
+                        <button onClick={handleRatingSubmit} className='primaryBtn'>Submit</button>
+                    </div>
 
                     <div className="horizontalLine"></div>
 
@@ -104,12 +110,18 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
                         {[...Array(5)].map((_, index) => (
                             <FaStar
                                 key={index}
-                                size={30}
+                                size={40}
                                 color={index + 1 <= existingReview.rating ? '#ffc107' : '#e4e5e9'}
+                                className='star'
                             />
                         ))}
                     </div>
-                    <p>{existingReview.comment}</p>
+                    <div>{existingReview.comment}</div>
+                    {existingReview.reply && <div className='sellerReply'>
+                        <h2 className='secondaryHeading'>Seller <span>Response</span></h2>
+                        <p>{existingReview.reply}</p>
+                    </div>
+                    }
 
                     <div className="horizontalLine"></div>
 
@@ -124,27 +136,34 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
                         {[...Array(5)].map((_, index) => (
                             <FaStar
                                 key={index}
-                                size={30}
+                                size={40}
                                 color={index + 1 <= existingReview.rating ? '#ffc107' : '#e4e5e9'}
+                                className='star'
                             />
                         ))}
                     </div>
                     <p>{existingReview.comment}</p>
 
-                    <h2>Reply to Review</h2>
-                    <textarea
-                        placeholder="Leave a reply"
-                        value={reply}
-                        onChange={(e) => setReply(e.target.value)}
-                    />
-                    <button onClick={handleReplySubmit} className='secondaryBtn'>
-                        Submit Reply
-                    </button>
+                    {!existingReview.reply ? <div className='sellerReply form'> <h2 className='secondaryHeading'>Reply to <span>Review</span></h2>
+                        <textarea
+                            placeholder="Leave a reply"
+                            value={reply}
+                            onChange={(e) => setReply(e.target.value)}
+                            className='inputField'
+                        />
+                        <button onClick={handleReplySubmit} className='secondaryBtn'>Submit Reply</button>
+                    </div> :
+
+                        <div className='sellerReply'> <h2 className='secondaryHeading'>Your <span>Reply</span></h2>
+                            <p>{existingReview.reply}</p>
+                        </div>
+                    }
 
                     <div className="horizontalLine"></div>
 
                 </div>
             )}
+
         </div>
     );
 };

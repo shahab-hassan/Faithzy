@@ -35,7 +35,6 @@ exports.sendMessage = asyncHandler(async (req, res) => {
             senderChat = new Chat({ isAdmin: false, userId: senderId, chats: [] });
         }
 
-        console.log("here");
         let senderReceiverChat = senderChat.chats.find(c => c.participantId?.toString() === receiverId || c.adminParticipantId?.toString() === receiverId);
         if (!senderReceiverChat) {
 
