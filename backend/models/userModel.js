@@ -27,7 +27,7 @@ const userSchema = mongoose.Schema({
         enum: ['buyer', 'seller', 'admin'],
         default: "buyer",
     },
-    sellerId: { type: mongoose.Schema.ObjectId, ref: "Seller"},
+    sellerId: { type: mongoose.Schema.ObjectId, ref: "Seller" },
     googleId: {
         type: String,
     },
@@ -43,7 +43,7 @@ const userSchema = mongoose.Schema({
     }
 )
 
-userSchema.methods.getResetPasswordToken = function() {
+userSchema.methods.getResetPasswordToken = function () {
     const resetToken = crypto.randomBytes(20).toString("hex");
 
     this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
@@ -59,6 +59,6 @@ userSchema.methods.getResetPasswordToken = function() {
 //     this.password = await bcrypt.hash(this.password, 10);
 //     next();
 // });
-  
+
 
 module.exports = mongoose.model("User", userSchema);

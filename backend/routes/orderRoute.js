@@ -55,8 +55,8 @@ router.get("/seller/product/:id", authorized, getSellerProductOrder);
 router.get("/seller/service/all", authorized, getSellerServiceOrders);
 router.get("/seller/service/:id", authorized, getSellerServiceOrder);
 
-router.put("/product/status", authorized, authorizedRoles("seller"), updateProductOrderStatus);
-router.put("/product/delivery/response", authorized, authorizedRoles("seller"), respondToProductOrderDelivery);
+router.put("/product/status", authorized, updateProductOrderStatus);
+router.put("/product/delivery/response", authorized, respondToProductOrderDelivery);
 router.put("/product/cancel", authorized, cancelProductOrder);
 router.put("/product/cancel/response", authorized, responseToProductOrderCancellation);
 

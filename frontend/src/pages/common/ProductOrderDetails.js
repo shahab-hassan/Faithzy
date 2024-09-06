@@ -7,7 +7,7 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { FaUserCircle } from "react-icons/fa";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md"
 import { IoIosCloseCircleOutline } from "react-icons/io";
-import LeaveReview from '../../components/common/LeaveReview';
+import LeaveProductReview from '../../components/common/LeaveProductReview';
 
 const ProductOrderDetails = ({ isBuyer }) => {
 
@@ -136,7 +136,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
   const orderStatusDetailsSeller = order && !isBuyer && subOrder && showStatusDetails && (
     <div className='orderStatusDetails'>
 
-      <LeaveReview subOrderId={subOrder._id} productId={showStatusDetails.productId} sellerId={showStatusDetails.sellerId} isBuyer={isBuyer} />
+      {subOrder.status[subOrder.status.length - 1].name === 'Completed' && <LeaveProductReview subOrderId={subOrder._id} productId={showStatusDetails.productId} sellerId={showStatusDetails.sellerId} isBuyer={isBuyer} />}
 
       <h2 className="secondaryHeading"><span>Order</span> Status</h2>
 
@@ -179,7 +179,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
   const orderStatusDetailsBuyer = order && isBuyer && showStatusDetails && (
     <div className='orderStatusDetails'>
 
-      <LeaveReview subOrderId={showStatusDetails._id} productId={showStatusDetails.productId} sellerId={showStatusDetails.sellerId} isBuyer={isBuyer} />
+      {showStatusDetails.status[showStatusDetails.status.length - 1].name === 'Completed' && <LeaveProductReview subOrderId={showStatusDetails._id} productId={showStatusDetails.productId} sellerId={showStatusDetails.sellerId} isBuyer={isBuyer} />}
 
       <h2 className="secondaryHeading"><span>Track</span> Order</h2>
 

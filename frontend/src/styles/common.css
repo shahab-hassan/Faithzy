@@ -505,20 +505,20 @@
     width: 50px;
 }
 
-.orderDetailsDiv .orderStatusDetails .leaveReviewDiv{
-    margin: 10px 0px;
-}
-.orderDetailsDiv .orderStatusDetails .leaveReviewDiv .leaveReviewContent{
+.orderDetailsDiv .orderStatusDetails .leaveReviewDiv .leaveReviewContent,
+.serviceOrderDetailsDiv .left .leaveReviewDiv .leaveReviewContent{
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-.orderDetailsDiv .orderStatusDetails .leaveReviewDiv .leaveReviewContent .starsDiv{
+.orderDetailsDiv .orderStatusDetails .leaveReviewDiv .leaveReviewContent .starsDiv,
+.serviceOrderDetailsDiv .left .leaveReviewDiv .leaveReviewContent .starsDiv{
     display: flex;
     align-items: center;
     gap: 10px;
 }
-.orderDetailsDiv .orderStatusDetails .leaveReviewDiv .leaveReviewContent .sellerReply{
+.orderDetailsDiv .orderStatusDetails .leaveReviewDiv .leaveReviewContent .sellerReply,
+.serviceOrderDetailsDiv .left .leaveReviewDiv .leaveReviewContent .sellerReply{
     margin-top: 8px;
     background: var(--lightGray);
     padding: 12px 20px;
@@ -526,4 +526,77 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+.orderDetailsDiv .orderStatusDetails .leaveReviewDiv .leaveReviewContent .horizontalLine,
+.serviceOrderDetailsDiv .left .leaveReviewDiv .leaveReviewContent .horizontalLine{
+    margin-top: 10px;
+}
+
+
+
+
+
+
+
+/* ********************* REVIEWS COMPONENT ********************* */
+
+.reviewDiv{
+    padding-bottom: 20px;
+}
+.reviewDiv .ratings{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+.reviewDiv .ratings div{
+    display: flex;
+    gap: 8px;
+}
+.reviewDiv .userReviews{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.reviewDiv .userReview{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.reviewDiv .userReview .upper{
+    display: flex;
+    justify-content: space-between;
+}
+.reviewDiv .userReview .upper img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.reviewDiv .userReview .upper .date{
+    color: var(--darkGray);
+}
+.reviewDiv .userReview .upper .aboutUser{
+    display: flex;
+    gap: 20px;
+}
+.reviewDiv .userReview .upper .aboutUser .userInfo{
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.reviewDiv .userReview .upper .aboutUser .userInfo .starsDiv{
+    display: flex;
+    gap: 5px;
+}
+.reviewDiv .userReview .sellerResponse{
+    padding: 12px 20px;
+    background: var(--lightGray);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.reviewDiv .userReview .sellerResponse .secondaryHeading{
+    font-size: 1.1rem;
 }

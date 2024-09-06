@@ -48,7 +48,7 @@ function ServiceCard({ item }) {
                 <div className="serviceLower">
                     <div className='serviceLowerTop'>
                         <FaStar className='starIconFilled' />
-                        <p>{item.rating.toFixed(1)}</p><span>({item.noOfReviews})</span>
+                        <p>{item?.rating?.toFixed(1)}</p><span>({item.noOfReviews})</span>
                     </div>
                     <div className="serviceLowerBottom">
                         {/* {item.discountPercent !== 0 && <p className='serviceDiscount'>{`$${item.price}`}</p>} */}

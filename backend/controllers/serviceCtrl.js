@@ -105,12 +105,6 @@ exports.createService = asyncHandler(async (req, res) => {
 
     const newService = await service.save();
 
-    await adminSettingsModel.findOneAndUpdate(
-      {},
-      { $inc: { activeServices: 1 } },
-      { new: true, upsert: true }
-    );
-
     res.status(200).json({
       success: true,
       message: "Post Created",
@@ -214,11 +208,6 @@ exports.deleteService = asyncHandler(async (req, res) => {
   );
 
   await serviceModel.findByIdAndDelete(service._id);
-
-  await adminSettingsModel.findOneAndUpdate(
-    {},
-    { $inc: { activeServices: -1 } }
-  );
 
   res.status(200).json({
     success: true,

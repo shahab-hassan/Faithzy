@@ -867,8 +867,9 @@
     border-color: var(--primaryCopper);
 }
 
-.productDetailsDiv .lower .innerLower{
-    padding: 25px;
+.productDetailsDiv .lower .innerLower,
+.productDetailsDiv .lower .productReviews{
+    padding: 35px;
 }
 
 
@@ -1775,6 +1776,17 @@
     margin: 0;
     margin-bottom: 80px;
 }
+.serviceDetailsDiv .serviceReviews{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--white);
+    border-radius: 8px;
+    padding: 20px 30px;
+}
+.serviceDetailsDiv .serviceReviews .reviewDiv{
+    margin-top: 20px;
+}
 
 
 
@@ -1907,6 +1919,7 @@
     font-size: 0.7rem;
     color: var(--darkGray);
     margin-top: 5px;
+    font-weight: 400;
 }
 
 .chatDiv .chatRoom .content{
@@ -2185,4 +2198,16 @@
 .profileDiv .sellerServices .services .service,
 .profileDiv .sellerProducts .products .product{
     width: 100%;
+}
+
+.profileDiv .sellerReviews{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--white);
+    border-radius: 8px;
+    padding: 20px 30px;
+}
+.profileDiv .sellerReviews .reviewDiv{
+    margin-top: 20px;
 }

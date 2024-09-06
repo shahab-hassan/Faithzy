@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { authorized, authorizedRoles } = require('../middlewares/authorization');
+const { authorized } = require('../middlewares/authorization');
 const { postRequest, editRequest, deleteRequest, getAllRequests, getUserRequests, getRequest, getRequestOffers, postOffer, editOffer, deleteOffer, getSellerOffers } = require('../controllers/tradeleadCtrl');
 
 router.get('/requests/all', authorized, getAllRequests);

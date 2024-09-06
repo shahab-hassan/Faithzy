@@ -96,16 +96,6 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
 
   await newOrder.save();
 
-  await adminSettingsModel.findOneAndUpdate(
-    {},
-    {
-      $inc: {
-        activeOrders: products.length
-      }
-    },
-    { new: true, upsert: true }
-  );
-
 
   // if (products.some(product => product.product)) {
   //   await cartModel.findOneAndUpdate({ userId }, { products: [] });
@@ -183,12 +173,6 @@ exports.createServiceOrder = asyncHandler(async (req, res) => {
     isDone: true,
     createdAt: new Date()
   });
-
-  await adminSettingsModel.findOneAndUpdate(
-    {},
-    { $inc: { activeOrders: 1 } },
-    { new: true, upsert: true }
-  );
 
   newOrder.service.history.unshift({
     name: "requirementsRequired",
@@ -436,19 +420,6 @@ exports.respondToProductOrderDelivery = asyncHandler(async (req, res) => {
   if (response === "yes") {
     subOrder.status.push({ name: 'Completed', createdAt: new Date() });
     subOrder.crrStatus = "Completed";
-
-    await adminSettingsModel.findOneAndUpdate(
-      {},
-      {
-        $inc: {
-          completedOrders: 1,
-          productsSold: 1,
-          activeOrders: -1
-        }
-      },
-      { new: true, upsert: true }
-    );
-
   }
   else if (response === "no") {
     subOrder.status.push({ name: "Delivery Rejected (Buyer hasn't received Item yet)", createdAt: new Date() });
@@ -504,18 +475,6 @@ exports.responseToProductOrderCancellation = asyncHandler(async (req, res) => {
   if (response === "yes") {
     subOrder.status.push({ name: 'Cancelled', createdAt: new Date() });
     subOrder.crrStatus = "Cancelled";
-
-    await adminSettingsModel.findOneAndUpdate(
-      {},
-      {
-        $inc: {
-          cancelledOrders: 1,
-          activeOrders: -1
-        }
-      },
-      { new: true, upsert: true }
-    );
-
   }
   else if (response === "no") {
     const previousStatus = subOrder.status[subOrder.status.length - 2].name;
@@ -682,10 +641,6 @@ exports.sendDelivery = async (req, res) => {
     });
     order.service.status.push({ name: "Delivered", createdAt: Date.now() })
     order.service.crrStatus = 'Delivered';
-    await adminSettingsModel.findOneAndUpdate(
-      {},
-      { $inc: { activeOrders: -1 } },
-    );
 
     await order.save();
     res.status(200).json({ success: true, order });
@@ -720,25 +675,10 @@ exports.respondToDelivery = asyncHandler(async (req, res) => {
         isDone: true,
         createdAt: new Date()
       });
-      await adminSettingsModel.findOneAndUpdate(
-        {},
-        {
-          $inc: {
-            completedOrders: 1,
-            servicesDone: 1,
-          }
-        },
-        { new: true, upsert: true }
-      );
     }
     else if (response === 'decline') {
       order.service.status.push({ name: "Active", createdAt: Date.now() });
       order.service.crrStatus = "Active"
-      await adminSettingsModel.findOneAndUpdate(
-        {},
-        { $inc: { activeOrders: 1 } },
-        { new: true, upsert: true }
-      );
       order.service.history.unshift({
         name: 'askedForRevision',
         message: `asked for Revision!`,
@@ -813,16 +753,6 @@ exports.respondToCancellation = asyncHandler(async (req, res) => {
         isDone: true,
         createdAt: new Date()
       });
-      await adminSettingsModel.findOneAndUpdate(
-        {},
-        {
-          $inc: {
-            activeOrders: -1,
-            cancelledOrders: 1
-          }
-        },
-        { new: true, upsert: true }
-      );
 
     }
     else if (response === 'decline') {

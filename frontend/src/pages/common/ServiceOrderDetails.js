@@ -4,6 +4,7 @@ import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md"
 import { IoIosCloseCircleOutline } from 'react-icons/io';
+import LeaveServiceReview from '../../components/common/LeaveServiceReview';
 
 import Gallery from "../../components/seller/Gallery"
 
@@ -398,6 +399,7 @@ function ServiceOrderDetails({ isBuyer }) {
         <div className="serviceOrderDetailsContent">
 
           <div className="left">
+            {order.service.status[order.service.status.length - 1].name === "Completed" && <LeaveServiceReview orderId={order._id} sellerId={order?.service?.serviceId?.sellerId?._id || order?.service?.serviceId?.sellerId} serviceId={order?.service?.serviceId} isBuyer={isBuyer} />}
             <h2 className="secondaryHeading"><span>Order</span> History</h2>
             <div className="horizontalLine"></div>
             <div className="history">
@@ -436,7 +438,7 @@ function ServiceOrderDetails({ isBuyer }) {
               <div className="actions">
                 <Link to={`/chat?p=${!isBuyer ? order?.userId?._id : order?.service?.serviceId?.sellerId?.userId?._id}`} className='primaryBtn'>{`Contact ${isBuyer ? "Seller" : "Buyer"}`}</Link>
                 <button className='secondaryBtn' disabled={crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Cancelled"}>Start Dispute</button>
-                <button className='dangerBtn' onClick={() => setShowCancelModel(true)} disabled={cancellationPending || crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Cancelled"}>{isBuyer ? "Cancel Order" : "Ask to Cancel"}</button>
+                <button className='dangerBtn' onClick={() => setShowCancelModel(true)} disabled={cancellationPending || crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Delivered" || crrStatus === "Cancelled"}>{isBuyer ? "Cancel Order" : "Ask to Cancel"}</button>
               </div>
             </div>
 
@@ -458,7 +460,7 @@ function ServiceOrderDetails({ isBuyer }) {
               </div>
               {!isBuyer && <div className="actions">
                 <button className='primaryBtn' disabled={crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Delivered" || crrStatus === "Cancelled"} onClick={() => setShowDeliveryModel(true)}>Deliver Now</button>
-                <button className='primaryBtn2' disabled={extensionPending || crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Cancelled"} onClick={() => setShowExtensionModel(true)}>Ask For Extension</button>
+                <button className='primaryBtn2' disabled={extensionPending || crrStatus === "InDispute" || crrStatus === "Delivered" || crrStatus === "Completed" || crrStatus === "Cancelled"} onClick={() => setShowExtensionModel(true)}>Ask For Extension</button>
               </div>}
             </div>
 

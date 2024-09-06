@@ -22,10 +22,10 @@ router.route("/profile/myServices/:id")
 .get(getSellerServicesById)
 
 router.route("/seller/myServices/all/")
-.get(authorized, authorizedRoles("seller"), getMySellerServices)
+.get(authorized, getMySellerServices)
 
 router.route("/seller/service/new")
-.post(authorized, authorizedRoles("seller"), (req, res, next) => {
+.post(authorized, (req, res, next) => {
     upload.array('serviceImages', 5)(req, res, function (err) {
       if (err)
         return next(err);
@@ -34,14 +34,14 @@ router.route("/seller/service/new")
   })
 
 router.route("/seller/service/:id")
-.put(authorized, authorizedRoles("seller"), (req, res, next) => {
+.put(authorized, (req, res, next) => {
     upload.array('serviceImages', 5)(req, res, function (err) {
       if (err)
         return next(err);
       updateService(req, res, next);
     });
   })
-.delete(authorized, authorizedRoles("seller"), deleteService)
+.delete(authorized, deleteService)
 
 router.route("/user/recentlyViewed/")
 .get(authorized, getRecentlyViewedServices)

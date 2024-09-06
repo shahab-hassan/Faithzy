@@ -1,6 +1,9 @@
 const adminSettingsModel = require('../models/adminSettingsModel');
 const { productOrderModel, serviceOrderModel } = require('../models/orderModel');
-const sellerModel = require('../models/sellerModel');
+const Seller = require('../models/sellerModel');
+const Product = require('../models/productModel');
+const Service = require('../models/serviceModel');
+const User = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
 
 
@@ -112,28 +115,37 @@ exports.updateAdminMembership = asyncHandler(async (req, res) => {
     res.status(200).json({ success: true, message: 'Fees updated successfully' });
 });
 
+
 exports.getGeneralDashboardInfo = asyncHandler(async (req, res) => {
     try {
+        const completedOrders = await productOrderModel.countDocuments({ 'products.crrStatus': 'Completed' }) + await serviceOrderModel.countDocuments({ 'service.crrStatus': 'Completed' });
+        const activeOrders = await productOrderModel.countDocuments({ 'products.crrStatus': 'Active' }) + await serviceOrderModel.countDocuments({ 'service.crrStatus': 'Active' });
+        const cancelledOrders = await productOrderModel.countDocuments({ 'products.crrStatus': 'Cancelled' }) + await serviceOrderModel.countDocuments({ 'service.crrStatus': 'Cancelled' });
 
-        const settings = await adminSettingsModel.findOne({});
+        const productsSold = await productOrderModel.countDocuments({ 'products.crrStatus': 'Completed' });
+        const servicesDone = await serviceOrderModel.countDocuments({ 'service.crrStatus': 'Completed' });
 
-        if (!settings) {
-            res.status(404);
-            throw new Error("Settings not found!");
-        }
+        const activeProducts = await Product.countDocuments();
+        const activeServices = await Service.countDocuments();
+
+        const registeredUsers = await User.countDocuments();
+
+        const totalSellers = await Seller.countDocuments();
+        const paidSellers = await Seller.countDocuments({ sellerType: 'Paid' });
 
         res.status(200).json({
-            success: true, generalInfo: {
-                completedOrders: settings.completedOrders,
-                productsSold: settings.productsSold,
-                servicesDone: settings.servicesDone,
-                activeOrders: settings.activeOrders,
-                cancelledOrders: settings.cancelledOrders,
-                activeServices: settings.activeServices,
-                activeProducts: settings.activeProducts,
-                registeredUsers: settings.registeredUsers,
-                totalSellers: settings.totalSellers,
-                paidSellers: settings.paidSellers,
+            success: true,
+            generalInfo: {
+                completedOrders,
+                activeOrders,
+                cancelledOrders,
+                productsSold,
+                servicesDone,
+                activeServices,
+                activeProducts,
+                registeredUsers,
+                totalSellers,
+                paidSellers
             }
         });
 
@@ -180,7 +192,7 @@ exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
         },
         {
             $match: {
-                "products.crrStatus": "Delivered",
+                "products.crrStatus": "Completed",
                 "updatedAt": { $gte: startDate, $lte: endDate }
             }
         },
@@ -236,7 +248,7 @@ exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
         }
     });
 
-    const sellerInvestments = await sellerModel.aggregate([
+    const sellerInvestments = await Seller.aggregate([
         {
             $unwind: "$investment"
         },

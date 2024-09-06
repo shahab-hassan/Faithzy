@@ -61,11 +61,6 @@ exports.registerUser = asyncHandler(async (req, res) => {
     let newUser;
     try {
         newUser = await userModel.create({ username, email, password: hashPassword, role });
-        await adminSettingsModel.findOneAndUpdate(
-            {},
-            { $inc: { registeredUsers: 1 } },
-            { new: true, upsert: true }
-        );
     }
     catch (e) {
         res.status(400)

@@ -111,12 +111,6 @@ exports.createProduct = asyncHandler(async (req, res) => {
 
         const newProduct = await product.save();
 
-        await adminSettingsModel.findOneAndUpdate(
-            {},
-            { $inc: { activeProducts: 1 } },
-            { new: true, upsert: true }
-        );
-
         res.status(200).json({
             success: true,
             message: "Product Created",
@@ -224,11 +218,6 @@ exports.deleteProduct = asyncHandler(async (req, res) => {
     );
 
     await productModel.findByIdAndDelete(product._id);
-
-    await adminSettingsModel.findOneAndUpdate(
-        {},
-        { $inc: { activeProducts: -1 } }
-    );
 
     res.status(200).json({
         success: true,

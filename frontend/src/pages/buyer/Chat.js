@@ -332,7 +332,7 @@ const ChatPage = () => {
                                     </div>
                                     <div>
                                         <div className='fw600'>{chat.participantId?._id === user?._id ? "You - Personal Chat" : chat.participantId? chat.participantId?.username : "Admin"}</div>
-                                        <p className='lastMessage'>
+                                        <p className='lastMessage singleLineText'>
                                             {messages.length > 0 && (chat.participantId?._id === selectedParticipant?._id || chat.adminParticipantId?._id === selectedParticipant?._id) ?
                                                 messages[messages.length - 1]?.offer ? "Custom Offer" : messages[messages.length - 1]?.text !== "" ? messages[messages.length - 1]?.text : "File" :
                                                 chat.messages[chat.messages.length - 1]?.offer ? "Custom Offer" : chat.messages[chat.messages.length - 1]?.text !== "" ? chat.messages[chat.messages.length - 1]?.text : "File"}

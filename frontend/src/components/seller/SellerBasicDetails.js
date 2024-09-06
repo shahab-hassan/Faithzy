@@ -23,7 +23,7 @@ function SellerBasicDetails({ sellerDetails }) {
                             <p>@{sellerDetails.userId.username}</p>
                             <div className="ratingsDiv">
                                 <FaStar className='starIconFilled' />
-                                <span>{sellerDetails.rating.toFixed(1) + " (" + sellerDetails.noOfReviews + ")"}</span>
+                                <span>{sellerDetails?.rating?.toFixed(1) + " (" + sellerDetails.noOfReviews + ")"}</span>
                             </div>
                             <Link to={`/profile/${sellerDetails._id}`} className="primaryBtn2 previewProfileBtn">Preview Profile</Link>
                             <Link to="/settings" className="primaryBtn">Edit Profile</Link>

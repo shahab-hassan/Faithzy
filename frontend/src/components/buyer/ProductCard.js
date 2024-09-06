@@ -75,7 +75,7 @@ function ProductCard({ item }) {
         <div className="productLower">
           <div className='productLowerTop'>
             <FaStar className='starIconFilled' />
-            <p>{item.rating.toFixed(1)}</p><span>({item.noOfReviews})</span>
+            <p>{item?.rating?.toFixed(1)}</p><span>({item.noOfReviews})</span>
             <p>- {item.sold}</p><span>sold</span>
           </div>
           <div className="productLowerBottom">

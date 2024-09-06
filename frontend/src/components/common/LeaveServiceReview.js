@@ -3,7 +3,7 @@ import { FaStar } from 'react-icons/fa';
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
 
-const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
+const LeaveReview = ({ orderId, serviceId, sellerId, isBuyer }) => {
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(null);
     const [comment, setComment] = useState('');
@@ -13,7 +13,7 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
     const token = localStorage.getItem("token");
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/v1/reviews/order/product/${sellerId}/${subOrderId}`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`http://localhost:5000/api/v1/reviews/order/service/${sellerId}/${orderId}`, { headers: { Authorization: `Bearer ${token}` } })
             .then((response) => {
                 if (response.data.review) {
                     setExistingReview(response.data.review);
@@ -23,7 +23,7 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
             .catch((error) => {
                 console.error('Error fetching review:', error);
             });
-    }, [token, sellerId, subOrderId]);
+    }, [token, sellerId, orderId]);
 
     const handleRatingSubmit = () => {
         if (!rating || comment.trim().length < 1) {
@@ -34,12 +34,12 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
         const reviewData = {
             rating,
             comment,
-            productId,
+            serviceId,
             sellerId,
-            subOrderId
+            orderId
         };
 
-        axios.post(`http://localhost:5000/api/v1/reviews/product/new`, reviewData, { headers: { Authorization: `Bearer ${token}` } })
+        axios.post(`http://localhost:5000/api/v1/reviews/service/new`, reviewData, { headers: { Authorization: `Bearer ${token}` } })
             .then((response) => {
                 enqueueSnackbar('Review submitted successfully!', { variant: 'success' });
                 setExistingReview(response.data.review);
@@ -52,7 +52,7 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
     };
 
     const handleReplySubmit = () => {
-        axios.put(`http://localhost:5000/api/v1/reviews/review/reply/${subOrderId}`, { reply }, { headers: { Authorization: `Bearer ${token}` } })
+        axios.put(`http://localhost:5000/api/v1/reviews/review/service/reply/${orderId}`, { reply }, { headers: { Authorization: `Bearer ${token}` } })
             .then((response) => {
                 enqueueSnackbar('Reply added successfully!', { variant: 'success' });
                 setExistingReview(response.data.updatedReview);
@@ -62,6 +62,8 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
                 enqueueSnackbar('Error submitting reply', { variant: 'error' });
             });
     };
+
+    console.log()
 
     return (
         <div className="leaveReviewDiv">

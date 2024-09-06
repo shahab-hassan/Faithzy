@@ -27,7 +27,7 @@
     --success: #18AE00;
     --danger: #FF3838;
     --warning: #DE8500;
-    --star: rgb(250, 225, 0);
+    --star: #ffc107;
     --primaryBg: linear-gradient(45deg,
         rgb(255, 250, 246) 0%,
         rgb(230, 240, 255) 22%,

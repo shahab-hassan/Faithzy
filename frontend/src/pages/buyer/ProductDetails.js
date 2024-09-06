@@ -8,6 +8,7 @@ import SampleProvisions from "../../components/buyer/SampleProvisions";
 import { AuthContext } from '../../utils/AuthContext';
 import { addToWishlistUtil, removeFromWishlistUtil, fetchWishlistUtil } from '../../utils/utilFuncs';
 import { addToCartUtil, removeFromCartUtil, fetchCartUtil } from '../../utils/utilFuncs';
+import Reviews from '../../components/common/Reviews';
 
 function ProductDetails() {
 
@@ -18,7 +19,8 @@ function ProductDetails() {
   const [cartCount, setCartCount] = useState(1);
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [isInCart, setIsInCart] = useState(false);
-  
+  const [isShowDescription, setIsShowDescription] = useState(true);
+
   useEffect(() => {
     axios.get(`http://localhost:5000/api/v1/products/product/${id}`)
       .then(response => {
@@ -29,8 +31,8 @@ function ProductDetails() {
 
     if (isLogin) {
       const token = localStorage.getItem('token');
-      axios.post('http://localhost:5000/api/v1/products/user/recentlyViewed/', 
-        { productId: id }, 
+      axios.post('http://localhost:5000/api/v1/products/user/recentlyViewed/',
+        { productId: id },
         { headers: { Authorization: `Bearer ${token}` } }
       )
         .catch(console.log);
@@ -51,7 +53,7 @@ function ProductDetails() {
       if (cart) {
         let isProductInCart = false;
         cart.products.forEach(item => {
-          if (item.product._id === id){
+          if (item.product._id === id) {
             isProductInCart = true;
             setCartCount(item.count);
           }
@@ -74,7 +76,7 @@ function ProductDetails() {
     }
   };
 
-  const handleCartClick = async(e)=>{
+  const handleCartClick = async (e) => {
     if (isInCart) {
       await removeFromCartUtil(e, id, cartCount, user);
       setIsInCart(false);
@@ -83,17 +85,17 @@ function ProductDetails() {
       setIsInCart(true);
     }
   }
-  
-  const galleryImages = product.productImages? product.productImages.map((image, index)=> {
-    return <img 
-              key={index} 
-              src={`http://localhost:5000/${image}`} 
-              alt="Error" 
-              onClick={()=>setProductThumbnail(image)}
-              style={productThumbnail === image? {borderColor: "var(--primaryCopper)"} : {borderColor: "transparent"}}
-            />
-  }) 
-  : <p>Loading...</p>;
+
+  const galleryImages = product.productImages ? product.productImages.map((image, index) => {
+    return <img
+      key={index}
+      src={`http://localhost:5000/${image}`}
+      alt="Error"
+      onClick={() => setProductThumbnail(image)}
+      style={productThumbnail === image ? { borderColor: "var(--primaryCopper)" } : { borderColor: "transparent" }}
+    />
+  })
+    : <p>Loading...</p>;
 
   return (
     <div className='productDetailsDiv'>
@@ -105,9 +107,9 @@ function ProductDetails() {
             <div className="upperLeft">
 
               {product.productImages && <img className='productThumbnail' src={`http://localhost:5000/${productThumbnail}`} alt="Error" />}
-              
+
               <div className="productGalleryDiv">
-                {galleryImages} 
+                {galleryImages}
               </div>
 
             </div>
@@ -116,7 +118,7 @@ function ProductDetails() {
 
               <div className='ratingsDiv'>
                 <FaStar className='starIconFilled' />
-                <span>{`${product.rating.toFixed(1)} (${product.noOfReviews} users feedback)`}</span>
+                <span>{`${product?.rating?.toFixed(1)} (${product.noOfReviews} users feedback)`}</span>
               </div>
 
               <p className="productTitle">{product.title}</p>
@@ -128,10 +130,10 @@ function ProductDetails() {
 
               <div className="productInfo">
                 <p>Units Sold: <strong>{product.sold}</strong></p>
-                <p>Availability: {product.stock > 0? <strong style={{color: "var(--success)"}}>In Stock</strong>
-                                  : <strong style={{color: "var(--danger)"}}>Out of stock</strong>}</p>
+                <p>Availability: {product.stock > 0 ? <strong style={{ color: "var(--success)" }}>In Stock</strong>
+                  : <strong style={{ color: "var(--danger)" }}>Out of stock</strong>}</p>
                 <p>Category: <strong>{product.category}</strong></p>
-                <p>Shipping Fee: <strong>{"$"+product.shippingFees}</strong></p>
+                <p>Shipping Fee: <strong>{"$" + product.shippingFees}</strong></p>
               </div>
 
               <div className="productPrice">
@@ -146,12 +148,12 @@ function ProductDetails() {
 
               <div className="productActions">
                 <div className="cartCountBtn">
-                  <p className='minus' onClick={()=>setCartCount(prev => cartCount>1? --prev : prev )}>-</p>
+                  <p className='minus' onClick={() => setCartCount(prev => cartCount > 1 ? --prev : prev)}>-</p>
                   <p>{cartCount}</p>
-                  <p className='plus' onClick={()=>setCartCount(prev => ++prev)}>+</p>
+                  <p className='plus' onClick={() => setCartCount(prev => ++prev)}>+</p>
                 </div>
                 <div className="addToCartBtn primaryBtn" onClick={handleCartClick}>
-                <p>{isInCart ? "REMOVE FROM CART" : "ADD TO CART"}</p>
+                  <p>{isInCart ? "REMOVE FROM CART" : "ADD TO CART"}</p>
                   <i className="fa-solid fa-cart-shopping"></i>
                 </div>
                 <Link to={`/chat?p=${product?.sellerId?.userId?._id}`} className="contactSellerBtn primaryBtn2">CONTACT SELLER</Link>
@@ -170,19 +172,27 @@ function ProductDetails() {
             </div>
 
           </div>
-      
+
           <div className="lower">
+
             <div className="upper">
-              <p className='active'>DESCRIPTION</p>
-              <p>REVIEWS</p>
+              <p className={`${isShowDescription && "active"}`} onClick={() => setIsShowDescription(true)}>DESCRIPTION</p>
+              <p className={`${!isShowDescription && "active"}`} onClick={() => setIsShowDescription(false)}>REVIEWS</p>
             </div>
+
             <div className="horizontalLine"></div>
-            <div className="innerLower">
+
+            {isShowDescription && <div className="innerLower productDescription">
               <h2 className="secondaryHeading">Description</h2>
               <p>{product.description}</p>
-            </div>
+            </div>}
+
+            {!isShowDescription && <div className="productReviews">
+              <Reviews type="product" id={id} />
+            </div>}
+
           </div>
-          
+
           <SampleProvisions pre="related" openedProduct={product} />
         </div>
       </section>

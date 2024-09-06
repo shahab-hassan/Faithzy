@@ -82,7 +82,8 @@ const serviceOrder = new mongoose.Schema({
   status: { type: [{ name: String, createdAt: Date }], required: true, default: [{ name: "Active", createdAt: Date.now() }] },
   crrStatus: {type: String, required: true, default: "Active"},
   history: [historySchema],
-  cancellationReason: String
+  cancellationReason: String,
+  isReviewSubmitted: {type: Boolean, default: false}
 })
 
 const serviceOrderSchema = new mongoose.Schema({

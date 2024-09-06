@@ -23,10 +23,10 @@ router.route("/profile/myProducts/:id")
 .get(getSellerProductsById)
 
 router.route("/seller/myProducts/all/")
-.get(authorized, authorizedRoles("seller"), getMySellerProducts)
+.get(authorized, getMySellerProducts)
 
 router.route("/seller/product/new")
-.post(authorized, authorizedRoles("seller"), (req, res, next) => {
+.post(authorized, (req, res, next) => {
     upload.fields([{ name: 'productThumbnail', maxCount: 1 }, { name: 'productGallery', maxCount: 5 }])(req, res, function (err) {
       if (err)
         return next(err);
@@ -35,14 +35,14 @@ router.route("/seller/product/new")
 })
 
 router.route("/seller/product/:id")
-.put(authorized, authorizedRoles("seller"), (req, res, next) => {
+.put(authorized, (req, res, next) => {
     upload.fields([{ name: 'productThumbnail', maxCount: 1 }, { name: 'productGallery', maxCount: 5 }])(req, res, function (err) {
       if (err)
         return next(err);
       updateProduct(req, res, next);
     });
   })
-.delete(authorized, authorizedRoles("seller"), deleteProduct)
+.delete(authorized, deleteProduct)
 
 router.route("/user/recentlyViewed/")
 .get(authorized, getRecentlyViewedProducts)

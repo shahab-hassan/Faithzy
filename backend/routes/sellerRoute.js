@@ -21,7 +21,7 @@ router.route("/seller/:id")
       updateSeller(req, res, next);
     });
   })
-  .delete(authorized, authorizedRoles("seller"), deleteSeller);
+  .delete(authorized, deleteSeller);
 
 router.post("/seller/new/", authorized, (req, res, next) => {
   upload.single('profileImage')(req, res, function (err) {

@@ -277,7 +277,7 @@ function Upgrade() {
 
                             <div className="paymentOptions">
                                 <div className={`stripe paymentOption ${paymentMethod === 'stripe' ? 'selected' : ''}`} onClick={() => setPaymentMethod('stripe')}><BsStripe className='icon' /><div>Stripe</div></div>
-                                <div className={`paypal paymentOption ${paymentMethod === 'paypal' ? 'selected' : ''}`} onClick={() => enqueueSnackbar("Paypal is not available at the moment!", { variant: "info" })}><FaPaypal className='icon' /><div>Paypal</div></div>
+                                {/* <div className={`paypal paymentOption ${paymentMethod === 'paypal' ? 'selected' : ''}`} onClick={() => enqueueSnackbar("Paypal is not available at the moment!", { variant: "info" })}><FaPaypal className='icon' /><div>Paypal</div></div> */}
                             </div>
 
                             {paymentMethod === "stripe" && <form className='form'>
