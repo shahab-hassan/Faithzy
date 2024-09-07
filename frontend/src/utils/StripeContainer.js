@@ -4,7 +4,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import Checkout from '../pages/buyer/Checkout';
 import Upgrade from '../pages/seller/Upgrade';
 
-const PUBLIC_KEY = "pk_test_TYooMQauvdEDq54NiTphI7jx";
+const PUBLIC_KEY = "pk_test_51PwLbfP5UwIgdJNUfISniYzV0Ej8bN8flTU3PWIIsfn8hb4iG1qT9ogbWLqgRV8Pg0nELMcadmmfCzcYTA1l47pB00zDOuozR1";
 
 const stripePromise = loadStripe(PUBLIC_KEY);
 

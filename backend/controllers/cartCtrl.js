@@ -10,7 +10,7 @@ exports.getCarts = asyncHandler(async (req, res) => {
     .populate({
       path: 'products.product',
       populate: {
-        path: 'sellerId',
+        path: 'sellerId stock',
       }
     });
 

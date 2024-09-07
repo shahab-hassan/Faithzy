@@ -34,7 +34,6 @@ function SellerBasicDetails({ sellerDetails }) {
                             <div className="horizontalLine"></div>
                             <div><p>From</p><strong>{sellerDetails.country}</strong></div>
                             <div><p>Joined</p><strong>{joined}</strong></div>
-                            <div><p>Earned in April</p><strong>$2000</strong></div>
                             <div className="horizontalLine"></div>
                             <div><p>Languages</p><strong>{sellerDetails.languages.join(", ")}</strong></div>
                         </div>

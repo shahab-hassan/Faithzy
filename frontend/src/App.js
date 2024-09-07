@@ -52,6 +52,7 @@ import AdminOrders from './pages/admin/AdminOrders.js';
 import AdminRevenue from './pages/admin/AdminRevenue.js';
 import AdminPayments from './pages/admin/AdminPayments.js';
 import AdminDisputes from './pages/admin/AdminDisputes.js';
+import Earnings from './pages/seller/Earnings.js';
 
 function App() {
 
@@ -103,6 +104,7 @@ function App() {
                     <Route path='/seller/orders/product/orderDetails/:id/:subOrderId' element={<ProductOrderDetails isBuyer={false} />} />
                     <Route path='/seller/orders/posting/orderDetails/:id/' element={<ServiceOrderDetails isBuyer={false} />} />
                     <Route path='/seller/upgrade' element={<UpgradeStripeContainer />} />
+                    <Route path='/seller/earnings' element={<Earnings />} />
                 </Route>
 
                 <Route>

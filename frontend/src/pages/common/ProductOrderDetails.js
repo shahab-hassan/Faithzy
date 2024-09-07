@@ -225,7 +225,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
       </div>}
 
       {subOrder.status[subOrder.status.length - 1].name === "Completed" && <div className="statusAction">
-        <h2 className="secondaryHeading"><span>Congratulations!</span> You have earned <span>${subOrder.sellerToGet.total}</span>! You will receive your funds within 3 working days.</h2>
+        <h2 className="secondaryHeading"><span>Congratulations!</span> You have earned <span>${subOrder.sellerToGet.total}</span>! You will receive your funds within 12 Business days.</h2>
         <div className="horizontalLine"></div>
       </div>}
 

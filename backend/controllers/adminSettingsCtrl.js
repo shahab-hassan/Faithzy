@@ -163,21 +163,23 @@ exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
     if (filter === 'custom') {
         startDate = new Date(customStartDate);
         endDate = new Date(customEndDate);
+        endDate.setHours(23, 59, 59, 999);
     } else if (filter === 'lifetime') {
         startDate = new Date('2024-08-01');
         endDate = new Date();
+        endDate.setHours(23, 59, 59, 999);
     } else {
         const dateMap = {
             '7d': 7,
             '30d': 30,
             '90d': 90
         };
-
         startDate = new Date();
+        startDate.setHours(12, 1, 1, 1);
         startDate.setDate(startDate.getDate() - (dateMap[filter] - 1));
         endDate = new Date();
+        endDate.setHours(23, 59, 59, 999);
     }
-
 
     const dateRange = {};
     let currentDate = new Date(startDate);

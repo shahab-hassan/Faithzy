@@ -130,8 +130,8 @@ function ProductDetails() {
 
               <div className="productInfo">
                 <p>Units Sold: <strong>{product.sold}</strong></p>
-                <p>Availability: {product.stock > 0 ? <strong style={{ color: "var(--success)" }}>In Stock</strong>
-                  : <strong style={{ color: "var(--danger)" }}>Out of stock</strong>}</p>
+                <p>Stock Available: {product.stock > 0 ? <strong style={{ color: "var(--success)" }}>{product.stock}</strong>
+                  : <strong style={{ color: "var(--danger)" }}>{product.stock}</strong>}</p>
                 <p>Category: <strong>{product.category}</strong></p>
                 <p>Shipping Fee: <strong>{"$" + product.shippingFees}</strong></p>
               </div>

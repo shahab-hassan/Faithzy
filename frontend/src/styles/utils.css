@@ -690,7 +690,7 @@ label span{
 }
 
 .tableDiv .rows .row .titleField .title{
-    width: 80%;
+    width: 98%;
     display: -webkit-box;
     -webkit-line-clamp: 1;
     line-clamp: inherit;

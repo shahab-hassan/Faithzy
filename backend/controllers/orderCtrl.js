@@ -2,6 +2,10 @@ const asyncHandler = require("express-async-handler");
 const { productOrderModel, serviceOrderModel } = require("../models/orderModel");
 const { createPaymentIntent } = require('../controllers/paymentCtrl');
 const adminSettingsModel = require("../models/adminSettingsModel");
+const productModel = require("../models/productModel");
+const serviceModel = require("../models/serviceModel");
+const sellerModel = require("../models/sellerModel");
+const paymentModel = require("../models//paymentModel");
 
 exports.createProductOrder = asyncHandler(async (req, res) => {
 
@@ -30,12 +34,23 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
     }
   }
 
+
+  for (let item of items) {
+    if (!((item.product.stock - item.count) >= 0)) {
+      res.status(400);
+      throw new Error("Not enough stock avaiable!")
+    }
+  }
+
+
   const products = items;
 
   const settings = await adminSettingsModel.findOne();
   const feesObj = settings.fees;
 
-  let allProducts = products.map(product => {
+  let allProducts = [];
+
+  for (let product of products) {
 
     let fee = 0;
     if (product.product.sellerId?.sellerType === "Free")
@@ -43,7 +58,6 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
     else
       fee = feesObj.paidSeller.product;
 
-    // const salesPrice = products.length > 1 ? product.product.salesPrice * product.count : product.product.salesPrice;
     const salesPrice = product.product.salesPrice * product.count;
     const shippingFees = product.product.shippingFees;
     const subtotal = salesPrice + shippingFees;
@@ -56,7 +70,11 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
     const buyerTax = buyerSubtotal * (Number(feesObj.buyer.product) / 100);
     const buyerTotal = buyerSubtotal + buyerTax;
 
-    return {
+    const crrProduct = await productModel.findById(product.product._id);
+    crrProduct.stock -= product.count;
+    await crrProduct.save();
+
+    allProducts.push({
       sellerId: product.product.sellerId?._id || product.product.sellerId,
       productId: product.product._id,
       count: product.count,
@@ -75,8 +93,8 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
         total: buyerTotal
       },
       netProfit: buyerTotal - total
-    }
-  })
+    })
+  }
 
   let paymentIntent;
   if (paymentMethod === 'stripe') {
@@ -103,6 +121,107 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
 
   res.status(201).json({ success: true, order: newOrder, clientSecret: paymentIntent.client_secret });
 });
+
+// exports.createProductOrder = asyncHandler(async (req, res) => {
+
+//   const userId = req.user._id;
+//   const { items, summary, paymentMethod, billingInfo, paypalOrderId } = req.body;
+
+//   if (req.user.sellerId?.toString() !== undefined) {
+//     for (let item of items) {
+//       if ((item.product.sellerId?._id === req.user.sellerId?.toString()) || (item.product.sellerId === req.user.sellerId?.toString())) {
+//         res.status(400);
+//         throw new Error("You cannot place Order!")
+//       }
+//     }
+//   }
+
+//   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+//   for (let key in billingInfo) {
+//     if (!billingInfo[key] && key !== "note") {
+//       res.status(400);
+//       throw new Error("All fields are required!")
+//     }
+//     if (key === "email" && !emailRegex.test(billingInfo[key])) {
+//       res.status(400);
+//       throw new Error("Invalid email address!");
+//     }
+//   }
+
+//   const products = items;
+
+//   const settings = await adminSettingsModel.findOne();
+//   const feesObj = settings.fees;
+
+//   let allProducts = products.map(product => {
+
+//     let fee = 0;
+//     if (product.product.sellerId?.sellerType === "Free")
+//       fee = feesObj.seller.product;
+//     else
+//       fee = feesObj.paidSeller.product;
+
+//     // const salesPrice = products.length > 1 ? product.product.salesPrice * product.count : product.product.salesPrice;
+//     const salesPrice = product.product.salesPrice * product.count;
+//     const shippingFees = product.product.shippingFees;
+//     const subtotal = salesPrice + shippingFees;
+//     const tax = subtotal * (Number(fee) / 100);
+//     const total = subtotal - tax;
+//     const promoDiscount = Number(summary.paidByBuyer.promoDiscount) / 100;
+
+//     const buyerSalesPrice = salesPrice * (1 - promoDiscount);
+//     const buyerSubtotal = buyerSalesPrice + shippingFees;
+//     const buyerTax = buyerSubtotal * (Number(feesObj.buyer.product) / 100);
+//     const buyerTotal = buyerSubtotal + buyerTax;
+
+//     return {
+//       sellerId: product.product.sellerId?._id || product.product.sellerId,
+//       productId: product.product._id,
+//       count: product.count,
+//       sellerToGet: {
+//         salesPrice: salesPrice,
+//         shippingFees: shippingFees,
+//         subtotal: subtotal,
+//         tax: tax,
+//         total: total
+//       },
+//       buyerPaid: {
+//         salesPrice: buyerSalesPrice,
+//         shippingFees: shippingFees,
+//         subtotal: buyerSubtotal,
+//         tax: buyerTax,
+//         total: buyerTotal
+//       },
+//       netProfit: buyerTotal - total
+//     }
+//   })
+
+//   let paymentIntent;
+//   if (paymentMethod === 'stripe') {
+//     const amount = summary.paidByBuyer.total * 100;
+//     paymentIntent = await createPaymentIntent(amount);
+//   }
+
+//   const newOrder = new productOrderModel({
+//     userId,
+//     products: allProducts,
+//     summary,
+//     paymentMethod,
+//     billingInfo,
+//     clientSecret: paymentMethod === 'stripe' ? paymentIntent.client_secret : undefined,
+//     paypalOrderId: paymentMethod === 'paypal' ? paypalOrderId : undefined,
+//   });
+
+//   await newOrder.save();
+
+
+//   // if (products.some(product => product.product)) {
+//   //   await cartModel.findOneAndUpdate({ userId }, { products: [] });
+//   // }
+
+//   res.status(201).json({ success: true, order: newOrder, clientSecret: paymentIntent.client_secret });
+// });
 
 exports.createServiceOrder = asyncHandler(async (req, res) => {
 
@@ -418,8 +537,32 @@ exports.respondToProductOrderDelivery = asyncHandler(async (req, res) => {
   if (!subOrder) return res.status(404).json({ success: false, error: "Product not found in order" });
 
   if (response === "yes") {
+
+    try {
+      const newPayment = new paymentModel({
+        buyerId: order.userId,
+        sellerId: subOrder.sellerId,
+        to: "Seller",
+        amount: subOrder.sellerToGet.total,
+        itemType: "Product",
+      });
+      await newPayment.save();
+    }
+    catch (e) {
+      res.status(400);
+      throw new Error(e);
+    }
+
     subOrder.status.push({ name: 'Completed', createdAt: new Date() });
     subOrder.crrStatus = "Completed";
+
+    const crrProduct = await productModel.findById(subOrder.productId);
+    const crrSeller = await sellerModel.findById(subOrder.sellerId);
+    crrProduct.sold += subOrder.count;
+    crrSeller.productsSold += subOrder.count;
+    await crrProduct.save();
+    await crrSeller.save();
+
   }
   else if (response === "no") {
     subOrder.status.push({ name: "Delivery Rejected (Buyer hasn't received Item yet)", createdAt: new Date() });
@@ -473,8 +616,29 @@ exports.responseToProductOrderCancellation = asyncHandler(async (req, res) => {
   if (!subOrder) return res.status(404).json({ success: false, error: "Product not found in order" });
 
   if (response === "yes") {
+
+    try {
+      const newPayment = new paymentModel({
+        buyerId: order.userId,
+        sellerId: subOrder.sellerId,
+        to: "Buyer",
+        amount: subOrder.buyerPaid.total,
+        itemType: "Product",
+      });
+      await newPayment.save();
+    }
+    catch (e) {
+      res.status(400);
+      throw new Error(e);
+    }
+
     subOrder.status.push({ name: 'Cancelled', createdAt: new Date() });
     subOrder.crrStatus = "Cancelled";
+
+    const crrProduct = await productModel.findById(subOrder.productId);
+    crrProduct.stock += subOrder.count;
+    await crrProduct.save();
+
   }
   else if (response === "no") {
     const previousStatus = subOrder.status[subOrder.status.length - 2].name;
@@ -666,6 +830,22 @@ exports.respondToDelivery = asyncHandler(async (req, res) => {
     }
 
     if (response === 'accept') {
+
+      try {
+        const newPayment = new paymentModel({
+          buyerId: order.userId,
+          sellerId: order.service.sellerId,
+          to: "Seller",
+          amount: order.summary.sellerToGet.total,
+          itemType: "Service",
+        });
+        await newPayment.save();
+      }
+      catch (e) {
+        res.status(400);
+        throw new Error(e);
+      }
+
       order.service.status.push({ name: "Completed", createdAt: Date.now() });
       order.service.crrStatus = 'Completed';
       order.service.history.unshift({
@@ -675,6 +855,14 @@ exports.respondToDelivery = asyncHandler(async (req, res) => {
         isDone: true,
         createdAt: new Date()
       });
+
+      const crrService = await serviceModel.findById(order.service.serviceId);
+      const crrSeller = await sellerModel.findById(order.service.sellerId);
+      crrService.sold += 1;
+      crrSeller.servicesDone += 1;
+      await crrService.save();
+      await crrSeller.save();
+
     }
     else if (response === 'decline') {
       order.service.status.push({ name: "Active", createdAt: Date.now() });
@@ -744,6 +932,22 @@ exports.respondToCancellation = asyncHandler(async (req, res) => {
     }
 
     if (response === 'accept') {
+
+      try {
+        const newPayment = new paymentModel({
+          buyerId: order.userId,
+          sellerId: order.service.sellerId,
+          to: "Buyer",
+          amount: order.summary.paidByBuyer.total,
+          itemType: "Service",
+        });
+        await newPayment.save();
+      }
+      catch (e) {
+        res.status(400);
+        throw new Error(e);
+      }
+
       order.service.status.push({ name: "Cancelled", createdAt: Date.now() });
       order.service.crrStatus = "Cancelled"
       order.service.history.unshift({

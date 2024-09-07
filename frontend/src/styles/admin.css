@@ -35,7 +35,7 @@
 }
 
 .admin .adminDiv .tableDiv .rows .row .titleField .title {
-    width: 90%;
+    width: 100%;
 }
 
 .admin .adminDiv .tableDiv .rows .row .icon {
@@ -503,4 +503,46 @@
     background: var(--white);
     border-radius: 8px;
     padding: 15px 25px;
+}
+
+
+
+
+
+/* ****************************** ADMIN PAYMENTS PAGE ****************************** */
+
+.adminPaymentsDiv .popupDiv .details .row{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.adminPaymentsDiv .popupDiv .buttonsDiv{
+    margin-top: 20px;
+}
+
+.adminPaymentsDiv .tableDiv .markAsPaid{
+    height: 20px;
+    width: 20px;
+    padding: 3px;
+    cursor: pointer;
+    color: var(--darkGray);
+    border: 2px solid var(--darkGray);
+    border-radius: 50%;
+    transition: 0.1s;
+}
+.adminPaymentsDiv .tableDiv .paid{
+    color: var(--white);
+    border: 2px solid var(--success);
+    background: var(--success);
+}
+.adminPaymentsDiv .tableDiv .markAsPaid:hover{
+    color: var(--black);
+    border: 2px solid var(--black);
+}
+.adminPaymentsDiv .tableDiv .paid:hover{
+    cursor: not-allowed;
+    color: var(--white);
+    border: 2px solid var(--success);
+    background: var(--success);
 }

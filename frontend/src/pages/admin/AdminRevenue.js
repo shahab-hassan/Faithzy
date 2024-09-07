@@ -21,6 +21,10 @@ const AdminRevenue = () => {
     const [customStartDate, setCustomStartDate] = useState('');
     const [customEndDate, setCustomEndDate] = useState('');
 
+    const crrDate = new Date();
+    crrDate.setDate(crrDate.getDate() - 1);
+    const today = crrDate.toISOString().split('T')[0];
+
     useEffect(() => {
         const fetchData = async () => {
             let url = `http://localhost:5000/api/v1/settings/admin/revenue?filter=${filter}`;
@@ -118,9 +122,9 @@ const AdminRevenue = () => {
                         {filter === 'custom' && (
                             <div className="customDateRange">
                                 <label>Start Date:</label>
-                                <input type="date" value={customStartDate} onChange={e => setCustomStartDate(e.target.value)} />
+                                <input type="date" value={customStartDate} onChange={e => setCustomStartDate(e.target.value)} max={today} />
                                 <label>End Date:</label>
-                                <input type="date" value={customEndDate} onChange={e => setCustomEndDate(e.target.value)} />
+                                <input type="date" value={customEndDate} onChange={e => setCustomEndDate(e.target.value)} max={today} />
                             </div>
                         )}
 

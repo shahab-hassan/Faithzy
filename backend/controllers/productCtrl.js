@@ -56,7 +56,7 @@ exports.getSellerProductsById = asyncHandler(async (req, res) => {
 exports.getProduct = asyncHandler(async (req, res) => {
 
     const product = await productModel.findById(req.params.id).populate({
-        path: 'sellerId',
+        path: 'sellerId stock',
         populate: {
             path: 'userId',
             select: 'username',

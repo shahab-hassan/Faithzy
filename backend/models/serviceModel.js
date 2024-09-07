@@ -9,7 +9,7 @@ const reviewSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const packageSchema = new mongoose.Schema({
-  name: {type: String, enum: ["BASIC", "STANDARD", "ULTIMATE"], required: true },
+  name: { type: String, enum: ["BASIC", "STANDARD", "ULTIMATE"], required: true },
   title: { type: String, required: [true, "Package title is required"] },
   description: { type: String, required: [true, "Package description is required"] },
   price: { type: Number, required: [true, "Package price is missing"], max: [1000000, "Price cannot exceed 1 Million"] },
@@ -33,6 +33,7 @@ const serviceSchema = new mongoose.Schema({
   noOfReviews: { type: Number, default: 0 },
   status: { type: [String], default: ["new", "freeSeller"] },
   reviews: [reviewSchema],
+  sold: { type: Number, default: 0 },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Service", serviceSchema);

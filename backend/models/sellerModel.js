@@ -37,6 +37,8 @@ const sellerSchema = new mongoose.Schema({
   rating: { type: Number, default: 0 },
   noOfReviews: { type: Number, default: 0 },
   reviews: [reviewSchema],
+  productsSold: {type: Number, default: 0},
+  servicesDone: {type: Number, default: 0}
 }, { timestamps: true });
 
 module.exports = mongoose.model('Seller', sellerSchema);

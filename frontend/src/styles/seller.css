@@ -876,3 +876,41 @@
 .upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption.selected .icon{
     color: var(--white);
 }
+
+
+
+
+
+
+/* ********************* EARNINGS PAGE ********************* */
+
+.earningsDiv {
+    margin: 50px 0px;
+}
+.earningsDiv .earningsOverview {
+    display: flex;
+    gap: 20px;
+}
+.earningsDiv .earningsOverview .overviewBox {
+    border-radius: 8px;
+    background: var(--white);
+    padding: 15px 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.earningsDiv .earningsOverview .overviewBox .secondaryHeading {
+    font-size: 1rem;
+}
+
+.earningsDiv .earningsOverview .overviewBox .value {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+.earningsDiv .tableDiv .upperRight{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

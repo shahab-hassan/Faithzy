@@ -23,7 +23,7 @@ function SellerHeader() {
                 <li><NavLink to="/seller/postings" className={(v)=>`${v.isActive? "white": "darkGray"}`}>Postings</NavLink></li>
                 <li><NavLink to="/seller/tradeleads" className={(v)=>`${v.isActive? "white": "darkGray"}`}>TradeLead</NavLink></li>
                 <li><NavLink to="/seller/upgrade" className={(v)=>`${v.isActive? "white": "darkGray"}`}>Upgrade</NavLink></li>
-                <li><NavLink to="/" className={(v)=>`${v.isActive? "white": "darkGray"}`}>Earnings</NavLink></li>
+                <li><NavLink to="/seller/earnings" className={(v)=>`${v.isActive? "white": "darkGray"}`}>Earnings</NavLink></li>
                 <li><NavLink to="/seller/orders" className={(v)=>`${v.isActive? "white": "darkGray"}`}>Orders</NavLink></li>
               </ul>
             </nav>
