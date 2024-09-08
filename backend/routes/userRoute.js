@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
-const { registerUser, loginUser, logoutUser, resetPasswordRequest, resetPassword, onGoogleLoginSuccess, onFacebookLoginSuccess, updateEmailAndUsername, updatePassword, getUser, getAllUsers, blockUser } = require("../controllers/userCtrl");
+const { registerUser, loginUser, logoutUser, resetPasswordRequest, resetPassword, onGoogleLoginSuccess, onFacebookLoginSuccess, updateEmailAndUsername, updatePassword, getUser, getAllUsers, blockUser, verifyEmail, resendVerificationEmail } = require("../controllers/userCtrl");
 const { authorized, authorizeAdmin } = require("../middlewares/authorization");
 const userModel = require("../models/userModel")
 
@@ -40,5 +40,10 @@ router.get('/checkLogin', authorized, async (req, res) => {
 router.put("/updateUser/:userId", authorized, updateEmailAndUsername)
 
 router.put("/updatePassword/:userId", authorized, updatePassword);
+
+router.get('/verifyEmail/:token', verifyEmail);
+
+router.post('/resend-verification', resendVerificationEmail);
+
 
 module.exports = router;

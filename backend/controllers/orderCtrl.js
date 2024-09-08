@@ -5,8 +5,11 @@ const adminSettingsModel = require("../models/adminSettingsModel");
 const productModel = require("../models/productModel");
 const serviceModel = require("../models/serviceModel");
 const sellerModel = require("../models/sellerModel");
+const userModel = require("../models/userModel");
 const paymentModel = require("../models//paymentModel");
 const cron = require('node-cron');
+const { receivedOrder, completedOrderToSeller, completedOrderToBuyer, cancelledOrderToBuyer, cancelledOrderToSeller } = require("../utils/emailTemplates");
+const sendEmail = require("../utils/sendEmail");
 
 cron.schedule('* * * * *', asyncHandler(async () => {
   const now = new Date();
@@ -17,17 +20,17 @@ cron.schedule('* * * * *', asyncHandler(async () => {
     dueDate.setDate(dueDate.getDate() + order.service.pkg.deliveryDays);
 
     if (now > dueDate) {
-      if(order.service.status[order.service.status.length - 1].name !== "Past Due" && order.service.status[order.service.status.length - 1].name === "Active"){
+      if (order.service.status[order.service.status.length - 1].name !== "Past Due" && order.service.status[order.service.status.length - 1].name === "Active") {
         order.service.status.push({ name: 'Past Due', createdAt: now });
         order.service.crrStatus = 'Past Due';
         await order.save();
       }
     }
-    else{
-      if(order.service.status[order.service.status.length - 1].name === "Past Due"){
-          order.service.status.pop();
-          order.service.crrStatus = order.service.status[order.service.status.length - 1].name;
-          await order.save();
+    else {
+      if (order.service.status[order.service.status.length - 1].name === "Past Due") {
+        order.service.status.pop();
+        order.service.crrStatus = order.service.status[order.service.status.length - 1].name;
+        await order.save();
       }
     }
   }
@@ -75,6 +78,7 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
   const feesObj = settings.fees;
 
   let allProducts = [];
+  let sellerEmails = new Set();
 
   for (let product of products) {
 
@@ -120,6 +124,17 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
       },
       netProfit: buyerTotal - total
     })
+
+    if (product.product.sellerId || product.product.sellerId?._id) {
+      const seller = await sellerModel.findById(product.product.sellerId || product.product.sellerId?._id);
+      if (seller) {
+        const user = await userModel.findById(seller.userId);
+        if (user && user.email) {
+          sellerEmails.add(user.email);
+        }
+      }
+    }
+
   }
 
   let paymentIntent;
@@ -140,114 +155,25 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
 
   await newOrder.save();
 
+  setImmediate(async () => {
+    try {
+      const messageLink = `https://localhost:3000/seller/orders`;
+      const emailContent = receivedOrder(messageLink);
 
-  // if (products.some(product => product.product)) {
-  //   await cartModel.findOneAndUpdate({ userId }, { products: [] });
-  // }
+      for (const sellerEmail of sellerEmails) {
+        await sendEmail({
+          to: sellerEmail,
+          subject: "Faithzy - New Order",
+          text: emailContent,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to send email:", error.message);
+    }
+  });
 
   res.status(201).json({ success: true, order: newOrder, clientSecret: paymentIntent.client_secret });
 });
-
-// exports.createProductOrder = asyncHandler(async (req, res) => {
-
-//   const userId = req.user._id;
-//   const { items, summary, paymentMethod, billingInfo, paypalOrderId } = req.body;
-
-//   if (req.user.sellerId?.toString() !== undefined) {
-//     for (let item of items) {
-//       if ((item.product.sellerId?._id === req.user.sellerId?.toString()) || (item.product.sellerId === req.user.sellerId?.toString())) {
-//         res.status(400);
-//         throw new Error("You cannot place Order!")
-//       }
-//     }
-//   }
-
-//   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-//   for (let key in billingInfo) {
-//     if (!billingInfo[key] && key !== "note") {
-//       res.status(400);
-//       throw new Error("All fields are required!")
-//     }
-//     if (key === "email" && !emailRegex.test(billingInfo[key])) {
-//       res.status(400);
-//       throw new Error("Invalid email address!");
-//     }
-//   }
-
-//   const products = items;
-
-//   const settings = await adminSettingsModel.findOne();
-//   const feesObj = settings.fees;
-
-//   let allProducts = products.map(product => {
-
-//     let fee = 0;
-//     if (product.product.sellerId?.sellerType === "Free")
-//       fee = feesObj.seller.product;
-//     else
-//       fee = feesObj.paidSeller.product;
-
-//     // const salesPrice = products.length > 1 ? product.product.salesPrice * product.count : product.product.salesPrice;
-//     const salesPrice = product.product.salesPrice * product.count;
-//     const shippingFees = product.product.shippingFees;
-//     const subtotal = salesPrice + shippingFees;
-//     const tax = subtotal * (Number(fee) / 100);
-//     const total = subtotal - tax;
-//     const promoDiscount = Number(summary.paidByBuyer.promoDiscount) / 100;
-
-//     const buyerSalesPrice = salesPrice * (1 - promoDiscount);
-//     const buyerSubtotal = buyerSalesPrice + shippingFees;
-//     const buyerTax = buyerSubtotal * (Number(feesObj.buyer.product) / 100);
-//     const buyerTotal = buyerSubtotal + buyerTax;
-
-//     return {
-//       sellerId: product.product.sellerId?._id || product.product.sellerId,
-//       productId: product.product._id,
-//       count: product.count,
-//       sellerToGet: {
-//         salesPrice: salesPrice,
-//         shippingFees: shippingFees,
-//         subtotal: subtotal,
-//         tax: tax,
-//         total: total
-//       },
-//       buyerPaid: {
-//         salesPrice: buyerSalesPrice,
-//         shippingFees: shippingFees,
-//         subtotal: buyerSubtotal,
-//         tax: buyerTax,
-//         total: buyerTotal
-//       },
-//       netProfit: buyerTotal - total
-//     }
-//   })
-
-//   let paymentIntent;
-//   if (paymentMethod === 'stripe') {
-//     const amount = summary.paidByBuyer.total * 100;
-//     paymentIntent = await createPaymentIntent(amount);
-//   }
-
-//   const newOrder = new productOrderModel({
-//     userId,
-//     products: allProducts,
-//     summary,
-//     paymentMethod,
-//     billingInfo,
-//     clientSecret: paymentMethod === 'stripe' ? paymentIntent.client_secret : undefined,
-//     paypalOrderId: paymentMethod === 'paypal' ? paypalOrderId : undefined,
-//   });
-
-//   await newOrder.save();
-
-
-//   // if (products.some(product => product.product)) {
-//   //   await cartModel.findOneAndUpdate({ userId }, { products: [] });
-//   // }
-
-//   res.status(201).json({ success: true, order: newOrder, clientSecret: paymentIntent.client_secret });
-// });
 
 exports.createServiceOrder = asyncHandler(async (req, res) => {
 
@@ -329,10 +255,29 @@ exports.createServiceOrder = asyncHandler(async (req, res) => {
 
   await newOrder.save();
 
+  if (serviceItem.service.sellerId?._id || serviceItem.service.sellerId) {
+    const seller = await sellerModel.findById(serviceItem.service.sellerId?._id || serviceItem.service.sellerId);
+    if (seller) {
+      const user = await userModel.findById(seller.userId);
+      if (user && user.email) {
+        setImmediate(async () => {
+          try {
+            const messageLink = `https://localhost:3000/`;
+            const emailContent = receivedOrder(messageLink);
 
-  // if (products.some(product => product.product)) {
-  //   await cartModel.findOneAndUpdate({ userId }, { products: [] });
-  // }
+            await sendEmail({
+              to: user.email,
+              subject: "Faithzy - New Order",
+              text: emailContent,
+            });
+
+          } catch (error) {
+            console.error("Failed to send email:", error.message);
+          }
+        });
+      }
+    }
+  }
 
   res.status(201).json({ success: true, order: newOrder, clientSecret: paymentIntent.client_secret });
 });
@@ -562,7 +507,13 @@ exports.respondToProductOrderDelivery = asyncHandler(async (req, res) => {
   const subOrder = order.products.id(productId);
   if (!subOrder) return res.status(404).json({ success: false, error: "Product not found in order" });
 
+
   if (response === "yes") {
+
+    const buyer = await userModel.findById(order.userId);
+    const seller = await sellerModel.findById(subOrder.sellerId).populate("userId");
+    const sellerEmail = seller.userId.email;
+    const buyerEmail = buyer.email;
 
     try {
       const newPayment = new paymentModel({
@@ -588,6 +539,35 @@ exports.respondToProductOrderDelivery = asyncHandler(async (req, res) => {
     crrSeller.productsSold += subOrder.count;
     await crrProduct.save();
     await crrSeller.save();
+
+    setImmediate(async () => {
+      try {
+        const messageLink = `https://localhost:3000`;
+        const emailContentToBuyer = completedOrderToBuyer(messageLink);
+
+        await sendEmail({
+          to: buyerEmail,
+          subject: "Faithzy - Order Completed",
+          text: emailContentToBuyer,
+        });
+      } catch (error) {
+        console.error("Failed to send email to buyer:", error.message);
+      }
+    });
+
+    setImmediate(async () => {
+      try {
+        const emailContentToSeller = completedOrderToSeller(subOrder.sellerToGet.total);
+
+        await sendEmail({
+          to: sellerEmail,
+          subject: "Faithzy - Order Completed",
+          text: emailContentToSeller,
+        });
+      } catch (error) {
+        console.error("Failed to send email to seller:", error.message);
+      }
+    });
 
   }
   else if (response === "no") {
@@ -641,7 +621,13 @@ exports.responseToProductOrderCancellation = asyncHandler(async (req, res) => {
   const subOrder = order.products.id(productId);
   if (!subOrder) return res.status(404).json({ success: false, error: "Product not found in order" });
 
+
   if (response === "yes") {
+
+    const buyer = await userModel.findById(order.userId);
+    const seller = await sellerModel.findById(subOrder.sellerId).populate("userId");
+    const sellerEmail = seller.userId.email;
+    const buyerEmail = buyer.email;
 
     try {
       const newPayment = new paymentModel({
@@ -664,6 +650,35 @@ exports.responseToProductOrderCancellation = asyncHandler(async (req, res) => {
     const crrProduct = await productModel.findById(subOrder.productId);
     crrProduct.stock += subOrder.count;
     await crrProduct.save();
+
+    setImmediate(async () => {
+      try {
+        const messageLink = `https://localhost:3000`;
+        const emailContentToBuyer = cancelledOrderToBuyer(messageLink);
+
+        await sendEmail({
+          to: buyerEmail,
+          subject: "Faithzy - Order Cancelled",
+          text: emailContentToBuyer,
+        });
+      } catch (error) {
+        console.error("Failed to send email to buyer:", error.message);
+      }
+    });
+
+    setImmediate(async () => {
+      try {
+        const emailContentToSeller = cancelledOrderToSeller(subOrder.sellerToGet.total);
+
+        await sendEmail({
+          to: sellerEmail,
+          subject: "Faithzy - Order Cancelled",
+          text: emailContentToSeller,
+        });
+      } catch (error) {
+        console.error("Failed to send email to seller:", error.message);
+      }
+    });
 
   }
   else if (response === "no") {
@@ -857,6 +872,11 @@ exports.respondToDelivery = asyncHandler(async (req, res) => {
 
     if (response === 'accept') {
 
+      const buyer = await userModel.findById(order.userId);
+      const seller = await sellerModel.findById(order.service.sellerId).populate("userId");
+      const sellerEmail = seller?.userId?.email;
+      const buyerEmail = buyer?.email;
+
       try {
         const newPayment = new paymentModel({
           buyerId: order.userId,
@@ -888,6 +908,35 @@ exports.respondToDelivery = asyncHandler(async (req, res) => {
       crrSeller.servicesDone += 1;
       await crrService.save();
       await crrSeller.save();
+
+      setImmediate(async () => {
+        try {
+          const messageLink = `https://localhost:3000`;
+          const emailContentToBuyer = completedOrderToBuyer(messageLink);
+
+          await sendEmail({
+            to: buyerEmail,
+            subject: "Faithzy - Order Completed",
+            text: emailContentToBuyer,
+          });
+        } catch (error) {
+          console.error("Failed to send email to buyer:", error.message);
+        }
+      });
+
+      setImmediate(async () => {
+        try {
+          const emailContentToSeller = completedOrderToSeller(order.summary.sellerToGet.total);
+
+          await sendEmail({
+            to: sellerEmail,
+            subject: "Faithzy - Order Completed",
+            text: emailContentToSeller,
+          });
+        } catch (error) {
+          console.error("Failed to send email to seller:", error.message);
+        }
+      });
 
     }
     else if (response === 'decline') {
@@ -959,6 +1008,11 @@ exports.respondToCancellation = asyncHandler(async (req, res) => {
 
     if (response === 'accept') {
 
+      const buyer = await userModel.findById(order.userId);
+      const seller = await sellerModel.findById(order.service.sellerId).populate("userId");
+      const sellerEmail = seller.userId.email;
+      const buyerEmail = buyer.email;
+
       try {
         const newPayment = new paymentModel({
           buyerId: order.userId,
@@ -982,6 +1036,35 @@ exports.respondToCancellation = asyncHandler(async (req, res) => {
         role: 'Buyer',
         isDone: true,
         createdAt: new Date()
+      });
+
+      setImmediate(async () => {
+        try {
+          const messageLink = `https://localhost:3000`;
+          const emailContentToBuyer = cancelledOrderToBuyer(messageLink);
+
+          await sendEmail({
+            to: buyerEmail,
+            subject: "Faithzy - Order Cancelled",
+            text: emailContentToBuyer,
+          });
+        } catch (error) {
+          console.error("Failed to send email to buyer:", error.message);
+        }
+      });
+
+      setImmediate(async () => {
+        try {
+          const emailContentToSeller = cancelledOrderToSeller(order.summary.sellerToGet.total);
+
+          await sendEmail({
+            to: sellerEmail,
+            subject: "Faithzy - Order Cancelled",
+            text: emailContentToSeller,
+          });
+        } catch (error) {
+          console.error("Failed to send email to seller:", error.message);
+        }
       });
 
     }

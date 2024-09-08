@@ -34,33 +34,15 @@ const offerSchema = new Schema({
     offerAmount: { type: Number, required: true },
     quantity: {
         type: Number,
-        default: 1,
-        validate: {
-            validator: function (value) {
-                return this.quoteType === 'product' ? !!value : true;
-            },
-            message: 'Quantity is required when quoteType is product'
-        }
+        default: 1
     },
     shippingFee: {
         type: Number,
-        default: 0,
-        validate: {
-            validator: function (value) {
-                return this.quoteType === 'product' ? !!value : true;
-            },
-            message: 'Shipping Fee is required when quoteType is product'
-        }
+        default: 0
     },
     duration: {
         type: Number,
-        default: 1,
-        validate: {
-            validator: function (value) {
-                return this.quoteType === 'service' ? !!value : true;
-            },
-            message: 'Duration is required when quoteType is service'
-        }
+        default: 1
     }
 });
 
@@ -72,6 +54,37 @@ const messageSchema = new Schema({
     timestamp: { type: Date, default: Date.now },
     offer: offerSchema
 });
+
+const singleChatSchema = new Schema({
+    isParticipantAdmin: { type: Boolean },
+    participantId: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        validate: {
+            validator: function (value) {
+                return this.isParticipantAdmin ? !value : !!value;
+            },
+            message: props =>
+                props.value
+                    ? 'Admin Participant ID is required when isParticipantAdmin is true'
+                    : 'Admin Participant ID should not be provided when isParticipantAdmin is false'
+        }
+    },
+    adminParticipantId: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Admin',
+        validate: {
+            validator: function (value) {
+                return this.isParticipantAdmin ? !!value : !value;
+            },
+            message: props =>
+                props.value
+                    ? 'Admin Participant ID is required when isParticipantAdmin is true'
+                    : 'Admin Participant ID should not be provided when isParticipantAdmin is false'
+        }
+    },
+    messages: [messageSchema]
+}, {timestamps: true});
 
 const chatSchema = new Schema({
     isAdmin: { type: Boolean },
@@ -101,37 +114,8 @@ const chatSchema = new Schema({
                     : 'Admin ID should not be provided when isAdmin is false'
         }
     },
-    chats: [{
-        isParticipantAdmin: { type: Boolean },
-        participantId: {
-            type: mongoose.Schema.ObjectId,
-            ref: 'User',
-            validate: {
-                validator: function (value) {
-                    return this.isParticipantAdmin ? !value : !!value;
-                },
-                message: props =>
-                    props.value
-                        ? 'Admin Participant ID is required when isParticipantAdmin is true'
-                        : 'Admin Participant ID should not be provided when isParticipantAdmin is false'
-            }
-        },
-        adminParticipantId: {
-            type: mongoose.Schema.ObjectId,
-            ref: 'Admin',
-            validate: {
-                validator: function (value) {
-                    return this.isParticipantAdmin ? !!value : !value;
-                },
-                message: props =>
-                    props.value
-                        ? 'Admin Participant ID is required when isParticipantAdmin is true'
-                        : 'Admin Participant ID should not be provided when isParticipantAdmin is false'
-            }
-        },
-        messages: [messageSchema]
-    }]
-});
+    chats: [singleChatSchema]
+}, {timestamps: true});
 
 const Chat = mongoose.model('Chat', chatSchema);
 

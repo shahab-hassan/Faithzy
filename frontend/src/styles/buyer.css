@@ -409,6 +409,14 @@
     flex-direction: column;
 }
 
+.loginDiv .emailVerificationNotification{
+    background: var(--gray);
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .thirdPartyLoginDiv{
     width: 100%;
     gap: 12px;

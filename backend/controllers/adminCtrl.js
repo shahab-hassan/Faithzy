@@ -4,7 +4,6 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 
 const adminModel = require("../models/adminModel")
-const sendEmail = require("../utils/sendEmail")
 
 exports.getAdmins = asyncHandler(async (req, res) => {
     const admins = await adminModel.find({ email: { $ne: "admin@gmail.com" } }).sort({ updatedAt: -1 });

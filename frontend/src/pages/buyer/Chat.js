@@ -141,6 +141,7 @@ const ChatPage = () => {
         const formData = new FormData();
         formData.append('senderId', user? user?._id : admin?._id);
         formData.append('receiverId', selectedParticipant._id);
+        formData.append('receiverEmail', selectedParticipant?.email);
         formData.append('text', message);
         formData.append('isParticipantAdmin', isParticipantAdmin);
         if (file)
@@ -277,9 +278,11 @@ const ChatPage = () => {
         const formData = new FormData();
         formData.append('senderId', user._id);
         formData.append('receiverId', selectedParticipant._id);
+        formData.append('receiverEmail', selectedParticipant?.email);
         formData.append('offer', JSON.stringify(offer));
+        formData.append('isParticipantAdmin', isParticipantAdmin);
 
-        axios.post('http://localhost:5000/api/v1/chats/sendMessage', formData, {
+        axios.post('http://localhost:5000/api/v1/chats/sendMessage/user', formData, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'multipart/form-data'
@@ -393,7 +396,7 @@ const ChatPage = () => {
                                                     <div className="bottom">
                                                         <div className='row'><MdOutlineLocalOffer className='icon' />{msg.offer.quoteType.charAt(0).toUpperCase() + msg.offer.quoteType.slice(1)}</div>
                                                         {msg.offer.quoteType === "product" && <div className='row'><FaBasketShopping className='icon' />{(msg.offer.quantity < 10 && "0") + msg.offer.quantity} (Quantity)</div>}
-                                                        {msg.offer.quoteType === "product" && <div className='row'><TbTruckDelivery className='icon' />${msg.offer.shippingFee} Shipping Fees</div>}
+                                                        {msg.offer.quoteType === "product" && <div className='row'><TbTruckDelivery className='icon' />{Number(msg.offer.shippingFee) === 0? "Free Shipping" : "$" + msg.offer.shippingFee + " Shipping Fees"}</div>}
                                                         {msg.offer.quoteType === "service" && <div className='row'><IoMdStopwatch className='icon' />{(msg.offer.duration < 10 && "0") + msg.offer.duration} delivery days</div>}
                                                     </div>
                                                     {msg.senderId !== (user? user?._id : admin?._id) && <div className="buttonsDiv">

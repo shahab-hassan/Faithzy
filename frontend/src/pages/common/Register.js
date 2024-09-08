@@ -12,17 +12,21 @@ function Register() {
   let [password, setPassword] = React.useState("");
   let [confirmPass, setConfirmPass] = React.useState("");
   let [passwordHidden, setPasswordHidden] = React.useState(true);
+  let [loading, setLoading] = React.useState(false);
 
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
   const registerUser = (e) => {
     e.preventDefault();
+    setLoading(true);
     axios.post("http://localhost:5000/api/v1/auth/register", { username, email, password, confirmPass }).then(() => {
-      enqueueSnackbar("Registered Successfully!", { variant: "success" })
+      enqueueSnackbar("An Email has been sent to you for verification... Please check your inbox!", { variant: "success" })
+      setLoading(false);
       navigate("/login")
     }).catch((e) => {
       enqueueSnackbar(e.response.data.error, { variant: "error" })
+      setLoading(false);
     })
   }
 
@@ -98,6 +102,7 @@ function Register() {
               <div className='inputDiv'>
                 <input
                   type="submit"
+                  disabled={loading}
                   className='primaryBtn'
                   value="Sign Up"
                 />

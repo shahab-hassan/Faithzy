@@ -1,7 +1,7 @@
-import React, {useContext} from 'react'
+import React, { useContext } from 'react'
 import axios from "axios"
-import {useNavigate, Link} from "react-router-dom"
-import {useSnackbar} from "notistack"
+import { useNavigate, Link } from "react-router-dom"
+import { useSnackbar } from "notistack"
 
 import ThirdPartyLogin from "../../components/buyer/ThirdPartyLogin"
 import { AuthContext } from "../../utils/AuthContext";
@@ -12,29 +12,63 @@ function Login() {
   let [password, setPassword] = React.useState("");
   let [passwordHidden, setPasswordHidden] = React.useState(true);
 
+  let [emailNotVerified, setEmailNotVerified] = React.useState(false);
+  let [resendDisabled, setResendDisabled] = React.useState(false);
+
+
   const navigate = useNavigate();
-  const {enqueueSnackbar} = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const { login } = useContext(AuthContext);
 
-  const loginUser = async (e)=>{
+  const loginUser = async (e) => {
     e.preventDefault();
-    try{
-      const response = await axios.post("http://localhost:5000/api/v1/auth/login", {email, password})
-      if(response.data.success){
-        login(response.data.token)
-        navigate("/")
-        enqueueSnackbar("LoggedIn Successfully!", {variant: "success"})
+    try {
+      const response = await axios.post("http://localhost:5000/api/v1/auth/login", { email, password })
+      if (response.data.success) {
+        login(response.data.token);
+        navigate("/");
+        enqueueSnackbar("Logged in Successfully!", { variant: "success" });
+      }
+    }
+    catch (e) {
+      if (e?.response?.data?.error === "Not Verified"){
+        setEmailNotVerified(true);
+        enqueueSnackbar('Email is not verified. Please verify!', { variant: "error" })
       }
       else
-        enqueueSnackbar("Something went wrong!", {variant: "error"})
-    }
-    catch(e){
-      enqueueSnackbar(e.response.data.error, {variant: "error"})
+        enqueueSnackbar(e.response.data.error, { variant: "error" })
     }
   }
 
+  const resendVerificationEmail = async () => {
+    setResendDisabled(true);
+    try {
+      await axios.post("http://localhost:5000/api/v1/auth/resend-verification", { email });
+      enqueueSnackbar("Verification email has been resent!", { variant: "success" });
+      setTimeout(() => setResendDisabled(false), 10000);
+    } catch (error) {
+      console.log(error);
+      enqueueSnackbar("Error sending email. Please try again later!", { variant: "error" });
+      setResendDisabled(false);
+    }
+  };
+
+
   return (
     <div className='loginDiv'>
+      {emailNotVerified && (
+        <div className="emailVerificationNotification">
+          <p>Your email is not verified. Please check your inbox and verify your email.</p>
+          <button
+            onClick={resendVerificationEmail}
+            disabled={resendDisabled}
+            className="secondaryBtn"
+          >
+            {resendDisabled ? "Resend in 10s" : "Resend Email"}
+          </button>
+        </div>
+      )}
+
       <section className='section'>
         <div className="loginContent">
 
@@ -64,14 +98,14 @@ function Login() {
               <div className='inputDiv'>
                 <div className="passwordFieldUpper">
                   <label htmlFor="password">Password</label>
-                  <div className='hidePasswordBtn' 
-                    onClick={()=>setPasswordHidden((oldValue)=> !oldValue)}
+                  <div className='hidePasswordBtn'
+                    onClick={() => setPasswordHidden((oldValue) => !oldValue)}
                   >
-                    <i className={passwordHidden? "fa-solid fa-eye-slash":"fa-solid fa-eye"}></i>
+                    <i className={passwordHidden ? "fa-solid fa-eye-slash" : "fa-solid fa-eye"}></i>
                   </div>
                 </div>
                 <input
-                  type={passwordHidden? "password": "text"}
+                  type={passwordHidden ? "password" : "text"}
                   name='password'
                   className='inputField'
                   placeholder='Enter your password'

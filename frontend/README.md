@@ -1,7 +1,12 @@
 *** Overview ***: 
 
--- Completed Cron Auto Updating Functionalities at:
---- Coupons Status Auto changing to Expired and Active
---- Service Orders auto marked as Past Due
---- Products and Services Discount auto ending after Expiry Date
---- Membership auto cancelling after expiry
+-- Sending Emails when:
+--- For Email Verification
+--- New user register
+--- Order Received (For both products and service)
+--- Order Complete (For both products and service)
+--- Order Cancelled (For both products and service)
+--- First time message received from any user or admin
+--- Receive offer from sellers
+
+-- Verying user Emails and applied different checks and validations!

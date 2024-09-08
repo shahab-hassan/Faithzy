@@ -5,9 +5,9 @@ const jwt = require("jsonwebtoken")
 const passport = require("passport");
 
 const userModel = require("../models/userModel")
-const adminSettingsModel = require("../models/adminSettingsModel")
 const sendToken = require("../utils/sendToken")
-const sendEmail = require("../utils/sendEmail")
+const sendEmail = require("../utils/sendEmail");
+const { verificationEmail, welcomeEmail } = require("../utils/emailTemplates");
 
 exports.getUser = asyncHandler(async (req, res) => {
     const user = await userModel.findById(req.params.id).populate("sellerId");
@@ -42,9 +42,16 @@ exports.registerUser = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error("Username already taken!")
     }
-    if (await userModel.findOne({ email })) {
-        res.status(400)
-        throw new Error("Email is already registered!")
+    const checkEmailExist = await userModel.findOne({ email });
+    if (checkEmailExist) {
+        if(checkEmailExist.verified){
+            res.status(400)
+            throw new Error("Email is already registered!")
+        }
+        else{
+            res.status(400)
+            throw new Error("Email is already registered but not Verified... Please verify!")
+        }
     }
     if (password.length < 8) {
         res.status(400)
@@ -58,14 +65,21 @@ exports.registerUser = asyncHandler(async (req, res) => {
 
     let hashPassword = await bcrypt.hash(password, 10);
 
-    let newUser;
-    try {
-        newUser = await userModel.create({ username, email, password: hashPassword, role });
-    }
-    catch (e) {
-        res.status(400)
-        throw new Error(e)
-    }
+    const newUser = await userModel.create({ username, email, password: hashPassword, role });
+
+    const verifyToken = crypto.randomBytes(20).toString("hex");
+    newUser.verifyEmailToken = crypto.createHash("sha256").update(verifyToken).digest("hex");
+    newUser.verifyEmailExpire = Date.now() + 30 * 60 * 1000;
+
+    await newUser.save();
+
+    const verifyUrl = `${req.protocol}://${req.get("host")}/api/v1/auth/verifyEmail/${verifyToken}`;
+
+    await sendEmail({
+        to: newUser.email,
+        subject: "Verify your Email - Faithzy",
+        text: verificationEmail(verifyUrl),
+    });
 
     res.status(201).json({
         success: true,
@@ -92,6 +106,11 @@ exports.loginUser = asyncHandler(async (req, res) => {
     if (user.userStatus === 'Blocked') {
         res.status(403)
         throw new Error("Your account has been blocked!");
+    }
+    
+    if (!user.verified) {
+        res.status(403)
+        throw new Error("Not Verified");
     }
 
     const isPasswordMatched = await bcrypt.compare(password, user.password)
@@ -187,10 +206,22 @@ exports.onGoogleLoginSuccess = (req, res, next) => {
         if (err || !user) {
             return res.redirect('/login');
         }
-        req.logIn(user, (err) => {
+        req.logIn(user, async (err) => {
             if (err) {
                 return res.redirect('/login');
             }
+
+            if (!user.verified) {
+                user.verified = true;
+                await user.save();
+
+                await sendEmail({
+                    to: user.email,
+                    subject: "Welcome to Faithzy",
+                    text: welcomeEmail(user.username),
+                });
+            }
+
             const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN_SECRET, { expiresIn: process.env.JWT_TOKEN_EXPIRY });
             res.redirect(`http://localhost:3000/?token=${token}`);
         });
@@ -202,10 +233,22 @@ exports.onFacebookLoginSuccess = (req, res, next) => {
         if (err || !user) {
             return res.redirect('/login');
         }
-        req.logIn(user, (err) => {
+        req.logIn(user, async (err) => {
             if (err) {
                 return res.redirect('/login');
             }
+
+            if (!user.verified) {
+                user.verified = true;
+                await user.save();
+
+                await sendEmail({
+                    to: user.email,
+                    subject: "Welcome to Faithzy",
+                    text: welcomeEmail(user.username),
+                });
+            }
+
             const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN_SECRET, { expiresIn: process.env.JWT_TOKEN_EXPIRY });
             res.redirect(`http://localhost:3000/?token=${token}`);
         });
@@ -276,4 +319,68 @@ exports.blockUser = asyncHandler(async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, message: "Server error!" });
     }
+});
+
+exports.verifyEmail = asyncHandler(async (req, res) => {
+    const { token } = req.params;
+
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    const user = await userModel.findOne({
+        verifyEmailToken: hashedToken,
+        verifyEmailExpire: { $gt: Date.now() }
+    });
+
+    if (!user) {
+        res.status(400);
+        throw new Error("Invalid or expired verification token.");
+    }
+
+    user.verified = true;
+    user.verifyEmailToken = undefined;
+    user.verifyEmailExpire = undefined;
+    await user.save();
+
+    await sendEmail({
+        to: user.email,
+        subject: "Welcome to Faithzy",
+        text: welcomeEmail(user.username),
+    });
+
+    res.status(200).json({
+        success: true,
+        message: "Email verified successfully! You can now Login.",
+    });
+});
+
+exports.resendVerificationEmail = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+        res.status(400);
+        throw new Error("Email not found.");
+    }
+
+    if (user.verified) {
+        res.status(400);
+        throw new Error("Email is already verified.");
+    }
+
+    const verifyToken = crypto.randomBytes(20).toString("hex");
+    user.verifyEmailToken = crypto.createHash("sha256").update(verifyToken).digest("hex");
+    user.verifyEmailExpire = Date.now() + 30 * 60 * 1000;
+
+    await user.save();
+
+    const verifyUrl = `${req.protocol}://${req.get("host")}/api/v1/auth/verifyEmail/${verifyToken}`;
+
+    await sendEmail({
+        to: user.email,
+        subject: "Verify your Email - Faithzy",
+        text: verificationEmail(verifyUrl),
+    });
+
+    res.status(200).json({ success: true, message: "Verification email sent!" });
 });
