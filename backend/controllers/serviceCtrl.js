@@ -4,6 +4,43 @@ const serviceModel = require("../models/serviceModel");
 const recentlyViewedModel = require("../models/recentlyViewedModel")
 const categoryModel = require('../models/categoryModel');
 const adminSettingsModel = require('../models/adminSettingsModel');
+const cron = require("node-cron");
+
+
+cron.schedule('0 0 * * *', async () => {
+  try {
+    const servicesToUpdate = await serviceModel.find({
+      discountPercent: { $gt: 0 },
+      discountExpiryDate: { $lt: new Date() },
+    }).populate('sellerId');
+
+    if (servicesToUpdate.length > 0) {
+      const adminSettings = await adminSettingsModel.findOne();
+      const feesObj = adminSettings.fees;
+
+      for (let service of servicesToUpdate) {
+        service.discountPercent = 0;
+        service.discountExpiryDate = new Date();
+
+        const discountedIndex = service.status.indexOf('discounted');
+        if (discountedIndex > -1) {
+          service.status.splice(discountedIndex, 1);
+        }
+
+        for (let pkg of service.packages) {
+          pkg.salesPrice = pkg.price;
+          const tax = service?.sellerId?.sellerType === "Paid" ? Number(feesObj.paidSeller.service) : Number(feesObj.seller.service);
+          pkg.amountToGet = pkg.price - (pkg.price * (tax / 100));
+        }
+
+        await service.save();
+      }
+    }
+  } catch (error) {
+    console.error('Error running cron job for services:', error);
+  }
+});
+
 
 exports.getAllServices = asyncHandler(async (req, res) => {
   const allServices = await serviceModel.find({});
@@ -75,7 +112,7 @@ exports.getService = asyncHandler(async (req, res) => {
 exports.createService = asyncHandler(async (req, res) => {
 
   try {
-    let { title, description, category, tags, questions, packages, discountPercent, discountDays
+    let { title, description, category, tags, questions, packages, discountPercent, discountExpiryDate
     } = req.body;
 
     const serviceImages = req.files ? req.files.map(file => file.path) : [];
@@ -91,7 +128,7 @@ exports.createService = asyncHandler(async (req, res) => {
       description,
       category,
       discountPercent,
-      discountDays,
+      discountExpiryDate: Number(discountPercent) !== 0 ? discountExpiryDate : new Date(),
       tags,
       status,
       questions: JSON.parse(questions),
@@ -132,7 +169,7 @@ exports.updateService = asyncHandler(async (req, res) => {
   }
 
   try {
-    let { title, description, category, tags, questions, packages, discountPercent, discountDays
+    let { title, description, category, tags, questions, packages, discountPercent, discountExpiryDate
     } = req.body;
 
     const serviceImages = req.files.length > 0 ? req.files.map(file => file.path) : service.serviceImages;
@@ -153,13 +190,13 @@ exports.updateService = asyncHandler(async (req, res) => {
         description,
         category,
         discountPercent,
-        discountDays,
+        discountExpiryDate: Number(discountPercent) !== 0 ? discountExpiryDate : new Date(),
         tags,
         status,
         questions: JSON.parse(questions),
         packages: JSON.parse(packages)
       },
-      { new: true }
+      { new: true, runValidators: true }
     );
 
     if (service.category !== category) {

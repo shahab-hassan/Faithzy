@@ -91,6 +91,22 @@ function ServiceOrderDetails({ isBuyer }) {
     const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
 
     setTimeRemaining({ days, hours, minutes });
+    // const dueDate = new Date(createdAt);
+    // dueDate.setDate(dueDate.getDate() + deliveryDays);
+    // const now = new Date();
+    // const timeDiff = dueDate - now;
+
+    // if (timeDiff <= 0) {
+    //   setIsPastDue(true);
+    //   setTimeRemaining({ days: 0, hours: 0, minutes: 0 });
+    //   return;
+    // }
+
+    // const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    // const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    // const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+
+    // setTimeRemaining({ days, hours, minutes });
   };
 
   const formatDate = (date) => {

@@ -5,6 +5,43 @@ const recentlyViewedModel = require("../models/recentlyViewedModel")
 const categoryModel = require('../models/categoryModel');
 const adminSettingsModel = require('../models/adminSettingsModel');
 
+const cron = require('node-cron');
+
+cron.schedule('0 0 * * *', async () => {
+    try {
+        const productsToUpdate = await productModel.find({
+            discountPercent: { $gt: 0 },
+            discountExpiryDate: { $lt: new Date() }
+        }).populate('sellerId');
+
+        if (productsToUpdate.length > 0) {
+
+            const adminSettings = await adminSettingsModel.findOne();
+            const feesObj = adminSettings.fees;
+
+            for (let product of productsToUpdate) {
+
+                product.discountPercent = 0;
+                product.discountExpiryDate = new Date();
+
+                const discountedIndex = product.status.indexOf('discounted');
+                if (discountedIndex > -1) {
+                    product.status.splice(discountedIndex, 1);
+                }
+
+                product.salesPrice = product.price;
+                const tax = product?.sellerId?.sellerType === "Paid"? Number(feesObj.paidSeller.product) : Number(feesObj.seller.product);
+                product.amountToGet = product.price - (product.price * (tax/100));
+
+                await product.save();
+            }
+        }
+
+    } catch (error) {
+        console.error('Error running cron job:', error);
+    }
+});
+
 exports.getAllProducts = asyncHandler(async (req, res) => {
     const allProducts = await productModel.find({});
     res.status(200).json({
@@ -56,7 +93,7 @@ exports.getSellerProductsById = asyncHandler(async (req, res) => {
 exports.getProduct = asyncHandler(async (req, res) => {
 
     const product = await productModel.findById(req.params.id).populate({
-        path: 'sellerId stock',
+        path: 'sellerId',
         populate: {
             path: 'userId',
             select: 'username',
@@ -78,7 +115,7 @@ exports.createProduct = asyncHandler(async (req, res) => {
 
     try {
         let { title, description, category, stock, price, discountPercent,
-            discountDays, salesPrice, amountToGet, shippingFees, tags
+            discountExpiryDate, salesPrice, amountToGet, shippingFees, tags
         } = req.body;
 
         const productImages = req.files ? [req.files.productThumbnail[0].path, ...req.files.productGallery.map(file => file.path)] : [];
@@ -96,7 +133,7 @@ exports.createProduct = asyncHandler(async (req, res) => {
             stock,
             price,
             discountPercent,
-            discountDays,
+            discountExpiryDate: Number(discountPercent) !== 0 ? discountExpiryDate : new Date(),
             salesPrice,
             amountToGet,
             shippingFees,
@@ -138,7 +175,7 @@ exports.updateProduct = asyncHandler(async (req, res) => {
     }
 
     try {
-        let { title, description, category, stock, price, discountPercent, discountDays, salesPrice, amountToGet, shippingFees, tags } = req.body;
+        let { title, description, category, stock, price, discountPercent, discountExpiryDate, salesPrice, amountToGet, shippingFees, tags } = req.body;
 
         let updatedImages = product.productImages;
 
@@ -166,14 +203,14 @@ exports.updateProduct = asyncHandler(async (req, res) => {
                 stock,
                 price,
                 discountPercent,
-                discountDays,
+                discountExpiryDate: Number(discountPercent) !== 0 ? discountExpiryDate : new Date(),
                 salesPrice,
                 amountToGet,
                 shippingFees,
                 tags,
                 status
             },
-            { new: true }
+            { new: true, runValidators: true }
         );
 
         if (product.category !== category) {

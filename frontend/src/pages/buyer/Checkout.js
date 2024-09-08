@@ -373,7 +373,7 @@ function Checkout() {
       enqueueSnackbar("Coupon removed!", { variant: "info" });
     }
     else {
-      axios.post("http://localhost:5000/api/v1/coupons/apply", { code: couponCode }, {
+      axios.post("http://localhost:5000/api/v1/coupons/apply", { code: couponCode, salesPrice: (items || (customItem && customItem.quoteType === "product")) ? summary.paidByBuyer.totalSalesPrice.toFixed(2) : serviceSummary.paidByBuyer.salesPrice.toFixed(2) }, {
         headers: { Authorization: `Bearer ${token}` }
       })
         .then(response => {

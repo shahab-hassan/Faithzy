@@ -1,8 +1,31 @@
 const asyncHandler = require("express-async-handler");
 const sellerModel = require('../models/sellerModel');
 const userModel = require('../models/userModel');
-const adminSettingsModel = require('../models/adminSettingsModel');
 const { createPaymentIntent } = require("./paymentCtrl");
+const cron = require("node-cron");
+
+
+cron.schedule('0 0 * * *', async () => {
+  try {
+    const currentDate = new Date();
+
+    const expiredSellers = await sellerModel.find({
+      sellerType: "Paid",
+      "plan.endDate": { $lt: currentDate }
+    });
+
+    if (expiredSellers.length > 0) {
+      for (const seller of expiredSellers) {
+        seller.sellerType = "Free";
+        seller.plan = null;
+
+        await seller.save();
+      }
+    }
+  } catch (error) {
+    console.error("Error checking expired seller plans:", error);
+  }
+});
 
 exports.createSeller = asyncHandler(async (req, res) => {
   if (req.user.role === "seller") {
@@ -140,7 +163,6 @@ exports.deleteSeller = asyncHandler(async (req, res) => {
 });
 
 
-
 exports.upgradeSellerPlan = asyncHandler(async (req, res) => {
 
   const { months, price, startDate, endDate, paymentMethod } = req.body.plan;
@@ -162,20 +184,19 @@ exports.upgradeSellerPlan = asyncHandler(async (req, res) => {
   }
 
   const seller = await sellerModel.findById(req.params.id);
-  if(!seller){
+  if (!seller) {
     res.status(404);
     throw new Error("Seller not found!");
   }
 
   seller.plan = plan;
   seller.sellerType = "Paid";
-  seller.investment.push({in: "membership", of: price, on: new Date()});
+  seller.investment.push({ in: "membership", of: price, on: new Date() });
 
   seller.save();
 
   res.status(200).json({ success: true, seller, clientSecret: paymentIntent.client_secret });
 });
-
 
 
 exports.cancelSellerPlan = asyncHandler(async (req, res) => {

@@ -12,10 +12,10 @@ const packageSchema = new mongoose.Schema({
   name: { type: String, enum: ["BASIC", "STANDARD", "ULTIMATE"], required: true },
   title: { type: String, required: [true, "Package title is required"] },
   description: { type: String, required: [true, "Package description is required"] },
-  price: { type: Number, required: [true, "Package price is missing"], max: [1000000, "Price cannot exceed 1 Million"] },
+  price: { type: Number, required: [true, "Package price is missing"], min: [5, "Price cannot be less than $5"], max: [1000000, "Price cannot exceed 1 Million"] },
   amountToGet: { type: Number, required: [true, "Amount is missing"] },
   salesPrice: { type: Number, required: true },
-  deliveryDays: { type: Number, required: [true, "Package delivery time is missing"], default: 1 },
+  deliveryDays: { type: Number, required: [true, "Package delivery time is missing"], default: 1, min: [1, "Delivery days can't be less than 1"], max: [1000, "Delivery days cannot exceed 1000"] },
 });
 
 const serviceSchema = new mongoose.Schema({
@@ -24,8 +24,8 @@ const serviceSchema = new mongoose.Schema({
   description: { type: String, required: [true, "Please Enter post Description"] },
   category: { type: String, required: [true, "Please Enter post Category"] },
   packages: [packageSchema],
-  discountPercent: { type: Number, default: 0, max: [100, "Discount percentage can't be greater than 100"] },
-  discountDays: { type: Number, default: 0 },
+  discountPercent: { type: Number, default: 0, min: [0, "Discount percentage can't be less than 0"], max: [100, "Discount percentage can't be greater than 100"] },
+  discountExpiryDate: { type: Date, default: Date.now },
   tags: { type: [String] },
   serviceImages: [String],
   questions: [String],

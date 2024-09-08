@@ -18,6 +18,10 @@ function CreateProduct() {
   const [galleryImages, setGalleryImages] = useState([]);
   const [categories, setCategories] = useState([]);
 
+  const crrDate = new Date();
+  crrDate.setDate(crrDate.getDate());
+  const today = crrDate.toISOString().split('T')[0];
+
   const [productDetails, setProductDetails] = useState({
     productImages: [],
     title: '',
@@ -26,31 +30,51 @@ function CreateProduct() {
     stock: 0,
     price: 0,
     discountPercent: 0,
-    discountDays: 0,
+    discountExpiryDate: "",
     salesPrice: 0,
     amountToGet: 0,
     shippingFees: 0,
     tags: ''
   });
 
+  const [feesObj, setFeesObj] = React.useState({
+    seller: { product: 0, service: 0 },
+    paidSeller: { product: 0, service: 0 },
+    buyer: { product: 0, service: 0 }
+  });
+
+  React.useEffect(() => {
+
+    axios.get("http://localhost:5000/api/v1/settings/admin/feesAndMembership")
+      .then(response => {
+        if (response.data.success)
+          setFeesObj(response.data.fees);
+      })
+      .catch(e => {
+        console.log(e);
+        enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
+      })
+
+  }, [])
+
   React.useEffect(() => {
     axios.get('http://localhost:5000/api/v1/categories/product/all')
-    .then(response => {
-        if (response.data.success){
-            let categories = response.data.categories; 
-            setCategories(categories);
-            setProductDetails(prev => ({
-              ...prev,
-              category: categories[0].name
-            }))
+      .then(response => {
+        if (response.data.success) {
+          let categories = response.data.categories;
+          setCategories(categories);
+          setProductDetails(prev => ({
+            ...prev,
+            category: categories[0].name
+          }))
         }
         else
-          enqueueSnackbar("Something went wrong!", {variant: "error"})
-    })
-    .catch(e => {
+          enqueueSnackbar("Something went wrong!", { variant: "error" })
+      })
+      .catch(e => {
         console.error(e);
         enqueueSnackbar(e.response.data.error || 'Failed to fetch categories', { variant: 'error' });
-    });
+      });
     if (id) {
       axios.get(`http://localhost:5000/api/v1/products/product/${id}`)
         .then(response => {
@@ -82,8 +106,18 @@ function CreateProduct() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === 'stock' && (value < 0 || value > 100000))
+      return;
+    else if (name === 'price' && (value < 0 || value > 1000000))
+      return;
+    else if (name === 'discountPercent' && (value < 0 || value > 100))
+      return;
+    else if (name === 'shippingFees' && (value < 0 || value > 1000000))
+      return;
+
     setProductDetails(prevState => ({
-      ...prevState, 
+      ...prevState,
       [name]: value
     }));
 
@@ -110,7 +144,7 @@ function CreateProduct() {
 
     const files = Array.from(e.target.files);
 
-    if(!files.length > 0)
+    if (!files.length > 0)
       return;
 
     const galleryImageUrls = [];
@@ -143,9 +177,11 @@ function CreateProduct() {
       discountPercent = value;
     }
 
+    const tax = user?.sellerId?.sellerType === "Paid"? Number(feesObj.paidSeller.product) : Number(feesObj.seller.product);
+
     if (offerDiscount) {
       const salesPrice = price - (price * (discountPercent / 100));
-      const amountToGet = salesPrice * 0.91;
+      const amountToGet = salesPrice - (salesPrice * (tax)/100);
       setProductDetails(prevState => ({
         ...prevState,
         salesPrice,
@@ -155,7 +191,7 @@ function CreateProduct() {
       setProductDetails(prevState => ({
         ...prevState,
         salesPrice: price,
-        amountToGet: price * 0.91
+        amountToGet: price - (price * (tax)/100)
       }));
     }
   };
@@ -163,16 +199,17 @@ function CreateProduct() {
   const updateDiscount = () => {
     setOfferDiscount(prevState => {
       if (prevState) {
+        const tax = user?.sellerId?.sellerType === "Paid"? Number(feesObj.paidSeller.product) : Number(feesObj.seller.product);
         setProductDetails(product => ({
           ...product,
           salesPrice: product.price,
-          amountToGet: product.price * 0.91
+          amountToGet: product.price - (product.price * (tax)/100)
         }));
       }
       setProductDetails(product => ({
         ...product,
         discountPercent: 0,
-        discountDays: 0
+        discountExpiryDate: ""
       }));
       return !prevState;
     });
@@ -188,16 +225,16 @@ function CreateProduct() {
     });
   };
 
-  const clearProducts = (toBeClear)=>{
-    if(toBeClear === "thumbnail"){
+  const clearProducts = (toBeClear) => {
+    if (toBeClear === "thumbnail") {
       setProductThumbnail(null);
       setProductDetails(prev => ({
-          ...prev,
-          productImages: [null, ...prev.productImages.slice(1)]
-        }))
+        ...prev,
+        productImages: [null, ...prev.productImages.slice(1)]
+      }))
     }
-      
-    if(toBeClear === "gallery"){
+
+    if (toBeClear === "gallery") {
       setGalleryImages([]);
       setProductDetails(prev => ({
         ...prev,
@@ -210,22 +247,22 @@ function CreateProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(galleryImages.length > 5){
-      enqueueSnackbar("Max '5' images are allowed", {variant: "warning"})
+    if (galleryImages.length > 5) {
+      enqueueSnackbar("Max '5' images are allowed", { variant: "warning" })
       return;
     }
-    if(galleryImages.length === 0){
-        enqueueSnackbar("Atleast '1' galley image is required!", {variant: "warning"})
-        return;
+    if (galleryImages.length === 0) {
+      enqueueSnackbar("Atleast '1' galley image is required!", { variant: "warning" })
+      return;
     }
 
-    if(productDetails.productImages.length===0 || productDetails.productImages[0] === null){
-      enqueueSnackbar("Product Thumbnail is required", {variant: "warning"})
+    if (productDetails.productImages.length === 0 || productDetails.productImages[0] === null) {
+      enqueueSnackbar("Product Thumbnail is required", { variant: "warning" })
       return;
     }
-    else if(productDetails.productImages.length < 2 || productDetails.productImages[1] === null){
-      enqueueSnackbar("Atleast one gallery image is required", {variant: "warning"})
-      return;  
+    else if (productDetails.productImages.length < 2 || productDetails.productImages[1] === null) {
+      enqueueSnackbar("Atleast one gallery image is required", { variant: "warning" })
+      return;
     }
 
     const formData = new FormData();
@@ -237,16 +274,16 @@ function CreateProduct() {
         formData.append('productGallery', image);
       }
     });
-  
+
     Object.keys(productDetails).forEach(key => {
-      if (key !== 'productThumbnail' && key!=="productGallery") {
+      if (key !== 'productThumbnail' && key !== "productGallery") {
         formData.append(key, productDetails[key]);
       }
     });
 
     try {
       const token = localStorage.getItem('token');
-      let response; 
+      let response;
       if (id) {
         response = await axios.put(`http://localhost:5000/api/v1/products/seller/product/${id}`, formData, {
           headers: {
@@ -280,7 +317,7 @@ function CreateProduct() {
       <section className="section">
         <div className="createProductContent">
 
-          <h1 className="primaryHeading">{id? "Edit" : "Add New"} <span>Product</span></h1>
+          <h1 className="primaryHeading">{id ? "Edit" : "Add New"} <span>Product</span></h1>
 
           <div className="createProductDetails">
 
@@ -336,8 +373,8 @@ function CreateProduct() {
                         <input type="number" className='inputField' name="discountPercent" value={productDetails.discountPercent} onChange={handleChange} required />
                       </div>
                       <div className='inputInnerDiv'>
-                        <label>Discount For (Days) <span>*</span></label>
-                        <input type="number" className='inputField' name="discountDays" value={productDetails.discountDays} onChange={handleChange} required />
+                        <label>Discount Expiry <span>*</span></label>
+                        <input type="date" className='inputField' name="discountExpiryDate" value={productDetails.discountExpiryDate} onChange={handleChange} min={today} required />
                       </div>
                     </div>
                   )}
@@ -348,7 +385,7 @@ function CreateProduct() {
                       <input type="number" className='inputField' name="salesPrice" value={productDetails.salesPrice} readOnly />
                     </div>
                     <div className='inputInnerDiv'>
-                      <label>Amount to Get (9% tax)</label>
+                      <label>Amount to Get ({user?.sellerId?.sellerType === "Paid"? feesObj.paidSeller.product : feesObj.seller.product}% tax)</label>
                       <input type="number" className='inputField' name="amountToGet" value={productDetails.amountToGet} readOnly />
                     </div>
                   </div>
@@ -379,14 +416,14 @@ function CreateProduct() {
 
                     <div className="productThumbnailUpper">
                       <label>Product Thumbnail <span>*</span></label>
-                      {productThumbnail && <div className='clearBtn' onClick={()=> clearProducts("thumbnail")}>Remove</div>}
+                      {productThumbnail && <div className='clearBtn' onClick={() => clearProducts("thumbnail")}>Remove</div>}
                     </div>
 
                     <div className="productThumbnailContent">
                       <label htmlFor="thumbnailUpload" className="uploadLabel">
                         {productThumbnail ? <img src={productThumbnail} alt="Error" className="thumbnailImage" />
-                         :  
-                        <FaUpload className="uploadIcon" />}
+                          :
+                          <FaUpload className="uploadIcon" />}
                       </label>
                       <input type="file" id="thumbnailUpload" className="inputField" onChange={handleThumbnailChange} required />
                     </div>

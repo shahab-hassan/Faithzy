@@ -6,6 +6,32 @@ const productModel = require("../models/productModel");
 const serviceModel = require("../models/serviceModel");
 const sellerModel = require("../models/sellerModel");
 const paymentModel = require("../models//paymentModel");
+const cron = require('node-cron');
+
+cron.schedule('* * * * *', asyncHandler(async () => {
+  const now = new Date();
+  const orders = await serviceOrderModel.find({ 'service.crrStatus': { $in: ['Active', 'Past Due'] } });
+
+  for (const order of orders) {
+    const dueDate = new Date(order.createdAt);
+    dueDate.setDate(dueDate.getDate() + order.service.pkg.deliveryDays);
+
+    if (now > dueDate) {
+      if(order.service.status[order.service.status.length - 1].name !== "Past Due" && order.service.status[order.service.status.length - 1].name === "Active"){
+        order.service.status.push({ name: 'Past Due', createdAt: now });
+        order.service.crrStatus = 'Past Due';
+        await order.save();
+      }
+    }
+    else{
+      if(order.service.status[order.service.status.length - 1].name === "Past Due"){
+          order.service.status.pop();
+          order.service.crrStatus = order.service.status[order.service.status.length - 1].name;
+          await order.save();
+      }
+    }
+  }
+}));
 
 exports.createProductOrder = asyncHandler(async (req, res) => {
 

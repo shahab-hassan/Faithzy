@@ -6,7 +6,7 @@ import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 
 import SampleProvisions from "../../components/buyer/SampleProvisions";
 import { AuthContext } from '../../utils/AuthContext';
-import { addToWishlistUtil, removeFromWishlistUtil, fetchWishlistUtil } from '../../utils/utilFuncs';
+import { addToWishlistUtil, removeFromWishlistUtil, fetchWishlistUtil, formatDate } from '../../utils/utilFuncs';
 import { addToCartUtil, removeFromCartUtil, fetchCartUtil } from '../../utils/utilFuncs';
 import Reviews from '../../components/common/Reviews';
 
@@ -145,6 +145,13 @@ function ProductDetails() {
               </div>
 
               <div className="horizontalLine"></div>
+
+              {Number(product.discountPercent) !== 0 && <div className="discountEndsOn">
+                <span>Discount ending on - </span><strong>{formatDate(product.discountExpiryDate)}</strong>
+              </div>}
+
+              {Number(product.discountPercent) !== 0 && <div className="horizontalLine"></div>}
+
 
               <div className="productActions">
                 <div className="cartCountBtn">

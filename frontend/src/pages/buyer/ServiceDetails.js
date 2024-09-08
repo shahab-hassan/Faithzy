@@ -6,7 +6,7 @@ import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 
 import SampleProvisions from '../../components/buyer/SampleProvisions';
 import { AuthContext } from '../../utils/AuthContext';
-import { addToWishlistUtil, removeFromWishlistUtil, fetchWishlistUtil } from '../../utils/utilFuncs';
+import { addToWishlistUtil, removeFromWishlistUtil, fetchWishlistUtil, formatDate } from '../../utils/utilFuncs';
 import Reviews from '../../components/common/Reviews';
 
 function ServiceDetails() {
@@ -140,6 +140,11 @@ function ServiceDetails() {
                                     <p className='off'>{`${service.discountPercent}% OFF`}</p>
                                 </>}
                             </div>
+                            {Number(service.discountPercent) !== 0 && <div className="discountEndsOn">
+                                Discount ending on - <strong>{formatDate(service.discountExpiryDate)}</strong>
+                            </div>}
+
+                            <div className="horizontalLine"></div>
 
                             <div className="serviceActions">
                                 <div className="addToWishlistBtn" onClick={(e) => handleWishlistClick(e)}>

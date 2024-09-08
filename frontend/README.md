@@ -1,7 +1,7 @@
 *** Overview ***: 
 
-- Completed Reviews Functionality:
---- Created and Completed Seller Earnings Page
---- Completed AdminPayments Page to manage payments
-
-- Fixed some other little issues and Bugs 
+-- Completed Cron Auto Updating Functionalities at:
+--- Coupons Status Auto changing to Expired and Active
+--- Service Orders auto marked as Past Due
+--- Products and Services Discount auto ending after Expiry Date
+--- Membership auto cancelling after expiry

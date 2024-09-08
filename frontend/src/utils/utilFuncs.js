@@ -82,7 +82,7 @@ export async function fetchWishlistUtil(user) {
 }
 
 
-export async function addToCartUtil(e, productId, count, user){
+export async function addToCartUtil(e, productId, count, user) {
   e.preventDefault();
 
   const token = localStorage.getItem("token");
@@ -162,7 +162,7 @@ export async function fetchCartUtil(user) {
 }
 
 
-export async function updateCartUtil(e, productId, count, user){
+export async function updateCartUtil(e, productId, count, user) {
   e.preventDefault();
 
   const token = localStorage.getItem("token");
@@ -186,4 +186,19 @@ export async function updateCartUtil(e, productId, count, user){
     enqueueSnackbar(e.response.data.error || "Something went wrong!", { variant: "error" });
     return null;
   }
+}
+
+
+
+export function formatDate(date) {
+  const options = { month: 'short', day: 'numeric', year: "numeric" };
+  return new Date(date).toLocaleDateString(undefined, options);
+}
+
+export function formatDateTime(date) {
+  const options = { month: 'short', day: 'numeric', year: '2-digit' };
+  const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
+  const formattedDate = new Date(date).toLocaleDateString(undefined, options);
+  const formattedTime = new Date(date).toLocaleTimeString(undefined, timeOptions);
+  return `${formattedTime} - ${formattedDate}`;
 }

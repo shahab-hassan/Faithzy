@@ -22,7 +22,7 @@ const AdminRevenue = () => {
     const [customEndDate, setCustomEndDate] = useState('');
 
     const crrDate = new Date();
-    crrDate.setDate(crrDate.getDate() - 1);
+    crrDate.setDate(crrDate.getDate());
     const today = crrDate.toISOString().split('T')[0];
 
     useEffect(() => {

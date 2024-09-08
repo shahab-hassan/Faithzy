@@ -1,5 +1,21 @@
 const asyncHandler = require('express-async-handler');
 const Coupon = require('../models/couponModel');
+const cron = require('node-cron');
+
+cron.schedule('* * * * *', async () => {
+
+    const now = new Date();
+
+    await Coupon.updateMany(
+        { isSchedule: true, scheduledDate: { $lte: now }, status: 'Scheduled' },
+        { $set: { status: 'Active', isSchedule: false } }
+    );
+
+    await Coupon.updateMany(
+        { expiry: { $lte: now }, status: 'Active' },
+        { $set: { status: 'Expired' } }
+    );
+});
 
 // Get all coupons
 exports.getAllCoupons = asyncHandler(async (req, res) => {
@@ -48,12 +64,18 @@ exports.deleteCoupon = asyncHandler(async (req, res) => {
 });
 
 exports.applyCoupon = asyncHandler(async (req, res) => {
-    const { code } = req.body;
+    const { code, salesPrice } = req.body;
 
     const coupon = await Coupon.findOne({ code });
-    if (!coupon) {
+    if (!coupon)
         return res.status(400).json({ success: false, error: "Invalid coupon code!" });
-    }
+    
+    if(coupon.status !== "Active")
+        return res.status(400).json({ success: false, error: `Coupon is not Active at the Moment` });
+
+    if(salesPrice < coupon.minToApply)
+        return res.status(400).json({ success: false, error: `Sales Price should be atleast $${coupon.minToApply} to apply this Coupon!` });
+    
 
     return res.status(200).json({ success: true, coupon });
 
