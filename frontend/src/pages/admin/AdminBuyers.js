@@ -4,12 +4,14 @@ import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { FaEnvelope, FaLock, FaLockOpen } from 'react-icons/fa';
 import { MdChat } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 
 function AdminBuyers() {
 
     const [buyers, setBuyers] = useState([]);
     const [filterType, setFilterType] = useState('All');
     const [isUpdated, setIsUpdated] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchBuyers = () => {
@@ -65,7 +67,7 @@ function AdminBuyers() {
                 <p className="joinField field">{new Date(item?.createdAt).toLocaleDateString()}</p>
                 <div className="actionsField field">
                     <MdChat className="icon" />
-                    <FaEnvelope className="icon" />
+                    <FaEnvelope className="icon" onClick={()=>navigate(`/ftzy-admin/email/send/${item?._id}`)} />
                     {item.userStatus === 'Blocked' ?
                         <FaLockOpen style={{ color: "var(--success)" }} className="icon" onClick={() => handleBlockUser(item._id, true)} />
                         :

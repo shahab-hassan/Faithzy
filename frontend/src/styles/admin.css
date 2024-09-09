@@ -546,3 +546,44 @@
     border: 2px solid var(--success);
     background: var(--success);
 }
+
+
+
+
+
+/* ****************************** ADMIN SEND EMAIL PAGE ****************************** */
+
+.adminSendEmailDiv .adminSendEmailContent{
+    background: var(--white);
+    border-radius: 8px;
+    padding: 20px 30px;
+}
+.adminSendEmailDiv .buttonsSection .upper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.adminSendEmailDiv .buttonsSection .buttonInputDiv{
+    display: flex;
+    gap: 10px;
+}
+.adminSendEmailDiv .buttonsSection .buttonInputDiv .btnUrlInput{
+    min-width: 65%;
+}
+.adminSendEmailDiv .buttonsSection .buttonInputDiv .removeBtnDiv{
+    min-width: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.adminSendEmailDiv .buttonsSection .buttonInputDiv .removeBtnDiv .removeBtn{
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    color: var(--darkGray);
+    transition: 0.2s;
+}
+.adminSendEmailDiv .buttonsSection .buttonInputDiv .removeBtnDiv .removeBtn:hover{
+    color: var(--black);
+}

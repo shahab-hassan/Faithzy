@@ -53,6 +53,7 @@ import AdminRevenue from './pages/admin/AdminRevenue.js';
 import AdminPayments from './pages/admin/AdminPayments.js';
 import AdminDisputes from './pages/admin/AdminDisputes.js';
 import Earnings from './pages/seller/Earnings.js';
+import AdminSendEmal from './pages/admin/AdminSendEmal.js';
 
 function App() {
 
@@ -130,6 +131,7 @@ function App() {
                     <Route path='/ftzy-admin/revenue' element={<AdminRevenue />} />
                     <Route path='/ftzy-admin/payments' element={<AdminPayments />} />
                     <Route path='/ftzy-admin/disputes' element={<AdminDisputes />} />
+                    <Route path='/ftzy-admin/email/send/:id' element={<AdminSendEmal />} />
                 </Route>
 
             </Routes>

@@ -5,6 +5,8 @@ const Product = require('../models/productModel');
 const Service = require('../models/serviceModel');
 const User = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
+const sendEmail = require("../utils/sendEmail")
+const {sendEmailFromAdminTemplate} = require("../utils/emailTemplates")
 
 
 exports.getTerms = asyncHandler(async (req, res) => {
@@ -312,4 +314,17 @@ exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
         revenue: revenueData,
         netProfit: netProfitData
     });
+});
+
+
+exports.sendEmailToUserFromAdmin = asyncHandler(async (req, res) => {
+    const { receiverEmail, subject, message, buttons } = req.body;
+
+    await sendEmail({
+        to: receiverEmail,
+        subject,
+        text: sendEmailFromAdminTemplate(subject, message, buttons),
+    });
+
+    res.status(200).json({ success: true });
 });

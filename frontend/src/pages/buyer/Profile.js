@@ -129,7 +129,7 @@ function Profile() {
                                 {isAdminLogin ? <div className='btnsForAdmin'>
                                     <Link to={`/ftzy-admin/chats/?p=${seller?.userId?._id}`} class="primaryBtn">Contact Seller</Link>
                                     <div>
-                                        <Link class="primaryBtn2">Send Email</Link>
+                                        <Link to={`/ftzy-admin/email/send/${seller?.userId?._id}`} class="primaryBtn2">Send Email</Link>
                                         <button onClick={() => handleBlockUser(seller?.userId?._id, seller?.userId?.userStatus === "Blocked")} class="secondaryBtn">{seller?.userId?.userStatus === "Blocked" ? "UnBlock Seller" : "Block Seller"}</button>
                                     </div>
                                 </div>

@@ -151,3 +151,20 @@ exports.welcomeEmail = (userName) => {
         </div>
     `;
 };
+
+exports.sendEmailFromAdminTemplate = (subject, message, buttons) => {
+
+    const buttonHtml = buttons.map(
+            (button) => `<a href="${button.url}" style="display:inline-block;margin-top:20px;margin-right:8px;padding:10px 20px;background-color:#4CAF50;color:white;text-decoration:none;border-radius:4px;">${button.title}</a>`
+        ).join('');
+
+    return `
+    <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 8px;">
+            <h2 style="color: #333;">${subject}</h2>
+            <p style="color: #555;">${message}</p>
+            ${buttonHtml}
+        </div>
+    </div>
+    `
+}

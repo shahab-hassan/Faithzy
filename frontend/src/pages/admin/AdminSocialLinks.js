@@ -88,7 +88,7 @@ function AdminSocialLinks() {
                                 <div>{platform.label}</div>
                             </div>
                             <input
-                                type="text"
+                                type="url"
                                 name={platform.name}
                                 value={links[platform.name] || ''}
                                 onChange={handleInputChange}
