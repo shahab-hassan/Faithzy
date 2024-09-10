@@ -476,6 +476,7 @@ label span{
     align-items: center;
     justify-content: center;
     transition: 0.1s;
+    padding: 10px;
 }
 .leftArrow .arrowIcon,
 .rightArrow .arrowIcon{

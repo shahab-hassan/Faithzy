@@ -34,6 +34,10 @@ function Login() {
       if (e?.response?.data?.error === "Not Verified"){
         setEmailNotVerified(true);
         enqueueSnackbar('Email is not verified. Please verify!', { variant: "error" })
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
       }
       else
         enqueueSnackbar(e.response.data.error, { variant: "error" })

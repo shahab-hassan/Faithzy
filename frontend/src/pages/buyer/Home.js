@@ -20,7 +20,7 @@ function Home() {
       window.history.replaceState({}, document.title, "/");
       enqueueSnackbar("LoggedIn Successfully!", {variant: "success"})
     }
-  }, [])
+  }, [location.search, login])
 
   return (
     <div>

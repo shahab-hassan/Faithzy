@@ -1,37 +1,30 @@
-import React from 'react'
-import {Link} from "react-router-dom"
+import React from 'react';
+import { Link } from "react-router-dom";
+import TradeleadStepper from './TradeleadStepper';
 
 function Hero() {
-  return (
-    <div className='heroDiv'>
-        <section className='section'>
+    return (
+        <div className='heroDiv'>
+            <section className='section'>
+                <div className="heroContent">
 
-            <div className="heroContent">
+                    <div className="heroContentMain">
+                        <h1>EMPOWER YOUR <span>FAITH</span></h1>
+                        <p>Explore a vast selection of religious products and services from trusted sellers. Whether seeking spiritual guidance, artifacts, or events, we've got you covered.</p>
+                        <div className="heroBtns">
+                            <Link to="/" className='primaryBtn'>Explore Products <i className="fa-solid fa-arrow-right"></i></Link>
+                            <Link to="/" className='primaryBtn'>Find Services <i className="fa-solid fa-arrow-right"></i></Link>
+                        </div>
+                    </div>
 
-                <div className="heroContentMain">
-                    <h1>NEW COLLECTION <span>"TASBIH"</span></h1>
-                    <p>Explore beautiful tasbih for mindful dhikr and luxurious prayer rugs for comfort and focus in your Salah...</p>
-                </div>
-                <div className="heroBtns">
-                    <Link to="/" className='primaryBtn'>Shop Now <i className="fa-solid fa-arrow-right"></i></Link>
-                    <Link to="/" className='primaryBtn'>Discover More <i className="fa-solid fa-arrow-right"></i></Link>
-                </div>
-                
-            </div>
+                    <div className="heroTradeleadFormDiv">
+                        <TradeleadStepper />
+                    </div>
 
-            {/* <div className="heroBgs">
-                <div className="leftBox">
-                    <div className="box"></div>
                 </div>
-                <div className="rightImgDiv">
-                    <div className="box"></div>
-                    <img src="/assets/images/heroBg.jpg" alt="Error" />
-                </div>
-            </div> */}
-
-        </section>
-    </div>
-  )
+            </section>
+        </div>
+    );
 }
 
-export default Hero
+export default Hero;
