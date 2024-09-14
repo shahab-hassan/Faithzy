@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import ServiceCard from '../../components/buyer/ServiceCard';
 import PriceFilter from '../../components/buyer/Filters/PriceFilter';
 import RatingFilter from '../../components/buyer/Filters/RatingFilter';
@@ -11,7 +11,8 @@ import ActiveFilters from '../../components/buyer/Filters/ActiveFilters';
 
 function Services() {
 
-    const { categoryName } = useParams();
+    const [searchParams] = useSearchParams();
+    const categoryName = searchParams.get('category') || '';
     const [services, setServices] = useState([]);
 
     const defaultPriceRange = {min: 0, max: 1000000};
@@ -21,36 +22,72 @@ function Services() {
     const [totalPages, setTotalPages] = useState(1);
     const [totalServices, setTotalServices] = useState(0);
 
-    useEffect(() => {
+    const searchQuery = searchParams.get('search') || '';
+
+    // useEffect(() => {
         
+    //     const fetchServices = async () => {
+    //         try {
+    //             const response = await axios.get(`http://localhost:5000/api/v1/services/category/all/${categoryName}`, {
+    //                 params: {
+    //                     minPrice: priceRange.min,
+    //                     maxPrice: priceRange.max,
+    //                     rating,
+    //                     page,
+    //                 },
+    //             });
+    //             if (response.data.success) {
+    //                 setServices(response.data.services);
+    //                 setTotalPages(response.data.totalPages);
+    //                 setTotalServices(response.data.totalServices)
+    //             } 
+    //             else
+    //                 enqueueSnackbar("Something went wrong!", { variant: "error" });
+    //         } catch (e) {
+    //             console.log(e);
+    //             enqueueSnackbar(e.response.data.error || "Something went wrong!", { variant: "error" });
+    //         }
+    //     };
+
+
+    //     fetchServices();
+    // }, [categoryName, rating, page, priceRange]);
+
+
+    useEffect(() => {
         const fetchServices = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/v1/services/category/all/${categoryName}`, {
+                const response = await axios.get(`http://localhost:5000/api/v1/services/results/all/`, {
                     params: {
+                        category: categoryName,
+                        search: searchQuery,
                         minPrice: priceRange.min,
                         maxPrice: priceRange.max,
                         rating,
                         page,
                     },
                 });
+
                 if (response.data.success) {
                     setServices(response.data.services);
                     setTotalPages(response.data.totalPages);
-                    setTotalServices(response.data.totalServices)
-                } 
-                else
+                    setTotalServices(response.data.totalServices);
+                } else {
                     enqueueSnackbar("Something went wrong!", { variant: "error" });
+                }
             } catch (e) {
                 console.log(e);
                 enqueueSnackbar(e.response.data.error || "Something went wrong!", { variant: "error" });
             }
         };
 
-
         fetchServices();
-    }, [categoryName, rating, page, priceRange]);
+    }, [categoryName, rating, page, priceRange, searchQuery]);
+
 
     let serviceElems = services.map(service => <ServiceCard key={service._id} item={service} />);
+
+
 
     return (
         <div className='servicesDiv'>

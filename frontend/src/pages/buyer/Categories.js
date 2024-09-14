@@ -27,14 +27,14 @@ function Categories() {
     }, [])
 
     const allProductCats = productCats? productCats.map((category, index) => {
-        return <Link key={index} to={`/products/${category.name}`} className='category'>
+        return <Link key={index} to={`/products?category=${category.name}`} className='category'>
                     <p>{category.name} <span className='count'>({category.count})</span></p>
                     <i className="fa-solid fa-arrow-right"></i>
                 </Link>
     }) : [];
 
     const allServiceCats = serviceCats? serviceCats.map((category, index) => {
-        return <Link key={index} to={`/services/${category.name}`} className='category'>
+        return <Link key={index} to={`/services?category=${category.name}`} className='category'>
                     <p>{category.name} <span className='count'>({category.count})</span></p>
                     <i className="fa-solid fa-arrow-right"></i>
                 </Link>

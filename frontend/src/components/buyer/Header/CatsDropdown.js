@@ -22,7 +22,7 @@ function CatsDropdown({ isProduct, closeDropdowns }) {
   }, [isProduct]);
 
   const handleCategoryClick = (categoryName) => {
-    navigate(`/${isProduct ? "products" : "services"}/${categoryName}`);
+    navigate(`/${isProduct ? "products" : "services"}?category=${categoryName}`);
     closeDropdowns();
   };
 

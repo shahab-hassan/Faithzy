@@ -1,3 +1,3 @@
 *** Overview ***: 
 
--- Added Tradelead form in Hero Section!
+-- Implemented Search Functionality on Home page in Header. Users can now search using search box

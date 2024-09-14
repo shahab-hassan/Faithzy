@@ -65,7 +65,7 @@
 
 .searchBoxDiv .searchBoxMain .searchBoxLeft{
     width: 100%;
-    padding: 10px 20px;
+    padding-left: 25px;
 }
 
 .searchBoxDiv .searchBoxMain .searchBoxRight{
@@ -88,6 +88,8 @@
     background: var(--lightGray);
     border: none;
     width: 100%;
+    height: 100%;
+    padding: 10px 0px;
 }
 
 .searchBtnDiv{
@@ -102,6 +104,10 @@
     gap: 0;
     box-shadow: -2px 1px 10px 0.1px var(--lightBlack);
     cursor: pointer;
+    transition: 0.1s;
+}
+.searchBtnDiv:hover{
+    background: var(--primaryCopperDark);
 }
 
 .buyerHeaderActions{
@@ -761,7 +767,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    color: var(--primaryCopper);
+    color: var(--primaryCopper) !important;
     /* display: none; */
 }
 

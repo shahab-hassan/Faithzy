@@ -315,7 +315,7 @@ const ChatPage = () => {
 
     return (
         <div className="chatDiv">
-            <section className={user && "section"}>
+            <section className={!admin && "section"}>
                 <div className="chatContent">
 
                     <div className="chatsList">

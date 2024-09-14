@@ -85,10 +85,10 @@ function ProductCard({ item }) {
         </div>
         {isLogin && <div className="hoverActions">
           <div className="cartIconDiv iconDiv" onClick={(e) => handleCartClick(e)}>
-            {isInCart ? <BsFillCartCheckFill className='icon' /> : <BsCartPlus className='icon' />}
+            {isInCart ? <BsFillCartCheckFill /> : <BsCartPlus />}
           </div>
           <div className="wishlistIconDiv iconDiv" onClick={(e)=> handleWishlistClick(e)}>
-            {isInWishlist ? <MdFavorite className='icon' /> : <MdFavoriteBorder className='icon' />}
+            {isInWishlist ? <MdFavorite /> : <MdFavoriteBorder />}
           </div>
         </div>}
       </div>

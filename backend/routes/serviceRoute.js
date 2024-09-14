@@ -3,11 +3,11 @@ const router = express.Router();
 
 const upload = require("../config/multer");
 
-const {getAllServices, getRecentlyViewedServices, addRecentlyViewedService, getMySellerServices, createService, getService, updateService, deleteService, getCategoryServices, getSellerServicesById} = require("../controllers/serviceCtrl.js");
+const {getAllServices, getAllServicesResults, getRecentlyViewedServices, addRecentlyViewedService, getMySellerServices, createService, getService, updateService, deleteService, getCategoryServices, getSellerServicesById} = require("../controllers/serviceCtrl.js");
 const {authorized, authorizedRoles} = require("../middlewares/authorization")
 
-router.route("/all/")
-.get(getAllServices)
+router.route("/all/").get(getAllServices)
+router.route("/results/all/").get(getAllServicesResults)
 
 // router.route("/seller/all/")
 // .get(getSellerServices)

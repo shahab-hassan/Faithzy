@@ -17,8 +17,8 @@ function BuyerHeader() {
   const [showServicesDropdown, setShowServicesDropdown] = React.useState(false);
   const [showProductsDropdown, setShowProductsDropdown] = React.useState(false);
 
-  const [activeLink, setActiveLink] = React.useState("");
   const location = useLocation();
+  const [activeLink, setActiveLink] = React.useState("");
 
   
   React.useEffect(() => {
@@ -29,14 +29,13 @@ function BuyerHeader() {
   }, []);
   
   React.useEffect(() => {
-    if (location.pathname.startsWith('/services'))
+    if (location.pathname.startsWith('/services') || showServicesDropdown)
       setActiveLink('services');
-    else if (location.pathname.startsWith('/products'))
+    else if (location.pathname.startsWith('/products') || showProductsDropdown)
       setActiveLink('products');
     else
       setActiveLink("");
-
-  }, [location.pathname]);
+  }, [location.pathname, showServicesDropdown, showProductsDropdown]);
   
   const handleClickOutside = (event) => {
     if (accountRef.current && !accountRef.current.contains(event.target))
@@ -45,7 +44,6 @@ function BuyerHeader() {
       setShowServicesDropdown(false);
     if(productsRef.current && !productsRef.current.contains(event.target))
       setShowProductsDropdown(false);
-    setActiveLink("");
   };
 
   const handleDropdownClick = (e, type)=>{

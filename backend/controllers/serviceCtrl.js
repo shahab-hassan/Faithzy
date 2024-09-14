@@ -42,6 +42,51 @@ cron.schedule('0 0 * * *', async () => {
 });
 
 
+exports.getAllServicesResults = asyncHandler(async (req, res) => {
+  try {
+    const { search, minPrice, maxPrice, category, rating, page = 1 } = req.query;
+    const query = {};
+
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+        { tags: { $regex: search, $options: "i" } }
+      ];
+    }
+
+    if (category) query.category = category;
+
+    if (minPrice || maxPrice) {
+      query["packages.price"] = {};
+      if (minPrice) query["packages.price"].$gte = minPrice;
+      if (maxPrice) query["packages.price"].$lte = maxPrice;
+    }
+
+    if (rating) query.rating = { $gte: rating };
+
+    const servicesPerPage = 40;
+    const services = await serviceModel.find(query)
+      .sort(search ? { title: "asc" } : {})
+      .limit(servicesPerPage)
+      .skip(servicesPerPage * (page - 1));
+
+    const totalServices = await serviceModel.countDocuments(query);
+
+    res.status(200).json({
+      success: true,
+      services,
+      totalServices,
+      totalPages: Math.ceil(totalServices / servicesPerPage),
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message || "Server Error",
+    });
+  }
+})
+
 exports.getAllServices = asyncHandler(async (req, res) => {
   const allServices = await serviceModel.find({});
   res.status(200).json({

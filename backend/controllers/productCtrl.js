@@ -30,8 +30,8 @@ cron.schedule('0 0 * * *', async () => {
                 }
 
                 product.salesPrice = product.price;
-                const tax = product?.sellerId?.sellerType === "Paid"? Number(feesObj.paidSeller.product) : Number(feesObj.seller.product);
-                product.amountToGet = product.price - (product.price * (tax/100));
+                const tax = product?.sellerId?.sellerType === "Paid" ? Number(feesObj.paidSeller.product) : Number(feesObj.seller.product);
+                product.amountToGet = product.price - (product.price * (tax / 100));
 
                 await product.save();
             }
@@ -49,6 +49,49 @@ exports.getAllProducts = asyncHandler(async (req, res) => {
         allProducts
     })
 })
+
+exports.getAllProductsResults = async (req, res) => {
+    try {
+        const { search, minPrice, maxPrice, category, rating, page = 1 } = req.query;
+        const query = {};
+
+        if (search) {
+            query.$or = [
+                { title: { $regex: search, $options: "i" } },
+                { description: { $regex: search, $options: "i" } },
+                { tags: { $regex: search, $options: "i" } }
+            ];
+        }
+
+        if (category) query.category = category;
+        if (minPrice || maxPrice) {
+            query.price = {};
+            if (minPrice) query.price.$gte = minPrice;
+            if (maxPrice) query.price.$lte = maxPrice;
+        }
+        if (rating) query.rating = { $gte: rating };
+
+        const productsPerPage = 40;
+        const products = await productModel.find(query)
+            .sort(search ? { title: "asc" } : {})
+            .limit(productsPerPage)
+            .skip(productsPerPage * (page - 1));
+
+        const totalProducts = await productModel.countDocuments(query);
+
+        res.status(200).json({
+            success: true,
+            products,
+            totalProducts,
+            totalPages: Math.ceil(totalProducts / productsPerPage),
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: err.message || "Server Error",
+        });
+    }
+};
 
 exports.getMySellerProducts = asyncHandler(async (req, res) => {
     let allProducts;

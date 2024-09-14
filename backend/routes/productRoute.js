@@ -3,11 +3,11 @@ const router = express.Router();
 
 const upload = require("../config/multer");
 
-const {getAllProducts, getRecentlyViewedProducts, addRecentlyViewedProduct, getMySellerProducts, createProduct, getProduct, updateProduct, deleteProduct, getCategoryProducts, getSellerProductsById} = require("../controllers/productCtrl.js");
+const {getAllProducts, getAllProductsResults, getRecentlyViewedProducts, addRecentlyViewedProduct, getMySellerProducts, createProduct, getProduct, updateProduct, deleteProduct, getCategoryProducts, getSellerProductsById} = require("../controllers/productCtrl.js");
 const {authorized, authorizedRoles} = require("../middlewares/authorization.js");
 
-router.route("/all/")
-.get(getAllProducts)
+router.route("/all/").get(getAllProducts)
+router.route("/results/all/").get(getAllProductsResults)
 
 // router.route("/seller/all/")
 // .get(getSellerProducts)

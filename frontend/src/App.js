@@ -68,8 +68,8 @@ function App() {
                     <Route path='/productDetails/:id' element={<ProductDetails />} />
                     <Route path='/settings' element={<Settings />} />
                     <Route path='/categories' element={<Categories />} />
-                    <Route path='/products/:categoryName' element={<Products />} />
-                    <Route path='/services/:categoryName' element={<Services />} />
+                    <Route path='/products' element={<Products />} />
+                    <Route path='/services' element={<Services />} />
                     <Route path='/checkout' element={<CheckoutStripeContainer />} />
                     <Route path='/postingDetails/:id' element={<ServiceDetails />} />
                     <Route path='/contact' element={<Contact />} />

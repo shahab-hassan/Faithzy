@@ -11,6 +11,7 @@
 
 :root {
     --primaryCopper: #8A4229;
+    --primaryCopperDark: #723723;
     --secondaryCopper: #FCB887;
     --secondaryCopperDark: #ff9549;
     --secondaryCopper2: hsl(25, 95%, 76%, .3);
