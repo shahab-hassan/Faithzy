@@ -18,7 +18,7 @@ const requestSchema = new mongoose.Schema({
   expiryDate: { type: Date, required: true },
   status: { type: String, enum: ['Active', 'Expired'], default: 'Active' },
   offers: [offerSchema]
-}, 
+},
 {timestamps: true}
 );
 

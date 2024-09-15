@@ -2,7 +2,7 @@
 
 .buyerHeaderDiv{
     background-color: var(--primaryBlue);
-    color: white;
+    color: var(--white);
     /* height: 21vh; */
 }
 
@@ -43,6 +43,21 @@
 {
     justify-content: space-between;
 }
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper .buyerHeaderActionsBefore{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper .buyerHeaderActionsBefore .luxuryBtn{
+    font-size: 0.8rem;
+    padding: 7px 22px;
+}
+/* .buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper, .buyerHeaderActionsBefore .navLink{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+} */
 
 .buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper .buyerHeaderUpperLeft{
     display: flex;
@@ -204,11 +219,17 @@
 
 
 
+
+
 /* *************** BUYER FOOOTER COMPONENT **************** */
 
 .buyerFooterDiv{
     padding: 30px 0px;
     background: var(--primaryBlue);
+}
+.buyerFooterDiv .horizontalLine{
+    height: 1px;
+    background: var(--darkGray);
 }
 
 .buyerFooterDiv .footerContent{
@@ -227,8 +248,7 @@
     color: var(--white);
 }
 
-.buyerFooterDiv .footerContent .footerUpper, 
-.buyerFooterDiv .footerContent .footerMiddle, 
+.buyerFooterDiv .footerContent .footerUpper,
 .buyerFooterDiv .footerContent .footerLower
 {
     display: flex;
@@ -237,33 +257,42 @@
     width: 100%;
 }
 
-.buyerFooterDiv .footerContent .footerMiddle{
+.buyerFooterDiv .footerContent .footerUpper{
     width: 95%;
     margin: 20px 0px;
     align-items: start;
+    gap: 30px;
 }
-.buyerFooterDiv .footerContent .footerMiddle div{
+.buyerFooterDiv .footerContent .footerUpper .column{
     display: flex;
     flex-direction: column;
     gap: 6px;
+    min-width: 17%;
 }
-.buyerFooterDiv .footerContent .footerMiddle div h4{
+.buyerFooterDiv .footerContent .footerUpper div h4{
     margin-bottom: 10px;
     color: var(--secondaryCopper);
     font-weight: 600;
     font-size: 1.2rem;
 }
 
-.buyerFooterDiv .footerContent .footerLower .footerIconsDiv{
-    display: flex;
-    gap: 15px;
+.buyerFooterDiv .footerContent .footerUpper .footerUpperLeft{
+    max-width: 25%;
+    gap: 20px;
+    margin-right: 50px;
 }
-.buyerFooterDiv .footerContent .footerLower .socialIcons .icon{
-    cursor: pointer;
+.buyerFooterDiv .footerContent .footerUpper .footerUpperLeft .faithzyLogoDiv{
+    width: 80px;
+    height: 80px;
 }
 
-.buyerFooterDiv .footerContent .footerCategoriesBtn i{
-    margin-left: 10px;
+.buyerFooterDiv .footerContent .footerIconsDiv{
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+.buyerFooterDiv .footerContent .socialIcons .icon{
+    cursor: pointer;
 }
 
 
@@ -315,25 +344,6 @@
     gap: 20px;
     margin-top: 20px;
     animation: fadeInUp 1s ease-in-out 0.5s;
-}
-
-.heroDiv .heroContent .heroContentMain .heroBtns a {
-    background: linear-gradient(45deg, var(--secondaryCopperDark), var(--primaryCopper));
-    padding: 12px 25px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    font-size: 16px;
-}
-
-.heroDiv .heroContent .heroContentMain .heroBtns a:hover {
-    background: var(--secondaryCopper2);
-    border: 2px solid var(--primaryCopper);
-    transform: scale(1.05);
-    color: var(--white);
-}
-
-.heroDiv .heroContent .heroContentMain .heroBtns i {
-    margin-left: 8px;
 }
 
 .heroDiv::before {

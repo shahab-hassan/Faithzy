@@ -104,7 +104,7 @@ const ChatPage = () => {
         return () => {
             socket.off('receiveMessage');
         };
-    }, [selectedParticipant]);
+    }, [selectedParticipant]);  
 
     useEffect(() => {
         if (!user && !admin) return;
@@ -222,8 +222,8 @@ const ChatPage = () => {
                     if (quoteType === "product") {
                         setOfferDetails(prev => ({
                             ...prev,
-                            productId: response.data.allProducts[0]._id,
-                            title: response.data.allProducts[0].title
+                            productId: response.data.allProducts[0]?._id,
+                            title: response.data.allProducts[0]?.title
                         }))
                         setQuoteItems(response.data.allProducts)
                     }

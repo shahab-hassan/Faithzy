@@ -6,7 +6,7 @@ const Service = require('../models/serviceModel');
 const User = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
 const sendEmail = require("../utils/sendEmail")
-const {sendEmailFromAdminTemplate} = require("../utils/emailTemplates")
+const {sendEmailFromAdminTemplate, receiveEmailFromUserTemplate} = require("../utils/emailTemplates")
 
 
 exports.getTerms = asyncHandler(async (req, res) => {
@@ -327,4 +327,17 @@ exports.sendEmailToUserFromAdmin = asyncHandler(async (req, res) => {
     });
 
     res.status(200).json({ success: true });
+});
+
+
+exports.receiveEmailFromUser = asyncHandler(async (req, res) => {
+
+    await sendEmail({
+        from: req.body.email,
+        subject: `New Contact Form Submission: ${req.body.subject}`,
+        text: receiveEmailFromUserTemplate(req.body.fullName, req.body.email, req.body.country, req.body.phoneNumber, req.body.message),
+    });
+
+    res.status(200).json({ success: true });
+
 });
