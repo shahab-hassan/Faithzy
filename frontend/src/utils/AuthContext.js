@@ -7,7 +7,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 
-    const [isLogin, setIsLogin] = useState(false);
+    const [isLogin, setIsLogin] = useState(null);
     const [isAdminLogin, setIsAdminLogin] = useState(null);
     const [user, setUser] = useState(null);
     const [admin, setAdmin] = useState(null);
@@ -33,6 +33,10 @@ export const AuthProvider = ({ children }) => {
                 setIsLogin(false);
                 setUser(null);
             }
+        }
+        else {
+            setIsLogin(false);
+            setUser(null);
         }
     };
 

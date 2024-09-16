@@ -7,8 +7,6 @@ import Register from "./pages/common/Register";
 import Login from "./pages/common/Login";
 import BuyerLayout from "./layouts/BuyerLayout";
 import BuyerLayoutHeader from "./layouts/BuyerLayoutHeader";
-import SellerLayout from "./layouts/SellerLayout";
-import SellerLayoutHeader from "./layouts/SellerLayoutHeader";
 import BecomeSeller from './pages/seller/BecomeSeller';
 import SellerDashboard from './pages/seller/SellerDashboard';
 import SellerProducts from './pages/seller/SellerProducts';
@@ -38,6 +36,8 @@ import Contact from './pages/buyer/Contact.js';
 import Profile from './pages/buyer/Profile';
 
 import AdminProtectedRoute from './utils/AdminProtectedRoute.js';
+import LoginProtectedRoute from './utils/LoginProtectedRoute.js';
+import SellerProtectedRoute from './utils/SellerProtectedRoute.js';
 import AdminLogin from "./pages/admin/AdminLogin.js";
 import AdminDashboard from './pages/admin/AdminDashboard.js';
 import Employees from './pages/admin/Employees.js';
@@ -54,37 +54,37 @@ import AdminPayments from './pages/admin/AdminPayments.js';
 import AdminDisputes from './pages/admin/AdminDisputes.js';
 import Earnings from './pages/seller/Earnings.js';
 import AdminSendEmal from './pages/admin/AdminSendEmal.js';
+import NotFound from './utils/NotFound.js';
 
 function App() {
 
     return (
         <>
             <ScrollToTop />
+
             <Routes>
+
                 <Route element={<BuyerLayout />}>
                     <Route path='/register' element={<Register />} />
                     <Route path='/login' element={<Login />} />
                     <Route path='/' element={<Home />} />
                     <Route path='/productDetails/:id' element={<ProductDetails />} />
-                    <Route path='/settings' element={<Settings />} />
                     <Route path='/categories' element={<Categories />} />
                     <Route path='/products' element={<Products />} />
                     <Route path='/services' element={<Services />} />
-                    <Route path='/checkout' element={<CheckoutStripeContainer />} />
                     <Route path='/postingDetails/:id' element={<ServiceDetails />} />
                     <Route path='/contact' element={<Contact />} />
                     <Route path='/profile/:id' element={<Profile />} />
-                </Route>
-
-                <Route element={<SellerLayout />}>
-                    <Route path='/seller/dashboard' element={<SellerDashboard />} />
-                    <Route path='/seller/product/preview/:id' element={<ProductDetails />} />
-                    <Route path='/seller/posting/preview/:id' element={<ServiceDetails />} />
+                    <Route path='/settings' element={<Settings />} />
                 </Route>
 
                 <Route element={<BuyerLayoutHeader/>}>
-                    <Route path='/postRequest' element={<PostRequest />} />
                     <Route path="/resetPasswordRequest" element={<ResetPasswordRequest />} />
+                </Route>
+
+                <Route element= {<LoginProtectedRoute /> } >
+                    <Route path='/checkout' element={<CheckoutStripeContainer />} />
+                    <Route path='/postRequest' element={<PostRequest />} />
                     <Route path='/wishlist' element={<Wishlist />} />
                     <Route path='/cart' element={<Cart />} />
                     <Route path='/orders' element={<Orders pageType="buyer" />} />
@@ -93,14 +93,20 @@ function App() {
                     <Route path='/chat' element={<ChatPage />} />
                 </Route>
 
-                <Route element={<SellerLayoutHeader/>}>
+                <Route element={<SellerProtectedRoute isFooter = {true} />}>
+                    <Route path='/seller/dashboard' element={<SellerDashboard />} />
+                    <Route path='/seller/product/preview/:id' element={<ProductDetails />} />
+                    <Route path='/seller/posting/preview/:id' element={<ServiceDetails />} />
+                </Route>
+
+
+                <Route element={<SellerProtectedRoute />}>
                     <Route path='/seller/products' element={<SellerProducts />} />
                     <Route path='/seller/products/manageProduct/new' element={<CreateProduct />} />
                     <Route path='/seller/products/manageProduct/edit/:id' element={<CreateProduct />} />
                     <Route path='/seller/postings' element={<SellerServices />} />
                     <Route path='/seller/postings/managePost/new' element={<CreateService />} />
                     <Route path='/seller/postings/managePost/edit/:id' element={<CreateService />} />
-                    <Route path='/seller/tradeleads' element={<Tradelead />} />
                     <Route path='/seller/orders' element={<Orders pageType="seller" />} />
                     <Route path='/seller/orders/product/orderDetails/:id/:subOrderId' element={<ProductOrderDetails isBuyer={false} />} />
                     <Route path='/seller/orders/posting/orderDetails/:id/' element={<ServiceOrderDetails isBuyer={false} />} />
@@ -108,11 +114,16 @@ function App() {
                     <Route path='/seller/earnings' element={<Earnings />} />
                 </Route>
 
+                <Route element={<SellerProtectedRoute isDestinationTradelead={true} />}>
+                    <Route path='/seller/tradeleads' element={<Tradelead />} />
+                </Route>
+
                 <Route>
                     <Route path="/resetPassword/:token" element={<ResetPassword />} />
                     <Route path='/requirements/:orderId' element={<Requirements />} />
                     <Route path='/seller/becomeaseller' element={<BecomeSeller />} />
                     <Route path='/ftzy-admin/login' element={<AdminLogin />} />
+                    <Route path="*" element={<NotFound />} />
                 </Route>
 
                 <Route element={<AdminProtectedRoute />}>

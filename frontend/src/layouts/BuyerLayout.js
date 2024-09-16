@@ -5,6 +5,7 @@ import BuyerHeader from "../components/buyer/Header/BuyerHeader"
 import BuyerFooter from "../components/buyer/BuyerFooter"
 
 function Layout() {
+
   return (
     <div>
         <BuyerHeader/>

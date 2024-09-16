@@ -4,14 +4,12 @@ import React, { useEffect, useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { FaFacebook, FaInstagram, FaTwitter, FaPinterest, FaTumblr, FaYoutube, FaSnapchatGhost, FaTiktok, FaLinkedin } from "react-icons/fa";
 import { AuthContext } from '../../utils/AuthContext';
-import RestrictedPopup from '../common/RestrictedPopup';
 
 function BuyerFooter() {
 
 
   const [socialLinks, setSocialLinks] = useState({});
   const { isLogin, user } = useContext(AuthContext);
-  const [showPopup, setShowPopup] = useState(false);
 
 
   useEffect(() => {
@@ -25,12 +23,6 @@ function BuyerFooter() {
     };
     fetchLinks();
   }, []);
-
-
-  const handleRestrictedAccess = (e) => {
-    e.preventDefault();
-    setShowPopup(true);
-  };
 
 
   return (
@@ -61,23 +53,23 @@ function BuyerFooter() {
             <div className='column'>
               <h4>Useful Links</h4>
               <Link to="/categories">Categories</Link>
-              {isLogin ? <Link to="/chat">Inbox</Link> : <a href="#" onClick={handleRestrictedAccess}>Inbox</a>}
-              {isLogin ? <Link to="/cart">Cart</Link> : <a href="#" onClick={handleRestrictedAccess}>Cart</a>}
-              {isLogin ? <Link to="/wishlist">Wishlist</Link> : <a href="#" onClick={handleRestrictedAccess}>Wishlist</a>}
+              <Link to="/chat">Inbox</Link>
+              <Link to="/cart">Cart</Link>
+              <Link to="/wishlist">Wishlist</Link>
             </div>
 
             <div className='column'>
               <h4>Support</h4>
               <Link to="/contact">Contact Us</Link>
-              {isLogin ? <Link to="/postRequest">Post a Request</Link> : <a href="#" onClick={handleRestrictedAccess}>Post a Request</a>}
+              <Link to="/postRequest">Post a Request</Link>
               <Link to="/terms">Terms and Conditions</Link>
               <Link to="/settings">Settings</Link>
             </div>
 
             <div className='column'>
               <h4>Account</h4>
-              {isLogin ? <Link to="/orders">Orders</Link> : <a href="#" onClick={handleRestrictedAccess}>Orders</a>}
-              {user && user?.role === "seller" ? <Link to="/seller/dashboard">Dashboard</Link> : isLogin ? <Link to="/seller/becomeaseller">Become Seller</Link> : <a href="#" onClick={handleRestrictedAccess}>Become Seller</a>}
+              <Link to="/orders">Orders as Buyer</Link>
+              {user && user?.role === "seller" ? <Link to="/seller/dashboard">Dashboard</Link> : <Link to="/seller/becomeaseller">Become Seller</Link>}
               {!isLogin && <><Link to="/login">Login</Link>
                 <Link to="/register">Register</Link></>}
               {isLogin && <><Link to="/seller/earnings">Earnings</Link>
@@ -94,8 +86,6 @@ function BuyerFooter() {
 
         </div>
       </section>
-
-      {showPopup && <RestrictedPopup onClosePopup={()=>setShowPopup(false)} />}
 
     </div>
   )

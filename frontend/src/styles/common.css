@@ -600,3 +600,28 @@
 .reviewDiv .userReview .sellerResponse .secondaryHeading{
     font-size: 1.1rem;
 }
+
+
+
+
+/********************** NOT FOUND ***********************/
+
+.notFoundDiv{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+    height: 100vh;
+    width: 100%;
+    background: var(--white);
+}
+
+.notFoundDiv .notFoundImgDiv{
+    width: 300px;
+}
+
+.notFoundImgDiv img{
+    width: 100%;
+}

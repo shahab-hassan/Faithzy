@@ -7,7 +7,6 @@ import CatsDropdown from "./CatsDropdown"
 
 import SearchBox from "../SearchBox"
 import { AuthContext } from '../../../utils/AuthContext';
-import RestrictedPopup from '../../common/RestrictedPopup';
 
 function BuyerHeader() {
 
@@ -16,7 +15,6 @@ function BuyerHeader() {
   const accountRef = useRef(null);
   const servicesRef = useRef(null);
   const productsRef = useRef(null);
-  const [showPopup, setShowPopup] = React.useState(false);
 
   const [showServicesDropdown, setShowServicesDropdown] = React.useState(false);
   const [showProductsDropdown, setShowProductsDropdown] = React.useState(false);
@@ -63,11 +61,6 @@ function BuyerHeader() {
     setShowServicesDropdown(false);
     setShowProductsDropdown(false);
   }
-
-  const handleRestrictedAccess = (e) => {
-    e.preventDefault();
-    setShowPopup(true);
-  };
 
 
   return (
@@ -154,7 +147,7 @@ function BuyerHeader() {
                 </li>
 
                 
-                <li>{isLogin ? <NavLink to="/postRequest" className={(v) => `${v.isActive ? "white" : "darkGray"}`}>Post a Request</NavLink> : <a href="#" className='darkGray' onClick={handleRestrictedAccess}>Post a Request</a>}</li>
+                <li><NavLink to="/postRequest" className={(v) => `${v.isActive ? "white" : "darkGray"}`}>Post a Request</NavLink></li>
 
                 {/* <li><NavLink to="/contact" className={(v)=>`${v.isActive? "white": "darkGray"}`}>Contact</NavLink></li> */}
 
@@ -166,7 +159,6 @@ function BuyerHeader() {
 
         </div>
       </section>
-      {showPopup && <RestrictedPopup onClosePopup={()=>setShowPopup(false)} />}
     </div>
   )
 }

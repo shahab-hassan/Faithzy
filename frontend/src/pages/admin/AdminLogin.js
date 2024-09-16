@@ -67,7 +67,7 @@ function AdminLogin() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Link className='forgotPasswordBtn'>Forgot Password?</Link>
+            {/* <Link className='forgotPasswordBtn'>Forgot Password?</Link> */}
           </div>
 
           <button type='submit' className='primaryBtn'>Login</button>
