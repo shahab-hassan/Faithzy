@@ -4,8 +4,10 @@ import { enqueueSnackbar } from 'notistack';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { FaEye } from 'react-icons/fa6';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
-import Dropdown from '../../components/common/Dropdown';
+// import Dropdown from '../../components/common/Dropdown';
 import { AuthContext } from "../../utils/AuthContext";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
+import { formatDate } from '../../utils/utilFuncs';
 
 function Employees() {
 
@@ -15,14 +17,16 @@ function Employees() {
   const [showAddNewModel, setShowAddNewModel] = React.useState(false);
   const [showDetailsModel, setShowDetailsModel] = React.useState(null);
   const [passwordHidden, setPasswordHidden] = React.useState(true);
-  const [selectedRole, setSelectedRole] = React.useState('Moderator');
-  const [pageAccess, setPageAccess] = React.useState({});
+  // const [selectedRole, setSelectedRole] = React.useState('Moderator');
+  // const [pageAccess, setPageAccess] = React.useState({});
   const [isEditing, setIsEditing] = React.useState(false);
   const [editAdmin, setEditAdmin] = React.useState(null);
+  const [showPassInputs, setShowPassInputs] = React.useState(false);
   const [newEmployee, setNewEmployee] = React.useState({
     email: '',
     name: '',
-    password: ''
+    newPassword: '',
+    confirmNewPass: '',
   });
 
   React.useEffect(() => {
@@ -46,8 +50,8 @@ function Employees() {
       name: '',
       password: ''
     });
-    setSelectedRole('Moderator');
-    setPageAccess({});
+    // setSelectedRole('Moderator');
+    // setPageAccess({});
     setShowAddNewModel(true);
   };
 
@@ -55,21 +59,21 @@ function Employees() {
 
     e.preventDefault();
 
-    if (selectedRole === "Editor")
-      if (Object.keys(pageAccess).length < 1) {
-        enqueueSnackbar("Editor requires at least 1 page access", { variant: "warning" });
-        return;
-      }
+    // if (selectedRole === "Editor")
+    //   if (Object.keys(pageAccess).length < 1) {
+    //     enqueueSnackbar("Editor requires at least 1 page access", { variant: "warning" });
+    //     return;
+    //   }
 
     const token = localStorage.getItem('adminToken');
-    const newAdminData = {
-      ...newEmployee,
-      role: selectedRole,
-      access: selectedRole === 'Editor' ? pageAccess : []
-    };
+    // const newAdminData = {
+    //   ...newEmployee,
+    //   role: selectedRole,
+    //   access: selectedRole === 'Editor' ? pageAccess : []
+    // };
 
     axios
-      .post('http://localhost:5000/api/v1/admins/admin/add', newAdminData, {
+      .post('http://localhost:5000/api/v1/admins/admin/add', newEmployee, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then((response) => {
@@ -80,14 +84,15 @@ function Employees() {
         }
       })
       .catch((e) => {
+        console.log(e);
         enqueueSnackbar(e.response?.data?.error || 'Something went wrong!', { variant: 'error' });
       });
   };
 
   const handleOpenEditForm = (adminData) => {
     setEditAdmin(adminData);
-    setSelectedRole(adminData.role);
-    setPageAccess(adminData.access || {});
+    // setSelectedRole(adminData.role);
+    // setPageAccess(adminData.access || {});
     setNewEmployee({
       email: adminData.email,
       name: adminData.name,
@@ -103,8 +108,8 @@ function Employees() {
     const token = localStorage.getItem('adminToken');
     const updatedAdminData = {
       ...newEmployee,
-      role: selectedRole,
-      access: selectedRole === 'Editor' ? pageAccess : undefined
+      // role: selectedRole,
+      // access: selectedRole === 'Editor' ? pageAccess : undefined
     };
 
     axios
@@ -153,74 +158,74 @@ function Employees() {
     }));
   };
 
-  const handlePageAccessChange = (page, checked, action) => {
-    setPageAccess((prev) => {
-      const updatedAccess = { ...prev };
+  // const handlePageAccessChange = (page, checked, action) => {
+  //   setPageAccess((prev) => {
+  //     const updatedAccess = { ...prev };
 
-      if (checked) {
-        updatedAccess[page] = action;
-      } else {
-        delete updatedAccess[page];
-      }
+  //     if (checked) {
+  //       updatedAccess[page] = action;
+  //     } else {
+  //       delete updatedAccess[page];
+  //     }
 
-      return updatedAccess;
-    });
-  };
+  //     return updatedAccess;
+  //   });
+  // };
 
 
-  const adminPages = [
-    'Dashboard',
-    'Categories',
-    'Coupons',
-    'Orders',
-    'Sellers',
-    'Buyers',
-    'Revenue',
-    'Payments',
-    'Social Media Links',
-    'Fee',
-    'Terms & Conditions',
-    'Disputes',
-    'Chats'
-  ];
+  // const adminPages = [
+  //   'Dashboard',
+  //   'Categories',
+  //   'Coupons',
+  //   'Orders',
+  //   'Sellers',
+  //   'Buyers',
+  //   'Revenue',
+  //   'Payments',
+  //   'Social Media Links',
+  //   'Fee',
+  //   'Terms & Conditions',
+  //   'Disputes',
+  //   'Chats'
+  // ];
 
-  const editEditorAccess = selectedRole === 'Editor' && (
-    <div className="editEditorAccess">
-      {adminPages.map((page, index) => (
-        <div key={index} className="accessBtn">
-          <div className="checkboxDiv">
-            <input
-              type="checkbox"
-              className="checkbox"
-              id={`checkbox-${page}`}
-              name={page}
-              checked={!!pageAccess[page]}
-              onChange={(e) =>
-                handlePageAccessChange(page, e.target.checked, pageAccess[page] || 'View')
-              }
-            />
-            <label htmlFor={`checkbox-${page}`}>{page}</label>
-          </div>
-          {pageAccess[page] && (
-            <Dropdown
-              options={['View', 'Edit']}
-              selected={pageAccess[page]}
-              onSelect={(action) => handlePageAccessChange(page, true, action)}
-              isSimple={true}
-            />
-          )}
-        </div>
-      ))}
-    </div>
-  );
+  // const editEditorAccess = selectedRole === 'Editor' && (
+  //   <div className="editEditorAccess">
+  //     {adminPages.map((page, index) => (
+  //       <div key={index} className="accessBtn">
+  //         <div className="checkboxDiv">
+  //           <input
+  //             type="checkbox"
+  //             className="checkbox"
+  //             id={`checkbox-${page}`}
+  //             name={page}
+  //             checked={!!pageAccess[page]}
+  //             onChange={(e) =>
+  //               handlePageAccessChange(page, e.target.checked, pageAccess[page] || 'View')
+  //             }
+  //           />
+  //           <label htmlFor={`checkbox-${page}`}>{page}</label>
+  //         </div>
+  //         {pageAccess[page] && (
+  //           <Dropdown
+  //             options={['View', 'Edit']}
+  //             selected={pageAccess[page]}
+  //             onSelect={(action) => handlePageAccessChange(page, true, action)}
+  //             isSimple={true}
+  //           />
+  //         )}
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
 
-  const showEditorAccesses = showDetailsModel && showDetailsModel.role === "Editor" && (
-    <div className='accessTo'>
-      {Object.entries(showDetailsModel.access)
-        .map(([page, access]) => `${page} (Can ${access})`)
-        .join(", ")}
-    </div>
-  );
+  // const showEditorAccesses = showDetailsModel && showDetailsModel.role === "Editor" && (
+  //   <div className='accessTo'>
+  //     {Object.entries(showDetailsModel.access)
+  //       .map(([page, access]) => `${page} (Can ${access})`)
+  //       .join(", ")}
+  //   </div>
+  // );
 
 
   const employeesElems = admins.length > 0 ? admins.map((item, index) => (
@@ -231,7 +236,7 @@ function Employees() {
         </div>
         <p className="idField field">#{item._id}</p>
         <p className="nameField field">{item.name}</p>
-        <p className="accessField field">{item.role}</p>
+        {/* <p className="accessField field">{item.role}</p> */}
         <div className="actionsField field">
           <FaEye className="icon" onClick={() => setShowDetailsModel(item)} />
           {admin._id !== item._id && <><FaEdit className="icon" onClick={() => handleOpenEditForm(item)} />
@@ -243,6 +248,14 @@ function Employees() {
     </div>
   ))
     : <div className="row">Nothing to show here...</div>;
+
+  const handlePasswordInputChange = (e) => {
+    let { name, value } = e.target;
+    setNewEmployee({ ...newEmployee, [name]: value });
+  }
+
+
+  if(!(admin && admin?.role === "Admin")) return <div>You are not authorized to access this page!</div>
 
 
   return (
@@ -262,7 +275,7 @@ function Employees() {
               <p className="title">Email</p>
               <p className="id">Employee ID</p>
               <p>Employee Name</p>
-              <p>Roles</p>
+              {/* <p>Roles</p> */}
               <p>Actions</p>
             </div>
             <div className="rows">{employeesElems}</div>
@@ -299,7 +312,7 @@ function Employees() {
                   required
                 />
               </div>
-              <div className="inputDiv">
+              {/* <div className="inputDiv">
                 <label>Role</label>
                 <Dropdown
                   options={['Moderator', 'Editor']}
@@ -307,10 +320,11 @@ function Employees() {
                   onSelect={setSelectedRole}
                 />
                 {editEditorAccess}
-              </div>
-              <div className="inputDiv">
+              </div> */}
+
+              {!isEditing && <div className="inputDiv">
                 <div className="passwordFieldUpper">
-                  <label htmlFor="password">{isEditing ? "Create New Password" : <>Create Password <span>*</span></>}</label>
+                  <label htmlFor="password">Create Password <span>*</span></label>
                   <div
                     className="hidePasswordBtn"
                     onClick={() => setPasswordHidden((oldValue) => !oldValue)}
@@ -327,7 +341,31 @@ function Employees() {
                   placeholder="Enter Password"
                   required={!isEditing}
                 />
-              </div>
+              </div>}
+
+              {isEditing && <div className="changePassDiv">
+
+                <div className="upper" onClick={() => setShowPassInputs(prev => !prev)}>
+                  <p>Change Password</p>
+                  {showPassInputs ? <MdKeyboardArrowUp className='icon' /> : <MdKeyboardArrowDown className='icon' />}
+                </div>
+
+                {showPassInputs && <div className="lower">
+
+                  <div className="inputDiv">
+                    <div className='inputInnerDiv'>
+                      <input type="password" placeholder='Enter new password' className='inputField' name='newPassword' value={newEmployee.newPassword} onChange={handlePasswordInputChange} required />
+                    </div>
+                    <div className='inputInnerDiv'>
+                      <input type="password" placeholder='Confirm new password' className='inputField' name='confirmNewPass' value={newEmployee.confirmNewPass} onChange={handlePasswordInputChange} required />
+                    </div>
+                  </div>
+
+                </div>}
+
+
+              </div>}
+
               <div className="buttonsDiv">
                 <button className="primaryBtn" type="submit">
                   {isEditing ? 'Save Changes' : 'Add Employee'}
@@ -357,18 +395,18 @@ function Employees() {
               <div className="row"><p>ID</p><p className='fw500'>#{showDetailsModel._id}</p></div>
               <div className="row"><p>Email</p><p className='fw500'>{showDetailsModel.email}</p></div>
               <div className="row"><p>Name</p><p className='fw500'>{showDetailsModel.name}</p></div>
-              <div className="row"><p>Role</p><p className='fw500'>{showDetailsModel.role}</p></div>
-              <div className="row"><p>Admin Since</p><p className='fw500'>{new Date(showDetailsModel.createdAt).toLocaleString()}</p></div>
+              {/* <div className="row"><p>Role</p><p className='fw500'>{showDetailsModel.role}</p></div> */}
+              <div className="row"><p>Admin Since</p><p className='fw500'>{formatDate(showDetailsModel.createdAt)}</p></div>
 
-              <div className="horizontalLine"></div>
+              {/* <div className="horizontalLine"></div> */}
 
-              {showDetailsModel.role === "Editor" &&
+              {/* {showDetailsModel.role === "Editor" &&
                 <div>
                   <p className='fw600'>Access To</p>
                   <div className='accessTo'>
                     {showEditorAccesses}
                   </div>
-                </div>}
+                </div>} */}
 
               <div className="buttonsDiv">
                 <button className="secondaryBtn" type="button" onClick={() => setShowDetailsModel(null)}>Close</button>

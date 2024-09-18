@@ -126,7 +126,7 @@ function Profile() {
                             <div className="horizontalLine"></div>
                             <div className="row"><span>Languages</span><span className='fw600'>{seller?.languages}</span></div>
                             <div className='buttonsDiv'>
-                                {isAdminLogin ? <div className='btnsForAdmin'>
+                                {isAdminLogin ? <div className='btnsForAdmin' >
                                     <Link to={`/ftzy-admin/chats/?p=${seller?.userId?._id}`} class="primaryBtn">Contact Seller</Link>
                                     <div>
                                         <Link to={`/ftzy-admin/email/send/${seller?.userId?._id}`} class="primaryBtn2">Send Email</Link>

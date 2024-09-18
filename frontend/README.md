@@ -1,5 +1,4 @@
 *** Overview ***: 
 
--- 404 Page (Not Found)
--- Restricted access to any page for unauthorized users on User side
--- Completed Footer Linking 
+- Now, any page can be access by Authorized users and admins only
+- Fixed some Bugs

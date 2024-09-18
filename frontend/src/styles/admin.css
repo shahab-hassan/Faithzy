@@ -193,7 +193,35 @@
     font-size: 0.9rem;
 }
 
+.adminEmployeesDiv .changePassDiv{
+    width: 100%;
+    margin: 10px 0px;
+    user-select: none;
+}
 
+.adminEmployeesDiv .changePassDiv .upper{
+    display: flex;
+    justify-content: space-between;
+    border-top: 2px solid var(--gray);
+    border-bottom: 2px solid var(--gray);
+    padding: 10px;
+    cursor: pointer;
+    background: transparent;
+    transition: 0.1s;
+}
+.adminEmployeesDiv .changePassDiv .upper:hover{
+    background: var(--extraLightGray);
+}
+.adminEmployeesDiv .changePassDiv .upper .icon{
+    width: 25px;
+    height: 25px;
+}
+.adminEmployeesDiv .changePassDiv .lower{
+    margin-top: 20px;
+}
+.adminEmployeesDiv .changePassDiv .lower .secondaryBtn{
+    margin-top: 10px;
+}
 
 
 

@@ -12,10 +12,10 @@ exports.getAdmins = asyncHandler(async (req, res) => {
 
 
 exports.addNewAdmin = asyncHandler(async (req, res) => {
-    const { email, name, password, role, access } = req.body;
+    const { email, name, password } = req.body;
 
     // Check if all required fields are provided
-    if (!email || !name || !password || !role) {
+    if (!email || !name || !password) {
         res.status(400);
         throw new Error("All fields are required!");
     }
@@ -27,6 +27,11 @@ exports.addNewAdmin = asyncHandler(async (req, res) => {
         throw new Error("Email already exists!");
     }
 
+    if (password.length < 8) {
+        res.status(400)
+        throw new Error("Use 8 or more characters with a mix of letters, numbers & symbols!")
+    }
+
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -35,8 +40,8 @@ exports.addNewAdmin = asyncHandler(async (req, res) => {
         email,
         name,
         password: hashedPassword,
-        role,
-        access: role === 'Editor' ? access : undefined
+        // role,
+        // access: role === 'Editor' ? access : undefined
     });
 
     res.status(201).json({
@@ -47,8 +52,20 @@ exports.addNewAdmin = asyncHandler(async (req, res) => {
 
 exports.updateAdmin = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const { email, name, role, access, password } = req.body;
+    const { email, name, newPassword, confirmNewPass } = req.body;
 
+    console.log(req.body);
+
+
+    if (newPassword && newPassword.length < 8) {
+        res.status(400)
+        throw new Error("Use 8 or more characters with a mix of letters, numbers & symbols!")
+    }
+
+    if (newPassword && (newPassword !== confirmNewPass)) {
+        res.status(400);
+        throw new Error("Passwords do not match!");
+    }
 
     let admin = await adminModel.findById(id);
     if (!admin) {
@@ -58,12 +75,11 @@ exports.updateAdmin = asyncHandler(async (req, res) => {
 
     admin.email = email || admin.email;
     admin.name = name || admin.name;
-    admin.role = role || admin.role;
-    admin.access = role === 'Editor' ? access : undefined;
+    // admin.role = role || admin.role;
+    // admin.access = role === 'Editor' ? access : undefined;
 
-    if (password) {
-        admin.password = await bcrypt.hash(password, 10);
-    }
+    if (newPassword)
+        admin.password = await bcrypt.hash(newPassword, 10);
 
     await admin.save();
 

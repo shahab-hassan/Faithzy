@@ -230,8 +230,8 @@ const ChatPage = () => {
                     else {
                         setOfferDetails(prev => ({
                             ...prev,
-                            serviceId: response.data.allServices[0]._id,
-                            title: response.data.allServices[0].title
+                            serviceId: response.data?.allServices[0]?._id,
+                            title: response.data?.allServices[0]?.title
                         }))
                         setQuoteItems(response.data.allServices)
                     }
@@ -528,18 +528,18 @@ const ChatPage = () => {
                                 </select>
                             </div>
 
-                            {quoteType === 'product' && (
+                            {quoteType === 'product' && quoteItems && quoteItems.length > 0 && (
                                 <div className="inputDiv">
                                     <label>Select Product</label>
                                     <select name="productId" className='inputField' onChange={handleOfferChange}>
-                                        {quoteItems && quoteItems.length > 0 && quoteItems.map((item, index) => {
+                                        {quoteItems.map((item, index) => {
                                             return <option key={index} value={JSON.stringify(item)} className='quoteItem'>{item.title}</option>
                                         })}
                                     </select>
                                 </div>
                             )}
 
-                            {quoteType === 'service' && (
+                            {quoteType === 'service' && quoteItems && quoteItems.length > 0 && (
                                 <div className="inputDiv">
                                     <label>Select Service</label>
                                     <select name="serviceId" className='inputField' onChange={handleOfferChange}>
@@ -550,7 +550,7 @@ const ChatPage = () => {
                                 </div>
                             )}
 
-                            <div className="inputDiv">
+                            {quoteItems && quoteItems.length > 0? <><div className="inputDiv">
                                 <label>Description <span>*</span></label>
                                 <textarea name="description" className='inputField' value={offerDetails.description} onChange={handleOfferChange} placeholder='Explain your offer...' required />
                             </div>
@@ -576,10 +576,10 @@ const ChatPage = () => {
                                         <input type="number" name="duration" className='inputField' value={offerDetails.duration} onChange={handleOfferChange} placeholder='Enter Days' />
                                     </div>
                                 )}
-                            </div>
+                            </div></> : `You currently don't have active ${quoteType} to send offer!`}
 
                             <div className="buttonsDiv">
-                                <button className='primaryBtn' type='submit'>Send Offer</button>
+                                <button className='primaryBtn' type='submit' disabled={!(quoteItems && quoteItems.length > 0)}>Send Offer</button>
                                 <button className='secondaryBtn' onClick={() => setShowQuoteModel(false)}>Close</button>
                             </div>
                         </form>

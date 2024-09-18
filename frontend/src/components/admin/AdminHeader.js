@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 import { MdAnalytics } from "react-icons/md";
 import { BiSolidCategoryAlt } from "react-icons/bi";
@@ -8,8 +8,11 @@ import { FaShop, FaSackDollar, FaCreditCard, FaNetworkWired, FaEnvelope, FaUsers
 import { FaUserCircle, FaMoneyBill } from "react-icons/fa";
 import { BsFileEarmarkRuledFill } from "react-icons/bs";
 import { HiUsers } from "react-icons/hi";
+import { AuthContext } from '../../utils/AuthContext';
 
 function AdminHeader() {
+
+  const { admin } = useContext(AuthContext);
 
   return (
     <div className='adminHeaderDiv'>
@@ -36,7 +39,7 @@ function AdminHeader() {
             <li><NavLink to="/ftzy-admin/terms" className={(v)=>`${v.isActive? "activeLi": ""}`}><BsFileEarmarkRuledFill className='icon'/>Terms & Conditions</NavLink></li>
             <li><NavLink to="/ftzy-admin/disputes" className={(v)=>`${v.isActive? "activeLi": ""}`}><HiUsers className='icon'/>Disputes</NavLink></li>
             <li><NavLink to="/ftzy-admin/chats" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaEnvelope className='icon'/>Chats</NavLink></li>
-            <li><NavLink to="/ftzy-admin/employees" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaUsers className='icon'/>Employees</NavLink></li>
+            {admin && admin?.role === "Admin" && <li><NavLink to="/ftzy-admin/employees" className={(v)=>`${v.isActive? "activeLi": ""}`}><FaUsers className='icon'/>Employees</NavLink></li>}
           </ul>
 
         </div>

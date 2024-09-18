@@ -72,7 +72,7 @@ function AdminSellers() {
                 <p className="statusField field">{item?.userId?.userStatus}</p>
                 <p className="joinField field">{new Date(item?.createdAt).toLocaleDateString()}</p>
                 <div className="actionsField field">
-                    <MdChat className="icon" />
+                    <MdChat className="icon" onClick={() => navigate(`/ftzy-admin/chats/?p=${item.userId?._id}`)} />
                     {item.userId.userStatus === 'Blocked' ?
                         <FaLockOpen style={{ color: "var(--success)" }} className="icon" onClick={() => handleBlockUser(item.userId._id, true)} />
                         :

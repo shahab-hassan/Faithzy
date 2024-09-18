@@ -5,12 +5,12 @@ const adminSchema = mongoose.Schema({
     email: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     password: { type: String, required: true },
-    role: { type: String, required: true, enum: ['Moderator', 'Editor'] },
-    access: {
-        type: Map,
-        of: String, // 'View' or 'Edit'
-        default: {}
-    },
+    role: { type: String, required: true, enum: ['Moderator', 'Admin'], default: "Moderator" },
+    // access: {
+    //     type: Map,
+    //     of: String, // 'View' or 'Edit'
+    //     default: {}
+    // },
     resetPasswordToken: String,
     resetPasswordExpire: Date,
 },
