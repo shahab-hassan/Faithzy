@@ -1,4 +1,3 @@
 *** Overview ***: 
 
-- Now, any page can be access by Authorized users and admins only
-- Fixed some Bugs
+- Admin can now add their Stripe account from Admin Panel to Receive Payments

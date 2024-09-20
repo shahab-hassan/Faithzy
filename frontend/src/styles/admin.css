@@ -537,9 +537,9 @@
 
 
 
-/* ****************************** ADMIN PAYMENTS PAGE ****************************** */
+/* ****************************** ADMIN PAYMENTS 2 PAGE ****************************** */
 
-.adminPaymentsDiv .popupDiv .details .row{
+/* .adminPaymentsDiv .popupDiv .details .row{
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -573,6 +573,24 @@
     color: var(--white);
     border: 2px solid var(--success);
     background: var(--success);
+} */
+
+
+/* ****************************** ADMIN PAYMENTS PAGE ****************************** */
+
+.adminPaymentsDiv .paymentMethods{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--lightGray);
+    padding: 8px 15px;
+    border-radius: 8px;
+    margin: 10px 0px;
+}
+.adminPaymentsDiv .paymentMethods .method{
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 

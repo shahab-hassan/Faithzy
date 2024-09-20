@@ -1,10 +1,23 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const asyncHandler = require("express-async-handler");
 const Payment = require('../models/paymentModel');
 const Seller = require('../models/sellerModel');
+const AdminSettings = require('../models/adminSettingsModel');
+
+const getStripeSecretKey = async () => {
+  const settings = await AdminSettings.findOne();
+
+  if (!settings || !settings.s_key)
+    throw new Error('Stripe secret key not found in settings');
+
+  return settings.s_key;
+};
 
 const createPaymentIntent = async (amount) => {
   amount = parseInt(amount);
+
+  const stripeSecretKey = await getStripeSecretKey();
+  const stripe = require('stripe')(stripeSecretKey);
+
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
@@ -18,15 +31,25 @@ const createPaymentIntent = async (amount) => {
   }
 };
 
+
 const confirmPaymentIntent = asyncHandler(async (req, res) => {
   const { paymentIntentId } = req.body;
-  const paymentIntent = await stripe.paymentIntents.confirm(paymentIntentId);
 
-  if (paymentIntent.status === 'succeeded')
-    res.status(200).json({ success: true, paymentIntent });
-  else {
-    res.status(500);
-    throw new Error('Payment confirmation failed');
+  const stripeSecretKey = await getStripeSecretKey();
+  const stripe = require('stripe')(stripeSecretKey);
+
+  try {
+    const paymentIntent = await stripe.paymentIntents.confirm(paymentIntentId);
+
+    if (paymentIntent.status === 'succeeded') {
+      res.status(200).json({ success: true, paymentIntent });
+    } else {
+      res.status(500);
+      throw new Error('Payment confirmation failed');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Payment confirmation failed' });
   }
 });
 
@@ -43,6 +66,7 @@ const getAllPayments = asyncHandler(async (req, res) => {
     })
   res.status(200).json({ success: true, payments });
 });
+
 
 const markPaymentAsPaid = asyncHandler(async (req, res) => {
   const payment = await Payment.findById(req.body.paymentId);

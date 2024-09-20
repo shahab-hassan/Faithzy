@@ -39,8 +39,11 @@ const adminSettingsSchema = new mongoose.Schema({
             sixMonths: { discount: { type: Number }, expiryDate: { type: Date } },
             twelveMonths: { discount: { type: Number }, expiryDate: { type: Date } },
         }
-    }
-}, {
+    },
+    p_key: String,
+    s_key: String
+},
+{
     timestamps: true
 });
 

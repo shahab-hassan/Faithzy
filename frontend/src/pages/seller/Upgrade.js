@@ -6,7 +6,7 @@ import { enqueueSnackbar } from "notistack";
 import { AuthContext } from "../../utils/AuthContext";
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 import { BsStripe } from "react-icons/bs";
-import { FaPaypal } from "react-icons/fa";
+// import { FaPaypal } from "react-icons/fa";
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
 
 function Upgrade() {

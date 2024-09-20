@@ -6,7 +6,8 @@ const Service = require('../models/serviceModel');
 const User = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
 const sendEmail = require("../utils/sendEmail")
-const {sendEmailFromAdminTemplate, receiveEmailFromUserTemplate} = require("../utils/emailTemplates")
+const bcrypt = require("bcrypt");
+const { sendEmailFromAdminTemplate, receiveEmailFromUserTemplate } = require("../utils/emailTemplates")
 
 
 exports.getTerms = asyncHandler(async (req, res) => {
@@ -340,4 +341,49 @@ exports.receiveEmailFromUser = asyncHandler(async (req, res) => {
 
     res.status(200).json({ success: true });
 
+});
+
+
+exports.addStripeKeys = asyncHandler(async (req, res) => {
+    try {
+        const { stripePublishableKey, stripeSecretKey } = req.body;
+
+        let settings = await adminSettingsModel.findOne();
+
+        if (!settings) {
+            res.status(404);
+            throw new Error("Settings not Found!");
+        }
+
+        settings.p_key = stripePublishableKey || settings.p_key
+        settings.s_key = stripeSecretKey || settings.s_key
+
+        settings.save();
+
+        res.status(200).json({ success: true, message: 'Stripe keys saved successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Failed to save Stripe keys' });
+    }
+});
+
+
+exports.getStripeKeys = asyncHandler(async (req, res) => {
+    try {
+        const settings = await adminSettingsModel.findOne();
+        
+        if (!settings) {
+            res.status(404);
+            throw new Error("Settings not found");
+        }
+
+        res.status(200).json({
+            success: true,
+            stripePublishableKey: settings.p_key,
+            stripeSecretKey: settings.s_key
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Failed to fetch Stripe keys' });
+    }
 });
