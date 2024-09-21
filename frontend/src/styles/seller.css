@@ -887,6 +887,23 @@
 .earningsDiv {
     margin: 50px 0px;
 }
+
+.earningsDiv .paymentMethods{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--lightGray);
+    padding: 8px 15px;
+    border-radius: 8px;
+    margin: 10px 0px;
+}
+.earningsDiv .paymentMethods .method{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
 .earningsDiv .earningsOverview {
     display: flex;
     gap: 20px;
@@ -913,4 +930,8 @@
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.earningsDiv .popupDiv .popupContent{
+    width: 40% !important;
 }

@@ -516,14 +516,20 @@ exports.respondToProductOrderDelivery = asyncHandler(async (req, res) => {
     const buyerEmail = buyer.email;
 
     try {
-      const newPayment = new paymentModel({
-        buyerId: order.userId,
-        sellerId: subOrder.sellerId,
-        to: "Seller",
+      let payment = await paymentModel.findOne({ sellerId: subOrder.sellerId });
+      
+      if(!payment)
+        payment = new paymentModel({ sellerId: subOrder.sellerId, history: [] });
+
+      payment.history.push({
+        buyerUsername: buyer.username,
         amount: subOrder.sellerToGet.total,
         itemType: "Product",
+        status: "Earning",
+        description: "Order Completed"
       });
-      await newPayment.save();
+
+      await payment.save();
     }
     catch (e) {
       res.status(400);

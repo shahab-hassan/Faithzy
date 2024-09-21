@@ -38,7 +38,9 @@ const sellerSchema = new mongoose.Schema({
   noOfReviews: { type: Number, default: 0 },
   reviews: [reviewSchema],
   productsSold: {type: Number, default: 0},
-  servicesDone: {type: Number, default: 0}
+  servicesDone: {type: Number, default: 0},
+  stripeAccountId: { type: String },
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Seller', sellerSchema);

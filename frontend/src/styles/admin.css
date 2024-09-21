@@ -578,12 +578,18 @@
 
 /* ****************************** ADMIN PAYMENTS PAGE ****************************** */
 
+.adminPaymentsDiv .paymentMethodsDiv{
+    background: var(--white);
+    padding: 20px 30px;
+    border-radius: 8px;
+}
+
 .adminPaymentsDiv .paymentMethods{
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: var(--lightGray);
-    padding: 8px 15px;
+    padding: 13px 20px;
     border-radius: 8px;
     margin: 10px 0px;
 }
@@ -592,7 +598,14 @@
     align-items: center;
     gap: 10px;
 }
-
+.adminPaymentsDiv .paymentsDetails{
+    background: var(--white);
+    padding: 20px 30px;
+    border-radius: 8px;
+}
+.adminPaymentsDiv .paymentsDetails .css-19kzrtu{
+    padding: 0 !important;
+}
 
 
 

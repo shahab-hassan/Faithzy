@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const Payment = require('../models/paymentModel');
+const { paymentModel, withdrawModel } = require('../models/paymentModel');
 const Seller = require('../models/sellerModel');
 const AdminSettings = require('../models/adminSettingsModel');
 
@@ -54,39 +54,39 @@ const confirmPaymentIntent = asyncHandler(async (req, res) => {
 });
 
 
-const getAllPayments = asyncHandler(async (req, res) => {
-  const payments = await Payment.find({})
-    .populate('buyerId', 'username')
-    .populate({
-      path: 'sellerId',
-      populate: {
-        path: 'userId',
-        select: 'username'
-      }
-    })
-  res.status(200).json({ success: true, payments });
-});
+// const getAllPayments = asyncHandler(async (req, res) => {
+//   const payments = await Payment.find({})
+//     .populate('buyerId', 'username')
+//     .populate({
+//       path: 'sellerId',
+//       populate: {
+//         path: 'userId',
+//         select: 'username'
+//       }
+//     })
+//   res.status(200).json({ success: true, payments });
+// });
 
 
-const markPaymentAsPaid = asyncHandler(async (req, res) => {
-  const payment = await Payment.findById(req.body.paymentId);
-  payment.status = "Paid";
-  await payment.save();
-  res.status(200).json({ success: true });
-});
+// const markPaymentAsPaid = asyncHandler(async (req, res) => {
+//   const payment = await Payment.findById(req.body.paymentId);
+//   payment.status = "Paid";
+//   await payment.save();
+//   res.status(200).json({ success: true });
+// });
 
 
-const getSellerPayments = asyncHandler(async (req, res) => {
-  const { sellerId } = req.params;
+// const getSellerPayments = asyncHandler(async (req, res) => {
+//   const { sellerId } = req.params;
 
-  const seller = await Seller.findById(sellerId);
-  if (!seller) {
-    return res.status(404).json({ success: false, message: 'Seller not found!' });
-  }
+//   const seller = await Seller.findById(sellerId);
+//   if (!seller) {
+//     return res.status(404).json({ success: false, message: 'Seller not found!' });
+//   }
 
-  const payments = await Payment.find({ sellerId, to: "Seller" }).populate('buyerId', 'username').sort({ updatedAt: -1 });
-  res.status(200).json({ success: true, payments });
-});
+//   const payments = await Payment.find({ sellerId, to: "Seller" }).populate('buyerId', 'username').sort({ updatedAt: -1 });
+//   res.status(200).json({ success: true, payments });
+// });
 
 
 const getSellerEarnings = asyncHandler(async (req, res) => {
@@ -96,30 +96,200 @@ const getSellerEarnings = asyncHandler(async (req, res) => {
   if (!seller)
     return res.status(404).json({ success: false, message: 'Seller not found!' });
 
-  const payments = await Payment.find({ sellerId, status: "Paid", to: "Seller" });
+  const payment = await paymentModel.findOne({ sellerId });
+  if (!payment)
+    return res.status(404).json({ success: false, message: 'Payment history not found!' });
 
-  const totalEarnings = payments.reduce((sum, payment) => sum + payment.amount, 0);
+  const { history } = payment;
 
-  const pendingPayments = await Payment.find({ sellerId, status: "Pending", to: "Seller" });
-  const pendingBalance = pendingPayments.reduce((sum, payment) => sum + payment.amount, 0);
+  const totalEarnings = history
+    .filter(entry => entry.status === "Earning")
+    .reduce((sum, entry) => sum + entry.amount, 0);
 
-  const currentMonth = new Date().getMonth();
-  const earningsInCurrentMonth = payments
-    .filter(payment => new Date(payment.createdAt).getMonth() === currentMonth)
-    .reduce((sum, payment) => sum + payment.amount, 0);
+  const paidBalance = history
+    .filter(entry => entry.status === "Paid")
+    .reduce((sum, entry) => sum + entry.amount, 0);
+
+  const requestedForWithdrawal = history
+    .filter(entry => entry.status === "Withdraw")
+    .reduce((sum, entry) => sum + entry.amount, 0);
+
+  const availableBalance = totalEarnings - (requestedForWithdrawal + paidBalance);
 
   const productsSold = seller.productsSold;
   const servicesDone = seller.servicesDone;
 
   res.status(200).json({
     success: true,
-    totalEarnings,
-    pendingBalance,
-    earningsInCurrentMonth,
-    productsSold,
-    servicesDone
+    earnings: {
+      totalEarnings,
+      paidBalance,
+      availableBalance,
+      requestedForWithdrawal,
+      productsSold,
+      servicesDone
+    }
   });
 });
 
 
-module.exports = { confirmPaymentIntent, createPaymentIntent, getSellerPayments, getSellerEarnings, getAllPayments, markPaymentAsPaid };
+const getSellerHistory = asyncHandler(async (req, res) => {
+  const { sellerId } = req.params;
+
+  const seller = await Seller.findById(sellerId);
+  if (!seller)
+    return res.status(404).json({ success: false, message: 'Seller not found!' });
+
+  const payment = await paymentModel.findOne({ sellerId });
+  if (!payment)
+    return res.status(404).json({ success: false, message: 'Payment history not found!' });
+
+  res.status(200).json({
+    success: true,
+    history: payment?.history?.reverse()
+  });
+});
+
+
+const connectStripe = asyncHandler(async (req, res) => {
+  const { sellerId } = req.body;
+  const stripeSecretKey = await getStripeSecretKey();
+  const stripe = require('stripe')(stripeSecretKey);
+
+  try {
+    const seller = await Seller.findById(sellerId).populate("userId");
+    if (!seller) return res.status(404).json({ message: 'Seller not found' });
+
+    // const sellerCountry = seller.country;
+    // if (!sellerCountry) return res.status(400).json({ message: 'Seller country is required' });
+
+    const account = await stripe.accounts.create({
+      type: 'express',
+      country: 'US',
+      email: seller?.userId?.email,
+    });
+    seller.stripeAccountId = account.id;
+    await seller.save();
+
+    const accountLink = await stripe.accountLinks.create({
+      account: account.id,
+      refresh_url: 'http://localhost:3000/seller/earnings',
+      return_url: 'http://localhost:3000/seller/earnings',
+      type: 'account_onboarding',
+    });
+
+    res.json({ url: accountLink.url });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+const requestForWithdraw = asyncHandler(async (req, res) => {
+  const { userId, sellerId, amount } = req.body;
+
+  try {
+    const seller = await Seller.findById(sellerId);
+    if (!seller) return res.status(404).json({ message: 'Seller not found' });
+
+    const withdrawalRequest = new withdrawModel({
+      userId,
+      to: "Seller",
+      amount
+    });
+
+
+    let payment = await paymentModel.findOne({ sellerId });
+
+    if (!payment)
+      payment = new paymentModel({ sellerId, history: [] });
+
+    payment.history.push({
+      amount,
+      status: "Withdraw",
+      description: "Requested for Withdrawal"
+    });
+
+    await payment.save();
+    await withdrawalRequest.save();
+
+    res.status(200).json({ success: true, message: 'Withdrawal request submitted' });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+const getWithdrawalRequests = asyncHandler(async (req, res) => {
+
+  const withdrawalRequests = await withdrawModel.find({}).populate({
+    path: 'userId',
+    // populate: { path: 'sellerId' }
+  });
+
+
+  res.status(200).json({
+    success: true,
+    withdrawalRequests
+  });
+
+});
+
+
+const markPaymentAsPaidManually = asyncHandler(async (req, res) => {
+
+  const { requestIds, paidOn, comment } = req.body;
+
+  for (let requestId of requestIds) {
+    const request = await withdrawModel.findById(requestId);
+    if (!request) return res.status(404).json({ message: `Request ${requestId} not found` });
+
+    request.status = "Paid";
+    request.paymentType = "Manual";
+    request.paidOn = paidOn;
+    request.comment = comment;
+
+    await request.save();
+  }
+
+  res.status(200).json({ success: true });
+});
+
+
+
+const releasePayments = asyncHandler(async (req, res) => {
+  const { requestIds } = req.body;
+  const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+  for (let requestId of requestIds) {
+      const request = await withdrawModel.findById(requestId).populate('userId');
+      if (!request) return res.status(404).json({ message: `Request ${requestId} not found` });
+
+      const seller = await Seller.findById(request.userId._id);
+      if (!seller || !seller.stripeAccountId) {
+          return res.status(400).json({ message: `Seller with Stripe account not found for request ${requestId}` });
+      }
+
+      await stripe.transfers.create({
+          amount: Math.round(request.amount * 100), 
+          currency: 'usd',
+          destination: seller.stripeAccountId,
+          transfer_group: `Withdrawal-${requestId}`
+      });
+
+      request.status = "Paid";
+      request.paymentType = "Auto";
+      request.paidOn = Date.now();
+      await request.save();
+  }
+
+  res.status(200).json({ success: true });
+});
+
+
+
+
+module.exports = { markPaymentAsPaidManually, confirmPaymentIntent, createPaymentIntent, getSellerEarnings, connectStripe, requestForWithdraw, getSellerHistory, getWithdrawalRequests };
