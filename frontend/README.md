@@ -1,5 +1,6 @@
 *** Overview ***: 
 
-- Sellers can now connect their Stripe Account
-- Sellers can see proper Earnings overview and Payments History
-- Admins can see withdrawal requests
+- Working on AdminPayments (Stripe Setup):
+--- Admin can now mark single or multple payment(s) as Paid
+--- Admin can mark payment(s) back as Pending Payment (s)
+--- Admin can see Seller Earnings and History

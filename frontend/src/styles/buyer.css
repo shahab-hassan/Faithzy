@@ -2280,6 +2280,10 @@
     justify-content: space-between;
     gap: 10px;
 }
+.profileDiv .profileContent .upper .sellerInfo .buttonsDiv .btnsForAdmin div a,
+.profileDiv .profileContent .upper .sellerInfo .buttonsDiv .btnsForAdmin div button{
+    width: 100% !important;
+}
 
 .profileDiv .sellerServices .services,
 .profileDiv .sellerProducts .products{

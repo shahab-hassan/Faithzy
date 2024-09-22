@@ -606,6 +606,18 @@
 .adminPaymentsDiv .paymentsDetails .css-19kzrtu{
     padding: 0 !important;
 }
+.adminPaymentsDiv .pendingPaymentsDiv .popupDiv .sellerDetails .sellerEarnings{
+    width: 100%;
+    gap: 8px;
+}
+.adminPaymentsDiv .pendingPaymentsDiv .popupDiv .sellerDetails .sellerHistory{
+    width: 100%;
+}
+.adminPaymentsDiv .pendingPaymentsDiv .popupDiv .sellerDetails .sellerEarnings .row{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
 
 
 
