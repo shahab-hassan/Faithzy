@@ -1,5 +1,5 @@
 const express = require('express');
-const { movePaymentToPending, markPaymentAsPaidManually, confirmPaymentIntent, getSellerHistory, getWithdrawalRequests, getSellerEarnings, connectStripe, requestForWithdraw } = require('../controllers/paymentCtrl');
+const { releasePayments, movePaymentToPending, markPaymentAsPaidManually, confirmPaymentIntent, getSellerHistory, getWithdrawalRequests, getSellerEarnings, connectStripe, requestForWithdraw } = require('../controllers/paymentCtrl');
 const { authorized, authorizeAdmin, combinedAuthorization } = require('../middlewares/authorization');
 const router = express.Router();
 
@@ -24,5 +24,7 @@ router.get('/withdrawal-requests', authorizeAdmin, getWithdrawalRequests);
 router.put('/mark-paid', authorizeAdmin, markPaymentAsPaidManually);
 
 router.put('/move-to-pending', authorizeAdmin, movePaymentToPending);
+
+router.put('/release-payment', authorizeAdmin, releasePayments);
 
 module.exports = router;

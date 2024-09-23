@@ -23,6 +23,8 @@ const AdminPayments = () => {
     const [paymentDate, setPaymentDate] = useState('');
     const [comment, setComment] = useState('');
     const [showMarkPaidModel, setShowMarkPaidModel] = useState(false);
+    const [showReleaseModel, setShowReleaseModel] = useState(false);
+    const [releaseLoading, setReleaseLoading] = useState(false);
 
     const [selectedRequests, setSelectedRequests] = useState([]);
     const [value, setValue] = React.useState(0);
@@ -129,11 +131,36 @@ const AdminPayments = () => {
                 enqueueSnackbar(`${selectedRequests.length} payment${selectedRequests.length > 1 ? "s" : ""} marked as Paid!`, { variant: 'success' });
                 setWithdrawalRequests(prev => prev.filter(req => !selectedRequests.includes(req._id)));
                 setSelectedRequests([]);
+                setShowMarkPaidModel(false);
             }
 
         } catch (error) {
             console.error(error);
             enqueueSnackbar('Something went wrong!', { variant: 'error' });
+        }
+    }
+
+    const releasePayments = async () => {
+
+        setReleaseLoading(true);
+
+        try {
+            const response = await axios.put('http://localhost:5000/api/v1/payments/release-payment', {
+                requestIds: selectedRequests
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (response.data.success) {
+                enqueueSnackbar(`${selectedRequests.length} payment${selectedRequests.length > 1 ? "s" : ""} released successfully!`, { variant: 'success' });
+                setWithdrawalRequests(prev => prev.filter(req => !selectedRequests.includes(req._id)));
+                setSelectedRequests([]);
+                setShowReleaseModel(false);
+            }
+            setReleaseLoading(false);
+        } catch (error) {
+            console.error(error);
+            enqueueSnackbar('Something went wrong!', { variant: 'error' });
+            setReleaseLoading(false);
         }
     }
 
@@ -155,11 +182,17 @@ const AdminPayments = () => {
         }
     }
 
+    const calculateTotalAmount = () => {
+        return withdrawalRequests
+            .filter(req => selectedRequests.includes(req._id))
+            .reduce((total, req) => total + req.amount, 0);
+    };
+
     return (
         <div className="adminPaymentsDiv">
             <div className="adminPaymentsContent">
 
-                <div className='paymentMethodsDiv'>
+                <div className='adminPaymentMethodsDiv'>
                     <h2 className='secondaryHeading'><span>Payment</span> Methods</h2>
 
                     <div className="paymentMethods">
@@ -188,6 +221,7 @@ const AdminPayments = () => {
                                 handleSelectRequest={handleSelectRequest}
                                 handleSelectAll={handleSelectAll}
                                 setShowMarkPaidModel={setShowMarkPaidModel}
+                                setShowReleaseModel={setShowReleaseModel}
                             />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={1}>
@@ -196,7 +230,6 @@ const AdminPayments = () => {
                                 selectedRequests={selectedRequests}
                                 handleSelectRequest={handleSelectRequest}
                                 handleSelectAll={handleSelectAll}
-                                setShowMarkPaidModel={setShowMarkPaidModel}
                                 moveToPending={moveToPending}
                             />
                         </CustomTabPanel>
@@ -294,6 +327,28 @@ const AdminPayments = () => {
                 </div>
             )}
 
+            {showReleaseModel && (
+                <div className="popupDiv">
+                    <div className="popupContent releasePopupContent">
+                        <div className="form">
+                            <h2 className="secondaryHeading">Confirm <span>Releasing</span> Payments</h2>
+                            <div className="horizontalLine"></div>
+                            <p>You are about to release a total of <strong>${calculateTotalAmount().toFixed(2)}</strong> to the sellers. Please ensure you have sufficient funds in your your linked Stripe account!</p>
+                        </div>
+
+                        <div className="buttonsDiv" style={{ marginTop: "20px" }}>
+                            <button className="primaryBtn" onClick={releasePayments} disabled={releaseLoading}>Release ${calculateTotalAmount().toFixed(2)}</button>
+                            <button className="secondaryBtn" onClick={() => setShowReleaseModel(false)}>Cancel</button>
+                        </div>
+                    </div>
+
+                    <div className="popupCloseBtn">
+                        <IoIosCloseCircleOutline className="icon" onClick={() => setShowReleaseModel(false)} />
+                    </div>
+                </div>
+            )}
+
+
         </div>
     );
 };
@@ -303,7 +358,7 @@ export default AdminPayments;
 
 
 
-function PendingPayments({ requests, selectedRequests, handleSelectRequest, handleSelectAll, setShowMarkPaidModel }) {
+function PendingPayments({ requests, selectedRequests, handleSelectRequest, handleSelectAll, setShowMarkPaidModel, setShowReleaseModel }) {
 
     const areAllSelected = selectedRequests.length === requests.length;
     const [showSellerDetailsModel, setShowSellerDetailsModel] = useState(false);
@@ -392,7 +447,7 @@ function PendingPayments({ requests, selectedRequests, handleSelectRequest, hand
                     <h2 className="secondaryHeading"><span>Pending</span> Withdrawal requests from Sellers</h2>
                     <div className="upperRight">
                         <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowMarkPaidModel(true)}>Mark Paid</button>
-                        <button className="secondaryBtn" disabled={selectedRequests.length < 1}>Release Payment</button>
+                        <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowReleaseModel(true)}>Release Payment</button>
                     </div>
                 </div>
                 <div className="header">
@@ -419,7 +474,7 @@ function PendingPayments({ requests, selectedRequests, handleSelectRequest, hand
                             <h2 className="secondaryHeading"><span>Seller</span> Details</h2>
                             <div className="horizontalLine"></div>
 
-                            <div className="sellerEarnings form">
+                            <div className="sellerEarnings form rowsParent">
                                 <h4 className='fw600'>Earnings</h4>
                                 <div className="row">
                                     <p>Total Earnings</p>
@@ -485,8 +540,9 @@ function PendingPayments({ requests, selectedRequests, handleSelectRequest, hand
 
 
 
-function CompletedPayments({ requests, selectedRequests, handleSelectRequest, handleSelectAll, setShowMarkPaidModel, moveToPending }) {
+function CompletedPayments({ requests, selectedRequests, handleSelectRequest, handleSelectAll, moveToPending }) {
 
+    const [showPaymentDetailsModel, setShowPaymentDetailsModel] = useState(null);
     const areAllSelected = selectedRequests.length === requests.length;
 
     const paymentElems = requests.length > 0 ? requests.map((request, index) => (
@@ -503,7 +559,9 @@ function CompletedPayments({ requests, selectedRequests, handleSelectRequest, ha
                 <Link to={`/ftzy-admin/sellers/${request?.userId?.sellerId}`} className="userField field">{request?.userId?.username + " >"}</Link>
                 <p className="typeField field">{request?.paymentType}</p>
                 <p className="priceField field">${request?.amount}</p>
-                <p className="actionsField field">{request?.amount}</p>
+                <div className="actionsField field">
+                    <FaEye className='icon' onClick={() => setShowPaymentDetailsModel(request)} />
+                </div>
             </div>
             {requests.length > 1 && requests.length - 1 !== index && <div className="horizontalLine"></div>}
         </div>
@@ -536,6 +594,57 @@ function CompletedPayments({ requests, selectedRequests, handleSelectRequest, ha
                 </div>
                 <div className="rows">{paymentElems}</div>
             </div>
+            {showPaymentDetailsModel && (
+                <div className="popupDiv">
+
+                    <div className="popupContent">
+
+                        <div className='sellerDetails form'>
+
+                            <h2 className="secondaryHeading"><span>Payment</span> Details</h2>
+                            <div className="horizontalLine"></div>
+
+                            <div className="rowsParent">
+                                <div className="row">
+                                    <p>Request Made On</p>
+                                    <div className="fw600">{formatDate(showPaymentDetailsModel?.createdAt)}</div>
+                                </div>
+                                <div className="row">
+                                    <p>Payment Paid On</p>
+                                    <div className="fw600">{formatDate(showPaymentDetailsModel?.paidOn)}</div>
+                                </div>
+                                <div className="row">
+                                    <p>Requested By</p>
+                                    <div className="fw600">{showPaymentDetailsModel?.userId?.username}</div>
+                                </div>
+                                <div className="row">
+                                    <p>Amount</p>
+                                    <div className="fw600">${showPaymentDetailsModel?.amount}</div>
+                                </div>
+                                <div className="row">
+                                    <p>Payment Approach</p>
+                                    <div className="fw600">{showPaymentDetailsModel?.paymentType}</div>
+                                </div>
+                                {showPaymentDetailsModel?.paymentType === "Manual" && <div className="row">
+                                    <p>Comment</p>
+                                    <div className="fw600">{showPaymentDetailsModel?.comment}</div>
+                                </div>}
+                            </div>
+
+                        </div>
+
+                        <div className="buttonsDiv" style={{ marginTop: "20px" }}>
+                            <button className="secondaryBtn" type="button" onClick={() => setShowPaymentDetailsModel(null)}>Close</button>
+                        </div>
+
+                    </div>
+
+                    <div className="popupCloseBtn">
+                        <IoIosCloseCircleOutline className="icon" onClick={() => setShowPaymentDetailsModel(null)} />
+                    </div>
+
+                </div>
+            )}
         </div>
     )
 }

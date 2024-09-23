@@ -578,10 +578,11 @@
 
 /* ****************************** ADMIN PAYMENTS PAGE ****************************** */
 
-.adminPaymentsDiv .paymentMethodsDiv{
+.adminPaymentsDiv .adminPaymentMethodsDiv{
     background: var(--white);
     padding: 20px 30px;
     border-radius: 8px;
+    margin-bottom: 20px;
 }
 
 .adminPaymentsDiv .paymentMethods{
@@ -606,17 +607,27 @@
 .adminPaymentsDiv .paymentsDetails .css-19kzrtu{
     padding: 0 !important;
 }
-.adminPaymentsDiv .pendingPaymentsDiv .popupDiv .sellerDetails .sellerEarnings{
-    width: 100%;
-    gap: 8px;
-}
 .adminPaymentsDiv .pendingPaymentsDiv .popupDiv .sellerDetails .sellerHistory{
     width: 100%;
 }
-.adminPaymentsDiv .pendingPaymentsDiv .popupDiv .sellerDetails .sellerEarnings .row{
+.adminPaymentsDiv .popupDiv .rowsParent{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+}
+.adminPaymentsDiv .popupDiv .rowsParent .row{
     width: 100%;
     display: flex;
     justify-content: space-between;
+    gap: 25px;
+}
+.adminPaymentsDiv .popupDiv .rowsParent .row div{
+    max-width: 75%;
+    text-align: justify;
+}
+.adminPaymentsDiv .releasePopupContent{
+    max-width: 50% !important;
 }
 
 

@@ -3,13 +3,11 @@ import axios from 'axios';
 import { AuthContext } from "../../utils/AuthContext"
 import { enqueueSnackbar } from 'notistack';
 import { BsStripe } from "react-icons/bs";
-// import Dropdown from '../../components/common/Dropdown';
 import { formatDate } from '../../utils/utilFuncs';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 
 const SellerEarnings = () => {
 
-    // const [stripeUrl, setStripeUrl] = useState('');
     const [loading, setLoading] = useState(false);
     const [showWithdrawalModel, setShowWithdrawalModel] = useState(false);
     const { user } = useContext(AuthContext);
@@ -23,9 +21,6 @@ const SellerEarnings = () => {
         productsSold: 0,
         servicesDone: 0,
     });
-
-    // const [itemTypeFilter, setItemTypeFilter] = useState("- Item Type -");
-    // const [statusTypeFilter, setStatusTypeFilter] = useState("- Status -");
 
     const token = localStorage.getItem("token");
 
@@ -96,10 +91,6 @@ const SellerEarnings = () => {
     };
 
 
-    // .filter(payment => {
-    //     return (itemTypeFilter === "- Item Type -" || payment.itemType === itemTypeFilter) &&
-    //         (statusTypeFilter === "- Status -" || payment.status === statusTypeFilter);
-    // })
     const paymentElems = history.length > 0 ? history.map((item, index) => (
             <div key={index}>
                 <div className="requestRow row">
@@ -123,7 +114,7 @@ const SellerEarnings = () => {
             <section className='section'>
                 <div className="earningsContent">
 
-                    <div>
+                    <div className='sellerPaymentMethodsDiv'>
                         <h2 className='secondaryHeading'><span>Payment</span> Methods</h2>
                         <div className="paymentMethods">
                             <div className="method"><BsStripe />Stripe</div>
@@ -176,7 +167,7 @@ const SellerEarnings = () => {
                                 <p className="title">Activity</p>
                                 <p>Date</p>
                                 <p>Buyer</p>
-                                <p>Item Type</p>
+                                <p>Order Type</p>
                                 <p>Amount</p>
                             </div>
                             <div className="rows">{paymentElems}</div>

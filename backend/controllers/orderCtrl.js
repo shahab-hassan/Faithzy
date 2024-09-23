@@ -6,7 +6,7 @@ const productModel = require("../models/productModel");
 const serviceModel = require("../models/serviceModel");
 const sellerModel = require("../models/sellerModel");
 const userModel = require("../models/userModel");
-const paymentModel = require("../models//paymentModel");
+const {paymentModel, withdrawModel} = require("../models//paymentModel");
 const cron = require('node-cron');
 const { receivedOrder, completedOrderToSeller, completedOrderToBuyer, cancelledOrderToBuyer, cancelledOrderToSeller } = require("../utils/emailTemplates");
 const sendEmail = require("../utils/sendEmail");
@@ -517,8 +517,8 @@ exports.respondToProductOrderDelivery = asyncHandler(async (req, res) => {
 
     try {
       let payment = await paymentModel.findOne({ sellerId: subOrder.sellerId });
-      
-      if(!payment)
+
+      if (!payment)
         payment = new paymentModel({ sellerId: subOrder.sellerId, history: [] });
 
       payment.history.push({
@@ -884,14 +884,20 @@ exports.respondToDelivery = asyncHandler(async (req, res) => {
       const buyerEmail = buyer?.email;
 
       try {
-        const newPayment = new paymentModel({
-          buyerId: order.userId,
-          sellerId: order.service.sellerId,
-          to: "Seller",
+        let payment = await paymentModel.findOne({ sellerId: order.service.sellerId });
+
+        if (!payment)
+          payment = new paymentModel({ sellerId: order.service.sellerId, history: [] });
+
+        payment.history.push({
+          buyerUsername: buyer.username,
           amount: order.summary.sellerToGet.total,
           itemType: "Service",
+          status: "Earning",
+          description: "Order Completed"
         });
-        await newPayment.save();
+
+        await payment.save();
       }
       catch (e) {
         res.status(400);
@@ -963,6 +969,7 @@ exports.respondToDelivery = asyncHandler(async (req, res) => {
 
     res.status(200).json({ success: true, order });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Server error' });
   }
 });

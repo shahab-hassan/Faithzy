@@ -96,28 +96,33 @@ const getSellerEarnings = asyncHandler(async (req, res) => {
   if (!seller)
     return res.status(404).json({ success: false, message: 'Seller not found!' });
 
-  const payment = await paymentModel.findOne({ sellerId });
-  if (!payment)
-    return res.status(404).json({ success: false, message: 'Payment history not found!' });
+  let totalEarnings = 0, paidBalance = 0, requestedForWithdrawal = 0, availableBalance = 0, productsSold = 0, servicesDone = 0;
 
-  const { history } = payment;
-
-  const totalEarnings = history
-    .filter(entry => entry.status === "Earning")
-    .reduce((sum, entry) => sum + entry.amount, 0);
-
-  const paidBalance = history
-    .filter(entry => entry.status === "Paid")
-    .reduce((sum, entry) => sum + entry.amount, 0);
-
-  const requestedForWithdrawal = history
-    .filter(entry => entry.status === "Withdraw")
-    .reduce((sum, entry) => sum + entry.amount, 0) - paidBalance;
-
-  const availableBalance = totalEarnings - (requestedForWithdrawal + paidBalance);
-
-  const productsSold = seller.productsSold;
-  const servicesDone = seller.servicesDone;
+  let payment = await paymentModel.findOne({ sellerId });
+  if (!payment){
+    payment = new paymentModel({ sellerId, history: [] });
+    payment.save();
+  }
+  else{
+    const { history } = payment;
+  
+    totalEarnings = history
+      .filter(entry => entry.status === "Earning")
+      .reduce((sum, entry) => sum + entry.amount, 0);
+  
+    paidBalance = history
+      .filter(entry => entry.status === "Paid")
+      .reduce((sum, entry) => sum + entry.amount, 0);
+  
+    requestedForWithdrawal = history
+      .filter(entry => entry.status === "Withdraw")
+      .reduce((sum, entry) => sum + entry.amount, 0) - paidBalance;
+  
+    availableBalance = totalEarnings - (requestedForWithdrawal + paidBalance);
+  
+    productsSold = seller.productsSold;
+    servicesDone = seller.servicesDone;
+  }
 
   res.status(200).json({
     success: true,
@@ -140,9 +145,11 @@ const getSellerHistory = asyncHandler(async (req, res) => {
   if (!seller)
     return res.status(404).json({ success: false, message: 'Seller not found!' });
 
-  const payment = await paymentModel.findOne({ sellerId });
-  if (!payment)
-    return res.status(404).json({ success: false, message: 'Payment history not found!' });
+  let payment = await paymentModel.findOne({ sellerId });
+  if (!payment){
+    payment = new paymentModel({ sellerId, history: [] });
+    payment.save();
+  }
 
   res.status(200).json({
     success: true,
@@ -225,39 +232,38 @@ const requestForWithdraw = asyncHandler(async (req, res) => {
 
 const getWithdrawalRequests = asyncHandler(async (req, res) => {
   try {
-      const { type } = req.query;
+    const { type } = req.query;
 
-      let filter = {};
+    let filter = {};
 
-      switch (type) {
-          case 'pendingPayments':
-              filter = { to: "Seller", status: "Pending" };
-              break;
-          case 'completedPayments':
-              filter = { to: "Seller", status: "Paid" };
-              break;
-          case 'pendingRefunds':
-              filter = { to: "Buyer", status: "Pending" };
-              break;
-          case 'completedRefunds':
-              filter = { to: "Buyer", status: "Paid" };
-              break;
-          default:
-              return res.status(400).json({ success: false, message: "Invalid type specified" });
-      }
+    switch (type) {
+      case 'pendingPayments':
+        filter = { to: "Seller", status: "Pending" };
+        break;
+      case 'completedPayments':
+        filter = { to: "Seller", status: "Paid" };
+        break;
+      case 'pendingRefunds':
+        filter = { to: "Buyer", status: "Pending" };
+        break;
+      case 'completedRefunds':
+        filter = { to: "Buyer", status: "Paid" };
+        break;
+      default:
+        return res.status(400).json({ success: false, message: "Invalid type specified" });
+    }
 
-      const withdrawalRequests = await withdrawModel.find(filter).populate('userId');
+    const withdrawalRequests = await withdrawModel.find(filter).populate('userId').sort({updatedAt: -1});
 
-      res.status(200).json({
-          success: true,
-          withdrawalRequests
-      });
+    res.status(200).json({
+      success: true,
+      withdrawalRequests
+    });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ success: false, message: "Server error" });
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 });
-
 
 
 const markPaymentAsPaidManually = asyncHandler(async (req, res) => {
@@ -323,13 +329,14 @@ const movePaymentToPending = asyncHandler(async (req, res) => {
 
 const releasePayments = asyncHandler(async (req, res) => {
   const { requestIds } = req.body;
-  const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+  const stripeSecretKey = await getStripeSecretKey();
+  const stripe = require('stripe')(stripeSecretKey);
 
   for (let requestId of requestIds) {
     const request = await withdrawModel.findById(requestId).populate('userId');
     if (!request) return res.status(404).json({ message: `Request ${requestId} not found` });
 
-    const seller = await Seller.findById(request.userId._id);
+    const seller = await Seller.findById(request.userId?.sellerId);
     if (!seller || !seller.stripeAccountId) {
       return res.status(400).json({ message: `Seller with Stripe account not found for request ${requestId}` });
     }
@@ -344,7 +351,18 @@ const releasePayments = asyncHandler(async (req, res) => {
     request.status = "Paid";
     request.paymentType = "Auto";
     request.paidOn = Date.now();
+
+    let payment = await paymentModel.findOne({ sellerId: request?.userId?.sellerId });
+    if (!payment || !payment.history) return res.status(404).json({ message: `Payment not found` });
+
+    payment.history.push({
+      amount: request.amount,
+      status: "Paid",
+      description: "Amount Paid"
+    });
+
     await request.save();
+    await payment.save();
   }
 
   res.status(200).json({ success: true });
@@ -353,4 +371,4 @@ const releasePayments = asyncHandler(async (req, res) => {
 
 
 
-module.exports = { movePaymentToPending, markPaymentAsPaidManually, confirmPaymentIntent, createPaymentIntent, getSellerEarnings, connectStripe, requestForWithdraw, getSellerHistory, getWithdrawalRequests };
+module.exports = { releasePayments, movePaymentToPending, markPaymentAsPaidManually, confirmPaymentIntent, createPaymentIntent, getSellerEarnings, connectStripe, requestForWithdraw, getSellerHistory, getWithdrawalRequests };

@@ -887,8 +887,13 @@
 .earningsDiv {
     margin: 50px 0px;
 }
-
-.earningsDiv .paymentMethods{
+.earningsDiv .sellerPaymentMethodsDiv{
+    background: var(--white);
+    padding: 20px 30px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.earningsDiv .sellerPaymentMethodsDiv .paymentMethods{
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -897,7 +902,7 @@
     border-radius: 8px;
     margin: 10px 0px;
 }
-.earningsDiv .paymentMethods .method{
+.earningsDiv .sellerPaymentMethodsDiv .paymentMethods .method{
     display: flex;
     align-items: center;
     gap: 10px;
@@ -925,6 +930,10 @@
 .earningsDiv .earningsOverview .overviewBox .value {
     font-size: 1.5rem;
     font-weight: 600;
+}
+.earningsDiv .tableDiv{
+    padding: 0;
+    margin: 20px 0px;
 }
 .earningsDiv .tableDiv .upperRight{
     display: flex;
