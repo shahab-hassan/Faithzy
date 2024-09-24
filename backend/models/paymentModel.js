@@ -19,6 +19,8 @@ const paymentSchema = new mongoose.Schema({
 const withdrawSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.ObjectId, ref: "User", required: true },
     to: { type: String, required: true, enum: ["Buyer", "Seller"] },
+    orderId: { type: String },
+    itemType: { type: String, enum: ["Product", "Service"] },
     amount: { type: Number, required: true },
     status: {type: String, required: true, enum: ["Pending", "Paid"], default: "Pending"},
     paymentType: {type: String, enum: ["Auto", "Manual"]},

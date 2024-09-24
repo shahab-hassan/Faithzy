@@ -62,6 +62,7 @@ const productOrderSchema = new mongoose.Schema({
     phoneNumber: String,
     note: String
   },
+  paymentIntentId: String,
   clientSecret: String
 }, { timestamps: true });
 
@@ -120,6 +121,7 @@ const serviceOrderSchema = new mongoose.Schema({
     paypalOrderId: String,
   },
   answers: [String],
+  paymentIntentId: String,
   clientSecret: String
 }, { timestamps: true });
 

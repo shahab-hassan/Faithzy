@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import { formatDate } from '../../utils/utilFuncs';
 import { Link } from 'react-router-dom';
 import { FaEye } from "react-icons/fa";
+import { CSVLink } from 'react-csv';
 
 
 const AdminPayments = () => {
@@ -22,8 +23,8 @@ const AdminPayments = () => {
     const [withdrawalRequests, setWithdrawalRequests] = useState([]);
     const [paymentDate, setPaymentDate] = useState('');
     const [comment, setComment] = useState('');
-    const [showMarkPaidModel, setShowMarkPaidModel] = useState(false);
-    const [showReleaseModel, setShowReleaseModel] = useState(false);
+    const [showMarkPaidModel, setShowMarkPaidModel] = useState(null);
+    const [showReleaseModel, setShowReleaseModel] = useState(null);
     const [releaseLoading, setReleaseLoading] = useState(false);
 
     const [selectedRequests, setSelectedRequests] = useState([]);
@@ -124,6 +125,7 @@ const AdminPayments = () => {
                 requestIds: selectedRequests,
                 paidOn: paymentDate,
                 comment,
+                isRelease: showMarkPaidModel === "Release" ? true : false
             }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -131,7 +133,7 @@ const AdminPayments = () => {
                 enqueueSnackbar(`${selectedRequests.length} payment${selectedRequests.length > 1 ? "s" : ""} marked as Paid!`, { variant: 'success' });
                 setWithdrawalRequests(prev => prev.filter(req => !selectedRequests.includes(req._id)));
                 setSelectedRequests([]);
-                setShowMarkPaidModel(false);
+                setShowMarkPaidModel(null);
             }
 
         } catch (error) {
@@ -159,15 +161,39 @@ const AdminPayments = () => {
             setReleaseLoading(false);
         } catch (error) {
             console.error(error);
-            enqueueSnackbar('Something went wrong!', { variant: 'error' });
+            enqueueSnackbar(error.reponse?.data?.error || 'Something went wrong!', { variant: 'error' });
             setReleaseLoading(false);
         }
     }
 
-    const moveToPending = async () => {
+    const refundPayments = async () => {
+
+        setReleaseLoading(true);
 
         try {
-            const response = await axios.put('http://localhost:5000/api/v1/payments/move-to-pending', { requestIds: selectedRequests }, {
+            const response = await axios.put('http://localhost:5000/api/v1/payments/refund-payment', {
+                requestIds: selectedRequests
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (response.data.success) {
+                enqueueSnackbar(`${selectedRequests.length} payment${selectedRequests.length > 1 ? "s" : ""} refunded successfully!`, { variant: 'success' });
+                setWithdrawalRequests(prev => prev.filter(req => !selectedRequests.includes(req._id)));
+                setSelectedRequests([]);
+                setShowReleaseModel(null);
+            }
+            setReleaseLoading(false);
+        } catch (error) {
+            console.error(error);
+            enqueueSnackbar(error.response?.data?.error || 'Something went wrong!', { variant: 'error' });
+            setReleaseLoading(false);
+        }
+    }
+
+    const moveToPending = async (type) => {
+
+        try {
+            const response = await axios.put('http://localhost:5000/api/v1/payments/move-to-pending', { requestIds: selectedRequests, isRefund: type === "Refund" ? true : false }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.data.success) {
@@ -234,10 +260,23 @@ const AdminPayments = () => {
                             />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={2}>
-                            Item Three
+                            <PendingRefunds
+                                requests={withdrawalRequests}
+                                selectedRequests={selectedRequests}
+                                handleSelectRequest={handleSelectRequest}
+                                handleSelectAll={handleSelectAll}
+                                setShowMarkPaidModel={setShowMarkPaidModel}
+                                setShowReleaseModel={setShowReleaseModel}
+                            />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={3}>
-                            Item Four
+                            <CompletedRefunds
+                                requests={withdrawalRequests}
+                                selectedRequests={selectedRequests}
+                                handleSelectRequest={handleSelectRequest}
+                                handleSelectAll={handleSelectAll}
+                                moveToPending={moveToPending}
+                            />
                         </CustomTabPanel>
                     </Box>
                 </div>
@@ -315,13 +354,13 @@ const AdminPayments = () => {
 
                         <div className="buttonsDiv" style={{ marginTop: "20px" }}>
                             <button className="primaryBtn" onClick={markPaidManually}>Mark Paid</button>
-                            <button className="secondaryBtn" onClick={() => setShowMarkPaidModel(false)}>Cancel</button>
+                            <button className="secondaryBtn" onClick={() => setShowMarkPaidModel(null)}>Cancel</button>
                         </div>
 
                     </div>
 
                     <div className="popupCloseBtn">
-                        <IoIosCloseCircleOutline className="icon" onClick={() => setShowMarkPaidModel(false)} />
+                        <IoIosCloseCircleOutline className="icon" onClick={() => setShowMarkPaidModel(null)} />
                     </div>
 
                 </div>
@@ -331,19 +370,19 @@ const AdminPayments = () => {
                 <div className="popupDiv">
                     <div className="popupContent releasePopupContent">
                         <div className="form">
-                            <h2 className="secondaryHeading">Confirm <span>Releasing</span> Payments</h2>
+                            <h2 className="secondaryHeading">Confirm <span>{showReleaseModel === "Release" ? "Releasing" : "Refunding"}</span> Payments</h2>
                             <div className="horizontalLine"></div>
-                            <p>You are about to release a total of <strong>${calculateTotalAmount().toFixed(2)}</strong> to the sellers. Please ensure you have sufficient funds in your your linked Stripe account!</p>
+                            <p>You are about to release a total of <strong>${calculateTotalAmount().toFixed(2)}</strong> to the {showReleaseModel === "Release" ? "sellers" : "buyers"}. Please ensure you have sufficient funds in your your linked Stripe account!</p>
                         </div>
 
                         <div className="buttonsDiv" style={{ marginTop: "20px" }}>
-                            <button className="primaryBtn" onClick={releasePayments} disabled={releaseLoading}>Release ${calculateTotalAmount().toFixed(2)}</button>
-                            <button className="secondaryBtn" onClick={() => setShowReleaseModel(false)}>Cancel</button>
+                            <button className="primaryBtn" onClick={showReleaseModel === "Release" ? releasePayments : refundPayments} disabled={releaseLoading}>{showReleaseModel === "Release" ? "Release" : "Refund"} ${calculateTotalAmount().toFixed(2)}</button>
+                            <button className="secondaryBtn" onClick={() => setShowReleaseModel(null)}>Cancel</button>
                         </div>
                     </div>
 
                     <div className="popupCloseBtn">
-                        <IoIosCloseCircleOutline className="icon" onClick={() => setShowReleaseModel(false)} />
+                        <IoIosCloseCircleOutline className="icon" onClick={() => setShowReleaseModel(null)} />
                     </div>
                 </div>
             )}
@@ -446,8 +485,8 @@ function PendingPayments({ requests, selectedRequests, handleSelectRequest, hand
                 <div className="upper">
                     <h2 className="secondaryHeading"><span>Pending</span> Withdrawal requests from Sellers</h2>
                     <div className="upperRight">
-                        <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowMarkPaidModel(true)}>Mark Paid</button>
-                        <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowReleaseModel(true)}>Release Payment</button>
+                        <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowMarkPaidModel("Release")}>Mark Paid</button>
+                        <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowReleaseModel("Release")}>Release Payment</button>
                     </div>
                 </div>
                 <div className="header">
@@ -538,6 +577,61 @@ function PendingPayments({ requests, selectedRequests, handleSelectRequest, hand
 }
 
 
+function PendingRefunds({ requests, selectedRequests, handleSelectRequest, handleSelectAll, setShowMarkPaidModel, setShowReleaseModel }) {
+
+    const areAllSelected = selectedRequests.length === requests.length;
+
+    // const token = localStorage.getItem("adminToken");
+
+    const paymentElems = requests.length > 0 ? requests.map((request, index) => (
+        <div key={index}>
+            <div className="requestRow row">
+                <div><input
+                    type="checkbox"
+                    checked={selectedRequests.includes(request._id)}
+                    onChange={() => handleSelectRequest(request._id)}
+                />
+                </div>
+                <p className="dateField field">{formatDate(request?.createdAt)}</p>
+                <p className="userField field">{request?.userId?.username}</p>
+                <p className="priceField field">${request?.amount}</p>
+                {/* <div className="actionsField field">
+                    <FaEye className='icon' onClick={() => showSellerDetails(request?.userId?.sellerId)} />
+                </div> */}
+            </div>
+            {requests.length > 1 && requests.length - 1 !== index && <div className="horizontalLine"></div>}
+        </div>
+    ))
+        : <div className="row">Nothing to show here...</div>;
+
+    return (
+        <div className="pendingPaymentsDiv tableDiv">
+            <div className="tableContent">
+                <div className="upper">
+                    <h2 className="secondaryHeading"><span>Pending</span> Refunds to Buyers</h2>
+                    <div className="upperRight">
+                        <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowMarkPaidModel("Refund")}>Mark Paid</button>
+                        <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowReleaseModel("Refund")}>Refund Payment</button>
+                    </div>
+                </div>
+                <div className="header">
+                    {requests.length > 0 && <div><input
+                        type="checkbox"
+                        checked={areAllSelected}
+                        onChange={() => handleSelectAll(requests, areAllSelected)}
+                    />
+                    </div>}
+                    <p>Date</p>
+                    <p>Buyer</p>
+                    <p>Amount</p>
+                    {/* <p>Actions</p> */}
+                </div>
+                <div className="rows">{paymentElems}</div>
+            </div>
+        </div>
+    )
+}
+
 
 
 function CompletedPayments({ requests, selectedRequests, handleSelectRequest, handleSelectAll, moveToPending }) {
@@ -568,14 +662,39 @@ function CompletedPayments({ requests, selectedRequests, handleSelectRequest, ha
     ))
         : <div className="row">Nothing to show here...</div>;
 
+    const csvData = requests.map(request => ({
+        "Requested On": formatDate(request?.createdAt),
+        "Paid On": formatDate(request?.paidOn),
+        "Seller": request?.userId?.username,
+        "Seller ID": request?.userId?.sellerId,
+        "Payment Type": request?.paymentType,
+        "Amount": request?.amount
+    }));
+
+    const headers = [
+        { label: "Requested On", key: "Requested On" },
+        { label: "Paid On", key: "Paid On" },
+        { label: "Seller", key: "Seller" },
+        { label: "Seller ID", key: "Seller ID" },
+        { label: "Payment Type", key: "Payment Type" },
+        { label: "Amount", key: "Amount" }
+    ];
+
     return (
         <div className="tableDiv">
             <div className="tableContent">
                 <div className="upper">
                     <h2 className="secondaryHeading"><span>Completed</span> Withdrawal requests</h2>
                     <div className="upperRight">
-                        <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={moveToPending}>Move to Pending</button>
-                        {/* <button className="secondaryBtn" disabled={selectedRequests.length < 1}>Release Payment</button> */}
+                        <CSVLink
+                            data={csvData}
+                            headers={headers}
+                            filename={"paid_payments.csv"}
+                            className="secondaryBtn"
+                        >
+                            Export CSV
+                        </CSVLink>
+                        <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => moveToPending("Payment")}>Move to Pending</button>
                     </div>
                 </div>
                 <div className="header">
@@ -650,6 +769,115 @@ function CompletedPayments({ requests, selectedRequests, handleSelectRequest, ha
 }
 
 
+
+function CompletedRefunds({ requests, selectedRequests, handleSelectRequest, handleSelectAll, moveToPending }) {
+
+    const [showPaymentDetailsModel, setShowPaymentDetailsModel] = useState(null);
+    const areAllSelected = selectedRequests.length === requests.length;
+
+    const paymentElems = requests.length > 0 ? requests.map((request, index) => (
+        <div key={index}>
+            <div className="requestRow row">
+                <div><input
+                    type="checkbox"
+                    checked={selectedRequests.includes(request._id)}
+                    onChange={() => handleSelectRequest(request._id)}
+                />
+                </div>
+                <p className="dateField field">{formatDate(request?.createdAt)}</p>
+                <p className="dateField field">{formatDate(request?.paidOn)}</p>
+                <p className="userField field">{request?.userId?.username}</p>
+                <p className="typeField field">{request?.paymentType}</p>
+                <p className="priceField field">${request?.amount}</p>
+                <div className="actionsField field">
+                    <FaEye className='icon' onClick={() => setShowPaymentDetailsModel(request)} />
+                </div>
+            </div>
+            {requests.length > 1 && requests.length - 1 !== index && <div className="horizontalLine"></div>}
+        </div>
+    ))
+        : <div className="row">Nothing to show here...</div>;
+
+    return (
+        <div className="tableDiv">
+            <div className="tableContent">
+                <div className="upper">
+                    <h2 className="secondaryHeading"><span>Paid</span> Refunds</h2>
+                    <div className="upperRight">
+                        <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => moveToPending("Refund")}>Move to Pending</button>
+                        {/* <button className="secondaryBtn" disabled={selectedRequests.length < 1}>Release Payment</button> */}
+                    </div>
+                </div>
+                <div className="header">
+                    {requests.length > 0 && <div><input
+                        type="checkbox"
+                        checked={areAllSelected}
+                        onChange={() => handleSelectAll(requests, areAllSelected)}
+                    />
+                    </div>}
+                    <p>Date</p>
+                    <p>Paid On</p>
+                    <p>Buyer</p>
+                    <p>Payed By</p>
+                    <p>Amount</p>
+                    <p>Actions</p>
+                </div>
+                <div className="rows">{paymentElems}</div>
+            </div>
+            {showPaymentDetailsModel && (
+                <div className="popupDiv">
+
+                    <div className="popupContent">
+
+                        <div className='sellerDetails form'>
+
+                            <h2 className="secondaryHeading"><span>Payment</span> Details</h2>
+                            <div className="horizontalLine"></div>
+
+                            <div className="rowsParent">
+                                <div className="row">
+                                    <p>Order Cancelled On</p>
+                                    <div className="fw600">{formatDate(showPaymentDetailsModel?.createdAt)}</div>
+                                </div>
+                                <div className="row">
+                                    <p>Refund Paid On</p>
+                                    <div className="fw600">{formatDate(showPaymentDetailsModel?.paidOn)}</div>
+                                </div>
+                                <div className="row">
+                                    <p>Buyer</p>
+                                    <div className="fw600">{showPaymentDetailsModel?.userId?.username}</div>
+                                </div>
+                                <div className="row">
+                                    <p>Amount</p>
+                                    <div className="fw600">${showPaymentDetailsModel?.amount}</div>
+                                </div>
+                                <div className="row">
+                                    <p>Payment Approach</p>
+                                    <div className="fw600">{showPaymentDetailsModel?.paymentType}</div>
+                                </div>
+                                {showPaymentDetailsModel?.paymentType === "Manual" && <div className="row">
+                                    <p>Comment</p>
+                                    <div className="fw600">{showPaymentDetailsModel?.comment}</div>
+                                </div>}
+                            </div>
+
+                        </div>
+
+                        <div className="buttonsDiv" style={{ marginTop: "20px" }}>
+                            <button className="secondaryBtn" type="button" onClick={() => setShowPaymentDetailsModel(null)}>Close</button>
+                        </div>
+
+                    </div>
+
+                    <div className="popupCloseBtn">
+                        <IoIosCloseCircleOutline className="icon" onClick={() => setShowPaymentDetailsModel(null)} />
+                    </div>
+
+                </div>
+            )}
+        </div>
+    )
+}
 
 
 function CustomTabPanel(props) {

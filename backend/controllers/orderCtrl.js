@@ -149,6 +149,7 @@ exports.createProductOrder = asyncHandler(async (req, res) => {
     summary,
     paymentMethod,
     billingInfo,
+    paymentIntentId: paymentMethod === 'stripe' ? paymentIntent.id : undefined,
     clientSecret: paymentMethod === 'stripe' ? paymentIntent.client_secret : undefined,
     paypalOrderId: paymentMethod === 'paypal' ? paypalOrderId : undefined,
   });
@@ -224,6 +225,7 @@ exports.createServiceOrder = asyncHandler(async (req, res) => {
     paymentMethod,
     netProfit: summary.paidByBuyer.total - summary.sellerToGet.total,
     buyerInfo,
+    paymentIntentId: paymentMethod === 'stripe' ? paymentIntent.id : undefined,
     clientSecret: paymentMethod === 'stripe' ? paymentIntent.client_secret : undefined,
     paypalOrderId: paymentMethod === 'paypal' ? paypalOrderId : undefined,
   });
@@ -635,27 +637,22 @@ exports.responseToProductOrderCancellation = asyncHandler(async (req, res) => {
     const sellerEmail = seller.userId.email;
     const buyerEmail = buyer.email;
 
-    try {
-      const newPayment = new paymentModel({
-        buyerId: order.userId,
-        sellerId: subOrder.sellerId,
-        to: "Buyer",
-        amount: subOrder.buyerPaid.total,
-        itemType: "Product",
-      });
-      await newPayment.save();
-    }
-    catch (e) {
-      res.status(400);
-      throw new Error(e);
-    }
+    const withdrawalRequest = new withdrawModel({
+      userId: buyer._id,
+      to: "Buyer",
+      orderId,
+      itemType: "Product",
+      amount: subOrder.buyerPaid.total - subOrder.buyerPaid.tax,
+    });
 
+    
     subOrder.status.push({ name: 'Cancelled', createdAt: new Date() });
     subOrder.crrStatus = "Cancelled";
-
+    
     const crrProduct = await productModel.findById(subOrder.productId);
     crrProduct.stock += subOrder.count;
     await crrProduct.save();
+    await withdrawalRequest.save();
 
     setImmediate(async () => {
       try {
@@ -1026,20 +1023,15 @@ exports.respondToCancellation = asyncHandler(async (req, res) => {
       const sellerEmail = seller.userId.email;
       const buyerEmail = buyer.email;
 
-      try {
-        const newPayment = new paymentModel({
-          buyerId: order.userId,
-          sellerId: order.service.sellerId,
-          to: "Buyer",
-          amount: order.summary.paidByBuyer.total,
-          itemType: "Service",
-        });
-        await newPayment.save();
-      }
-      catch (e) {
-        res.status(400);
-        throw new Error(e);
-      }
+      const withdrawalRequest = new withdrawModel({
+        userId: buyer._id,
+        to: "Buyer",
+        orderId: order._id,
+        itemType: "Service",
+        amount: order.summary.paidByBuyer.total - order.summary.paidByBuyer.tax,
+      });
+
+      await withdrawalRequest.save();
 
       order.service.status.push({ name: "Cancelled", createdAt: Date.now() });
       order.service.crrStatus = "Cancelled"
