@@ -17,8 +17,6 @@ exports.sendMessage = asyncHandler(async (req, res) => {
     if (offer) {
         const parsedOffer = JSON.parse(offer);
 
-        console.log(offer);
-
         if (parsedOffer.quoteType === 'product') {
             parsedOffer.serviceId = null;
         } else if (parsedOffer.quoteType === 'service') {

@@ -20,6 +20,7 @@ const productOrder = new mongoose.Schema({
   },
   status: { type: [{ name: String, createdAt: Date }], required: true, default: [{ name: "Active", createdAt: Date.now() }] },
   crrStatus: {type: String, required: true, default: "Active"},
+  disputeId: { type: String },
   netProfit: {type: Number, required: true, default: 0},
   cancellationReason: String,
   cancellationFrom: {type: String, enum: ["Buyer", "Seller"]},

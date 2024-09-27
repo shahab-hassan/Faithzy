@@ -173,7 +173,7 @@
     gap: 30px;
 }
 
-.orderDetailsDiv .orders .upper{
+.orderDetailsDiv .orders > .upper{
     background: var(--primaryBlue);
     color: var(--white);
     border-top-left-radius: 8px;
@@ -300,10 +300,21 @@
     display: flex;
     justify-content: space-between;
 }
+.orderDetailsDiv .orderStatusDetails .inputDiv .actions .btnsDiv{
+    display: flex;
+    gap: 15px;
+}
 .orderDetailsDiv .orderStatusDetails .actionsB{
     display: flex;
     justify-content: right;
     gap: 15px;
+}
+.orderDetailsDiv .popupDiv .disputePopupContent{
+    max-width: 60%;
+}
+.orderDetailsDiv .popupDiv .disputePopupContent .infoDiv{
+    font-size: 0.8rem;
+    color: var(--lightBlackPrimary);
 }
 
 
@@ -624,4 +635,145 @@
 
 .notFoundImgDiv img{
     width: 100%;
+}
+
+
+
+
+
+/********************** CHAT ROOM ***********************/
+
+.disputeChatDiv{
+    height: 78vh;
+}
+.disputeChatDiv .chatRoom{
+    height: 85%;
+}
+
+.commonChatDiv .chatRoom .content{
+    padding: 20px 0px;
+}
+.commonChatDiv .chatRoom .messages{
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.commonChatDiv .chatRoom .messages .message{
+    padding: 5px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.commonChatDiv .chatRoom .messages .message .senderName{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.commonChatDiv .chatRoom .messages .message .senderName span{
+    color: var(--darkGray);
+    font-size: 0.7rem;
+    font-weight: 300;
+}
+
+.commonChatDiv .chatRoom .messages .message.received{
+    background: var(--extraLightGray);
+    padding: 10px 30px;
+}
+
+.commonChatDiv .chatRoom .messages .message.received .senderName{
+    color: var(--primaryCopper);
+}
+
+
+.commonChatDiv .chatRoom .messages .message .documentBox {
+    display: flex;
+    align-items: center;
+    background-color: var(--primaryBlue);
+    padding: 12px 20px;
+    border-radius: 8px;
+    width: fit-content;
+    color: var(--white);
+    gap: 15px;
+}
+
+.commonChatDiv .chatRoom .messages .message .documentBox .fileInfo a {
+    color: var(--secondaryCopper);
+}
+
+.commonChatDiv .chatRoom .writeMessageDiv{
+    height: fit-content;
+    background: var(--lightGray);
+    width: 100%;
+    padding: 10px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.commonChatDiv .chatRoom .writeMessageDiv .upper input{
+    border: none;
+    outline: none;
+    background: var(--lightGray);
+    width: 100%;
+}
+.commonChatDiv .chatRoom .writeMessageDiv .lower{
+    display: flex;
+    justify-content: space-between;
+}
+.commonChatDiv .chatRoom .writeMessageDiv .lower .left{
+    display: flex;
+    align-items: center;
+}
+.commonChatDiv .chatRoom .writeMessageDiv .lower .left .attachIcon{
+    margin-right: 15px;
+}
+.commonChatDiv .chatRoom .writeMessageDiv .lower .left #fileInput{
+    display: none;
+}
+
+.commonChatDiv .chatRoom .writeMessageDiv .filePreview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--lightBlack);
+}
+
+.commonChatDiv .chatRoom .writeMessageDiv .filePreview p {
+    margin: 0;
+    font-weight: 500;
+}
+
+.commonChatDiv .chatRoom .writeMessageDiv .filePreview .removeFileIcon{
+    cursor: pointer;
+}
+
+.commonChatDiv .nothingFound{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+.commonChatDiv .nothingFound .icon{
+    width: 100px;
+    height: 100px;
+    color: var(--darkGray);
+}
+
+.orderDetailsDiv .orderStatusDetails .productOrderDisputeChat{
+    margin: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.orderDetailsDiv .orderStatusDetails .productOrderDisputeChat .disputeChatDiv{
+    height: 75vh;
+}
+.orderDetailsDiv .orderStatusDetails .productOrderDisputeChat .disputeChatDiv .chatRoom{
+    height: 85%;
 }

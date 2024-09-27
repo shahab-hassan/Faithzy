@@ -2016,102 +2016,6 @@
     font-weight: 400;
 }
 
-.chatDiv .chatRoom .content{
-    padding: 20px 0px;
-}
-.chatDiv .chatRoom .messages{
-    height: 100%;
-    overflow-y: auto;
-}
-
-.chatDiv .chatRoom .messages .message{
-    padding: 5px 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.chatDiv .chatRoom .messages .message .senderName{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.chatDiv .chatRoom .messages .message .senderName span{
-    color: var(--darkGray);
-    font-size: 0.7rem;
-    font-weight: 300;
-}
-
-.chatDiv .chatRoom .messages .message.received{
-    background: var(--extraLightGray);
-    padding: 10px 30px;
-}
-
-.chatDiv .chatRoom .messages .message.received .senderName{
-    color: var(--primaryCopper);
-}
-
-
-.chatDiv .chatRoom .messages .message .documentBox {
-    display: flex;
-    align-items: center;
-    background-color: var(--primaryBlue);
-    padding: 12px 20px;
-    border-radius: 8px;
-    width: fit-content;
-    color: var(--white);
-    gap: 15px;
-}
-
-.chatDiv .chatRoom .messages .message .documentBox .fileInfo a {
-    color: var(--secondaryCopper);
-}
-
-.chatDiv .chatRoom .writeMessageDiv{
-    height: fit-content;
-    background: var(--lightGray);
-    width: 100%;
-    padding: 10px 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.chatDiv .chatRoom .writeMessageDiv .upper input{
-    border: none;
-    outline: none;
-    background: var(--lightGray);
-    width: 100%;
-}
-.chatDiv .chatRoom .writeMessageDiv .lower{
-    display: flex;
-    justify-content: space-between;
-}
-.chatDiv .chatRoom .writeMessageDiv .lower .left{
-    display: flex;
-    align-items: center;
-}
-.chatDiv .chatRoom .writeMessageDiv .lower .left .attachIcon{
-    margin-right: 15px;
-}
-.chatDiv .chatRoom .writeMessageDiv .lower .left #fileInput{
-    display: none;
-}
-
-.chatDiv .chatRoom .writeMessageDiv .filePreview {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--lightBlack);
-}
-
-.chatDiv .chatRoom .writeMessageDiv .filePreview p {
-    margin: 0;
-    font-weight: 500;
-}
-
-.chatDiv .chatRoom .writeMessageDiv .filePreview .removeFileIcon{
-    cursor: pointer;
-}
 
 .chatDiv .chatRoom .messages .offerMessage{
     border: 1px solid var(--gray);
@@ -2167,21 +2071,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.chatDiv .nothingFound{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    gap: 20px;
-}
-.chatDiv .nothingFound .icon{
-    width: 100px;
-    height: 100px;
-    color: var(--darkGray);
 }
 
 .chatDiv .otherInfo .sampleProvisionsDiv{

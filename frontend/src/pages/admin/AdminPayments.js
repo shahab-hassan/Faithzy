@@ -479,12 +479,27 @@ function PendingPayments({ requests, selectedRequests, handleSelectRequest, hand
     ))
         : <div className="row">Nothing to show here...</div>;
 
+    const csvData = requests.map(request => ({
+        "Requested On": formatDate(request?.createdAt),
+        "Seller": request?.userId?.username,
+        "Seller ID": request?.userId?._id,
+        "Amount": request?.amount
+    }));
+
+    const headers = [
+        { label: "Requested On", key: "Requested On" },
+        { label: "Seller", key: "Seller" },
+        { label: "Seller ID", key: "Seller ID" },
+        { label: "Amount", key: "Amount" }
+    ];
+
     return (
         <div className="pendingPaymentsDiv tableDiv">
             <div className="tableContent">
                 <div className="upper">
                     <h2 className="secondaryHeading"><span>Pending</span> Withdrawal requests from Sellers</h2>
                     <div className="upperRight">
+                        <CSVLink data={csvData} headers={headers} filename={"pending_payments.csv"} className="secondaryBtn">Export CSV</CSVLink>
                         <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowMarkPaidModel("Release")}>Mark Paid</button>
                         <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowReleaseModel("Release")}>Release Payment</button>
                     </div>
@@ -604,12 +619,27 @@ function PendingRefunds({ requests, selectedRequests, handleSelectRequest, handl
     ))
         : <div className="row">Nothing to show here...</div>;
 
+    const csvData = requests.map(request => ({
+        "Date": formatDate(request?.createdAt),
+        "Buyer": request?.userId?.username,
+        "Buyer ID": request?.userId?._id,
+        "Amount": request?.amount,
+    }));
+
+    const headers = [
+        { label: "Date", key: "Date" },
+        { label: "Buyer", key: "Buyer" },
+        { label: "Buyer ID", key: "Buyer ID" },
+        { label: "Amount", key: "Amount" }
+    ];
+
     return (
         <div className="pendingPaymentsDiv tableDiv">
             <div className="tableContent">
                 <div className="upper">
                     <h2 className="secondaryHeading"><span>Pending</span> Refunds to Buyers</h2>
                     <div className="upperRight">
+                        <CSVLink data={csvData} headers={headers} filename={"pending_refunds.csv"} className="secondaryBtn">Export CSV</CSVLink>
                         <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowMarkPaidModel("Refund")}>Mark Paid</button>
                         <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowReleaseModel("Refund")}>Refund Payment</button>
                     </div>
@@ -667,8 +697,9 @@ function CompletedPayments({ requests, selectedRequests, handleSelectRequest, ha
         "Paid On": formatDate(request?.paidOn),
         "Seller": request?.userId?.username,
         "Seller ID": request?.userId?.sellerId,
-        "Payment Type": request?.paymentType,
-        "Amount": request?.amount
+        "Amount": request?.amount,
+        "Payment Approach": request?.paymentType,
+        "Comment": request?.comment || "-",
     }));
 
     const headers = [
@@ -676,8 +707,9 @@ function CompletedPayments({ requests, selectedRequests, handleSelectRequest, ha
         { label: "Paid On", key: "Paid On" },
         { label: "Seller", key: "Seller" },
         { label: "Seller ID", key: "Seller ID" },
-        { label: "Payment Type", key: "Payment Type" },
-        { label: "Amount", key: "Amount" }
+        { label: "Amount", key: "Amount" },
+        { label: "Payment Approach", key: "Payment Approach" },
+        { label: "Comment", key: "Comment" },
     ];
 
     return (
@@ -686,14 +718,7 @@ function CompletedPayments({ requests, selectedRequests, handleSelectRequest, ha
                 <div className="upper">
                     <h2 className="secondaryHeading"><span>Completed</span> Withdrawal requests</h2>
                     <div className="upperRight">
-                        <CSVLink
-                            data={csvData}
-                            headers={headers}
-                            filename={"paid_payments.csv"}
-                            className="secondaryBtn"
-                        >
-                            Export CSV
-                        </CSVLink>
+                        <CSVLink data={csvData} headers={headers} filename={"completed_payments.csv"} className="secondaryBtn">Export CSV</CSVLink>
                         <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => moveToPending("Payment")}>Move to Pending</button>
                     </div>
                 </div>
@@ -798,12 +823,33 @@ function CompletedRefunds({ requests, selectedRequests, handleSelectRequest, han
     ))
         : <div className="row">Nothing to show here...</div>;
 
+    const csvData = requests.map(request => ({
+        "Order Cancellation Date": formatDate(request?.createdAt),
+        "Paid On": formatDate(request?.paidOn),
+        "Buyer": request?.userId?.username,
+        "Buyer ID": request?.userId?._id,
+        "Amount": request?.amount,
+        "Payment Approach": request?.paymentType,
+        "Comment": request?.comment || "-",
+    }));
+
+    const headers = [
+        { label: "Order Cancellation Date", key: "Order Cancellation Date" },
+        { label: "Paid On", key: "Paid On" },
+        { label: "Buyer", key: "Buyer" },
+        { label: "Buyer ID", key: "Buyer ID" },
+        { label: "Amount", key: "Amount" },
+        { label: "Payment Approach", key: "Payment Approach" },
+        { label: "Comment", key: "Comment" }
+    ];
+
     return (
         <div className="tableDiv">
             <div className="tableContent">
                 <div className="upper">
                     <h2 className="secondaryHeading"><span>Paid</span> Refunds</h2>
                     <div className="upperRight">
+                        <CSVLink data={csvData} headers={headers} filename={"completed_refunds.csv"} className="secondaryBtn">Export CSV</CSVLink>
                         <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => moveToPending("Refund")}>Move to Pending</button>
                         {/* <button className="secondaryBtn" disabled={selectedRequests.length < 1}>Release Payment</button> */}
                     </div>
@@ -878,6 +924,7 @@ function CompletedRefunds({ requests, selectedRequests, handleSelectRequest, han
         </div>
     )
 }
+
 
 
 function CustomTabPanel(props) {

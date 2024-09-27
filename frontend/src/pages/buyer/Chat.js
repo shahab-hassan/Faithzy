@@ -314,7 +314,7 @@ const ChatPage = () => {
     if (!user && !admin) return <div>Loading</div>
 
     return (
-        <div className="chatDiv">
+        <div className="chatDiv commonChatDiv">
             <section className={!admin && "section"}>
                 <div className="chatContent">
 
@@ -356,7 +356,7 @@ const ChatPage = () => {
                             <>
                                 <div className="header">
                                     <img src={selectedParticipant?.role === "seller" ? `http://localhost:5000/${selectedParticipant?.sellerId?.profileImage}` : isParticipantAdmin? "/assets/images/logo.svg" : "/assets/images/seller.png"} alt="Profile" />
-                                    <Link to={!isParticipantAdmin && `/profile/${selectedParticipant?.sellerId?._id}`} >{selectedParticipant?._id === user?._id ? "You - Personal Chat" : isParticipantAdmin? "Admin" : selectedParticipant?.username}</Link>
+                                    <Link to={!isParticipantAdmin && `/${user? "profile":"ftzy-admin/sellers"}/${selectedParticipant?.sellerId?._id}`} >{selectedParticipant?._id === user?._id ? "You - Personal Chat" : isParticipantAdmin? "Admin" : selectedParticipant?.username}</Link>
                                 </div>
                                 <div className="messages content">
                                     {messages.map((msg, index) => (
@@ -459,7 +459,7 @@ const ChatPage = () => {
                                     {/* <FaEllipsisV className='icon' /> */}
                                 </div>
                                 <div className="participantDetails content">
-                                    {!isParticipantAdmin && <><h2 className="secondaryHeading">About <Link to={`/profile/${selectedParticipant?.sellerId?._id}`}>@{selectedParticipant.username}</Link></h2>
+                                    {!isParticipantAdmin && <><h2 className="secondaryHeading">About <Link to={`/${user? "profile":"ftzy-admin/sellers"}/${selectedParticipant?.sellerId?._id}`}>@{selectedParticipant.username}</Link></h2>
                                     {selectedParticipant.role === "seller" && <><div className="row"><p>Name</p><div className='fw600'>{selectedParticipant.sellerId.fullName}</div></div>
                                         <div className="row"><p>Ratings</p><div className='fw600 sellerRatings'>
                                             <FaStar className='starIconFilled' />

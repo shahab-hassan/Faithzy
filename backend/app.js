@@ -43,6 +43,7 @@ app.use("/api/v1/settings/admin", require("./routes/adminSettingsRoute.js"));
 app.use("/api/v1/coupons", require("./routes/couponRoute.js"));
 app.use("/api/v1/reviews", require("./routes/reviewRoute.js"));
 app.use("/api/v1/payments", require("./routes/paymentRoute.js"));
+app.use("/api/v1/disputes", require("./routes/disputeRoute.js"));
 
 app.use(errorHandler);
 

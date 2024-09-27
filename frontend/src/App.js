@@ -55,6 +55,7 @@ import AdminDisputes from './pages/admin/AdminDisputes.js';
 import Earnings from './pages/seller/Earnings.js';
 import AdminSendEmal from './pages/admin/AdminSendEmal.js';
 import NotFound from './utils/NotFound.js';
+import AdminManageDispute from './pages/admin/AdminManageDispute.js';
 
 function App() {
 
@@ -142,6 +143,7 @@ function App() {
                     <Route path='/ftzy-admin/revenue' element={<AdminRevenue />} />
                     <Route path='/ftzy-admin/payments' element={<AdminPayments />} />
                     <Route path='/ftzy-admin/disputes' element={<AdminDisputes />} />
+                    <Route path='/ftzy-admin/disputes/:id' element={<AdminManageDispute />} />
                     <Route path='/ftzy-admin/email/send/:id' element={<AdminSendEmal />} />
                 </Route>
 

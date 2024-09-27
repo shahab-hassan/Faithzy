@@ -669,3 +669,18 @@
 .adminSendEmailDiv .buttonsSection .buttonInputDiv .removeBtnDiv .removeBtn:hover{
     color: var(--black);
 }
+
+
+
+
+
+/* ****************************** ADMIN DISPUTES + ADMIN MANAGE DISPUTE ****************************** */
+
+.adminManageDisputeDiv .adminManageDisputeContent{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--white);
+    padding: 20px 30px;
+    border-radius: 8px;
+}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import { enqueueSnackbar } from "notistack"
@@ -8,6 +8,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md"
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import LeaveProductReview from '../../components/common/LeaveProductReview';
+import DisputeChatRoom from '../../components/common/DisputeChatRoom';
 
 const ProductOrderDetails = ({ isBuyer }) => {
 
@@ -20,6 +21,9 @@ const ProductOrderDetails = ({ isBuyer }) => {
   const [newStatus, setNewStatus] = useState('');
   const [showCancellationModel, setShowCancellationModel] = useState(null);
   const [cancellationReason, setCancellationReason] = useState("");
+  const [showStartDisputeModel, setShowStartDisputeModel] = useState(null);
+  const [disputeReason, setDisputeReason] = useState("");
+  const disputeChatTopRef = useRef(null);
 
   useEffect(() => {
     if (localStorage.getItem('statusUpdated')) {
@@ -29,6 +33,10 @@ const ProductOrderDetails = ({ isBuyer }) => {
     else if (localStorage.getItem('cancellationRequest')) {
       enqueueSnackbar("Cancellation request has been sent!", { variant: "success" });
       localStorage.removeItem('cancellationRequest');
+    }
+    else if (localStorage.getItem('disputeStarted')) {
+      enqueueSnackbar("Dispute has been started!", { variant: "success" });
+      localStorage.removeItem('disputeStarted');
     }
   }, []);
 
@@ -51,6 +59,10 @@ const ProductOrderDetails = ({ isBuyer }) => {
         enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
       });
   }, [id, subOrderId, token, isBuyer]);
+
+  useEffect(() => {
+    disputeChatTopRef.current?.scrollIntoView({ behavior: "smooth", block: 'start' });
+}, [showStatusDetails]);
 
 
   const handleStatusChange = async () => {
@@ -114,6 +126,28 @@ const ProductOrderDetails = ({ isBuyer }) => {
     }
   }
 
+  const handleStartDispute = async (productId) => {
+    setShowStartDisputeModel(null)
+    try {
+      const response = await axios.post('http://localhost:5000/api/v1/disputes/product/new', {
+        orderId: order._id,
+        productId,
+        disputeReason,
+        initiatedBy: isBuyer ? "Buyer" : "Seller"
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (response.data.success) {
+        localStorage.setItem('disputeStarted', 'true');
+        window.location.reload();
+      }
+    } catch (e) {
+      console.error(e);
+      enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
+    }
+  }
+
   const handleResponseToCancellation = async (productId, resp) => {
     try {
       const response = await axios.put('http://localhost:5000/api/v1/orders/product/cancel/response', {
@@ -165,7 +199,8 @@ const ProductOrderDetails = ({ isBuyer }) => {
 
             <div className='actions'>
               <button onClick={handleStatusChange} disabled={!newStatus} className='secondaryBtn'>Update Status</button>
-              <div>
+              <div className='btnsDiv'>
+                <button className='secondaryBtn' onClick={() => setShowStartDisputeModel(subOrder._id)}>Start Dispute</button>
                 <button className='dangerBtn' onClick={() => setShowCancellationModel(subOrder._id)}>Cancel Order</button>
               </div>
             </div>
@@ -173,6 +208,16 @@ const ProductOrderDetails = ({ isBuyer }) => {
           </div>
 
         )}
+
+      {subOrder.status[subOrder.status.length - 1].name === "InDispute" && <div className="commonChatDiv productOrderDisputeChat">
+        <div className="horizontalLine" ref={disputeChatTopRef}></div>
+        <div>
+          <h2 className="secondaryHeading">Order in <span>Dispute</span> - Chat with <span>Admin</span></h2>
+          <p>You are currently in a dispute chat involving the buyer, admin, and yourself. Continue the discussion to work towards a resolution!</p>
+        </div>
+        <DisputeChatRoom disputeId={subOrder.disputeId} isSourceAdmin={false} />
+      </div>}
+
     </div>
   );
 
@@ -197,8 +242,10 @@ const ProductOrderDetails = ({ isBuyer }) => {
           disabled={showStatusDetails.status[showStatusDetails.status.length - 1].name === "InDispute" ||
             showStatusDetails.status[showStatusDetails.status.length - 1].name === "Cancelled" ||
             showStatusDetails.status[showStatusDetails.status.length - 1].name === "Completed" ||
-            showStatusDetails.status[showStatusDetails.status.length - 1].name === "Delivered"
-          }>
+            showStatusDetails.status[showStatusDetails.status.length - 1].name === "Delivered"}
+
+          onClick={() => setShowStartDisputeModel(showStatusDetails._id)}
+        >
           Start Dispute
         </button>
         <button className='dangerBtn'
@@ -211,6 +258,15 @@ const ProductOrderDetails = ({ isBuyer }) => {
           Cancel Order
         </button>
       </div>
+
+      {showStatusDetails.status[showStatusDetails.status.length - 1].name === "InDispute" && <div className="commonChatDiv productOrderDisputeChat">
+        <div className="horizontalLine" ref={disputeChatTopRef}></div>
+        <div>
+          <h2 className="secondaryHeading">Order in <span>Dispute</span> - Chat with <span>Admin</span></h2>
+          <p>You are currently in a dispute chat involving the seller, admin, and yourself. Continue the discussion to work towards a resolution!</p>
+        </div>
+        <DisputeChatRoom disputeId={showStatusDetails.disputeId} isSourceAdmin={false} />
+      </div>}
 
     </div>
   );
@@ -296,78 +352,77 @@ const ProductOrderDetails = ({ isBuyer }) => {
 
   </div>
 
-  const BuyerProductOrder = order && isBuyer &&
-    <div className='buyerProductOrderDetailsCard'>
-      {order.products.map((product, i) => (
-        <div key={i} className='buyerProductOrderCard'>
+  const BuyerProductOrder = order && isBuyer && <div className='buyerProductOrderDetailsCard'>
+    {order.products.map((product, i) => (
+      <div key={i} className='buyerProductOrderCard'>
 
-          {product.status[product.status.length - 1].name === "Delivered" && <div className="statusAction">
-            <h2 className="secondaryHeading">Your order has been <span>delivered!</span> Have you received your item?</h2>
-            <p>Note: Clicking "Yes, Received" will mark this order as Complete!</p>
+        {product.status[product.status.length - 1].name === "Delivered" && <div className="statusAction">
+          <h2 className="secondaryHeading">Your order has been <span>delivered!</span> Have you received your item?</h2>
+          <p>Note: Clicking "Yes, Received" will mark this order as Complete!</p>
+          <div className="btns">
+            <button className='primaryBtn' onClick={() => handleResponseToDelivery(product._id, "yes")}>Yes, Received</button>
+            <button className='dangerBtn' onClick={() => handleResponseToDelivery(product._id, "no")}>Not Received</button>
+          </div>
+          <div className="horizontalLine"></div>
+        </div>}
+
+        {product.status[product.status.length - 1].name === "On Hold" &&
+          (product.cancellationFrom === "Seller" && isBuyer) &&
+          <div className="statusAction">
+            <h2 className="secondaryHeading">{product.productId.sellerId.userId?.username} wants to <span>Cancel the Order!</span></h2>
+            <div><span className='fw600'>Reason: </span>{product.cancellationReason}</div>
+            <p>Note: Clicking "Ok, Cancel" will cancel the Order and payment will be returned to Buyer!</p>
             <div className="btns">
-              <button className='primaryBtn' onClick={() => handleResponseToDelivery(product._id, "yes")}>Yes, Received</button>
-              <button className='dangerBtn' onClick={() => handleResponseToDelivery(product._id, "no")}>Not Received</button>
+              <button className='primaryBtn' onClick={() => handleResponseToCancellation(product._id, "yes")}>Ok, cancel</button>
+              <button className='dangerBtn' onClick={() => handleResponseToCancellation(product._id, "no")}>No, don't cancel</button>
             </div>
             <div className="horizontalLine"></div>
           </div>}
 
-          {product.status[product.status.length - 1].name === "On Hold" &&
-            (product.cancellationFrom === "Seller" && isBuyer) &&
-            <div className="statusAction">
-              <h2 className="secondaryHeading">{product.productId.sellerId.userId?.username} wants to <span>Cancel the Order!</span></h2>
-              <div><span className='fw600'>Reason: </span>{product.cancellationReason}</div>
-              <p>Note: Clicking "Ok, Cancel" will cancel the Order and payment will be returned to Buyer!</p>
-              <div className="btns">
-                <button className='primaryBtn' onClick={() => handleResponseToCancellation(product._id, "yes")}>Ok, cancel</button>
-                <button className='dangerBtn' onClick={() => handleResponseToCancellation(product._id, "no")}>No, don't cancel</button>
-              </div>
-              <div className="horizontalLine"></div>
-            </div>}
+        {product.status[product.status.length - 1].name === "On Hold" &&
+          (product.cancellationFrom === "Buyer" && isBuyer) &&
+          <div className="statusAction">
+            <h2 className="secondaryHeading">Your <span>order cancellation</span> request has been sent to Seller. Order will be <span>cancelled</span> once seller accepts!</h2>
+            <div className="horizontalLine"></div>
+          </div>}
 
-          {product.status[product.status.length - 1].name === "On Hold" &&
-            (product.cancellationFrom === "Buyer" && isBuyer) &&
-            <div className="statusAction">
-              <h2 className="secondaryHeading">Your <span>order cancellation</span> request has been sent to Seller. Order will be <span>cancelled</span> once seller accepts!</h2>
-              <div className="horizontalLine"></div>
-            </div>}
-
-          <div className="order">
-            <div className="left">
-              <div className="leftLeft">
-                <div className="imgDiv">
-                  <img src={`http://localhost:5000/${product.productId?.productImages[0]}`} alt="Error" />
-                </div>
-                <div className="productInfo">
-                  <p className='singleLineText'>{product.productId.title}</p>
-                  <p className='category'>{product.productId.category}</p>
-                </div>
+        <div className="order">
+          <div className="left">
+            <div className="leftLeft">
+              <div className="imgDiv">
+                <img src={`http://localhost:5000/${product.productId?.productImages[0]}`} alt="Error" />
               </div>
-              <div className="leftRight">
-                <div className="column">
-                  <p><FaShop className='icon' /></p>
-                  <Link to={`/profile/${product?.productId?.sellerId?._id}`}>{product.productId.sellerId.userId?.username + " >"}</Link>
-                </div>
-                <div className="column">
-                  <p><FaBasketShopping className='icon' /></p>
-                  <div>{product.count < 10 ? "0" + product.count : product.count}</div>
-                </div>
-                <div className="column">
-                  <p><TbTruckDelivery className='icon' /></p>
-                  <div>{product.status[product.status.length - 1].name}</div>
-                </div>
+              <div className="productInfo">
+                <p className='singleLineText'>{product.productId.title}</p>
+                <p className='category'>{product.productId.category}</p>
+              </div>
+            </div>
+            <div className="leftRight">
+              <div className="column">
+                <p><FaShop className='icon' /></p>
+                <Link to={`/profile/${product?.productId?.sellerId?._id}`}>{product.productId.sellerId.userId?.username + " >"}</Link>
+              </div>
+              <div className="column">
+                <p><FaBasketShopping className='icon' /></p>
+                <div>{product.count < 10 ? "0" + product.count : product.count}</div>
+              </div>
+              <div className="column">
+                <p><TbTruckDelivery className='icon' /></p>
+                <div>{product.status[product.status.length - 1].name}</div>
               </div>
             </div>
           </div>
-          <div className='horizontalLine'></div>
-          <div className='actionsDiv'>
-            <div onClick={() => setShowStatusDetails(showStatusDetails?._id === product._id ? null : product)}>
-              Order Status {showStatusDetails ? <MdKeyboardArrowUp className='icon' /> : <MdKeyboardArrowDown className='icon' />}
-            </div>
-          </div>
-          {(showStatusDetails?._id === product._id) && orderStatusDetailsBuyer}
         </div>
-      ))}
-    </div>
+        <div className='horizontalLine'></div>
+        <div className='actionsDiv'>
+          <div onClick={() => setShowStatusDetails(showStatusDetails?._id === product._id ? null : product)}>
+            Order Status {showStatusDetails ? <MdKeyboardArrowUp className='icon' /> : <MdKeyboardArrowDown className='icon' />}
+          </div>
+        </div>
+        {(showStatusDetails?._id === product._id) && orderStatusDetailsBuyer}
+      </div>
+    ))}
+  </div>
 
   if (!order || (!isBuyer && !subOrder)) return <p>Loading...</p>;
 
@@ -469,34 +524,76 @@ const ProductOrderDetails = ({ isBuyer }) => {
         </div>
       </section>
 
-      {showCancellationModel &&
-        <div className="popupDiv">
-          <div className="popupContent">
+      {showCancellationModel && <div className="popupDiv">
+        <div className="popupContent">
 
-            <form className="form">
+          <form className="form">
 
-              <h2 className="secondaryHeading"><span>Cancel</span> Order</h2>
+            <h2 className="secondaryHeading"><span>Cancel</span> Order</h2>
 
-              <div className="horizontalLine"></div>
+            <div className="horizontalLine"></div>
 
-              <div className="inputDiv">
-                <label>Reason of Cancellation</label>
-                <textarea type="text" className='inputField' value={cancellationReason} onChange={(e) => setCancellationReason(e.target.value)} placeholder='Enter Reason' />
-              </div>
-
-              <div className="buttonsDiv">
-                <button className='dangerBtn' onClick={() => handleCancelOrder(showCancellationModel)}>Confirm Cancellation</button>
-                <button className='secondaryBtn' onClick={() => setShowCancellationModel(null)}>Close</button>
-              </div>
-
-            </form>
-
-            <div className="popupCloseBtn">
-              <IoIosCloseCircleOutline className='icon' onClick={() => setShowCancellationModel(null)} />
+            <div className="inputDiv">
+              <label>Reason of Cancellation</label>
+              <textarea type="text" className='inputField' value={cancellationReason} onChange={(e) => setCancellationReason(e.target.value)} placeholder='Enter Reason' />
             </div>
 
+            <div className="buttonsDiv">
+              <button className='dangerBtn' onClick={() => handleCancelOrder(showCancellationModel)}>Confirm Cancellation</button>
+              <button className='secondaryBtn' onClick={() => setShowCancellationModel(null)}>Close</button>
+            </div>
+
+          </form>
+
+          <div className="popupCloseBtn">
+            <IoIosCloseCircleOutline className='icon' onClick={() => setShowCancellationModel(null)} />
           </div>
+
         </div>
+      </div>
+      }
+
+      {showStartDisputeModel && <div className="popupDiv">
+        <div className="popupContent disputePopupContent">
+
+          <form className="form">
+
+            <h2 className="secondaryHeading">Start <span>Dispute</span></h2>
+
+            <div className="horizontalLine"></div>
+
+            <div className="infoDiv">
+              <p className="infoText">
+                Please note that starting a dispute will change the order status to <span className='fw500'>InDispute</span>, and the admin will be notified.
+                You, the {isBuyer? "seller" : "buyer"}, and the admin will enter into a discussion via chat to resolve the issue.
+                The admin will review the situation and decide how much of the order value will be refunded to {isBuyer? "you" : "the buyer"} and how much will be paid to {isBuyer? "the seller" : "you"}.
+                Once resolved, the order will be marked as <span className='fw500'>Completed</span>.
+              </p>
+              <p className="infoText">
+                Ensure you have a valid reason for the dispute, as this process may take some time to resolve.
+              </p>
+            </div>
+
+            <div className="horizontalLine"></div>
+
+            <div className="inputDiv">
+              <label>Reason of Dispute</label>
+              <textarea type="text" className='inputField' value={disputeReason} onChange={(e) => setDisputeReason(e.target.value)} placeholder='Enter Reason' />
+            </div>
+
+            <div className="buttonsDiv">
+              <button className='dangerBtn' onClick={() => handleStartDispute(showStartDisputeModel)}>Start Dispute</button>
+              <button className='secondaryBtn' onClick={() => setShowStartDisputeModel(null)}>Close</button>
+            </div>
+
+          </form>
+
+          <div className="popupCloseBtn">
+            <IoIosCloseCircleOutline className='icon' onClick={() => setShowStartDisputeModel(null)} />
+          </div>
+
+        </div>
+      </div>
       }
 
     </div>
