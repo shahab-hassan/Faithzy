@@ -85,7 +85,8 @@ const serviceOrder = new mongoose.Schema({
   crrStatus: {type: String, required: true, default: "Active"},
   history: [historySchema],
   cancellationReason: String,
-  isReviewSubmitted: {type: Boolean, default: false}
+  isReviewSubmitted: {type: Boolean, default: false},
+  disputeId: { type: String }
 })
 
 const serviceOrderSchema = new mongoose.Schema({

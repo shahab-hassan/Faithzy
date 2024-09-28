@@ -4,10 +4,7 @@ import DisputeChatRoom from '../../components/common/DisputeChatRoom';
 
 function AdminManageDispute() {
 
-    
     const { id } = useParams();
-    
-
 
     return (
         <div className='adminManageDisputeDiv'>

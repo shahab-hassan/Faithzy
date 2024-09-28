@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import { enqueueSnackbar } from "notistack"
@@ -23,7 +23,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
   const [cancellationReason, setCancellationReason] = useState("");
   const [showStartDisputeModel, setShowStartDisputeModel] = useState(null);
   const [disputeReason, setDisputeReason] = useState("");
-  const disputeChatTopRef = useRef(null);
+  const [dispute, setDispute] = useState(null);
 
   useEffect(() => {
     if (localStorage.getItem('statusUpdated')) {
@@ -41,6 +41,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
   }, []);
 
   useEffect(() => {
+
     axios.get(`http://localhost:5000/api/v1/orders/${isBuyer ? 'buyer' : 'seller'}/product/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -58,11 +59,17 @@ const ProductOrderDetails = ({ isBuyer }) => {
         console.error(e);
         enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
       });
-  }, [id, subOrderId, token, isBuyer]);
 
-  useEffect(() => {
-    disputeChatTopRef.current?.scrollIntoView({ behavior: "smooth", block: 'start' });
-}, [showStatusDetails]);
+    axios.get(`http://localhost:5000/api/v1/disputes/dispute/${showStatusDetails?.disputeId}`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(response => {
+        if (response.data.success)
+          setDispute(response.data.dispute);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+
+  }, [id, subOrderId, token, isBuyer, showStatusDetails]);
 
 
   const handleStatusChange = async () => {
@@ -126,8 +133,13 @@ const ProductOrderDetails = ({ isBuyer }) => {
     }
   }
 
-  const handleStartDispute = async (productId) => {
+  const handleStartDispute = async (e, productId) => {
+    e.preventDefault();
     setShowStartDisputeModel(null)
+    if(!disputeReason || disputeReason === ""){
+      enqueueSnackbar("Dispute reason is Required!", { variant: "error" });
+      return;
+    }
     try {
       const response = await axios.post('http://localhost:5000/api/v1/disputes/product/new', {
         orderId: order._id,
@@ -170,7 +182,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
   const orderStatusDetailsSeller = order && !isBuyer && subOrder && showStatusDetails && (
     <div className='orderStatusDetails'>
 
-      {subOrder.status[subOrder.status.length - 1].name === 'Completed' && <LeaveProductReview subOrderId={subOrder._id} productId={showStatusDetails.productId} sellerId={showStatusDetails.sellerId} isBuyer={isBuyer} />}
+      {(subOrder.status[subOrder.status.length - 1].name === 'Completed' || subOrder.status[subOrder.status.length - 1].name === 'Resolved') && <LeaveProductReview subOrderId={subOrder._id} productId={showStatusDetails.productId} sellerId={showStatusDetails.sellerId} isBuyer={isBuyer} />}
 
       <h2 className="secondaryHeading"><span>Order</span> Status</h2>
 
@@ -185,6 +197,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
       {subOrder.status[subOrder.status.length - 1].name !== 'Delivered' &&
         subOrder.status[subOrder.status.length - 1].name !== 'Cancelled' &&
         subOrder.status[subOrder.status.length - 1].name !== 'Completed' &&
+        subOrder.status[subOrder.status.length - 1].name !== 'Resolved' &&
         subOrder.status[subOrder.status.length - 1].name !== 'On Hold' &&
         subOrder.status[subOrder.status.length - 1].name !== 'InDispute'
         && (
@@ -209,11 +222,18 @@ const ProductOrderDetails = ({ isBuyer }) => {
 
         )}
 
-      {subOrder.status[subOrder.status.length - 1].name === "InDispute" && <div className="commonChatDiv productOrderDisputeChat">
-        <div className="horizontalLine" ref={disputeChatTopRef}></div>
+      {(subOrder.status[subOrder.status.length - 1].name === "InDispute" || subOrder.status[subOrder.status.length - 1].name === "Resolved") && <div className="commonChatDiv productOrderDisputeChat">
+        <div className="horizontalLine"></div>
         <div>
-          <h2 className="secondaryHeading">Order in <span>Dispute</span> - Chat with <span>Admin</span></h2>
-          <p>You are currently in a dispute chat involving the buyer, admin, and yourself. Continue the discussion to work towards a resolution!</p>
+          {subOrder.status[subOrder.status.length - 1].name === "Resolved" ?
+            <>
+              <h2 className="secondaryHeading">The Dispute has been <span>Resolved</span> - Admin paid <span>${dispute?.amountToSeller}</span> to you</h2>
+              <p>Dispute, which was initiated by {dispute?.initiatedBy === "Seller"? "you" : "Buyer"} has been marked as Resolved by Admin. You have earned ${dispute?.amountToSeller}!  </p>
+            </>
+            : <>
+              <h2 className="secondaryHeading">Order in <span>Dispute</span> - Chat with <span>Admin</span></h2>
+              <p>You are currently in a dispute chat involving the buyer, admin, and yourself. Continue the discussion to work towards a resolution!</p>
+            </>}
         </div>
         <DisputeChatRoom disputeId={subOrder.disputeId} isSourceAdmin={false} />
       </div>}
@@ -224,7 +244,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
   const orderStatusDetailsBuyer = order && isBuyer && showStatusDetails && (
     <div className='orderStatusDetails'>
 
-      {showStatusDetails.status[showStatusDetails.status.length - 1].name === 'Completed' && <LeaveProductReview subOrderId={showStatusDetails._id} productId={showStatusDetails.productId} sellerId={showStatusDetails.sellerId} isBuyer={isBuyer} />}
+      {(showStatusDetails.status[showStatusDetails.status.length - 1].name === 'Completed' || showStatusDetails.status[showStatusDetails.status.length - 1].name === 'Resolved') && <LeaveProductReview subOrderId={showStatusDetails._id} productId={showStatusDetails.productId} sellerId={showStatusDetails.sellerId} isBuyer={isBuyer} />}
 
       <h2 className="secondaryHeading"><span>Track</span> Order</h2>
 
@@ -242,6 +262,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
           disabled={showStatusDetails.status[showStatusDetails.status.length - 1].name === "InDispute" ||
             showStatusDetails.status[showStatusDetails.status.length - 1].name === "Cancelled" ||
             showStatusDetails.status[showStatusDetails.status.length - 1].name === "Completed" ||
+            showStatusDetails.status[showStatusDetails.status.length - 1].name === "Resolved" ||
             showStatusDetails.status[showStatusDetails.status.length - 1].name === "Delivered"}
 
           onClick={() => setShowStartDisputeModel(showStatusDetails._id)}
@@ -252,6 +273,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
           disabled={showStatusDetails.status[showStatusDetails.status.length - 1].name === "Delivered" ||
             showStatusDetails.status[showStatusDetails.status.length - 1].name === "Cancelled" ||
             showStatusDetails.status[showStatusDetails.status.length - 1].name === "Completed" ||
+            showStatusDetails.status[showStatusDetails.status.length - 1].name === "Resolved" ||
             showStatusDetails.status[showStatusDetails.status.length - 1].name === "On Hold" ||
             showStatusDetails.status[showStatusDetails.status.length - 1].name === "InDispute"}
           onClick={() => setShowCancellationModel(showStatusDetails._id)}>
@@ -259,11 +281,18 @@ const ProductOrderDetails = ({ isBuyer }) => {
         </button>
       </div>
 
-      {showStatusDetails.status[showStatusDetails.status.length - 1].name === "InDispute" && <div className="commonChatDiv productOrderDisputeChat">
-        <div className="horizontalLine" ref={disputeChatTopRef}></div>
+      {(showStatusDetails.status[showStatusDetails.status.length - 1].name === "InDispute" || showStatusDetails.status[showStatusDetails.status.length - 1].name === "Resolved") && <div className="commonChatDiv productOrderDisputeChat">
+        <div className="horizontalLine"></div>
         <div>
-          <h2 className="secondaryHeading">Order in <span>Dispute</span> - Chat with <span>Admin</span></h2>
-          <p>You are currently in a dispute chat involving the seller, admin, and yourself. Continue the discussion to work towards a resolution!</p>
+          {showStatusDetails.status[showStatusDetails.status.length - 1].name === "Resolved" ?
+            <>
+              <h2 className="secondaryHeading">The Dispute has been <span>Resolved</span> - Admin refunded <span>${dispute?.amountToBuyer}</span></h2>
+              <p>Dispute, which was initiated by {dispute?.initiatedBy === "Buyer"? "you" : "Seller"} has been marked as Resolved by Admin. You got ${dispute?.amountToBuyer} refund!  </p>
+            </>
+            : <>
+              <h2 className="secondaryHeading">Order in <span>Dispute</span> - Chat with <span>Admin</span></h2>
+              <p>You are currently in a dispute chat involving the seller, admin, and yourself. Continue the discussion to work towards a resolution!</p>
+            </>}
         </div>
         <DisputeChatRoom disputeId={showStatusDetails.disputeId} isSourceAdmin={false} />
       </div>}
@@ -565,9 +594,9 @@ const ProductOrderDetails = ({ isBuyer }) => {
             <div className="infoDiv">
               <p className="infoText">
                 Please note that starting a dispute will change the order status to <span className='fw500'>InDispute</span>, and the admin will be notified.
-                You, the {isBuyer? "seller" : "buyer"}, and the admin will enter into a discussion via chat to resolve the issue.
-                The admin will review the situation and decide how much of the order value will be refunded to {isBuyer? "you" : "the buyer"} and how much will be paid to {isBuyer? "the seller" : "you"}.
-                Once resolved, the order will be marked as <span className='fw500'>Completed</span>.
+                You, the {isBuyer ? "seller" : "buyer"}, and the admin will enter into a discussion via chat to resolve the issue.
+                The admin will review the situation and decide how much of the order value will be refunded to {isBuyer ? "you" : "the buyer"} and how much will be paid to {isBuyer ? "the seller" : "you"}.
+                Once resolved, the order will be marked as <span className='fw500'>Resolved</span>.
               </p>
               <p className="infoText">
                 Ensure you have a valid reason for the dispute, as this process may take some time to resolve.
@@ -582,7 +611,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
             </div>
 
             <div className="buttonsDiv">
-              <button className='dangerBtn' onClick={() => handleStartDispute(showStartDisputeModel)}>Start Dispute</button>
+              <button className='dangerBtn' onClick={(e) => handleStartDispute(e, showStartDisputeModel)}>Start Dispute</button>
               <button className='secondaryBtn' onClick={() => setShowStartDisputeModel(null)}>Close</button>
             </div>
 

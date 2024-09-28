@@ -684,3 +684,40 @@
     padding: 20px 30px;
     border-radius: 8px;
 }
+
+.adminManageDisputeDiv .adminManageDisputeContainer{
+    display: flex;
+    justify-content: space-between;
+}
+.adminManageDisputeDiv .adminManageDisputeContainer .chatRoom{
+    width: 58%;
+}
+.adminManageDisputeDiv .adminManageDisputeContainer .adminDisputeDetails{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0px 20px;
+    overflow-y: auto;
+}
+.adminManageDisputeDiv .adminManageDisputeContainer .adminDisputeDetails .item{
+    display: flex;
+    gap: 15px;
+}
+.adminManageDisputeDiv .adminManageDisputeContainer .adminDisputeDetails .item img{
+    width: 80px;
+}
+.adminManageDisputeDiv .adminManageDisputeContainer .adminDisputeDetails .item p{
+    font-size: 0.85rem;
+    color: var(--lightBlackPrimary);
+}
+.adminManageDisputeDiv .adminManageDisputeContainer .adminDisputeDetails .rows{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+.adminManageDisputeDiv .adminManageDisputeContainer .adminDisputeDetails .rows .row{
+    display: flex;
+    justify-content: space-between;
+}

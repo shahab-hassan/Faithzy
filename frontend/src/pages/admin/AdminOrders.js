@@ -16,8 +16,8 @@ function AdminOrders({pre}) {
     const [openedOrder, setOpenedOrder] = useState(null);
     const [openedSubOrder, setOpenedSubOrder] = useState(null);
 
-    const productFilters = ["All", "Active", "Shipped", "Delivered", "Completed", "On Hold", "Cancelled", "InDispute"];
-    const serviceFilters = ["All", "Active", "Delivered", "Completed", "Cancelled", "Past Due", "InDispute"];
+    const productFilters = ["All", "Active", "Shipped", "Delivered", "Completed", "On Hold", "Cancelled", "InDispute", "Resolved"];
+    const serviceFilters = ["All", "Active", "Delivered", "Completed", "Cancelled", "Past Due", "InDispute", "Resolved"];
 
     useEffect(() => {
         const fetchOrders = () => {

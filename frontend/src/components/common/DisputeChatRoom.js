@@ -3,7 +3,7 @@ import { AuthContext } from '../../utils/AuthContext';
 import { FaFileAlt, FaFilePdf, FaFileWord } from 'react-icons/fa';
 import { enqueueSnackbar } from 'notistack';
 import axios from 'axios';
-import { formatDateTime } from '../../utils/utilFuncs';
+import { formatDate, formatDateTime } from '../../utils/utilFuncs';
 import { IoIosChatboxes, IoIosCloseCircle, IoIosCloseCircleOutline } from 'react-icons/io';
 import { CgAttachment } from 'react-icons/cg';
 import io from 'socket.io-client';
@@ -20,8 +20,18 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
     const adminToken = localStorage.getItem('adminToken');
 
     const [dispute, setDispute] = useState(null);
-    // const [subOrder, setSubOrder] = useState(null);
+    const [subOrder, setSubOrder] = useState(null);
     const [messages, setMessages] = useState([]);
+
+    const [amountToBuyer, setAmountToBuyer] = useState(0);
+    const [amountToSeller, setAmountToSeller] = useState(dispute?.orderAmount);
+
+    useEffect(() => {
+        if (localStorage.getItem('disputeResolved')) {
+            enqueueSnackbar("Dispute Resolved Successfully!", { variant: "success" });
+            localStorage.removeItem('disputeResolved');
+        }
+    }, []);
 
     useEffect(() => {
 
@@ -29,8 +39,9 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
             .then(response => {
                 if (response.data.success) {
                     setDispute(response.data.dispute)
-                    // setSubOrder(response.data.subOrder)
+                    setSubOrder(response.data.subOrder)
                     setMessages(response.data.dispute.messages)
+                    setAmountToSeller(response.data.dispute.orderAmount);
                 }
             })
             .catch(e => {
@@ -41,7 +52,7 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
     }, [adminToken, disputeId, isSourceAdmin, token])
 
     useEffect(() => {
-        messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        messagesEndRef?.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
     useEffect(() => {
@@ -105,16 +116,52 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
         }
     };
 
+    const handleBuyerAmountChange = (e) => {
+        const enteredAmount = parseFloat(e.target.value);
+        if (enteredAmount < 0)
+            return;
+        if (enteredAmount > dispute.orderAmount)
+            return;
+        setAmountToBuyer(enteredAmount);
+        setAmountToSeller(dispute.orderAmount - enteredAmount);
+    };
+
+    const resolveDispute = async () => {
+
+        if (amountToBuyer + amountToSeller !== dispute.orderAmount) {
+            enqueueSnackbar("Amounts must sum to the total order amount!", { variant: "error" });
+            return;
+        }
+
+        try {
+            const response = await axios.post(`http://localhost:5000/api/v1/disputes/${dispute.provisionType.toLowerCase()}/resolve`, {
+                disputeId: dispute._id,
+                amountToBuyer
+            }, { headers: { Authorization: `Admin ${adminToken}` } });
+
+            if (response.data.success) {
+                localStorage.setItem('disputeResolved', 'true');
+                window.location.reload();
+            }
+        } catch (error) {
+            console.log(error);
+            enqueueSnackbar(error.response?.data?.error || "Error resolving dispute!", { variant: "error" });
+        }
+    };
+
+
+    if (!dispute) return <div>Loading...</div>
 
     return (
         <div className={`disputeChatDiv ${isSourceAdmin && "adminManageDisputeContainer"}`}>
+
             <div className="chatRoom">
 
                 <div className="messages content">
                     {messages.length > 0 ? messages.map((msg, index) => (
                         <div key={index} className={msg.senderId === (user ? user?._id : admin?._id) ? "message sent" : "message received"}>
                             <div className='senderName fw600 lightBlackPrimary fs09'>
-                                <div>{msg.senderId === (user?._id || admin?._id)? "You" : msg.senderId === dispute.buyerId?._id ? dispute.buyerId?.username + " - Buyer" : msg.senderId === dispute.sellerId?.userId?._id ? dispute.sellerId?.userId?.username + " - Seller" : "Admin"}</div>
+                                <div>{msg.senderId === (user?._id || admin?._id) ? "You" : msg.senderId === dispute.buyerId?._id ? dispute.buyerId?.username + " - Buyer" : msg.senderId === dispute.sellerId?.userId?._id ? dispute.sellerId?.userId?.username + " - Seller" : "Admin"}</div>
                                 <span className='messageTime'>{formatDateTime(msg.timestamp)}</span>
                             </div>
                             <div>{msg.text}</div>
@@ -163,7 +210,7 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
                     )}
                     <div className="lower">
                         <div className='left'>
-                            <div>
+                            {dispute.status !== "Resolved" && <div>
                                 <label htmlFor='fileInput'><CgAttachment className='attachIcon icon' /></label>
                                 <input
                                     type="file"
@@ -171,15 +218,114 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
                                     id="fileInput"
                                     onChange={handleFileChange}
                                 />
-                            </div>
+                            </div>}
                         </div>
                         <div className="right">
-                            <button className='primaryBtn' onClick={sendMessage}>Send</button>
+                            <button className='primaryBtn' onClick={sendMessage} disabled={dispute.status === "Resolved"}>Send</button>
                         </div>
                     </div>
                 </div>
 
             </div>
+
+            {isSourceAdmin && <div className="adminDisputeDetails">
+
+                <h2 className="secondaryHeading">Dispute <span>Details</span></h2>
+
+                {dispute.provisionType === "Product" ? <div className="item">
+                    <img src={`http://localhost:5000/${subOrder?.productId?.productImages[0]}`} alt="Error" />
+                    <p>{subOrder?.productId?.title}</p>
+                </div> :
+                    <div className="item"><img src={`http://localhost:5000/${subOrder?.service?.serviceId?.serviceImages[0]}`} alt="Error" />
+                        <p>{subOrder?.service.serviceId?.title}</p></div>
+                }
+
+                <div className="rows">
+                    <div className="row">
+                        <p>Order ID</p>
+                        <div className='fw500'>#{subOrder._id}</div>
+                    </div>
+                    <div className="row">
+                        <p>Provision Type</p>
+                        <div className='fw500'>{dispute.provisionType}</div>
+                    </div>
+                    <div className="row">
+                        <p>Buyer</p>
+                        <div className='fw500'>{dispute.buyerId.username}</div>
+                    </div>
+                    <div className="row">
+                        <p>Seller</p>
+                        <div className='fw500'>{dispute.sellerId?.userId?.username}</div>
+                    </div>
+                    <div className="row">
+                        <p>Amount</p>
+                        <div className='fw500'>${dispute.orderAmount}</div>
+                    </div>
+                    <div className="row">
+                        <p>Started On</p>
+                        <div className='fw500'>{formatDate(dispute.createdAt)}</div>
+                    </div>
+                    <div className="row">
+                        <p>Started By</p>
+                        <div className='fw500'>{dispute.initiatedBy}</div>
+                    </div>
+                </div>
+
+                <div className="horizontalLine"></div>
+
+                <div className="reasonDiv rows">
+                    <h2 className="secondaryHeading">Dispute <span>Reason</span></h2>
+                    {dispute.reason}
+                </div>
+
+                <div className="horizontalLine"></div>
+
+                {dispute.status !== "Resolved" ? <div className="form">
+                    <div className="inputDiv">
+                        <label>Refund to Buyer <span>*</span></label>
+                        <input
+                            type="number"
+                            placeholder='Enter amount to refund to Buyer in $'
+                            value={amountToBuyer}
+                            onChange={handleBuyerAmountChange}
+                            className='inputField'
+                        />
+                    </div>
+                    <div className="inputDiv">
+                        <label>Pay to Seller <span>*</span></label>
+                        <input
+                            type="number"
+                            placeholder='Amount to pay to Seller in $'
+                            value={amountToSeller}
+                            className='inputField'
+                            readOnly
+                        />
+                    </div>
+                    <button className="primaryBtn" onClick={resolveDispute}>Mark Dispute as Resolved</button>
+                </div> :
+                    <div className="rows">
+                        <div className="row">
+                            <p>Status</p>
+                            <div className='fw500'>{dispute.status}</div>
+                        </div>
+                        <div className="row">
+                            <p>Resolution Date</p>
+                            <div className='fw500'>{formatDate(dispute.resolutionDate)}</div>
+                        </div>
+                        <div className="row">
+                            <p>Refunded To Buyer</p>
+                            <div className='fw500'>${dispute.amountToBuyer}</div>
+                        </div>
+                        <div className="row">
+                            <p>Paid To Seller</p>
+                            <div className='fw500'>${dispute.amountToSeller}</div>
+                        </div>
+                    </div>
+                }
+
+            </div>}
+
+
             {showImageModel &&
                 <div className="popupDiv">
                     <div className="popupContent">
@@ -207,6 +353,7 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
                     </div>
                 </div>
             }
+
         </div>
     )
 }

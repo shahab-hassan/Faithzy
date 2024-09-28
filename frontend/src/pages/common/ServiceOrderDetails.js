@@ -7,6 +7,7 @@ import { IoIosCloseCircleOutline } from 'react-icons/io';
 import LeaveServiceReview from '../../components/common/LeaveServiceReview';
 
 import Gallery from "../../components/seller/Gallery"
+import DisputeChatRoom from '../../components/common/DisputeChatRoom';
 
 function ServiceOrderDetails({ isBuyer }) {
   const { id } = useParams();
@@ -33,11 +34,18 @@ function ServiceOrderDetails({ isBuyer }) {
   const [cancellationReason, setCancellationReason] = useState('');
   const [isPastDue, setIsPastDue] = useState(false);
   const [showImageModel, setShowImageModel] = useState(null);
+  const [dispute, setDispute] = useState(null);
+  const [showStartDisputeModel, setShowStartDisputeModel] = useState(null);
+  const [disputeReason, setDisputeReason] = useState("");
 
   useEffect(() => {
     if (localStorage.getItem('reqsSubmitted')) {
       enqueueSnackbar("Answers submitted Successfully!", { variant: "success" });
       localStorage.removeItem('reqsSubmitted');
+    }
+    else if (localStorage.getItem('disputeStarted')) {
+      enqueueSnackbar("Dispute has been started!", { variant: "success" });
+      localStorage.removeItem('disputeStarted');
     }
   }, []);
 
@@ -66,12 +74,20 @@ function ServiceOrderDetails({ isBuyer }) {
         });
     };
 
+    if (order?.service?.disputeId) {
+      axios.get(`http://localhost:5000/api/v1/disputes/dispute/${order?.service?.disputeId}`, { headers: { Authorization: `Bearer ${token}` } })
+        .then(response => {
+          if (response.data.success)
+            setDispute(response.data.dispute);
+        })
+    }
+
     fetchOrderData();
 
     const intervalId = setInterval(fetchOrderData, 60000);
 
     return () => clearInterval(intervalId);
-  }, [id, isChange, isBuyer, token]);
+  }, [id, isChange, isBuyer, token, order?.service?.disputeId]);
 
 
   const calculateTimeRemaining = (createdAt, deliveryDays) => {
@@ -306,6 +322,35 @@ function ServiceOrderDetails({ isBuyer }) {
     }
   }
 
+  const handleStartDispute = async (e) => {
+
+    e.preventDefault();
+
+    if (!disputeReason || disputeReason === "") {
+      enqueueSnackbar("Dispute reason is Required!", { variant: "error" });
+      return;
+    }
+
+    setShowStartDisputeModel(null)
+    try {
+      const response = await axios.post('http://localhost:5000/api/v1/disputes/service/new', {
+        orderId: order._id,
+        disputeReason,
+        initiatedBy: isBuyer ? "Buyer" : "Seller"
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (response.data.success) {
+        localStorage.setItem('disputeStarted', 'true');
+        window.location.reload();
+      }
+    } catch (e) {
+      console.error(e);
+      enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
+    }
+  }
+
   const reqRequiredSection = order && <form className='form' onSubmit={handleSubmitReqs}>
     {order.service.serviceId.questions.map((question, index) => {
       return <div className='inputDiv' key={index}>
@@ -414,16 +459,44 @@ function ServiceOrderDetails({ isBuyer }) {
       <section className="section">
         <div className="serviceOrderDetailsContent">
 
-          <div className="left">
-            {order.service.status[order.service.status.length - 1].name === "Completed" && <LeaveServiceReview orderId={order._id} sellerId={order?.service?.serviceId?.sellerId?._id || order?.service?.serviceId?.sellerId} serviceId={order?.service?.serviceId} isBuyer={isBuyer} />}
-            <h2 className="secondaryHeading"><span>Order</span> History</h2>
-            <div className="horizontalLine"></div>
-            <div className="history">
-              {historyActivities}
+          <div className="leftContainer">
+
+            {(order.service.status[order.service.status.length - 1].name === "InDispute" || order.service.status[order.service.status.length - 1].name === "Resolved") && <div className="leftUpper">
+              <div className="commonChatDiv serviceOrderDisputeChat">
+                <div>
+                  {isBuyer ? order.service.status[order.service.status.length - 1].name === "Resolved" ?
+                    <>
+                      <h2 className="secondaryHeading">The Dispute has been <span>Resolved</span> - Admin refunded <span>${dispute?.amountToBuyer}</span></h2>
+                      <p>Dispute, which was initiated by {dispute?.initiatedBy === "Buyer" ? "you" : "Seller"} has been marked as Resolved by Admin. You got ${dispute?.amountToBuyer} refund!  </p>
+                    </>
+                    : <>
+                      <h2 className="secondaryHeading">Order in <span>Dispute</span> - Chat with <span>Admin</span></h2>
+                      <p>You are currently in a dispute chat involving the seller, admin, and yourself. Continue the discussion to work towards a resolution!</p>
+                    </> : order.service.status[order.service.status.length - 1].name === "Resolved" ?
+                    <>
+                      <h2 className="secondaryHeading">The Dispute has been <span>Resolved</span> - Admin paid <span>${dispute?.amountToSeller}</span> to you</h2>
+                      <p>Dispute, which was initiated by {dispute?.initiatedBy === "Seller" ? "you" : "Buyer"} has been marked as Resolved by Admin. You have earned ${dispute?.amountToSeller}!  </p>
+                    </>
+                    : <>
+                      <h2 className="secondaryHeading">Order in <span>Dispute</span> - Chat with <span>Admin</span></h2>
+                      <p>You are currently in a dispute chat involving the buyer, admin, and yourself. Continue the discussion to work towards a resolution!</p>
+                    </>}
+                </div>
+                <DisputeChatRoom disputeId={order.service.disputeId} isSourceAdmin={false} />
+              </div>
+            </div>}
+
+            <div className="leftHistory">
+              {(order.service.status[order.service.status.length - 1].name === "Completed" || order.service.status[order.service.status.length - 1].name === "Resolved") && <LeaveServiceReview orderId={order._id} sellerId={order?.service?.serviceId?.sellerId?._id || order?.service?.serviceId?.sellerId} serviceId={order?.service?.serviceId} isBuyer={isBuyer} />}
+              <h2 className="secondaryHeading"><span>Order</span> History</h2>
+              <div className="horizontalLine"></div>
+              <div className="history">
+                {historyActivities}
+              </div>
             </div>
           </div>
 
-          <div className="right">
+          <div className="rightBox">
 
             <div className="orderDetails">
               <h2 className="secondaryHeading"><span>Order</span> Details</h2>
@@ -453,15 +526,15 @@ function ServiceOrderDetails({ isBuyer }) {
               </div>
               <div className="actions">
                 <Link to={`/chat?p=${!isBuyer ? order?.userId?._id : order?.service?.serviceId?.sellerId?.userId?._id}`} className='primaryBtn'>{`Contact ${isBuyer ? "Seller" : "Buyer"}`}</Link>
-                <button className='secondaryBtn' disabled={crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Cancelled"}>Start Dispute</button>
-                <button className='dangerBtn' onClick={() => setShowCancelModel(true)} disabled={cancellationPending || crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Delivered" || crrStatus === "Cancelled"}>{isBuyer ? "Cancel Order" : "Ask to Cancel"}</button>
+                <button className='secondaryBtn' disabled={crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Cancelled" || crrStatus === "Resolved" || crrStatus === "Delivered"} onClick={() => setShowStartDisputeModel(true)}>Start Dispute</button>
+                <button className='dangerBtn' onClick={() => setShowCancelModel(true)} disabled={cancellationPending || crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Delivered" || crrStatus === "Cancelled" || crrStatus === "Resolved"}>{isBuyer ? "Cancel Order" : "Ask to Cancel"}</button>
               </div>
             </div>
 
             <div className="timeRemaining">
               <h2 className="secondaryHeading"><span>Time</span> Remaining</h2>
               <div className="horizontalLine"></div>
-              {crrStatus !== "Completed" && crrStatus !== "Cancelled" && crrStatus !== "InDispute" && <><div className="countdownBox">
+              {crrStatus !== "Completed" && crrStatus !== "Cancelled" && crrStatus !== "InDispute" && crrStatus !== "Resolved" && <><div className="countdownBox">
                 <div><strong className={`${isPastDue && "pastDue"}`}>{(timeRemaining.days < 10 && "0") + timeRemaining.days}</strong> Days</div>
                 <div className="verticalLine"></div>
                 <div><strong className={`${isPastDue && "pastDue"}`}>{(timeRemaining.hours < 10 && "0") + timeRemaining.hours}</strong> Hours</div>
@@ -475,8 +548,8 @@ function ServiceOrderDetails({ isBuyer }) {
                 <div><p>Due On</p><strong>{dueOn}</strong></div>
               </div>
               {!isBuyer && <div className="actions">
-                <button className='primaryBtn' disabled={crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Delivered" || crrStatus === "Cancelled"} onClick={() => setShowDeliveryModel(true)}>Deliver Now</button>
-                <button className='primaryBtn2' disabled={extensionPending || crrStatus === "InDispute" || crrStatus === "Delivered" || crrStatus === "Completed" || crrStatus === "Cancelled"} onClick={() => setShowExtensionModel(true)}>Ask For Extension</button>
+                <button className='primaryBtn' disabled={crrStatus === "InDispute" || crrStatus === "Completed" || crrStatus === "Delivered" || crrStatus === "Cancelled" || crrStatus === "Resolved"} onClick={() => setShowDeliveryModel(true)}>Deliver Now</button>
+                <button className='primaryBtn2' disabled={extensionPending || crrStatus === "InDispute" || crrStatus === "Delivered" || crrStatus === "Completed" || crrStatus === "Cancelled" || crrStatus === "Resolved"} onClick={() => setShowExtensionModel(true)}>Ask For Extension</button>
               </div>}
             </div>
 
@@ -608,6 +681,49 @@ function ServiceOrderDetails({ isBuyer }) {
 
           </div>
         </div>
+      }
+
+      {showStartDisputeModel && <div className="popupDiv">
+        <div className="popupContent disputePopupContent">
+
+          <form className="form">
+
+            <h2 className="secondaryHeading">Start <span>Dispute</span></h2>
+
+            <div className="horizontalLine"></div>
+
+            <div className="infoDiv">
+              <p className="infoText">
+                Please note that starting a dispute will change the order status to <span className='fw500'>InDispute</span>, and the admin will be notified.
+                You, the {isBuyer ? "seller" : "buyer"}, and the admin will enter into a discussion via chat to resolve the issue.
+                The admin will review the situation and decide how much of the order value will be refunded to {isBuyer ? "you" : "the buyer"} and how much will be paid to {isBuyer ? "the seller" : "you"}.
+                Once resolved, the order will be marked as <span className='fw500'>Resolved</span>.
+              </p>
+              <p className="infoText">
+                Ensure you have a valid reason for the dispute, as this process may take some time to resolve.
+              </p>
+            </div>
+
+            <div className="horizontalLine"></div>
+
+            <div className="inputDiv">
+              <label>Reason of Dispute</label>
+              <textarea type="text" className='inputField' value={disputeReason} onChange={(e) => setDisputeReason(e.target.value)} placeholder='Enter Reason' />
+            </div>
+
+            <div className="buttonsDiv">
+              <button className='dangerBtn' onClick={handleStartDispute}>Start Dispute</button>
+              <button className='secondaryBtn' onClick={() => setShowStartDisputeModel(null)}>Close</button>
+            </div>
+
+          </form>
+
+          <div className="popupCloseBtn">
+            <IoIosCloseCircleOutline className='icon' onClick={() => setShowStartDisputeModel(null)} />
+          </div>
+
+        </div>
+      </div>
       }
 
     </div>

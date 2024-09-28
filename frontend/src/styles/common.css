@@ -309,10 +309,12 @@
     justify-content: right;
     gap: 15px;
 }
-.orderDetailsDiv .popupDiv .disputePopupContent{
+.orderDetailsDiv .popupDiv .disputePopupContent,
+.serviceOrderDetailsDiv .popupDiv .disputePopupContent{
     max-width: 60%;
 }
-.orderDetailsDiv .popupDiv .disputePopupContent .infoDiv{
+.orderDetailsDiv .popupDiv .disputePopupContent .infoDiv,
+.serviceOrderDetailsDiv .popupDiv .disputePopupContent .infoDiv{
     font-size: 0.8rem;
     color: var(--lightBlackPrimary);
 }
@@ -336,8 +338,21 @@
 .serviceOrderDetailsDiv .serviceOrderDetailsContent button{
     font-size: 0.7rem;
 }
-.serviceOrderDetailsDiv .left{
+.serviceOrderDetailsDiv .leftContainer{
     width: 62%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.serviceOrderDetailsDiv .leftContainer .leftUpper{
+    width: 100%;
+    background: var(--white);
+    border-radius: 8px;
+    padding: 20px 40px;
+    height: fit-content;
+}
+.serviceOrderDetailsDiv .leftHistory{
+    width: 100%;
     background: var(--white);
     border-radius: 8px;
     padding: 20px 40px;
@@ -348,14 +363,14 @@
     padding-bottom: 50px;
 }
 
-.serviceOrderDetailsDiv .right{
+.serviceOrderDetailsDiv .rightBox{
     width: 35%;
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
-.serviceOrderDetailsDiv .right .orderDetails,
-.serviceOrderDetailsDiv .right .timeRemaining{
+.serviceOrderDetailsDiv .rightBox .orderDetails,
+.serviceOrderDetailsDiv .rightBox .timeRemaining{
     background: var(--white);
     border-radius: 8px;
     padding: 20px 40px;
@@ -363,89 +378,89 @@
     flex-direction: column;
     gap: 15px;
 }
-.serviceOrderDetailsDiv .right .orderDetails .posting{
+.serviceOrderDetailsDiv .rightBox .orderDetails .posting{
     display: flex;
     gap: 15px;
 }
-.serviceOrderDetailsDiv .right .orderDetails .posting .imgDiv{
+.serviceOrderDetailsDiv .rightBox .orderDetails .posting .imgDiv{
     width: 100px;
 }
-.serviceOrderDetailsDiv .right .orderDetails .posting .imgDiv img{
+.serviceOrderDetailsDiv .rightBox .orderDetails .posting .imgDiv img{
     width: 100%;
 }
-.serviceOrderDetailsDiv .right .orderDetails .posting .singleLineText{
+.serviceOrderDetailsDiv .rightBox .orderDetails .posting .singleLineText{
     height: 3rem;
     -webkit-line-clamp: 2;
     line-clamp: inherit;
 }
-.serviceOrderDetailsDiv .right .orderDetails .details,
-.serviceOrderDetailsDiv .right .timeRemaining .details{
+.serviceOrderDetailsDiv .rightBox .orderDetails .details,
+.serviceOrderDetailsDiv .rightBox .timeRemaining .details{
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
-.serviceOrderDetailsDiv .right .orderDetails .details div,
-.serviceOrderDetailsDiv .right .timeRemaining .details div{
+.serviceOrderDetailsDiv .rightBox .orderDetails .details div,
+.serviceOrderDetailsDiv .rightBox .timeRemaining .details div{
     display: flex;
     justify-content: space-between;
 }
-.serviceOrderDetailsDiv .right .orderDetails .details div strong,
-.serviceOrderDetailsDiv .right .timeRemaining .details div strong{
+.serviceOrderDetailsDiv .rightBox .orderDetails .details div strong,
+.serviceOrderDetailsDiv .rightBox .timeRemaining .details div strong{
     color: var(--lightBlackPrimary);
     font-weight: 600;
 }
-.serviceOrderDetailsDiv .right .orderDetails .username{
+.serviceOrderDetailsDiv .rightBox .orderDetails .username{
     cursor: pointer;
 }
-.serviceOrderDetailsDiv .right .orderDetails .actions,
-.serviceOrderDetailsDiv .right .timeRemaining .actions{
+.serviceOrderDetailsDiv .rightBox .orderDetails .actions,
+.serviceOrderDetailsDiv .rightBox .timeRemaining .actions{
     width: 100%;
     display: flex;
     justify-content: space-between;
     gap: 10px;
 }
-.serviceOrderDetailsDiv .right .orderDetails .actions button,
-.serviceOrderDetailsDiv .right .timeRemaining .actions button,
-.serviceOrderDetailsDiv .right .orderDetails .actions a,
-.serviceOrderDetailsDiv .right .timeRemaining .actions a{
+.serviceOrderDetailsDiv .rightBox .orderDetails .actions button,
+.serviceOrderDetailsDiv .rightBox .timeRemaining .actions button,
+.serviceOrderDetailsDiv .rightBox .orderDetails .actions a,
+.serviceOrderDetailsDiv .rightBox .timeRemaining .actions a{
     width: 100%;
     font-size: 0.7rem;
 }
-.serviceOrderDetailsDiv .right .timeRemaining .countdownBox{
+.serviceOrderDetailsDiv .rightBox .timeRemaining .countdownBox{
     display: flex;
     justify-content: center;
     gap: 35px;
     margin: 10px;
 }
-.serviceOrderDetailsDiv .right .timeRemaining .countdownBox div{
+.serviceOrderDetailsDiv .rightBox .timeRemaining .countdownBox div{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.serviceOrderDetailsDiv .right .timeRemaining .countdownBox div strong{
+.serviceOrderDetailsDiv .rightBox .timeRemaining .countdownBox div strong{
     font-size: 1.5rem;
 }
-.serviceOrderDetailsDiv .right .timeRemaining .countdownBox .pastDue{
+.serviceOrderDetailsDiv .rightBox .timeRemaining .countdownBox .pastDue{
     color: var(--danger);
 }
 
-.serviceOrderDetailsDiv .left .history{
+.serviceOrderDetailsDiv .leftHistory .history{
     display: flex;
     flex-direction: column;
     gap: 20px;
     margin-top: 20px;
 }
-.serviceOrderDetailsDiv .left .history .activity{
+.serviceOrderDetailsDiv .leftHistory .history .activity{
     position: relative;
     padding-left: 40px;
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
-.serviceOrderDetailsDiv .left .history .activity .horizontalLine{
+.serviceOrderDetailsDiv .leftHistory .history .activity .horizontalLine{
     margin-top: 8px;
 }
-.serviceOrderDetailsDiv .left .history .activity::before{
+.serviceOrderDetailsDiv .leftHistory .history .activity::before{
     position: absolute;
     content: "";
     top: 5px;
@@ -455,7 +470,7 @@
     border-radius: 50%;
     background: var(--secondaryCopper);
 }
-.serviceOrderDetailsDiv .left .history .activity::after{
+.serviceOrderDetailsDiv .leftHistory .history .activity::after{
     position: absolute;
     content: "";
     top: 30px;
@@ -464,72 +479,72 @@
     height: 100%;
     background: var(--secondaryCopper);
 }
-.serviceOrderDetailsDiv .left .history .activity.lastElem::after{
+.serviceOrderDetailsDiv .leftHistory .history .activity.lastElem::after{
     top: 0;
     height: 0%;
 }
-.serviceOrderDetailsDiv .left .history .activity .upper{
+.serviceOrderDetailsDiv .leftHistory .history .activity .upper{
     display: flex;
     justify-content: space-between;
 }
-.serviceOrderDetailsDiv .left .history .activity .title{
+.serviceOrderDetailsDiv .leftHistory .history .activity .title{
     font-weight: 500;
     padding: 4px 0px;
     max-width: 90%;
     font-size: 0.95rem;
 }
-.serviceOrderDetailsDiv .left .history .activity .actionBy{
+.serviceOrderDetailsDiv .leftHistory .history .activity .actionBy{
     color: var(--primaryCopper);
 }
-.serviceOrderDetailsDiv .left .history .activity .time{
+.serviceOrderDetailsDiv .leftHistory .history .activity .time{
     color: var(--darkGray);
     font-size: 0.85rem;
 }
-.serviceOrderDetailsDiv .left .history .activity .showDetails{
+.serviceOrderDetailsDiv .leftHistory .history .activity .showDetails{
     width: 25px;
     height: 25px;
     cursor: pointer;
     color: var(--darkGray);
 }
-.serviceOrderDetailsDiv .left .history .activity .details{
+.serviceOrderDetailsDiv .leftHistory .history .activity .details{
     display: flex;
     flex-direction: column;
     gap: 10px;
     font-size: 0.85rem;
 }
-.serviceOrderDetailsDiv .left .history .activity .details .detailsBtns{
+.serviceOrderDetailsDiv .leftHistory .history .activity .details .detailsBtns{
     display: flex;
     gap: 10px;
     width: fit-content;
     margin-top: 10px;
 }
-.serviceOrderDetailsDiv .left .history .activity .details .reqsActivity .question{
+.serviceOrderDetailsDiv .leftHistory .history .activity .details .reqsActivity .question{
     font-weight: 500;
 }
 
-.serviceOrderDetailsDiv .left .history .activity .details .deliveryImages{
+.serviceOrderDetailsDiv .leftHistory .history .activity .details .deliveryImages{
     display: flex;
     justify-content: left;
     gap: 10px;
 }
-.serviceOrderDetailsDiv .left .history .activity .details .deliveryImages img{
+.serviceOrderDetailsDiv .leftHistory .history .activity .details .deliveryImages img{
     width: 50px;
 }
 
 .orderDetailsDiv .orderStatusDetails .leaveReviewDiv .leaveReviewContent,
-.serviceOrderDetailsDiv .left .leaveReviewDiv .leaveReviewContent{
+.serviceOrderDetailsDiv .leftHistory .leaveReviewDiv .leaveReviewContent{
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 .orderDetailsDiv .orderStatusDetails .leaveReviewDiv .leaveReviewContent .starsDiv,
-.serviceOrderDetailsDiv .left .leaveReviewDiv .leaveReviewContent .starsDiv{
+.serviceOrderDetailsDiv .leftHistory .leaveReviewDiv .leaveReviewContent .starsDiv{
     display: flex;
     align-items: center;
     gap: 10px;
 }
 .orderDetailsDiv .orderStatusDetails .leaveReviewDiv .leaveReviewContent .sellerReply,
-.serviceOrderDetailsDiv .left .leaveReviewDiv .leaveReviewContent .sellerReply{
+.serviceOrderDetailsDiv .leftHistory .leaveReviewDiv .leaveReviewContent .sellerReply{
     margin-top: 8px;
     background: var(--lightGray);
     padding: 12px 20px;
@@ -540,7 +555,7 @@
 }
 
 .orderDetailsDiv .orderStatusDetails .leaveReviewDiv .leaveReviewContent .horizontalLine,
-.serviceOrderDetailsDiv .left .leaveReviewDiv .leaveReviewContent .horizontalLine{
+.serviceOrderDetailsDiv .leftHistory .leaveReviewDiv .leaveReviewContent .horizontalLine{
     margin-top: 10px;
 }
 
@@ -776,4 +791,10 @@
 }
 .orderDetailsDiv .orderStatusDetails .productOrderDisputeChat .disputeChatDiv .chatRoom{
     height: 85%;
+}
+.serviceOrderDetailsDiv .serviceOrderDetailsContent .serviceOrderDisputeChat{
+    height: 75vh;
+}
+.serviceOrderDetailsDiv .serviceOrderDetailsContent .serviceOrderDisputeChat .disputeChatDiv{
+    height: 80%;
 }

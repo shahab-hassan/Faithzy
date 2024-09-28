@@ -8,7 +8,7 @@ const paymentSchema = new mongoose.Schema({
         amount: { type: Number, required: true },
         itemType: {type: String, enum: ["Product", "Service"]},
         status: {type: String, required: true, enum: ["Earning", "Withdraw", "Paid"]},
-        description: {type: String, required: true, enum: ['Order Completed', 'Requested for Withdrawal', 'Amount Paid']},
+        description: {type: String, required: true, enum: ['Order Completed', 'Order Completed (Dispute Resolved)', 'Requested for Withdrawal', 'Amount Paid']},
         date: {type: Date, required: true, default: Date.now}
     }]
 }, 
