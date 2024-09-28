@@ -228,15 +228,24 @@
 
 /* ****************************** ADMIN TERMS & CONDITIONS PAGE ****************************** */
 
-.adminTermsDiv textarea {
+.adminTermsDiv .adminTermsContent {
     width: 100%;
     background: var(--white);
     padding: 20px 30px;
     margin-bottom: 20px;
-    min-height: 70vh;
+    min-height: 85vh;
     border: 1px solid var(--gray);
     outline: none;
     border-radius: 8px;
+}
+.adminTermsDiv .form {
+    height: 100%;
+    width: 100%;
+}
+.adminTermsDiv .form .reactQuill{
+    height: 55vh;
+    width: 100%;
+    margin-bottom: 50px;
 }
 
 

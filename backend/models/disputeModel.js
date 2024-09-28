@@ -20,9 +20,11 @@ const disputeSchema = new mongoose.Schema({
     reason: { type: String, required: true },
     status: { type: String, required: true, enum: ["InProgress", "Resolved"], default: "InProgress" },
     resolutionDate: { type: Date },
+    messages: [messageSchema],
+    totalPaidByBuyer: { type: Number, required: true }, 
     amountToBuyer: { type: Number },
     amountToSeller: { type: Number },
-    messages: [messageSchema]
+    totalReceivedBySeller: { type: Number, default: 0 }, 
 },
     { timestamps: true }
 );

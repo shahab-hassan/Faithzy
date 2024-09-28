@@ -655,6 +655,22 @@
 
 
 
+/********************** TERMS AND CONDITIONS ***********************/
+
+.termsDiv{
+    padding: 50px;
+}
+.termsDiv .termsContent{
+    background: var(--white);
+    border-radius: 8px;
+    padding: 30px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+
 
 /********************** CHAT ROOM ***********************/
 

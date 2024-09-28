@@ -30,6 +30,7 @@ exports.startNewProductOrderDispute = asyncHandler(async (req, res) => {
             subOrderId: productId,
             initiatedBy,
             orderAmount: subOrder.buyerPaid.subtotal,
+            totalPaidByBuyer: subOrder.buyerPaid.total,
             provisionType: "Product",
             reason: disputeReason
         });
@@ -65,6 +66,7 @@ exports.startNewServiceOrderDispute = asyncHandler(async (req, res) => {
             orderId,
             initiatedBy,
             orderAmount: order.summary.paidByBuyer.salesPrice,
+            totalPaidByBuyer: order.summary.paidByBuyer.total,
             provisionType: "Service",
             reason: disputeReason
         });
@@ -230,6 +232,7 @@ exports.resolveProductOrderDispute = asyncHandler(async (req, res) => {
                 description: "Order Completed (Dispute Resolved)"
             });
             await payment.save();
+            dispute.totalReceivedBySeller = amountToSeller * (1 - (tax / 100));
         }
 
         if (amountToBuyer !== 0) {
@@ -302,6 +305,7 @@ exports.resolveServiceOrderDispute = asyncHandler(async (req, res) => {
                 description: "Order Completed (Dispute Resolved)"
             });
             await payment.save();
+            dispute.totalReceivedBySeller = amountToSeller * (1 - (tax / 100));
         }
 
         if (amountToBuyer !== 0) {

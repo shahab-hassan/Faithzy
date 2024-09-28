@@ -2,6 +2,7 @@ const adminSettingsModel = require('../models/adminSettingsModel');
 const { productOrderModel, serviceOrderModel } = require('../models/orderModel');
 const Seller = require('../models/sellerModel');
 const Product = require('../models/productModel');
+const disputeModel = require('../models/disputeModel');
 const Service = require('../models/serviceModel');
 const User = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
@@ -240,6 +241,31 @@ exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
         }
     ]);
 
+    const resolvedDisputes = await disputeModel.aggregate([
+        {
+            $match: {
+                status: "Resolved",
+                "updatedAt": { $gte: startDate, $lte: endDate }
+            }
+        },
+        {
+            $project: {
+                date: { $dateToString: { format: "%Y-%m-%d", date: "$updatedAt" } },
+                buyerPaidTotal: "$totalPaidByBuyer", // Total amount buyer paid initially
+                refundedToBuyer: "$amountToBuyer", // Refunded to buyer
+                totalReceivedBySeller: "$totalReceivedBySeller"
+            }
+        },
+        {
+            $group: {
+                _id: "$date",
+                buyerPaidTotal: { $sum: "$buyerPaidTotal" },
+                refundedToBuyer: { $sum: "$refundedToBuyer" },
+                totalReceivedBySeller: { $sum: "$totalReceivedBySeller" }
+            }
+        }
+    ]);
+
     let totalRevenue = 0, fromOrders = 0, fromMemberships = 0, fromBoosts = 0, newUsers = 0, netProfit = 0;
 
     const orders = [...productOrders, ...serviceOrders];
@@ -252,6 +278,24 @@ exports.getRevenueAndProfitDetails = asyncHandler(async (req, res) => {
             netProfit += order.profit;
         }
     });
+
+    resolvedDisputes.forEach(dispute => {
+
+        console.log(dispute);
+
+        const { buyerPaidTotal, refundedToBuyer, totalReceivedBySeller } = dispute;
+        const revenueFromDispute = buyerPaidTotal - refundedToBuyer;
+        const profitFromDispute = revenueFromDispute - totalReceivedBySeller;
+
+        if (dateRange[dispute._id]) {
+            dateRange[dispute._id].revenue += revenueFromDispute;
+            dateRange[dispute._id].profit += profitFromDispute;
+            totalRevenue += revenueFromDispute;
+            fromOrders += revenueFromDispute;
+            netProfit += profitFromDispute;
+        }
+    });
+
 
     const sellerInvestments = await Seller.aggregate([
         {
@@ -371,7 +415,7 @@ exports.addStripeKeys = asyncHandler(async (req, res) => {
 exports.getStripeKeys = asyncHandler(async (req, res) => {
     try {
         const settings = await adminSettingsModel.findOne();
-        
+
         if (!settings) {
             res.status(404);
             throw new Error("Settings not found");

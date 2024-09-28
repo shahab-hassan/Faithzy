@@ -56,6 +56,7 @@ import Earnings from './pages/seller/Earnings.js';
 import AdminSendEmal from './pages/admin/AdminSendEmal.js';
 import NotFound from './utils/NotFound.js';
 import AdminManageDispute from './pages/admin/AdminManageDispute.js';
+import Terms from './pages/common/Terms.js';
 
 function App() {
 
@@ -77,6 +78,7 @@ function App() {
                     <Route path='/contact' element={<Contact />} />
                     <Route path='/profile/:id' element={<Profile />} />
                     <Route path='/settings' element={<Settings />} />
+                    <Route path='/terms' element={<Terms />} />
                 </Route>
 
                 <Route element={<BuyerLayoutHeader/>}>

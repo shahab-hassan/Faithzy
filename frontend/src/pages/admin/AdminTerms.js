@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { enqueueSnackbar } from "notistack"
+import { enqueueSnackbar } from "notistack";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 function AdminTerms() {
-
     const [terms, setTerms] = useState("");
 
     useEffect(() => {
         axios.get('http://localhost:5000/api/v1/settings/admin/terms')
             .then(res => {
-                if (res.data.success)
+                if (res.data.success) {
                     setTerms(res.data?.terms || "");
+                }
             })
             .catch(e => {
                 console.error(e);
-                enqueueSnackbar(e?.reponse?.data?.error || "Something went wrong!", { variant: "error" })
+                enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
             });
     }, []);
 
@@ -23,33 +25,31 @@ function AdminTerms() {
         axios.post('http://localhost:5000/api/v1/settings/admin/terms', { content: terms }, {
             headers: { Authorization: `Bearer ${token}` }
         })
-        .then(res => {
-            if (res.data.success)
-                enqueueSnackbar('Terms & conditions updated successfully!', { variant: "success" });
-        })
-        .catch(e => {
-            console.error(e);
-            enqueueSnackbar(e?.reponse?.data?.error || "Something went wrong!", { variant: "error" })
-        });
+            .then(res => {
+                if (res.data.success) {
+                    enqueueSnackbar('Terms & conditions updated successfully!', { variant: "success" });
+                }
+            })
+            .catch(e => {
+                console.error(e);
+                enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
+            });
     };
 
     return (
         <div className='adminTermsDiv'>
             <div className="adminTermsContent">
-
                 <div className="form">
                     <h2 className='secondaryHeading'><span>Terms</span> & <span>Conditions</span></h2>
                     <div className="horizontalLine"></div>
-                    <div className='inputDiv'>
-                        <textarea
-                            value={terms}
-                            onChange={(e) => setTerms(e.target.value)}
-                            rows="20"
-                        />
-                        <button className='primaryBtn' onClick={handleSave}>Save</button>
-                    </div>
+                    <ReactQuill
+                        value={terms}
+                        onChange={(value) => setTerms(value)}
+                        theme="snow"
+                        className='reactQuill'
+                    />
+                    <button className='primaryBtn' onClick={handleSave}>Save</button>
                 </div>
-
             </div>
         </div>
     );
