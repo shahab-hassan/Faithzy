@@ -1,5 +1,8 @@
 *** Overview ***: 
 
-- Update AdminRevenue to show Revenue and Profit made from Resolved Orders
-- Created and Complete Terms Page
-- Updated AdminTerms to apply formatting to Text 
+- Made 50% of the website Responsive
+- Working to integrate Payoneer as payment method
+--- Sellers can add payment account id
+--- Sellers can toggle to set an active payment method
+--- Admins can see pending and completed payment requests
+--- Admin can add Payoneer account id

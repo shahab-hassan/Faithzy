@@ -10,12 +10,12 @@ import { AuthContext } from '../../utils/AuthContext';
 function SampleProvisions({ pre, openedProduct, openedService }) {
 
   const { enqueueSnackbar } = useSnackbar();
-  const { isLogin } = useContext(AuthContext);
+  const { isLogin, isTabletPro, isTablet, isMobilePro, isMobile } = useContext(AuthContext);
 
   const [allProvisions, setAllProvisions] = useState([]);
   const [recentlyViewed, setRecentlyViewed] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedType, setSelectedType] = useState(openedService? "Services":"Products");
+  const [selectedType, setSelectedType] = useState(openedService ? "Services" : "Products");
 
   useEffect(() => {
 
@@ -30,7 +30,7 @@ function SampleProvisions({ pre, openedProduct, openedService }) {
       axios.get(`http://localhost:5000/api/v1/${endpoint}/user/recentlyViewed/`, { headers: { Authorization: `Bearer ${token}` } })
         .then((response) => {
           if (response.data.recentlyViewed)
-            selectedType === "Products"? setRecentlyViewed(response.data.recentlyViewed.viewedProducts) : setRecentlyViewed(response.data.recentlyViewed.viewedServices)
+            selectedType === "Products" ? setRecentlyViewed(response.data.recentlyViewed.viewedProducts) : setRecentlyViewed(response.data.recentlyViewed.viewedServices)
         })
         .catch((e) => {
           enqueueSnackbar(e.response.data.error || "Something went wrong!", { variant: "error" });
@@ -47,8 +47,8 @@ function SampleProvisions({ pre, openedProduct, openedService }) {
     provisionItems = recentlyViewed.map((item, index) => (
       <CardComponent key={index} item={item} />
     ));
-  } 
-  if(pre !== "recents") {
+  }
+  if (pre !== "recents") {
     provisionItems = allProvisions.map((item, index) => {
       if (pre === "discounted" && !item.status.includes("discounted"))
         return null;
@@ -75,7 +75,7 @@ function SampleProvisions({ pre, openedProduct, openedService }) {
   if (pre === "related")
     provisionItems = [...relatedItems];
 
-  const maxVisible = pre === "chat"? 1 : 5;
+  const maxVisible = (pre === "chat" || isMobile) ? 1 : isMobilePro ? 2 : isTablet ? 3 : isTabletPro ? 4 : 5;
   const totalItems = provisionItems.length;
 
   const handleScrollLeft = () => {
@@ -92,18 +92,18 @@ function SampleProvisions({ pre, openedProduct, openedService }) {
     <div className='sampleProvisionsDiv'>
       <div className="sampleProvisionsContent">
         <div className="sampleProvisionsUpper">
-          <h1 className={pre === "chat"? "secondaryHeading" : `primaryHeading`}>
-            {pre === "discounted" ? "Discounted" : (pre === "recents" ? "Recently Viewed" : pre === "related" ? "Related" : "Top")}
+          {pre === "recents" ? <h1 className={pre === "chat" ? "secondaryHeading" : `primaryHeading`}><span>Recently</span> Viewed</h1> : <h1 className={pre === "chat" ? "secondaryHeading" : `primaryHeading`}>
+            {pre === "discounted" ? "Discounted" : pre === "related" ? "Related" : "Top"}
             <span> {selectedType.charAt(0).toUpperCase() + selectedType.slice(1)}</span>
-          </h1>
+          </h1>}
           <div className='sampleProvisionsUpperRight'>
             <Dropdown selected={selectedType} onSelect={setSelectedType} options={["Products", "Services"]} />
             {/* <Link className="secondaryBtn">View All<i className="fa-solid fa-arrow-right"></i></Link> */}
           </div>
         </div>
         <div className="sampleProvisionsLower">
-          <div className="productsDiv">
-            {visibleItems.length>0? visibleItems : "Nothing to show here..."}
+          <div className="productsDiv" style={pre === "chat" ? { gridTemplateColumns: "repeat(1, 1fr)" } : { gridTemplateColumns: "repeat(5, 1fr)" }}>
+            {visibleItems.length > 0 ? visibleItems : "Nothing to show here..."}
             {totalItems > maxVisible && (
               <>
                 {currentIndex !== 0 && <div className="slideLeftBtn" onClick={handleScrollLeft}>

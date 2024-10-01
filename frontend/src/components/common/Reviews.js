@@ -41,8 +41,8 @@ function Reviews({ type, id }) {
 
                 <div className="ratings">
                     <div>
-                        <FaStar size={40} color='#ffc107' />
-                        <h1 className="primaryHeading">{rating?.toFixed(1)}</h1>
+                        <FaStar size={35} color='#ffc107' />
+                        <h1>{rating?.toFixed(1)}</h1>
                     </div>
                     <span>{(reviews.length < 10 && "0") + reviews.length} Review{reviews.length > 1 && "s"}</span>
                 </div>
@@ -61,7 +61,7 @@ function Reviews({ type, id }) {
                                             {[...Array(5)].map((_, index) => (
                                                 <FaStar
                                                     key={index}
-                                                    size={20}
+                                                    size={15}
                                                     color={index + 1 <= review.rating ? '#ffc107' : '#e4e5e9'}
                                                     className='star'
                                                 />

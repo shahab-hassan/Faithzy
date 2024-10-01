@@ -5,12 +5,18 @@ import { enqueueSnackbar } from 'notistack';
 import { BsStripe } from "react-icons/bs";
 import { formatDate } from '../../utils/utilFuncs';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
+import { SiPayoneer } from "react-icons/si";
+import { Switch } from '@mui/material';
 
 const SellerEarnings = () => {
 
     const [loading, setLoading] = useState(false);
     const [showWithdrawalModel, setShowWithdrawalModel] = useState(false);
-    const { user } = useContext(AuthContext);
+    const [showAddPayoneerModel, setShowAddPayoneerModel] = useState(false);
+    const [payoneerAccountId, setPayoneerAccountId] = useState("");
+    const [stripeActive, setStripeActive] = useState(false);
+    const [payoneerActive, setPayoneerActive] = useState(false);
+    const { user, fetchUserData } = useContext(AuthContext);
 
     const [history, setHistory] = useState([]);
     const [earnings, setEarnings] = useState({
@@ -33,7 +39,14 @@ const SellerEarnings = () => {
 
 
     useEffect(() => {
+
         if (!user) return;
+
+        setStripeActive(user?.sellerId?.activePaymentMethod === "Stripe");
+        setPayoneerActive(user?.sellerId?.activePaymentMethod === "Payoneer");
+
+        if (user?.sellerId?.payoneerAccountId) setPayoneerAccountId(user?.sellerId?.payoneerAccountId);
+
         axios.get(`http://localhost:5000/api/v1/payments/seller/${user?.sellerId?._id}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
@@ -79,7 +92,7 @@ const SellerEarnings = () => {
     const requestedWithdrawal = async () => {
         setShowWithdrawalModel(false);
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/payments/seller/request-withdrawal', { userId: user?._id, sellerId: user?.sellerId?._id, amount: earnings.availableBalance }, { headers: { Authorization: `Bearer ${token}` } });
+            const response = await axios.post('http://localhost:5000/api/v1/payments/seller/request-withdrawal', { userId: user?._id, sellerId: user?.sellerId?._id, amount: earnings.availableBalance, stripeActive }, { headers: { Authorization: `Bearer ${token}` } });
             if (response.data.success) {
                 localStorage.setItem('requestSubmitted', 'true');
                 window.location.reload();
@@ -91,20 +104,87 @@ const SellerEarnings = () => {
     };
 
 
+    const addPayoneer = async () => {
+
+        if (!payoneerAccountId) {
+            enqueueSnackbar("Please enter Account ID!", { variant: "error" });
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const response = await axios.post('http://localhost:5000/api/v1/payments/seller/add-payoneer',
+                { sellerId: user?.sellerId?._id, payoneerAccountId },
+                { headers: { Authorization: `Bearer ${token}` } });
+
+            if (response.data.success) {
+                enqueueSnackbar("Payoneer account added successfully!", { variant: "success" });
+                setShowAddPayoneerModel(false);
+                await fetchUserData();
+                setPayoneerActive(true);
+                setStripeActive(false);
+            }
+
+            setLoading(false);
+        } catch (error) {
+            console.error(error);
+            enqueueSnackbar("Something went wrong!", { variant: "error" });
+            setLoading(false);
+        }
+    };
+
+
+    const handleToggle = (method) => {
+        if (window.confirm(`Are you sure you want to turn off ${method}?`)) {
+            updateActivePaymentMethod(null);
+        }
+    };
+
+    const handleStripeToggle = () => {
+        if (stripeActive) {
+            handleToggle("Stripe");
+        } else {
+            updateActivePaymentMethod("Stripe");
+        }
+    };
+    const handlePayoneerToggle = () => {
+        if (payoneerActive) {
+            handleToggle("Payoneer");
+        } else {
+            updateActivePaymentMethod("Payoneer");
+        }
+    };
+    const updateActivePaymentMethod = async (method) => {
+        try {
+            const response = await axios.post('http://localhost:5000/api/v1/payments/seller/update-active-payment-method',
+                { sellerId: user?.sellerId?._id, activePaymentMethod: method },
+                { headers: { Authorization: `Bearer ${token}` } });
+            if (response.data.success) {
+                enqueueSnackbar(`Active payment method updated!`, { variant: "success" });
+                setStripeActive(method === "Stripe");
+                setPayoneerActive(method === "Payoneer");
+                await fetchUserData();
+            }
+        } catch (error) {
+            enqueueSnackbar("Failed to update active payment method", { variant: "error" });
+        }
+    };
+
+
     const paymentElems = history.length > 0 ? history.map((item, index) => (
-            <div key={index}>
-                <div className="requestRow row">
-                    <div className="titleField field">
-                        <p className="title">{item?.description}</p>
-                    </div>
-                    <p className="dateField field">{formatDate(item?.date)}</p>
-                    <p className="buyerField field">{item?.buyerUsername || "-"}</p>
-                    <p className="typeField field">{item?.itemType || "-"}</p>
-                    <p className="priceField field">${item?.amount}</p>
+        <div key={index}>
+            <div className="requestRow row">
+                <div className="titleField field">
+                    <p className="title">{item?.description}</p>
                 </div>
-                {history.length > 1 && history.length - 1 !== index && <div className="horizontalLine"></div>}
+                <p className="dateField field">{formatDate(item?.date)}</p>
+                <p className="buyerField field">{item?.buyerUsername || "-"}</p>
+                <p className="typeField field">{item?.itemType || "-"}</p>
+                <p className="priceField field">${item?.amount}</p>
             </div>
-        ))
+            {history.length > 1 && history.length - 1 !== index && <div className="horizontalLine"></div>}
+        </div>
+    ))
         : <div className="row">Nothing to show here...</div>;
 
 
@@ -118,15 +198,42 @@ const SellerEarnings = () => {
                         <h2 className='secondaryHeading'><span>Payment</span> Methods</h2>
                         <div className="paymentMethods">
                             <div className="method"><BsStripe />Stripe</div>
-                            <button className='secondaryBtn' onClick={connectStripe} disabled={loading || user?.sellerId?.stripeAccountId}>{user?.sellerId?.stripeAccountId ? "Connected" : loading ? "Loading..." : "Connect"}</button>
+                            <div className='buttonsDiv'>
+                                <Switch
+                                    checked={stripeActive}
+                                    onChange={handleStripeToggle}
+                                    color="primary"
+                                    inputProps={{ 'aria-label': 'Stripe switch' }}
+                                    disabled={!user?.sellerId?.stripeAccountId}
+                                />
+                                <button className='secondaryBtn' onClick={connectStripe} disabled={loading || user?.sellerId?.stripeAccountId}>
+                                    {user?.sellerId?.stripeAccountId ? "Connected" : loading ? "Loading..." : "Connect"}
+                                </button>
+                            </div>
                         </div>
+                        <div className="paymentMethods">
+                            <div className="method"><SiPayoneer />Payoneer</div>
+                            <div className='buttonsDiv'>
+                                <Switch
+                                    checked={payoneerActive}
+                                    onChange={handlePayoneerToggle}
+                                    color="primary"
+                                    inputProps={{ 'aria-label': 'Payoneer switch' }}
+                                    disabled={!user?.sellerId?.payoneerAccountId}
+                                />
+                                <button className="secondaryBtn" onClick={() => setShowAddPayoneerModel(true)} disabled={loading}>
+                                    {user?.sellerId?.payoneerAccountId ? "Edit Details" : "Add Payoneer"}
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div className="earningsOverview">
                         <div className="overviewBox">
                             <h2 className="secondaryHeading">Available Balance</h2>
                             <div className="value">${earnings.availableBalance.toFixed(2)}</div>
-                            <button className="secondaryBtn" disabled={earnings.availableBalance === 0} onClick={() => setShowWithdrawalModel(true)}>Withdraw</button>
+                            <button className="secondaryBtn" disabled={Math.floor(earnings.availableBalance) === 0} onClick={() => setShowWithdrawalModel(true)}>Withdraw</button>
                         </div>
                         <div className="overviewBox">
                             <h2 className="secondaryHeading">Total Earnings</h2>
@@ -188,17 +295,21 @@ const SellerEarnings = () => {
                             <div className="horizontalLine"></div>
 
                             <div className="description">
-                                {user?.sellerId?.stripeAccountId ? earnings.availableBalance >= 30 ?
-                                    <p>You are about to withdraw ${earnings.availableBalance}. The amount will be transferred to your connected Stripe account. You will receive your funds within a few days.</p>
+                                {(stripeActive && user?.sellerId?.stripeAccountId) ? earnings.availableBalance >= 30 ?
+                                    <div className='form'><div>Active Method: <span className='fw500'>Stripe</span></div><p>You are about to withdraw ${earnings.availableBalance}. The amount will be transferred to your connected Stripe account. You will receive your funds within a few days.</p></div>
                                     :
                                     <p>Your available balance is less than $30. You need at least $30 to request a withdrawal.</p>
                                     :
-                                    <p>It looks like you haven't connected a payment method yet. Please connect your Stripe account to request a withdrawal.</p>
+                                    (payoneerActive && user?.sellerId?.payoneerAccountId) ? earnings.availableBalance >= 30 ?
+                                        <div className='form'><div>Active Method: <span className='fw500'>Payoneer</span></div><p>You are about to withdraw ${earnings.availableBalance}. The amount will be transferred to your connected Payoneer account. You will receive your funds within a few days.</p></div>
+                                        :
+                                        <p>Your available balance is less than $30. You need at least $30 to request a withdrawal.</p> :
+                                        <p>It looks like you haven't connected/active a payment method. Please add Payment Method to request a withdrawal.</p>
                                 }
                             </div>
 
                             <div className="buttonsDiv">
-                                <button className="primaryBtn" type="button" disabled={!user?.sellerId?.stripeAccountId || earnings.availableBalance <= 30} onClick={requestedWithdrawal}>Withdraw ${earnings.availableBalance}</button>
+                                <button className="primaryBtn" type="button" disabled={(!user?.sellerId?.stripeAccountId && !user?.sellerId?.payoneerAccountId) || (earnings.availableBalance <= 30) || (!stripeActive && !payoneerActive)} onClick={requestedWithdrawal}>Withdraw ${earnings.availableBalance}</button>
                                 <button className="secondaryBtn" type="button" onClick={() => setShowWithdrawalModel(false)}>Close</button>
                             </div>
                         </div>
@@ -206,6 +317,41 @@ const SellerEarnings = () => {
                     </div>
                     <div className="popupCloseBtn">
                         <IoIosCloseCircleOutline className="icon" onClick={() => setShowWithdrawalModel(false)} />
+                    </div>
+                </div>
+            )}
+
+
+            {showAddPayoneerModel && (
+                <div className="popupDiv">
+                    <div className="popupContent">
+
+                        <div className="form">
+
+                            <h2 className="secondaryHeading">Add <span>Payoneer</span></h2>
+                            <div className="horizontalLine"></div>
+
+                            <div className="inputDiv">
+                                <label>Payoneer Account ID</label>
+                                <input
+                                    type="text"
+                                    value={payoneerAccountId}
+                                    onChange={(e) => setPayoneerAccountId(e.target.value)}
+                                    className='inputField'
+                                    placeholder="Enter your Payoneer Account ID"
+                                />
+                            </div>
+                            <p>Make sure you enter correct Account ID, otherwise you may not receive your funds!</p>
+
+                            <div className="buttonsDiv">
+                                <button className="primaryBtn" type="button" onClick={addPayoneer}>Save</button>
+                                <button className="secondaryBtn" type="button" onClick={() => setShowAddPayoneerModel(false)}>Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div className="popupCloseBtn">
+                        <IoIosCloseCircleOutline className="icon" onClick={() => setShowAddPayoneerModel(false)} />
                     </div>
                 </div>
             )}

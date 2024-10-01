@@ -41,7 +41,8 @@ const adminSettingsSchema = new mongoose.Schema({
         }
     },
     p_key: String,
-    s_key: String
+    s_key: String,
+    payoneerAccountId: String
 },
 {
     timestamps: true

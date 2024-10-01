@@ -24,37 +24,6 @@ function Products() {
 
     const searchQuery = searchParams.get('search') || '';
 
-    // useEffect(() => {
-
-    //     const fetchProducts = async () => {
-    //         try {
-    //             const response = await axios.get(`http://localhost:5000/api/v1/products/category/all/${categoryName}`, {
-    //                 params: {
-    //                     minPrice: priceRange.min,
-    //                     maxPrice: priceRange.max,
-    //                     rating,
-    //                     page,
-    //                 },
-    //             });
-    //             if (response.data.success) {
-    //                 setProducts(response.data.products);
-    //                 setTotalPages(response.data.totalPages);
-    //                 setTotalProducts(response.data.totalProducts)
-    //             } 
-    //             else
-    //                 enqueueSnackbar("Something went wrong!", { variant: "error" });
-    //         } catch (e) {
-    //             console.log(e);
-    //             enqueueSnackbar(e.response.data.error || "Something went wrong!", { variant: "error" });
-    //         }
-    //     };
-
-
-    //     fetchProducts();
-    // }, [categoryName, rating, page, priceRange]);
-
-
-
     useEffect(() => {
         const fetchProducts = async () => {
             try {

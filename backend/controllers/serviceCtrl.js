@@ -111,8 +111,11 @@ exports.getMySellerServices = asyncHandler(async (req, res) => {
 
 exports.getSellerServicesById = asyncHandler(async (req, res) => {
   try {
+
+    const {isTabletPro, isTablet, isMobilePro, isMobile} = req.query;
+
     const page = parseInt(req.query.page) || 1;
-    const limit = req.query.isAdminLogin ? 4 : 5;
+    const limit = isMobile === "true" ? 1 : isMobilePro === "true" ? 2 : isTablet === "true" ? 3 : (isTabletPro === "true" || req.query.isAdminLogin === "true") ? 4 : 5;
 
     const allServices = await serviceModel.find({ sellerId: req.params.id })
       .skip((page - 1) * limit)

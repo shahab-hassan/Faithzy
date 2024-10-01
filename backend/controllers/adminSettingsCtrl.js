@@ -412,7 +412,7 @@ exports.addStripeKeys = asyncHandler(async (req, res) => {
 });
 
 
-exports.getStripeKeys = asyncHandler(async (req, res) => {
+exports.getKeys = asyncHandler(async (req, res) => {
     try {
         const settings = await adminSettingsModel.findOne();
 
@@ -424,10 +424,33 @@ exports.getStripeKeys = asyncHandler(async (req, res) => {
         res.status(200).json({
             success: true,
             stripePublishableKey: settings.p_key,
-            stripeSecretKey: settings.s_key
+            stripeSecretKey: settings.s_key,
+            payoneerAccountId: settings.payoneerAccountId
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Failed to fetch Stripe keys' });
+    }
+});
+
+exports.addPayoneerKeys = asyncHandler(async (req, res) => {
+    try {
+        const { payoneerAccountId } = req.body;
+
+        let settings = await adminSettingsModel.findOne();
+
+        if (!settings) {
+            res.status(404);
+            throw new Error("Settings not Found!");
+        }
+
+        settings.payoneerAccountId = payoneerAccountId || settings.payoneerAccountId
+
+        settings.save();
+
+        res.status(200).json({ success: true, message: 'Payoneer keys saved successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Failed to save Stripe keys' });
     }
 });

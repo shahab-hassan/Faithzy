@@ -704,10 +704,9 @@ exports.saveServiceOrderAnswers = async (req, res) => {
 
     const order = await serviceOrderModel.findById(orderId);
 
-    if (!order) {
-      return res.status(404).json({ error: "Order not found" });
+    if (!order || order.answers) {
+      return res.status(404).json({ error: "Something went wrong!" });
     }
-
     order.answers = answers;
 
     order.service.history.forEach((activity, index) => {

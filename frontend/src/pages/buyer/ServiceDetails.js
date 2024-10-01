@@ -86,7 +86,7 @@ function ServiceDetails() {
             <div className="horizontalLine"></div>
             <div className="lower">
                 <div className="title">{crrPackage.title}</div>
-                <div className="description">{crrPackage.description}</div>
+                <p className="description">{crrPackage.description}</p>
                 <div className="info">
                     <p>{crrPackage.deliveryDays} days Delivery</p>
                     <div className="priceDetails">
@@ -130,7 +130,7 @@ function ServiceDetails() {
                                 <Link to={`/profile/${service?.sellerId?._id}`}>{service && service.sellerId && service.sellerId.userId?.username + " >"}</Link>
                             </div>
 
-                            <Link to={`/services/${service.category}`} className='category'>{service.category + " >"}</Link>
+                            <Link to={`/services?category=${service.category}`} className='category'>{service.category + " >"}</Link>
 
                             <div className="servicePrice">
                                 <p>From</p>

@@ -17,43 +17,47 @@ function ResetPassword() {
             enqueueSnackbar("Password reset successful", { variant: "success" });
             navigate("/login");
         } catch (e) {
-            if(e.response.data.error)
+            if (e.response.data.error)
                 enqueueSnackbar(e.response.data.error, { variant: "error" });
-            else{
+            else {
                 console.log(e)
                 enqueueSnackbar("Can't Reset Password... Something went wrong", { variant: "error" });
             }
-            
+
         }
     };
 
     return (
-        <div className='resetPasswordDiv' style={{margin: "50px 0px"}}>
+        <div className='resetPasswordDiv' style={{ margin: "50px 0px" }}>
             <section className='section'>
 
-                <form onSubmit={resetPassword}>
-                    <div className='inputField'>
-                        <label htmlFor="password">New Password</label>
-                        <input 
-                            type="password" 
-                            name="password" 
-                            placeholder='Enter new password' 
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-                    <div className='inputField'>
-                        <label htmlFor="confirmPass">Confirm New Password</label>
-                        <input 
-                            type="password" 
-                            name="confirmPass" 
-                            placeholder='Confirm new password' 
-                            value={confirmPass}
-                            onChange={(e) => setConfirmPass(e.target.value)}
-                        />
+                <form onSubmit={resetPassword} className='form'>
+                    <div className='inputDiv'>
+                        <div className="inputInnerDiv">
+                            <label htmlFor="password">New Password</label>
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder='Enter new password'
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className='inputField'
+                            />
+                        </div>
+                        <div className='inputInnerDiv'>
+                            <label htmlFor="confirmPass">Confirm New Password</label>
+                            <input
+                                type="password"
+                                name="confirmPass"
+                                placeholder='Confirm new password'
+                                value={confirmPass}
+                                onChange={(e) => setConfirmPass(e.target.value)}
+                                className='inputField'
+                            />
+                        </div>
                     </div>
                     <div>
-                        <input type="submit" value="Reset Password" className='btn' />
+                        <input type="submit" value="Reset Password" className='primaryBtn ' />
                     </div>
                 </form>
 

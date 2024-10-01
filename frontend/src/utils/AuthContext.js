@@ -13,6 +13,30 @@ export const AuthProvider = ({ children }) => {
     const [admin, setAdmin] = useState(null);
     const navigate = useNavigate();
 
+    const [isTabletPro, setIsTabletPro] = React.useState(window.innerWidth <= 1090);
+    const [isTablet, setIsTablet] = React.useState(window.innerWidth <= 900);
+    const [isMobilePro, setIsMobilePro] = React.useState(window.innerWidth <= 650);
+    const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 500);
+    const [isMobileMini, setIsMobileMini] = React.useState(window.innerWidth <= 400);
+
+    React.useEffect(() => {
+
+        const handleResize = () => {
+            setIsTablet(window.innerWidth <= 900);
+            setIsTabletPro(window.innerWidth <= 1090);
+            setIsMobilePro(window.innerWidth <= 650);
+            setIsMobile(window.innerWidth <= 500);
+            setIsMobileMini(window.innerWidth <= 400);
+        };
+        
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const fetchUserData = async () => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -110,7 +134,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ isLogin, user, login, logout, fetchUserData, fetchAdminData, adminLogin, isAdminLogin, admin }}>
+        <AuthContext.Provider value={{ isLogin, user, login, logout, fetchUserData, fetchAdminData, adminLogin, isAdminLogin, admin, isTablet, isTabletPro, isMobile, isMobilePro, isMobileMini }}>
             {children}
         </AuthContext.Provider>
     );

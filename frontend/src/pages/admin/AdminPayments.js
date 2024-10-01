@@ -11,6 +11,7 @@ import { formatDate } from '../../utils/utilFuncs';
 import { Link } from 'react-router-dom';
 import { FaEye } from "react-icons/fa";
 import { CSVLink } from 'react-csv';
+import { SiPayoneer } from 'react-icons/si';
 
 
 const AdminPayments = () => {
@@ -18,6 +19,8 @@ const AdminPayments = () => {
     const [stripePublishableKey, setStripePublishableKey] = useState('');
     const [stripeSecretKey, setStripeSecretKey] = useState('');
     const [showAddStripeModel, setShowAddStripeModel] = useState(false);
+    const [payoneerAccountId, setPayoneerAccountId] = useState('');
+    const [showAddPayoneerModel, setShowAddPayoneerModel] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
     const token = localStorage.getItem("adminToken");
     const [withdrawalRequests, setWithdrawalRequests] = useState([]);
@@ -41,10 +44,11 @@ const AdminPayments = () => {
 
         const fetchStripeKey = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/v1/settings/admin/stripe_keys', { headers: { Authorization: `Admin ${token}` } });
+                const response = await axios.get('http://localhost:5000/api/v1/settings/admin/keys', { headers: { Authorization: `Admin ${token}` } });
                 if (response.data.success) {
                     setStripePublishableKey(response.data.stripePublishableKey)
                     setStripeSecretKey(response.data.stripeSecretKey)
+                    setPayoneerAccountId(response.data.payoneerAccountId);
                 }
             } catch (error) {
                 console.error("Error fetching Stripe keys:", error);
@@ -69,12 +73,14 @@ const AdminPayments = () => {
         if (value === 1) fetchWithdrawalRequests("completedPayments");
         if (value === 2) fetchWithdrawalRequests("pendingRefunds");
         if (value === 3) fetchWithdrawalRequests("completedRefunds");
+        if (value === 4) fetchWithdrawalRequests("pendingPayoneerPayments");
+        if (value === 5) fetchWithdrawalRequests("completedPayoneerPayments");
         fetchStripeKey();
 
     }, [token, value]);
 
 
-    const handleSubmit = async (e) => {
+    const handleStripeDetailsSubmit = async (e) => {
         e.preventDefault();
 
         if (!stripePublishableKey || !stripeSecretKey) {
@@ -87,11 +93,36 @@ const AdminPayments = () => {
                 { stripePublishableKey, stripeSecretKey },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            if (response.data.success)
+            if (response.data.success){
                 enqueueSnackbar('Stripe account details saved successfully!', { variant: 'success' });
+                setShowAddStripeModel(false);
+            }
 
         } catch (error) {
             enqueueSnackbar('Failed to save Stripe account details', { variant: 'error' });
+            console.error(error);
+        }
+    };
+    
+    const handlePayoneerDetailsSubmit = async (e) => {
+        e.preventDefault();
+    
+        if (!payoneerAccountId) {
+            enqueueSnackbar('Please fill in Payoneer account details', { variant: 'error' });
+            return;
+        }
+    
+        try {
+            const response = await axios.post('http://localhost:5000/api/v1/settings/admin/payoneer_keys',
+                { payoneerAccountId },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            if (response.data.success){
+                enqueueSnackbar('Payoneer account details saved successfully!', { variant: 'success' });
+                setShowAddPayoneerModel(false);
+            }
+        } catch (error) {
+            enqueueSnackbar('Failed to save Payoneer account details', { variant: 'error' });
             console.error(error);
         }
     };
@@ -220,13 +251,13 @@ const AdminPayments = () => {
 
                 <div className='adminPaymentMethodsDiv'>
                     <h2 className='secondaryHeading'><span>Payment</span> Methods</h2>
-
                     <div className="paymentMethods">
-                        <div className="method">
-                            <BsStripe />
-                            Stripe
-                        </div>
+                        <div className="method"><BsStripe />Stripe</div>
                         <button className="secondaryBtn" onClick={() => setShowAddStripeModel(true)}>Manage</button>
+                    </div>
+                    <div className="paymentMethods">
+                        <div className="method"><SiPayoneer />Payoneer</div>
+                        <button className="secondaryBtn" onClick={() => setShowAddPayoneerModel(true)}>Manage</button>
                     </div>
                 </div>
 
@@ -234,10 +265,12 @@ const AdminPayments = () => {
                     <Box sx={{ width: '100%' }}>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                                <Tab label="Pending Payments" {...a11yProps(0)} />
-                                <Tab label="Completed Payments" {...a11yProps(1)} />
-                                <Tab label="Pending Refunds" {...a11yProps(2)} />
-                                <Tab label="Completed Refunds" {...a11yProps(3)} />
+                                <Tab sx={{ fontSize: "12px" }} label="Pending Payments" {...a11yProps(0)} />
+                                <Tab sx={{ fontSize: "12px" }} label="Completed Payments" {...a11yProps(1)} />
+                                <Tab sx={{ fontSize: "12px" }} label="Pending Refunds" {...a11yProps(2)} />
+                                <Tab sx={{ fontSize: "12px" }} label="Completed Refunds" {...a11yProps(3)} />
+                                <Tab sx={{ fontSize: "12px" }} label="Pending Payoneer Payments" {...a11yProps(4)} />
+                                <Tab sx={{ fontSize: "12px" }} label="Completed Payoneer Payments" {...a11yProps(5)} />
                             </Tabs>
                         </Box>
                         <CustomTabPanel value={value} index={0}>
@@ -248,6 +281,7 @@ const AdminPayments = () => {
                                 handleSelectAll={handleSelectAll}
                                 setShowMarkPaidModel={setShowMarkPaidModel}
                                 setShowReleaseModel={setShowReleaseModel}
+                                isStripe={true}
                             />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={1}>
@@ -257,6 +291,7 @@ const AdminPayments = () => {
                                 handleSelectRequest={handleSelectRequest}
                                 handleSelectAll={handleSelectAll}
                                 moveToPending={moveToPending}
+                                isStripe={true}
                             />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={2}>
@@ -278,6 +313,27 @@ const AdminPayments = () => {
                                 moveToPending={moveToPending}
                             />
                         </CustomTabPanel>
+                        <CustomTabPanel value={value} index={4}>
+                            <PendingPayments
+                                requests={withdrawalRequests}
+                                selectedRequests={selectedRequests}
+                                handleSelectRequest={handleSelectRequest}
+                                handleSelectAll={handleSelectAll}
+                                setShowMarkPaidModel={setShowMarkPaidModel}
+                                setShowReleaseModel={setShowReleaseModel}
+                                isStripe={false}
+                            />
+                        </CustomTabPanel>
+                        <CustomTabPanel value={value} index={5}>
+                            <CompletedPayments
+                                requests={withdrawalRequests}
+                                selectedRequests={selectedRequests}
+                                handleSelectRequest={handleSelectRequest}
+                                handleSelectAll={handleSelectAll}
+                                moveToPending={moveToPending}
+                                isStripe={false}
+                            />
+                        </CustomTabPanel>
                     </Box>
                 </div>
 
@@ -289,6 +345,8 @@ const AdminPayments = () => {
                     <div className="popupContent">
 
                         <div className='form'>
+                            <h2 className="secondaryHeading">Add <span>Stripe</span> Details</h2>
+                            <div className="horizontalLine"></div>
                             <div className='inputDiv'>
                                 <label>Stripe Publishable Key <span>*</span></label>
                                 <input
@@ -312,7 +370,7 @@ const AdminPayments = () => {
                         </div>
 
                         <div className="buttonsDiv" style={{ marginTop: "20px" }}>
-                            <button type="submit" className='primaryBtn' onClick={handleSubmit}>Save Stripe Details</button>
+                            <button type="submit" className='primaryBtn' onClick={handleStripeDetailsSubmit}>Save Stripe Details</button>
                             <button className="secondaryBtn" type="button" onClick={() => setShowAddStripeModel(false)}>Close</button>
                         </div>
 
@@ -320,6 +378,40 @@ const AdminPayments = () => {
 
                     <div className="popupCloseBtn">
                         <IoIosCloseCircleOutline className="icon" onClick={() => setShowAddStripeModel(false)} />
+                    </div>
+
+                </div>
+            )}
+
+            {showAddPayoneerModel && (
+                <div className="popupDiv">
+
+                    <div className="popupContent">
+
+                        <div className='form'>
+                            <h2 className="secondaryHeading">Add <span>Payoneer</span> Details</h2>
+                            <div className="horizontalLine"></div>
+                            <div className='inputDiv'>
+                                <label>Payoneer Account ID <span>*</span></label>
+                                <input
+                                    type="text"
+                                    value={payoneerAccountId}
+                                    onChange={(e) => setPayoneerAccountId(e.target.value)}
+                                    placeholder="Enter your Payoneer Account ID"
+                                    className="inputField"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="buttonsDiv" style={{ marginTop: "20px" }}>
+                            <button type="submit" className='primaryBtn' onClick={handlePayoneerDetailsSubmit}>Save Payoneer Details</button>
+                            <button className="secondaryBtn" type="button" onClick={() => setShowAddPayoneerModel(false)}>Close</button>
+                        </div>
+
+                    </div>
+
+                    <div className="popupCloseBtn">
+                        <IoIosCloseCircleOutline className="icon" onClick={() => setShowAddPayoneerModel(false)} />
                     </div>
 
                 </div>
@@ -397,7 +489,7 @@ export default AdminPayments;
 
 
 
-function PendingPayments({ requests, selectedRequests, handleSelectRequest, handleSelectAll, setShowMarkPaidModel, setShowReleaseModel }) {
+function PendingPayments({ requests, selectedRequests, handleSelectRequest, handleSelectAll, setShowMarkPaidModel, setShowReleaseModel, isStripe }) {
 
     const areAllSelected = selectedRequests.length === requests.length;
     const [showSellerDetailsModel, setShowSellerDetailsModel] = useState(false);
@@ -497,7 +589,7 @@ function PendingPayments({ requests, selectedRequests, handleSelectRequest, hand
         <div className="pendingPaymentsDiv tableDiv">
             <div className="tableContent">
                 <div className="upper">
-                    <h2 className="secondaryHeading"><span>Pending</span> Withdrawal requests from Sellers</h2>
+                    <h2 className="secondaryHeading"><span>Pending {isStripe ? "Stripe" : "Payoneer"}</span> Withdrawal requests from Sellers</h2>
                     <div className="upperRight">
                         <CSVLink data={csvData} headers={headers} filename={"pending_payments.csv"} className="secondaryBtn">Export CSV</CSVLink>
                         <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowMarkPaidModel("Release")}>Mark Paid</button>
@@ -532,19 +624,19 @@ function PendingPayments({ requests, selectedRequests, handleSelectRequest, hand
                                 <h4 className='fw600'>Earnings</h4>
                                 <div className="row">
                                     <p>Total Earnings</p>
-                                    <div className="fw600">${earnings.totalEarnings}</div>
+                                    <div className="fw600">${earnings.totalEarnings.toFixed(2)}</div>
                                 </div>
                                 <div className="row">
                                     <p>Available Balance</p>
-                                    <div className="fw600">${earnings.availableBalance}</div>
+                                    <div className="fw600">${earnings.availableBalance.toFixed(2)}</div>
                                 </div>
                                 <div className="row">
                                     <p>Paid Balance</p>
-                                    <div className="fw600">${earnings.paidBalance}</div>
+                                    <div className="fw600">${earnings.paidBalance.toFixed(2)}</div>
                                 </div>
                                 <div className="row">
                                     <p>Requested for Withdrawal</p>
-                                    <div className="fw600">${earnings.requestedForWithdrawal}</div>
+                                    <div className="fw600">${earnings.requestedForWithdrawal.toFixed(2)}</div>
                                 </div>
                                 <div className="row">
                                     <p>Products Sold</p>
@@ -664,7 +756,7 @@ function PendingRefunds({ requests, selectedRequests, handleSelectRequest, handl
 
 
 
-function CompletedPayments({ requests, selectedRequests, handleSelectRequest, handleSelectAll, moveToPending }) {
+function CompletedPayments({ requests, selectedRequests, handleSelectRequest, handleSelectAll, moveToPending, isStripe }) {
 
     const [showPaymentDetailsModel, setShowPaymentDetailsModel] = useState(null);
     const areAllSelected = selectedRequests.length === requests.length;
@@ -716,7 +808,7 @@ function CompletedPayments({ requests, selectedRequests, handleSelectRequest, ha
         <div className="tableDiv">
             <div className="tableContent">
                 <div className="upper">
-                    <h2 className="secondaryHeading"><span>Completed</span> Withdrawal requests</h2>
+                    <h2 className="secondaryHeading"><span>Completed {isStripe ? "Stripe" : "Payoneer"}</span> Withdrawal requests</h2>
                     <div className="upperRight">
                         <CSVLink data={csvData} headers={headers} filename={"completed_payments.csv"} className="secondaryBtn">Export CSV</CSVLink>
                         <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => moveToPending("Payment")}>Move to Pending</button>

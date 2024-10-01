@@ -461,7 +461,7 @@ const ChatPage = () => {
                                 <div className="participantDetails content">
                                     {!isParticipantAdmin && <><h2 className="secondaryHeading">About <Link to={`/${user? "profile":"ftzy-admin/sellers"}/${selectedParticipant?.sellerId?._id}`}>@{selectedParticipant.username}</Link></h2>
                                     {selectedParticipant.role === "seller" && <><div className="row"><p>Name</p><div className='fw600'>{selectedParticipant.sellerId.fullName}</div></div>
-                                        <div className="row"><p>Ratings</p><div className='fw600 sellerRatings'>
+                                        <div className="row"><p>Ratings</p><div className='fw600 ratingsDiv'>
                                             <FaStar className='starIconFilled' />
                                             <span>{`${selectedParticipant.sellerId.rating} (${selectedParticipant.sellerId.noOfReviews})`}</span>
                                         </div></div>

@@ -76,7 +76,7 @@ function Cart() {
               </div>
               <div className="price">
                 {Number(product.discountPercent) !== 0 && <span>${product.price}</span>}
-                ${product.salesPrice}
+                <div>${product.salesPrice}</div>
               </div>
             </div>
           </div>

@@ -75,45 +75,45 @@ function PostRequest() {
     };
 
     const requestElems = buyerRequests.length > 0 ? buyerRequests.map((request, index) => (
-            <div key={index}>
-                <div className="requestRow row">
-                    <div className="titleField field"><p className='title'>{request.title}</p></div>
-                    <p className="priceField field">${request.budget}</p>
-                    <p className="durationField field">{request.duration} days</p>
-                    <p className="expiryField field">{new Date(request.expiryDate).toLocaleDateString()}</p>
-                    <p className="offersField field" onClick={() => handleViewOffers(request._id)}>
-                        {(request.offers.length<10 && "0") + request.offers.length} 
-                        <MdKeyboardArrowRight />
-                    </p>
-                    <div className="actionsField field">
-                        <FaEye className='icon' onClick={()=> setShowDetailsModel(request)} />
-                        <FaEdit className='icon' onClick={() => handleEditRequest(request)} />
-                        <FaTrash className='icon' onClick={() => handleDeleteRequest(request._id)} />
-                    </div>
+        <div key={index}>
+            <div className="requestRow row">
+                <div className="titleField field"><p className='title'>{request.title}</p></div>
+                <p className="priceField field">${request.budget}</p>
+                <p className="durationField field">{request.duration} days</p>
+                <p className="expiryField field">{new Date(request.expiryDate).toLocaleDateString()}</p>
+                <p className="offersField field" onClick={() => handleViewOffers(request._id)}>
+                    {(request.offers.length < 10 && "0") + request.offers.length}
+                    <MdKeyboardArrowRight />
+                </p>
+                <div className="actionsField field">
+                    <FaEye className='icon' onClick={() => setShowDetailsModel(request)} />
+                    <FaEdit className='icon' onClick={() => handleEditRequest(request)} />
+                    <FaTrash className='icon' onClick={() => handleDeleteRequest(request._id)} />
                 </div>
-                {buyerRequests.length > 1 && buyerRequests.length - 1 !== index && <div className="horizontalLine"></div>}
             </div>
-        )) : <div className="row">Nothing to show here...</div>;
+            {buyerRequests.length > 1 && buyerRequests.length - 1 !== index && <div className="horizontalLine"></div>}
+        </div>
+    )) : <div className="row">Nothing to show here...</div>;
 
-    const offerElems = offers.length > 0? offers.map((offer, index)=>{
+    const offerElems = offers.length > 0 ? offers.map((offer, index) => {
         return <div key={index} className='tableContent'>
-                    <div className="header">
-                        <p className='title'>Cover Letter</p>
-                        <p>Price</p>
-                        <p>Duration</p>
-                        <p className='seller'>Seller</p>
-                        <p>Actions</p>
-                    </div>
-                    <div className="rows">
-                        <div className="row">
-                            <div className="titleField field">{offer.coverLetter}</div>
-                            <p className="field priceField">${offer.price}</p>
-                            <p className="field">{offer.duration} days</p>
-                            <Link to={`/profile/${offer?.sellerId?.sellerId}`} className="field sellerField">{offer.sellerId.username + " >"}</Link>
-                            <Link to={`/chat?p=${offer?.sellerId?._id}`} className="field"><MdMessage className='icon' /></Link>
-                        </div>
-                    </div>
+            <div className="header">
+                <p className='title'>Cover Letter</p>
+                <p>Price</p>
+                <p>Duration</p>
+                <p className='seller'>Seller</p>
+                <p>Actions</p>
+            </div>
+            <div className="rows">
+                <div className="row">
+                    <div className="titleField field">{offer.coverLetter}</div>
+                    <p className="field priceField">${offer.price}</p>
+                    <p className="field">{offer.duration} days</p>
+                    <Link to={`/profile/${offer?.sellerId?.sellerId}`} className="field sellerField">{offer.sellerId.username + " >"}</Link>
+                    <Link to={`/chat?p=${offer?.sellerId?._id}`} className="field"><MdMessage className='icon' /></Link>
                 </div>
+            </div>
+        </div>
     }) : "Nothing to show here..."
 
     return (
@@ -149,11 +149,11 @@ function PostRequest() {
                         <h2 className='secondaryHeading'>Received <span>Offers</span></h2>
 
                         <div className="horizontalLine"></div>
-                        
+
                         <div className="offersRows">{offerElems}</div>
 
                         <div className="buttonsDiv">
-                            <button className='secondaryBtn' onClick={()=>setShowOffersModal(false)}>Close</button>
+                            <button className='secondaryBtn' onClick={() => setShowOffersModal(false)}>Close</button>
                         </div>
 
                     </div>
@@ -188,7 +188,7 @@ function PostNewRequest({ setShowPostRequestModel, selectedRequest, setSelectedR
     useEffect(() => {
         axios.get(`http://localhost:5000/api/v1/categories/service/all`)
             .then(response => {
-                if (response.data.success){
+                if (response.data.success) {
                     const categories = response.data.categories;
                     setCategories(categories);
                     setFormData(prev => ({
@@ -340,7 +340,7 @@ function PostNewRequest({ setShowPostRequestModel, selectedRequest, setSelectedR
                         </button>
                         <button
                             className="secondaryBtn"
-                            onClick={() => {setShowPostRequestModel(false); setSelectedRequest(null)}}
+                            onClick={() => { setShowPostRequestModel(false); setSelectedRequest(null) }}
                         >
                             Cancel
                         </button>
@@ -348,7 +348,7 @@ function PostNewRequest({ setShowPostRequestModel, selectedRequest, setSelectedR
                 </form>
             </div>
             <div className="closeBtn popupCloseBtn">
-                <IoIosCloseCircleOutline className='icon' onClick={() => {setShowPostRequestModel(false); setSelectedRequest(null)}}/>
+                <IoIosCloseCircleOutline className='icon' onClick={() => { setShowPostRequestModel(false); setSelectedRequest(null) }} />
             </div>
         </div>
     );

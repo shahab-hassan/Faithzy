@@ -241,6 +241,8 @@ a:hover{
     font-size: 16px;
     color: var(--white);
     border: 2px solid transparent;
+    min-width: 90px;
+    text-align: center;
 }
 
 .luxuryBtn:hover, .luxuryBtn.active {
@@ -288,13 +290,6 @@ a:hover{
     cursor: pointer;
 }
 
-.sellerRatings{
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-
 .form{
     display: flex;
     flex-direction: column;
@@ -305,10 +300,6 @@ a:hover{
     width: 100%;
 }
 .form .inputDiv .inputInnerDiv{
-    /* display: flex;
-    align-items: start;
-    flex-direction: column;
-    justify-content: start; */
     width: 100%;
 }
 .form .inputDiv:has(.inputInnerDiv){
@@ -553,6 +544,7 @@ label span{
     width: 100%;
     color: var(--white);
     border-radius: 8px;
+    min-width: 100px;
 }
 .cartCountBtn .minus,
 .cartCountBtn .plus

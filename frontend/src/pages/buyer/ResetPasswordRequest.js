@@ -29,19 +29,20 @@ function ResetPasswordRequest() {
         <div className='resetPasswordRequestDiv' style={{margin: "50px 0px"}}>
             <section className="section">
 
-                <form onSubmit={requestPasswordReset}>
-                    <div className='inputField'>
+                <form onSubmit={requestPasswordReset} className='form'>
+                    <div className='inputDiv'>
                         <label htmlFor="email">Email</label>
                         <input 
                             type="email" 
                             name="email" 
                             placeholder='Enter your email' 
                             value={email}
+                            className='inputField'
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
                     <div>
-                        <input type="submit" value="Request Password Reset" className='btn' />
+                        <input type="submit" value="Request Password Reset" className='primaryBtn' />
                     </div>
                 </form>
 

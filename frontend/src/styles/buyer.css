@@ -1,28 +1,26 @@
 /* *************** HEADER COMPONENT + SEARCH BOX COMPONENT + CATERGORY DROPDOWN **************** */
 
-.buyerHeaderDiv{
+.buyerHeaderDiv {
     background-color: var(--primaryBlue);
     color: var(--white);
-    /* height: 21vh; */
 }
 
-.buyerHeaderDiv .buyerHeaderContent{
+.buyerHeaderDiv .buyerHeaderContent {
     padding: 30px 0px;
     display: flex;
     flex-direction: column;
     gap: 22px;
 }
-/* .buyerHeaderDiv .buyerHeaderContent{
-    padding: 20px 0px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-} */
 
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper, 
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper, .buyerHeaderActions,
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper, .buyerHeaderActions, .leftActions,
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper, .buyerHeaderActions, .rightActions,
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper,
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper,
+.buyerHeaderActions,
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper,
+.buyerHeaderActions,
+.leftActions,
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper,
+.buyerHeaderActions,
+.rightActions,
 
 .buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower,
 .buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .lowerLeft ul,
@@ -30,8 +28,7 @@
 
 .searchBoxDiv .searchBoxMain,
 .searchBoxDiv .searchBoxMain .searchBoxRight,
-.searchBtnDiv
-{
+.searchBtnDiv {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -39,51 +36,52 @@
 }
 
 .buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper,
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower
-{
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower {
     justify-content: space-between;
 }
 
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper .buyerHeaderActionsBefore{
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper {
+    gap: 80px;
+}
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper .buyerHeaderActionsBefore {
     display: flex;
     align-items: center;
     gap: 20px;
 }
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper .buyerHeaderActionsBefore .luxuryBtn{
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper .buyerHeaderActionsBefore .luxuryBtn {
     font-size: 0.8rem;
     padding: 7px 22px;
 }
-/* .buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper, .buyerHeaderActionsBefore .navLink{
-    display: flex;
-    align-items: center;
-    gap: 7px;
-} */
 
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper .buyerHeaderUpperLeft{
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper .buyerHeaderUpperLeft {
     display: flex;
     gap: 80px;
     align-items: center;
+    width: 100%;
 }
 
-.searchBoxDiv{
+.searchBoxDiv {
     position: relative;
+    width: 80%;
 }
 
-.searchBoxDiv .searchBoxMain{
+.searchBoxDiv .searchBoxMain {
     background-color: var(--lightGray);
     border-radius: 28px;
-    min-width: 700px;
+    width: 100%;
     height: 50px;
     justify-content: space-between;
     gap: 0;
 }
 
-.searchBoxDiv .searchBoxMain .searchBoxLeft{
+.searchBoxDiv .searchBoxMain .searchBoxLeft {
     width: 100%;
     padding-left: 25px;
 }
 
-.searchBoxDiv .searchBoxMain .searchBoxRight{
+.searchBoxDiv .searchBoxMain .searchBoxRight {
     background: var(--primaryCopper);
     height: 100%;
     border-top-right-radius: 28px;
@@ -91,14 +89,16 @@
     padding: 10px 20px;
     padding-right: 60px;
 }
-.searchBoxDiv .searchBoxMain .searchBoxRight .dropdown{
+
+.searchBoxDiv .searchBoxMain .searchBoxRight .dropdown {
     color: var(--white);
 }
-.searchBoxDiv .searchBoxMain .searchBoxRight .dropdown option{
+
+.searchBoxDiv .searchBoxMain .searchBoxRight .dropdown option {
     color: var(--black);
 }
 
-.searchBoxDiv .searchBoxMain .searchBoxLeft .searchInput{
+.searchBoxDiv .searchBoxMain .searchBoxLeft .searchInput {
     outline: none;
     background: var(--lightGray);
     border: none;
@@ -107,7 +107,7 @@
     padding: 10px 0px;
 }
 
-.searchBtnDiv{
+.searchBoxDiv .searchBtnDiv {
     position: absolute;
     background-color: var(--primaryCopper);
     top: -8px;
@@ -121,45 +121,51 @@
     cursor: pointer;
     transition: 0.1s;
 }
-.searchBtnDiv:hover{
+
+.searchBoxDiv .searchBtnDiv:hover {
     background: var(--primaryCopperDark);
 }
 
-.buyerHeaderActions{
+.buyerHeaderActions {
     gap: 40px;
 }
-.buyerHeaderActions i{
+
+.buyerHeaderActions i {
     font-size: 20px;
     cursor: pointer;
     color: var(--gray);
     transition: 0.1s;
 }
-.buyerHeaderActions i:hover{
+
+.buyerHeaderActions i:hover {
     color: var(--white);
 }
 
 .buyerHeaderActions .leftActions,
-.buyerHeaderActions .rightActions
-{
+.buyerHeaderActions .rightActions {
     gap: 25px;
 }
-.buyerHeaderActions .leftActions i{
+
+.buyerHeaderActions .leftActions i {
     color: var(--secondaryCopper);
     transition: 0.1s;
 }
-.buyerHeaderActions .leftActions i:hover{
+
+.buyerHeaderActions .leftActions i:hover {
     color: var(--secondaryCopperDark);
 }
-.buyerHeaderActions .leftActions .ordersHeader p{
+
+.buyerHeaderActions .leftActions .ordersHeader p {
     font-size: 20px;
     cursor: pointer;
     color: var(--gray);
 }
-.buyerHeaderActions .leftActions .ordersHeader p:hover{
+
+.buyerHeaderActions .leftActions .ordersHeader p:hover {
     color: var(--white);
 }
 
-.buyerHeaderActions .rightActions{
+.buyerHeaderActions .rightActions {
     border: 1px solid var(--primaryCopper);
     border-radius: 8px;
     padding: 12px 25px;
@@ -167,28 +173,30 @@
 }
 
 .buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .lowerLeft ul,
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .lowerRight ul
-{
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .lowerRight ul {
     gap: 30px;
 }
 
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower i{
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower i {
     margin: 0px 10px;
 }
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower li a{
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower li a {
     display: flex;
     align-items: center;
     gap: 2px;
 }
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .icon{
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .icon {
     width: 25px;
     height: 25px;
 }
 
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi{
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi {
     position: relative;
 }
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi .catsDropdownDiv{
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi .catsDropdownDiv {
     position: absolute;
     background: var(--white);
     top: 150%;
@@ -197,12 +205,14 @@
     min-width: 980%;
     z-index: 1;
 }
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi .catsDropdownDiv .catsDropdownContent{
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi .catsDropdownDiv .catsDropdownContent {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
 }
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi .catsDropdownDiv .cat{
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi .catsDropdownDiv .cat {
     color: var(--lightBlack);
     cursor: pointer;
     transition: 0.1s;
@@ -213,9 +223,15 @@
     gap: 10px;
     padding: 3px 10px;
 }
-.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi .catsDropdownDiv .cat:hover{
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderLower .catsDropdownLi .catsDropdownDiv .cat:hover {
     background: var(--lightGray);
 }
+
+.buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper .buyerHeaderDrawer {
+    display: none;
+}
+
 
 
 
@@ -223,16 +239,17 @@
 
 /* *************** BUYER FOOOTER COMPONENT **************** */
 
-.buyerFooterDiv{
+.buyerFooterDiv {
     padding: 30px 0px;
     background: var(--primaryBlue);
 }
-.buyerFooterDiv .horizontalLine{
+
+.buyerFooterDiv .horizontalLine {
     height: 1px;
     background: var(--darkGray);
 }
 
-.buyerFooterDiv .footerContent{
+.buyerFooterDiv .footerContent {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -240,58 +257,62 @@
     color: var(--gray);
 }
 
-.buyerFooterDiv .footerContent a{
+.buyerFooterDiv .footerContent a {
     color: var(--darkGray);
     transition: 0.2s;
 }
-.buyerFooterDiv .footerContent a:hover{
+
+.buyerFooterDiv .footerContent a:hover {
     color: var(--white);
 }
 
 .buyerFooterDiv .footerContent .footerUpper,
-.buyerFooterDiv .footerContent .footerLower
-{
+.buyerFooterDiv .footerContent .footerLower {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
 
-.buyerFooterDiv .footerContent .footerUpper{
+.buyerFooterDiv .footerContent .footerUpper {
     width: 95%;
     margin: 20px 0px;
     align-items: start;
     gap: 30px;
 }
-.buyerFooterDiv .footerContent .footerUpper .column{
+
+.buyerFooterDiv .footerContent .footerUpper .column {
     display: flex;
     flex-direction: column;
     gap: 6px;
     min-width: 17%;
 }
-.buyerFooterDiv .footerContent .footerUpper div h4{
+
+.buyerFooterDiv .footerContent .footerUpper div h4 {
     margin-bottom: 10px;
     color: var(--secondaryCopper);
     font-weight: 600;
     font-size: 1.2rem;
 }
 
-.buyerFooterDiv .footerContent .footerUpper .footerUpperLeft{
+.buyerFooterDiv .footerContent .footerUpper .footerUpperLeft {
     max-width: 25%;
     gap: 20px;
     margin-right: 50px;
 }
-.buyerFooterDiv .footerContent .footerUpper .footerUpperLeft .faithzyLogoDiv{
+
+.buyerFooterDiv .footerContent .footerUpper .footerUpperLeft .faithzyLogoDiv {
     width: 80px;
     height: 80px;
 }
 
-.buyerFooterDiv .footerContent .footerIconsDiv{
+.buyerFooterDiv .footerContent .footerIconsDiv {
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
 }
-.buyerFooterDiv .footerContent .socialIcons .icon{
+
+.buyerFooterDiv .footerContent .socialIcons .icon {
     cursor: pointer;
 }
 
@@ -321,12 +342,14 @@
     flex-direction: column;
     width: 45%;
 }
-.heroDiv .heroContent .heroContentMain h1{
+
+.heroDiv .heroContent .heroContentMain h1 {
     font-family: "Bebas Neue", sans-serif;
     font-size: 60px;
     letter-spacing: 2.5px;
 }
-.heroDiv .heroContent .heroContentMain span{
+
+.heroDiv .heroContent .heroContentMain span {
     font-family: "Bebas Neue", sans-serif;
     color: var(--secondaryCopper);
 }
@@ -373,12 +396,13 @@
     opacity: 0.5;
 }
 
-.heroDiv .heroTradeleadFormDiv{
+.heroDiv .heroTradeleadFormDiv {
     width: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
 .heroDiv .heroTradeleadFormDiv .tradeleadStepper {
     padding: 30px 50px;
     border-radius: 12px;
@@ -425,28 +449,33 @@
     background-color: var(--primaryCopper);
 }
 
-.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .inputField{
+.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .inputField {
     background: transparent;
     color: var(--white);
 }
-.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .stepInputs{
+
+.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .stepInputs {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
-.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .stepInputs .tradeleadInputDiv{
+
+.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .stepInputs .tradeleadInputDiv {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
-.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .tradeleadDescription{
+
+.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .tradeleadDescription {
     resize: vertical;
     max-height: 150px;
 }
-.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent option{
+
+.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent option {
     color: var(--darkGray);
 }
-.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .tradeleadDate{
+
+.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .tradeleadDate {
     color-scheme: dark;
 }
 
@@ -456,20 +485,24 @@
     gap: 10px;
     margin-top: 20px;
 }
+
 .heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepButtons {
     display: flex;
     justify-content: center;
     gap: 10px;
 }
-.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepButtons button{
+
+.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepButtons button {
     background: var(--primaryCopper);
     border-color: var(--primaryCopper);
 }
-.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepButtons button:hover{
+
+.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepButtons button:hover {
     border-color: var(--primaryCopper);
     background: transparent;
 }
-.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepButtons button .arrowIcon{
+
+.heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepButtons button .arrowIcon {
     color: var(--white);
 }
 
@@ -487,15 +520,14 @@
 
 .loginDiv .loginContent,
 .loginDiv .loginContent .loginRight,
-.loginDiv .loginContent .loginRight .loginRightLower
-{
+.loginDiv .loginContent .loginRight .loginRightLower {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
 
-.loginDiv .emailVerificationNotification{
+.loginDiv .emailVerificationNotification {
     background: var(--gray);
     padding: 15px 25px;
     display: flex;
@@ -503,22 +535,22 @@
     align-items: center;
 }
 
-.thirdPartyLoginDiv{
+.thirdPartyLoginDiv {
     width: 100%;
     gap: 12px;
 }
 
-.thirdPartyLoginDiv a{
+.thirdPartyLoginDiv a {
     flex-direction: row;
     gap: 20px;
 }
 
 .thirdPartyLoginDiv .loginWithFacebook img,
-.thirdPartyLoginDiv .loginWithGoogle img{
+.thirdPartyLoginDiv .loginWithGoogle img {
     width: 20px;
 }
 
-.thirdPartyLoginDiv a{
+.thirdPartyLoginDiv a {
     color: var(--lightBlack);
     width: 100%;
     background: var(--white);
@@ -527,14 +559,14 @@
     border-radius: 32px;
     transition: 0.2s;
 }
-.thirdPartyLoginDiv a:hover{
+
+.thirdPartyLoginDiv a:hover {
     background: var(--lightGray);
 }
 
 
 .registerDiv .registerContent,
-.loginDiv .loginContent
-{
+.loginDiv .loginContent {
     flex-direction: row;
     justify-content: space-evenly;
     gap: 30px;
@@ -542,19 +574,19 @@
 }
 
 .registerDiv .registerContent .registerRight,
-.loginDiv .loginContent .loginRight
-{
+.loginDiv .loginContent .loginRight {
     min-width: 50%;
     gap: 30px;
 }
 
-.orLine{
+.orLine {
     position: relative;
     color: var(--darkGray);
     width: 100%;
     text-align: center;
 }
-.orLine::before{
+
+.orLine::before {
     position: absolute;
     content: "";
     top: 50%;
@@ -563,7 +595,8 @@
     height: 4%;
     background: var(--darkGray);
 }
-.orLine::after{
+
+.orLine::after {
     position: absolute;
     content: "";
     top: 50%;
@@ -575,37 +608,34 @@
 
 
 .registerDiv .registerContent .registerRight .registerRightLower,
-.loginDiv .loginContent .loginRight .loginRightLower
-{
+.loginDiv .loginContent .loginRight .loginRightLower {
     width: 100%;
     gap: 10px;
 }
+
 .registerDiv .registerContent .registerRight .registerRightLower .inputDiv,
-.loginDiv .loginContent .loginRight .loginRightLower .inputDiv
-{
+.loginDiv .loginContent .loginRight .loginRightLower .inputDiv {
     width: 100%;
 }
 
 .registerDiv .registerContent .registerRight .registerRightLower .inputDiv .passInstructions,
-.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .forgotPasswordBtn
-{
+.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .forgotPasswordBtn {
     color: var(--darkGray);
     font-size: 0.85rem;
-} 
-.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .forgotPasswordBtn:hover{
+}
+
+.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .forgotPasswordBtn:hover {
     color: var(--black);
-} 
+}
 
 .registerDiv .registerContent .registerRight .registerRightLower .inputDiv .primaryBtn,
-.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .primaryBtn
-{
+.loginDiv .loginContent .loginRight .loginRightLower .inputDiv .primaryBtn {
     width: 100%;
     margin: 15px 0px;
 }
 
 .registerDiv .registerContent .registerRight .registerRightLower .loginInsteadDiv a,
-.loginDiv .loginContent .loginRight .loginRightLower .registerInsteadDiv a
-{
+.loginDiv .loginContent .loginRight .loginRightLower .registerInsteadDiv a {
     color: var(--primaryCopper);
 }
 
@@ -618,7 +648,6 @@
 }
 
 .sampleProvisionsDiv .sampleProvisionsUpper,
-.sampleProvisionsDiv .sampleProvisionsLower .productsDiv,
 .sampleProvisionsDiv .sampleProvisionsUpper .sampleProvisionsUpperRight {
     display: flex;
     align-items: center;
@@ -629,21 +658,18 @@
     margin-bottom: 30px;
 }
 
-/* .sampleProvisionsDiv .sampleProvisionsUpper .sampleProvisionsUpperRight {
-    gap: 30px;
-} */
-
-.sampleProvisionsDiv .sampleProvisionsLower{
+.sampleProvisionsDiv .sampleProvisionsLower {
     position: relative;
 }
 
 .sampleProvisionsDiv .sampleProvisionsLower .productsDiv {
-    gap: 20px;
+    gap: 25px;
     width: 100%;
     margin: auto;
-    justify-content: left;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
 }
-  
+
 .sampleProvisionsDiv .sampleProvisionsLower .productsDiv .slideLeftBtn {
     position: absolute;
     left: -2%;
@@ -659,7 +685,7 @@
     cursor: pointer;
     font-size: 1.2rem;
 }
-  
+
 .sampleProvisionsDiv .sampleProvisionsLower .productsDiv .slideRightBtn {
     position: absolute;
     right: -2%;
@@ -683,8 +709,7 @@
 
 .product {
     padding: 10px;
-    /* width: 266px; */
-    width: 19%;
+    width: 100%;
     border-radius: 8px;
     background-color: var(--white);
     box-shadow: 0.1px 0.1px 10px 1px var(--gray);
@@ -693,22 +718,22 @@
     position: relative;
 }
 
-.product:hover{
+.product:hover {
     transform: translateY(-1.5%);
 }
-/* .product:hover .hoverActions{
-    display: flex;
-} */
 
-.product .productImgDiv{
+.product .productImgDiv {
     width: 100%;
-    height: 250px;
+    height: 235px;
+    background: var(--lightGray);
+    border-radius: 8px;
 }
 
 .product .productImgDiv img {
     width: 100%;
     height: 100%;
     border-radius: 8px;
+    object-fit: cover;
 }
 
 .product .productTitle {
@@ -726,50 +751,50 @@
 }
 
 
-.product .productLower{
+.product .productLower {
     margin-top: 8px;
     display: flex;
     flex-direction: column;
 }
 
-.product .productLower .productLowerTop{
+.product .productLower .productLowerTop {
     display: flex;
     align-items: center;
+    font-size: 0.9rem;
+    gap: 5px;
 }
-.product .productLower .productLowerBottom{
+
+.product .productLower .productLowerBottom {
     display: flex;
     gap: 15px;
     justify-content: right;
     align-items: baseline;
 }
 
-.product .productLower .productLowerTop{
-    font-size: 0.9rem;
-    gap: 5px;
-}
-
-.product .productLower .productLowerTop p{
+.product .productLower .productLowerTop p {
     color: var(--lightBlack);
     font-weight: 600;
 }
-.product .productLower .productLowerTop span{
+
+.product .productLower .productLowerTop span {
     color: var(--primaryCopper);
     font-weight: 500;
 }
 
-.product .productLower .productPrice{
+.product .productLower .productPrice {
     color: var(--secondaryBlue);
     font-size: 1.8rem;
     margin-right: 5px;
 }
-.product .productLower .productDiscount{
+
+.product .productLower .productDiscount {
     color: var(--darkGray);
     text-decoration: line-through;
     font-size: 1.2rem;
 }
 
 .service .hoverActions,
-.product .hoverActions{
+.product .hoverActions {
     position: absolute;
     right: 10%;
     top: 5%;
@@ -782,7 +807,7 @@
 }
 
 .service .hoverActions .iconDiv,
-.product .hoverActions .iconDiv{
+.product .hoverActions .iconDiv {
     background: var(--secondaryCopper);
     width: 35px;
     height: 35px;
@@ -793,8 +818,9 @@
     justify-content: center;
     transition: 0.2s;
 }
+
 .service .hoverActions .iconDiv:hover,
-.product .hoverActions .iconDiv:hover{
+.product .hoverActions .iconDiv:hover {
     background: var(--primaryCopper);
     color: var(--white);
 }
@@ -806,25 +832,28 @@
 
 /* **************** PRODUCT DETAILS **************** */
 
-.productDetailsDiv{
+.productDetailsDiv {
     padding: 100px 0px;
 }
 
-.productDetailsDiv .upper{
+.productDetailsDiv .upper {
     display: flex;
     justify-content: space-between;
 }
 
-.productDetailsDiv .upper .upperLeft{
+.productDetailsDiv .upper .upperLeft {
     width: 40%;
 }
 
-.productDetailsDiv .upper .upperLeft .productThumbnail{
+.productDetailsDiv .upper .upperLeft .productThumbnail {
     width: 100%;
+    max-height: 420px;
+    height: fit-content;
+    object-fit: cover;
     border-radius: 8px;
 }
 
-.productDetailsDiv .upper .upperLeft .productGalleryDiv{
+.productDetailsDiv .upper .upperLeft .productGalleryDiv {
     display: flex;
     width: 100%;
     gap: 10px;
@@ -832,98 +861,107 @@
     justify-content: left;
 }
 
-.productDetailsDiv .upper .upperLeft .productGalleryDiv img{
+.productDetailsDiv .upper .upperLeft .productGalleryDiv img {
     width: 15%;
     border: 3px solid transparent;
     cursor: pointer;
     border-radius: 8px;
     transition: 0.2s;
+    object-fit: cover;
 }
 
-.productDetailsDiv .upper .upperRight{
+.productDetailsDiv .upper .upperRight {
     width: 52%;
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
 
-.productDetailsDiv .upper .upperRight .ratingsDiv{
+.productDetailsDiv .upper .upperRight .ratingsDiv {
     display: flex;
     gap: 8px;
     align-items: center;
 }
 
-.productDetailsDiv .upper .upperRight .productTitle{
+.productDetailsDiv .upper .upperRight .productTitle {
     font-weight: 600;
     font-size: 1.2rem;
 }
 
-.productDetailsDiv .upper .upperRight .sellerInfo{
+.productDetailsDiv .upper .upperRight .sellerInfo {
     display: flex;
     align-items: center;
     gap: 8px;
 }
-.productDetailsDiv .upper .upperRight .sellerInfo img{
+
+.productDetailsDiv .upper .upperRight .sellerInfo img {
     width: 30px;
     border-radius: 50%;
 }
-.productDetailsDiv .upper .upperRight .sellerInfo a{
+
+.productDetailsDiv .upper .upperRight .sellerInfo a {
     color: var(--black);
 }
 
-.productDetailsDiv .upper .upperRight .productInfo{
+.productDetailsDiv .upper .upperRight .productInfo {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
-.productDetailsDiv .upper .upperRight .productInfo p{
+
+.productDetailsDiv .upper .upperRight .productInfo p {
     width: 49%;
     color: var(--primaryCopper);
 }
-.productDetailsDiv .upper .upperRight .productInfo strong{
+
+.productDetailsDiv .upper .upperRight .productInfo strong {
     color: var(--black);
 }
 
-.productDetailsDiv .upper .upperRight .productPrice{
+.productDetailsDiv .upper .upperRight .productPrice {
     display: flex;
     gap: 20px;
     align-items: baseline;
 }
-.productDetailsDiv .upper .upperRight .productPrice .salesPrice{
+
+.productDetailsDiv .upper .upperRight .productPrice .salesPrice {
     font-size: 1.8rem;
     color: var(--primaryCopper);
 }
-.productDetailsDiv .upper .upperRight .productPrice .price{
+
+.productDetailsDiv .upper .upperRight .productPrice .price {
     color: var(--darkGray);
     text-decoration: line-through;
     font-size: 1.2rem;
 }
-.productDetailsDiv .upper .upperRight .productPrice .off{
+
+.productDetailsDiv .upper .upperRight .productPrice .off {
     color: var(--white);
     background-color: var(--primaryBlue);
     padding: 8px 15px;
 }
 
-.productDetailsDiv .upper .upperRight .productActions{
+.productDetailsDiv .upper .upperRight .productActions {
     display: flex;
     gap: 15px;
     justify-content: space-between;
 }
 
-.productDetailsDiv .upper .upperRight .productActions .primaryBtn, 
-.productDetailsDiv .upper .upperRight .productActions .primaryBtn2{
+.productDetailsDiv .upper .upperRight .productActions .primaryBtn,
+.productDetailsDiv .upper .upperRight .productActions .primaryBtn2 {
     width: 100%;
     text-align: center;
-} 
+}
 
-.productDetailsDiv .upper .upperRight .productActions .addToCartBtn{
+.productDetailsDiv .upper .upperRight .productActions .addToCartBtn {
     display: flex;
     align-items: center;
     gap: 10px;
     justify-content: center;
+    width: 150%;
 }
 
-.productDetailsDiv .upper .upperRight .addToWishlistBtn{
+.productDetailsDiv .upper .upperRight .addToWishlistBtn {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -931,38 +969,42 @@
     cursor: pointer;
 }
 
-.productDetailsDiv .upper .upperRight .buyNowBtn{
+.productDetailsDiv .upper .upperRight .buyNowBtn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 15px;
 }
 
-.productDetailsDiv .lower{
+.productDetailsDiv .lower {
     margin-top: 100px;
     border: 1px solid var(--gray);
     border-radius: 8px;
 }
 
-.productDetailsDiv .lower .upper{
+.productDetailsDiv .lower .upper {
     display: flex;
+    flex-direction: row;
     align-items: center;
+    gap: 0px;
     justify-content: center;
 }
-.productDetailsDiv .lower .upper p{
+
+.productDetailsDiv .lower .upper p {
     color: var(--primaryCopper);
     padding: 15px;
     border-bottom: 5px solid transparent;
     cursor: pointer;
 }
-.productDetailsDiv .lower .upper .active{
+
+.productDetailsDiv .lower .upper .active {
     background: var(--primaryBlue);
     color: var(--white);
     border-color: var(--primaryCopper);
 }
 
 .productDetailsDiv .lower .innerLower,
-.productDetailsDiv .lower .productReviews{
+.productDetailsDiv .lower .productReviews {
     padding: 35px;
 }
 
@@ -974,8 +1016,7 @@
 
 .service {
     padding: 10px;
-    /* width: 266px; */
-    width: 19%;
+    width: 100%;
     border-radius: 8px;
     background-color: var(--white);
     box-shadow: 0.1px 0.1px 10px 1px var(--gray);
@@ -983,11 +1024,11 @@
     transition: all 0.3s ease-out;
 }
 
-.service:hover{
+.service:hover {
     transform: translateY(-1.5%);
 }
 
-.service .serviceImgDiv{
+.service .serviceImgDiv {
     width: 100%;
     height: 180px;
 }
@@ -996,6 +1037,7 @@
     width: 100%;
     height: 100%;
     border-radius: 8px;
+    object-fit: cover;
 }
 
 .service .serviceTitle {
@@ -1013,19 +1055,20 @@
 }
 
 
-.service .serviceLower{
+.service .serviceLower {
     margin-top: 8px;
     display: flex;
     flex-direction: column;
 }
 
-.service .serviceLower .serviceLowerTop{
+.service .serviceLower .serviceLowerTop {
     display: flex;
     align-items: center;
     font-size: 0.9rem;
     gap: 5px;
 }
-.service .serviceLower .serviceLowerBottom{
+
+.service .serviceLower .serviceLowerBottom {
     display: flex;
     gap: 15px;
     justify-content: right;
@@ -1033,21 +1076,23 @@
     color: var(--darkGray);
 }
 
-.service .serviceLower .serviceLowerTop p{
+.service .serviceLower .serviceLowerTop p {
     color: var(--lightBlack);
     font-weight: 600;
 }
-.service .serviceLower .serviceLowerTop span{
+
+.service .serviceLower .serviceLowerTop span {
     color: var(--primaryCopper);
     font-weight: 500;
 }
 
-.service .serviceLower .servicePrice{
+.service .serviceLower .servicePrice {
     color: var(--secondaryBlue);
     font-size: 1.8rem;
     margin-right: 5px;
 }
-.service .serviceLower .serviceDiscount{
+
+.service .serviceLower .serviceDiscount {
     color: var(--darkGray);
     text-decoration: line-through;
     font-size: 1.2rem;
@@ -1060,11 +1105,11 @@
 
 /* **************** SETTINGS **************** */
 
-.settingsDiv{
+.settingsDiv {
     padding: 50px 0px;
 }
 
-.settingsDiv .settingsContent{
+.settingsDiv .settingsContent {
     padding: 50px;
     background: var(--white);
     border-radius: 8px;
@@ -1073,25 +1118,26 @@
     gap: 40px;
 }
 
-.settingsDiv .becomeSellerDiv .section{
+.settingsDiv .becomeSellerDiv .section {
     width: 100%;
 }
+
 .settingsDiv .becomeSellerDiv,
-.settingsDiv .becomeSellerDiv .becomeSellerContent{
+.settingsDiv .becomeSellerDiv .becomeSellerContent {
     padding: 0;
 }
 
-.settingsDiv .sellerSettings .primaryHeading{
+.settingsDiv .sellerSettings .primaryHeading {
     margin-bottom: 15px;
 }
 
-.settingsDiv .changePassDiv{
+.settingsDiv .changePassDiv {
     width: 100%;
     margin: 10px 0px;
     user-select: none;
 }
 
-.settingsDiv .changePassDiv .upper{
+.settingsDiv .changePassDiv .upper {
     display: flex;
     justify-content: space-between;
     border-top: 2px solid var(--gray);
@@ -1101,17 +1147,21 @@
     background: transparent;
     transition: 0.1s;
 }
-.settingsDiv .changePassDiv .upper:hover{
+
+.settingsDiv .changePassDiv .upper:hover {
     background: var(--extraLightGray);
 }
-.settingsDiv .changePassDiv .upper .icon{
+
+.settingsDiv .changePassDiv .upper .icon {
     width: 25px;
     height: 25px;
 }
-.settingsDiv .changePassDiv .lower{
+
+.settingsDiv .changePassDiv .lower {
     margin-top: 20px;
 }
-.settingsDiv .changePassDiv .lower .secondaryBtn{
+
+.settingsDiv .changePassDiv .lower .secondaryBtn {
     margin-top: 10px;
 }
 
@@ -1121,40 +1171,47 @@
 
 /* **************** CATEGORIES PAGE **************** */
 
-.categoriesDiv{
+.categoriesDiv {
     padding: 50px 0px;
 }
-.categoriesDiv .categoriesContent{
+
+.categoriesDiv .categoriesContent {
     background: var(--white);
     border-radius: 8px;
     padding: 50px;
 }
-.categoriesDiv .serviceCatsDiv{
+
+.categoriesDiv .serviceCatsDiv {
     margin-top: 50px;
 }
 
-.categoriesDiv .categories{
+.categoriesDiv .categories {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     margin: 20px 0px;
 }
-.categoriesDiv .categories .category{
+
+.categoriesDiv .categories .category {
     cursor: pointer;
     border-bottom: 1px solid var(--gray);
     padding: 15px 20px;
     display: flex;
     justify-content: space-between;
+    gap: 20px;
     align-items: center;
     color: var(--black);
 }
-.categoriesDiv .categories .category:hover{
+
+.categoriesDiv .categories .category:hover {
     background: var(--lightGray);
 }
-.categoriesDiv .categories .category .count{
+
+.categoriesDiv .categories .category .count {
     color: var(--darkGray);
     font-size: 0.9rem;
 }
-.categoriesDiv .categories .category i{
+
+.categoriesDiv .categories .category i {
     color: var(--darkGray);
 }
 
@@ -1163,68 +1220,77 @@
 /* **************** PRODUCTS & SERVICES PAGES **************** */
 
 .servicesDiv,
-.productsDiv{
+.productsDiv {
     margin: 50px 0px;
 }
 
 .servicesDiv .servicesContent,
-.productsDiv .productsContent{
+.productsDiv .productsContent {
     display: flex;
     justify-content: space-between;
     gap: 60px;
 }
 
 .servicesDiv .filters,
-.productsDiv .filters{
+.productsDiv .filters {
     display: flex;
     flex-direction: column;
     gap: 20px;
     min-width: 18%;
 }
+
 .servicesDiv .filters .filter,
-.productsDiv .filters .filter{
+.productsDiv .filters .filter {
     display: flex;
     flex-direction: column;
     gap: 3px;
 }
+
 .servicesDiv .filters .filter .row,
-.productsDiv .filters .filter .row{
+.productsDiv .filters .filter .row {
     color: var(--lightBlack);
     font-size: 0.9rem;
     cursor: pointer;
     font-weight: 500;
     transition: 0.1s;
+    display: flex;
+    align-items: center;
 }
+
 .servicesDiv .filters .filter .row:hover,
-.productsDiv .filters .filter .row:hover{
+.productsDiv .filters .filter .row:hover {
     color: var(--black);
 }
+
 .servicesDiv .filters .filter .row input,
-.productsDiv .filters .filter .row input{
+.productsDiv .filters .filter .row input {
     margin-right: 5px;
 }
+
 .servicesDiv .filters .filter .active,
-.productsDiv .filters .filter .active{
+.productsDiv .filters .filter .active {
     color: var(--primaryCopper) !important;
 }
 
 .servicesDiv .left .categoryFilter .seeMore,
-.productsDiv .left .categoryFilter .seeMore{
+.productsDiv .left .categoryFilter .seeMore {
     cursor: pointer;
     color: var(--primaryCopper);
 }
+
 .servicesDiv .left .ratingFilter .rating,
-.productsDiv .left .ratingFilter .rating{
+.productsDiv .left .ratingFilter .rating {
     display: flex;
     gap: 2px;
 }
+
 .servicesDiv .left .ratingFilter .rating .up,
-.productsDiv .left .ratingFilter .rating .up{
+.productsDiv .left .ratingFilter .rating .up {
     margin-left: 10px;
 }
 
 .servicesDiv .right,
-.productsDiv .right{
+.productsDiv .right {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -1232,14 +1298,15 @@
     min-width: 75%;
 }
 
-.servicesDiv .right .activeFilters ,
+.servicesDiv .right .activeFilters,
 .productsDiv .right .activeFilters {
     display: flex;
     gap: 10px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
-.servicesDiv .right .activeFilters .filterTag ,
+.servicesDiv .right .activeFilters .filterTag,
 .productsDiv .right .activeFilters .filterTag {
     display: flex;
     align-items: center;
@@ -1248,7 +1315,7 @@
     border-radius: 5px;
 }
 
-.servicesDiv .right .activeFilters .filterTag button ,
+.servicesDiv .right .activeFilters .filterTag button,
 .productsDiv .right .activeFilters .filterTag button {
     background: none;
     border: none;
@@ -1259,21 +1326,22 @@
 }
 
 .servicesDiv .right .resultsFound span,
-.productsDiv .right .resultsFound span{
+.productsDiv .right .resultsFound span {
     color: var(--primaryCopper);
     font-weight: 500;
 }
 
 .servicesDiv .right .services,
-.productsDiv .right .products{
+.productsDiv .right .products {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     margin: 20px 0px;
     margin-bottom: 50px;
     gap: 25px;
 }
+
 .servicesDiv .right .services .service,
-.productsDiv .right .products .product{
+.productsDiv .right .products .product {
     width: 100%;
 }
 
@@ -1282,40 +1350,43 @@
 
 /* **************** WISHLIST PAGE **************** */
 
-.tableDiv .rows .row .field .cartCheck{
+.tableDiv .rows .row .field .cartCheck {
     color: var(--success);
 }
-.tableDiv .rows .row .field .cartCheck:hover{
+
+.tableDiv .rows .row .field .cartCheck:hover {
     cursor: not-allowed;
     color: var(--success);
 }
 
-.tableDiv .rows .row .field .arrowRight{
+.tableDiv .rows .row .field .arrowRight {
     background: var(--lightGray);
     border-radius: 50%;
     padding: 3px;
     transition: 0.1s;
 }
-.tableDiv .rows .row .field .arrowRight:hover{
+
+.tableDiv .rows .row .field .arrowRight:hover {
     background: var(--gray);
 }
 
 
-.tableDiv .rows .row .titleField .imgDiv{
+.tableDiv .rows .row .titleField .imgDiv {
     width: 15%;
     height: 100%;
 }
-.tableDiv .rows .row .titleField .imgDiv img{
+
+.tableDiv .rows .row .titleField .imgDiv img {
     width: 100%;
 }
 
-.tableDiv .rows .row .categoryField{
+.tableDiv .rows .row .categoryField {
     color: var(--primaryCopper);
     cursor: pointer;
-    gap: 5px;   
+    gap: 5px;
 }
 
-.tableDiv .rows .row .sellerField{
+.tableDiv .rows .row .sellerField {
     cursor: pointer;
     font-weight: 500;
     gap: 5px;
@@ -1325,16 +1396,16 @@
 
 /* **************** CART PAGE **************** */
 
-.cartDiv{
+.cartDiv {
     padding: 50px 0px;
 }
 
-.cartDiv .cartContent .section{
+.cartDiv .cartContent .section {
     display: flex;
     justify-content: space-between;
 }
 
-.cartDiv .left{
+.cartDiv .left {
     background: var(--white);
     border-radius: 8px;
     width: 70%;
@@ -1342,15 +1413,16 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    height: fit-content;
 }
 
-.cartDiv .left .secondaryHeading .totalItems{
+.cartDiv .left .secondaryHeading .totalItems {
     font-size: 1rem;
     color: var(--darkGray);
     margin-left: 5px;
 }
 
-.cartDiv .left .cartProducts{
+.cartDiv .left .cartProducts {
     display: flex;
     flex-direction: column;
     gap: 40px;
@@ -1358,33 +1430,34 @@
     margin-top: 10px;
 }
 
-.cartDiv .left .cartProducts .cartElem{
+.cartDiv .left .cartProducts .cartElem {
     display: flex;
     gap: 30px;
     margin-bottom: 40px;
 }
 
-.cartDiv .left .cartProducts .cartElem .imgDiv{
+.cartDiv .left .cartProducts .cartElem .imgDiv {
     width: 120px;
-    height: 120px;
-}
-.cartDiv .left .cartProducts .cartElem .imgDiv img{
-    width: 100%;
-    height: 100%;
 }
 
-.cartDiv .left .cartProducts .cartElem .cartElemContent{
+.cartDiv .left .cartProducts .cartElem .imgDiv img {
+    width: 100%;
+}
+
+.cartDiv .left .cartProducts .cartElem .cartElemContent {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 10px;
     width: 100%;
 }
-.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop{
+
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop {
     display: flex;
     justify-content: space-between;
 }
-.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop .title{
+
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop .title {
     font-size: 1.1rem;
     font-weight: 600;
     display: -webkit-box;
@@ -1396,61 +1469,75 @@
     height: 1.5em;
     width: 88%;
 }
-.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop .icon{
+
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop .icon {
     width: 25px;
     height: 25px;
     cursor: pointer;
     color: var(--darkGray);
     transition: 0.1s;
 }
-.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop .icon:hover{
+
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop .icon:hover {
     color: var(--black);
 }
-.cartDiv .left .cartProducts .cartElem .cartElemContent .shippingFee span{
+
+.cartDiv .left .cartProducts .cartElem .cartElemContent .shippingFee span {
     color: var(--primaryCopper);
 }
-.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom{
+
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom {
     display: flex;
     justify-content: space-between;
 }
-.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .cartCountBtn{
+
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .cartCountBtn {
     width: 20%;
-    height: 80%;
+    height: 30px;
 }
-.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .cartCountBtn p{
+
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .cartCountBtn p {
     font-size: 14px;
 }
-.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .price{
+
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .price {
     font-size: 2rem;
     font-weight: 700;
     color: var(--primaryCopper);
+    display: flex;
+    align-items: baseline;
+    gap: 15px;
+    justify-content: left;
 }
-.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .price span{
+
+.cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .price span {
     font-size: 1.2rem;
     color: var(--darkGray);
     font-weight: 300;
     text-decoration: line-through;
-    margin-right: 15px;
 }
 
-.cartDiv .summary{
+.cartDiv .summary {
     background: var(--white);
     border-radius: 8px;
     width: 25%;
     height: fit-content;
     padding: 20px 30px;
 }
-.cartDiv .summary .summaryContent{
+
+.cartDiv .summary .summaryContent {
     margin-top: 20px;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
-.cartDiv .summary .summaryContent .row{
+
+.cartDiv .summary .summaryContent .row {
     display: flex;
     justify-content: space-between;
 }
-.cartDiv .summary .summaryContent .row .subTotal{
+
+.cartDiv .summary .summaryContent .row .subTotal {
     color: var(--primaryCopper);
 }
 
@@ -1460,7 +1547,7 @@
 
 /* **************** POST REQUEST PAGE **************** */
 
-.postRequestDiv .requestRow .offersField{
+.postRequestDiv .requestRow .offersField {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1469,40 +1556,43 @@
     font-weight: 600;
     cursor: pointer;
 }
-.postRequestDiv .offersModalDiv .offersModelContent{
+
+.postRequestDiv .offersModalDiv .offersModelContent {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.postRequestDiv .rows .row .field .icon{
+.postRequestDiv .rows .row .field .icon {
     width: 18px;
     height: 18px;
 }
 
 
-.offersModalDiv .popupContent{
+.offersModalDiv .popupContent {
     min-width: 80%;
 }
 
 .offersModalDiv .offersRows .tableContent .header .title,
-.offersModalDiv .offersRows .tableContent .rows .row .titleField{
+.offersModalDiv .offersRows .tableContent .rows .row .titleField {
     width: 400%;
     font-size: 0.9rem;
 }
 
-.offersModalDiv .offersRows .tableContent .header .seller{
+.offersModalDiv .offersRows .tableContent .header .seller {
     width: 150%;
 }
-.offersModalDiv .offersRows .tableContent .rows .row .sellerField{
+
+.offersModalDiv .offersRows .tableContent .rows .row .sellerField {
     width: 150%;
     cursor: pointer;
 }
 
-.offersModalDiv .offersRows .tableContent .rows .row .field{
+.offersModalDiv .offersRows .tableContent .rows .row .field {
     align-items: start;
 }
-.offersModalDiv .offersRows .tableContent .rows .row .field .icon{
+
+.offersModalDiv .offersRows .tableContent .rows .row .field .icon {
     margin-top: 3px;
     width: 22px;
     height: 22px;
@@ -1514,22 +1604,24 @@
 
 /* **************** CHECKOUT PAGE **************** */
 
-.checkoutDiv{
+.checkoutDiv {
     padding: 50px 0px;
 }
-.checkoutDiv .checkoutContent{
+
+.checkoutDiv .checkoutContent {
     display: flex;
     justify-content: space-between;
 }
 
-.checkoutDiv .billingInfo{
+.checkoutDiv .billingInfo {
     padding: 20px 30px;
     width: 60%;
     background: var(--white);
     height: fit-content;
     border-radius: 8px;
 }
-.checkoutDiv .orderSummary{
+
+.checkoutDiv .orderSummary {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -1540,59 +1632,63 @@
     border-radius: 8px;
 }
 
-.checkoutDiv .orderSummary .item{
+.checkoutDiv .orderSummary .item {
     display: flex;
     gap: 15px;
     justify-content: space-between;
     align-items: center;
 }
-.checkoutDiv .orderSummary .item .imgDiv{
+
+.checkoutDiv .orderSummary .item .imgDiv {
     width: 90px;
 }
-.checkoutDiv .orderSummary .item .imgDiv img{
+
+.checkoutDiv .orderSummary .item .imgDiv img {
     width: 100%;
     border-radius: 8px;
 }
 
-.checkoutDiv .orderSummary .item .itemContent{
+.checkoutDiv .orderSummary .item .itemContent {
     width: 80%;
 }
-.checkoutDiv .orderSummary .item .itemContent .price{
+
+.checkoutDiv .orderSummary .item .itemContent .price {
     color: var(--primaryCopper);
     font-weight: 500;
     margin-top: 5px;
 }
 
-.checkoutDiv .orderSummary .promoCodeBox{
+.checkoutDiv .orderSummary .promoCodeBox {
     display: flex;
     justify-content: space-between;
     gap: 10px;
     align-items: center;
 }
 
-.checkoutDiv .orderSummary .row{
+.checkoutDiv .orderSummary .row {
     display: flex;
     justify-content: space-between;
 }
 
-.checkoutDiv .orderSummary .row .subTotal{
+.checkoutDiv .orderSummary .row .subTotal {
     color: var(--primaryCopper);
 }
 
-.paymentMethodsDiv{
+.paymentMethodsDiv {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 15px;
     margin: 15px 0px;
 }
-.paymentMethodsDiv .paymentOptions{
+
+.paymentMethodsDiv .paymentOptions {
     display: flex;
     justify-content: space-between;
     gap: 15px;
 }
 
-.paymentMethodsDiv .paymentOptions .paymentOption{
+.paymentMethodsDiv .paymentOptions .paymentOption {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1604,19 +1700,23 @@
     transition: 0.2s;
     border-radius: 8px;
 }
-.paymentMethodsDiv .paymentOptions .paymentOption.selected{
+
+.paymentMethodsDiv .paymentOptions .paymentOption.selected {
     background: var(--primaryBlue);
     color: var(--white);
 }
-.paymentMethodsDiv .paymentOptions .paymentOption:not(.selected):hover{
+
+.paymentMethodsDiv .paymentOptions .paymentOption:not(.selected):hover {
     background: var(--lightGray);
 }
-.paymentMethodsDiv .paymentOptions .paymentOption .icon{
+
+.paymentMethodsDiv .paymentOptions .paymentOption .icon {
     width: 40px;
     height: 40px;
     color: var(--secondaryBlue);
 }
-.paymentMethodsDiv .paymentOptions .paymentOption.selected .icon{
+
+.paymentMethodsDiv .paymentOptions .paymentOption.selected .icon {
     color: var(--white);
 }
 
@@ -1629,29 +1729,33 @@
 /* *************** SERVICE DETAILS PAGE **************** */
 
 
-.serviceDetailsDiv{
+.serviceDetailsDiv {
     margin: 100px 0px;
 }
-.serviceDetailsDiv .serviceDetailsContent{
+
+.serviceDetailsDiv .serviceDetailsContent {
     display: flex;
     flex-direction: column;
 }
 
-.serviceDetailsDiv .serviceInfo{
+.serviceDetailsDiv .serviceInfo {
     display: flex;
     justify-content: space-between;
 }
 
-.serviceDetailsDiv .serviceInfo .serviceImages{
+.serviceDetailsDiv .serviceInfo .serviceImages {
     width: 40%;
 }
 
-.serviceDetailsDiv .serviceInfo .serviceImages .serviceThumbnail{
+.serviceDetailsDiv .serviceInfo .serviceImages .serviceThumbnail {
     width: 100%;
     border-radius: 8px;
+    max-height: 380px;
+    height: fit-content;
+    object-fit: cover;
 }
 
-.serviceDetailsDiv .serviceInfo .serviceImages .serviceGalleryDiv{
+.serviceDetailsDiv .serviceInfo .serviceImages .serviceGalleryDiv {
     display: flex;
     width: 100%;
     gap: 10px;
@@ -1659,83 +1763,90 @@
     justify-content: left;
 }
 
-.serviceDetailsDiv .serviceInfo .serviceImages .serviceGalleryDiv img{
-    width: 15%;
+.serviceDetailsDiv .serviceInfo .serviceImages .serviceGalleryDiv img {
+    width: 18%;
     border: 3px solid transparent;
     cursor: pointer;
     border-radius: 8px;
     transition: 0.2s;
+    object-fit: cover;
 }
 
-.serviceDetailsDiv .serviceInfo .info{
+.serviceDetailsDiv .serviceInfo .info {
     width: 52%;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.serviceDetailsDiv .serviceInfo .info .ratingsDiv{
+.serviceDetailsDiv .serviceInfo .info .ratingsDiv {
     display: flex;
     gap: 8px;
     align-items: center;
 }
 
-.serviceDetailsDiv .serviceInfo .info .title{
+.serviceDetailsDiv .serviceInfo .info .title {
     font-weight: 600;
     font-size: 1.2rem;
 }
 
-.serviceDetailsDiv .serviceInfo .info .sellerInfo{
+.serviceDetailsDiv .serviceInfo .info .sellerInfo {
     display: flex;
     align-items: center;
     gap: 8px;
 }
-.serviceDetailsDiv .serviceInfo .info .sellerInfo img{
+
+.serviceDetailsDiv .serviceInfo .info .sellerInfo img {
     width: 30px;
     border-radius: 50%;
 }
-.serviceDetailsDiv .serviceInfo .info .sellerInfo a{
+
+.serviceDetailsDiv .serviceInfo .info .sellerInfo a {
     color: var(--black);
 }
 
-.serviceDetailsDiv .serviceInfo .info .category{
+.serviceDetailsDiv .serviceInfo .info .category {
     color: var(--primaryCopper);
     cursor: pointer;
     font-weight: 500;
 }
 
-.serviceDetailsDiv .serviceInfo .info .servicePrice{
+.serviceDetailsDiv .serviceInfo .info .servicePrice {
     display: flex;
     gap: 10px;
     align-items: baseline;
 }
-.serviceDetailsDiv .serviceInfo .info .servicePrice .salesPrice{
+
+.serviceDetailsDiv .serviceInfo .info .servicePrice .salesPrice {
     font-size: 1.8rem;
     color: var(--primaryCopper);
 }
-.serviceDetailsDiv .serviceInfo .info .servicePrice .price{
+
+.serviceDetailsDiv .serviceInfo .info .servicePrice .price {
     color: var(--darkGray);
     text-decoration: line-through;
     font-size: 1.2rem;
     margin-left: 10px;
 }
-.serviceDetailsDiv .serviceInfo .info .servicePrice .off{
+
+.serviceDetailsDiv .serviceInfo .info .servicePrice .off {
     color: var(--white);
     background-color: var(--primaryBlue);
     padding: 8px 15px;
 }
 
-.serviceDetailsDiv .serviceInfo .info .serviceActions{
+.serviceDetailsDiv .serviceInfo .info .serviceActions {
     display: flex;
     gap: 15px;
     justify-content: space-between;
 }
-.serviceDetailsDiv .serviceInfo .info .serviceActions .moreActions{
+
+.serviceDetailsDiv .serviceInfo .info .serviceActions .moreActions {
     display: flex;
     gap: 15px;
 }
 
-.serviceDetailsDiv .serviceInfo .info .serviceActions .addToWishlistBtn{
+.serviceDetailsDiv .serviceInfo .info .serviceActions .addToWishlistBtn {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -1743,13 +1854,14 @@
     cursor: pointer;
 }
 
-.serviceDetailsDiv .packages{
+.serviceDetailsDiv .packages {
     display: flex;
     justify-content: space-between;
     gap: 40px;
     padding: 80px 0px;
 }
-.serviceDetailsDiv .packages .packageBox{
+
+.serviceDetailsDiv .packages .packageBox {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -1757,60 +1869,70 @@
     border-radius: 8px;
     min-width: 30%;
     max-width: 40%;
-    height: fit-content;
 }
-.serviceDetailsDiv .packages .packageBox .upper{
+
+.serviceDetailsDiv .packages .packageBox .upper {
     text-align: center;
     padding-top: 15px;
     font-weight: 500;
     font-size: 1.2rem;
 }
-.serviceDetailsDiv .packages .packageBox .BASIC{
+
+.serviceDetailsDiv .packages .packageBox .BASIC {
     color: var(--danger);
 }
-.serviceDetailsDiv .packages .packageBox .STANDARD{
+
+.serviceDetailsDiv .packages .packageBox .STANDARD {
     color: var(--secondaryBlue);
 }
-.serviceDetailsDiv .packages .packageBox .ULTIMATE{
+
+.serviceDetailsDiv .packages .packageBox .ULTIMATE {
     color: var(--warning);
 }
-.serviceDetailsDiv .packages .packageBox .lower{
+
+.serviceDetailsDiv .packages .packageBox .lower {
     display: flex;
     flex-direction: column;
     gap: 25px;
     padding: 10px 30px;
     padding-bottom: 25px;
 }
-.serviceDetailsDiv .packages .packageBox .lower .title{
+
+.serviceDetailsDiv .packages .packageBox .lower .title {
     font-size: 1.2rem;
     font-weight: 600;
 }
-.serviceDetailsDiv .packages .packageBox .lower .info{
+
+.serviceDetailsDiv .packages .packageBox .lower .info {
     display: flex;
     justify-content: space-between;
     color: var(--lightBlackPrimary);
     font-weight: 500;
     align-items: center;
 }
-.serviceDetailsDiv .packages .packageBox .lower .info .priceDetails{
+
+.serviceDetailsDiv .packages .packageBox .lower .info .priceDetails {
     display: flex;
     gap: 20px;
     align-items: center;
 }
-.serviceDetailsDiv .packages .packageBox .lower .info .priceDetails .discount{
+
+.serviceDetailsDiv .packages .packageBox .lower .info .priceDetails .discount {
     color: var(--darkGray);
     text-decoration: line-through;
     font-size: 1.2rem;
 }
-.serviceDetailsDiv .packages .packageBox .lower .info .priceDetails .price{
+
+.serviceDetailsDiv .packages .packageBox .lower .info .priceDetails .price {
     color: var(--white);
     background: var(--lightBlackPrimary);
     padding: 6px 20px;
     border-radius: 8px;
     font-size: 1.2rem;
 }
+
 .serviceDetailsDiv .aboutService,
-.serviceDetailsDiv .aboutSeller{
+.serviceDetailsDiv .aboutSeller {
     background: var(--white);
     padding: 20px 30px;
     margin-bottom: 80px;
@@ -1820,57 +1942,68 @@
     gap: 15px;
 }
 
-.serviceDetailsDiv .aboutSeller .upper{
+.serviceDetailsDiv .aboutSeller .upper {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.serviceDetailsDiv .aboutSeller .upper .sellerProfile{
+
+.serviceDetailsDiv .aboutSeller .upper .sellerProfile {
     display: flex;
     gap: 25px;
     font-size: 0.9rem;
     align-items: center;
 }
-.serviceDetailsDiv .aboutSeller .upper .sellerProfile .imgDiv{
+
+.serviceDetailsDiv .aboutSeller .upper .sellerProfile .imgDiv {
     width: 80px;
     height: 80px;
 }
-.serviceDetailsDiv .aboutSeller .upper .sellerProfile .imgDiv img{
+
+.serviceDetailsDiv .aboutSeller .upper .sellerProfile .imgDiv img {
     width: 100%;
     border-radius: 50%;
 }
-.serviceDetailsDiv .aboutSeller .upper .sellerProfile .profileInfo{
+
+.serviceDetailsDiv .aboutSeller .upper .sellerProfile .profileInfo {
     display: flex;
     flex-direction: column;
     gap: 2px;
 }
-.serviceDetailsDiv .aboutSeller .upper .sellerProfile .profileInfo .username{
+
+.serviceDetailsDiv .aboutSeller .upper .sellerProfile .profileInfo .username {
     font-size: 0.85rem;
     cursor: pointer;
     font-weight: 500;
     color: var(--lightBlackPrimary);
 }
-.serviceDetailsDiv .aboutSeller .upper .sellerProfile .profileInfo .username:hover{
+
+.serviceDetailsDiv .aboutSeller .upper .sellerProfile .profileInfo .username:hover {
     color: var(--black);
 }
-.serviceDetailsDiv .aboutSeller .upper .sellerProfile .profileInfo .ratingsDiv{
+
+.serviceDetailsDiv .aboutSeller .upper .sellerProfile .profileInfo .ratingsDiv {
     display: flex;
     gap: 8px;
     align-items: center;
 }
-.serviceDetailsDiv .aboutSeller .upper .sellerInfo{
+
+.serviceDetailsDiv .aboutSeller .upper .sellerInfo {
     display: flex;
     gap: 80px;
     margin-right: 20px;
 }
-.serviceDetailsDiv .aboutSeller .upper .sellerInfo .col p{
+
+.serviceDetailsDiv .aboutSeller .upper .sellerInfo .col p {
     font-size: 0.85rem;
 }
-.serviceDetailsDiv .sampleProvisionsDiv{
+
+.serviceDetailsDiv .sampleProvisionsDiv {
     margin: 0;
     margin-bottom: 80px;
 }
-.serviceDetailsDiv .serviceReviews{
+
+.serviceDetailsDiv .serviceReviews {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -1878,7 +2011,8 @@
     border-radius: 8px;
     padding: 20px 30px;
 }
-.serviceDetailsDiv .serviceReviews .reviewDiv{
+
+.serviceDetailsDiv .serviceReviews .reviewDiv {
     margin-top: 20px;
 }
 
@@ -1887,10 +2021,11 @@
 
 /* *************** REQUIREMENTS PAGE **************** */
 
-.requirementsDiv{
+.requirementsDiv {
     margin: 50px 0px;
 }
-.requirementsDiv .requirementsContent{
+
+.requirementsDiv .requirementsContent {
     background: var(--white);
     padding: 20px 40px;
 }
@@ -1901,29 +2036,32 @@
 
 /* *************** CHAT PAGE **************** */
 
-.chatDiv{
+.chatDiv {
     margin: 50px 0px;
 }
-.chatDiv .chatContent{
+
+.chatDiv .chatContent {
     background: var(--white);
     border-radius: 8px;
     display: flex;
     height: 110vh;
 }
-.chatDiv .icon{
+
+.chatDiv .icon {
     cursor: pointer;
     color: var(--darkGray);
     transition: 0.2s;
 }
-.chatDiv .icon:hover{
+
+.chatDiv .icon:hover {
     color: var(--black);
 }
 
-.chatDiv a{
+.chatDiv a {
     color: var(--primaryCopper);
 }
 
-.chatDiv .content{
+.chatDiv .content {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -1952,7 +2090,7 @@
     width: 30%;
 }
 
-.chatDiv .header{
+.chatDiv .header {
     padding: 20px 30px;
     border-bottom: 2px solid var(--lightGray);
     display: flex;
@@ -1961,7 +2099,8 @@
     font-weight: 600;
     font-size: 1.2rem;
 }
-.chatDiv .header .highlight{
+
+.chatDiv .header .highlight {
     border-radius: 50%;
     background: var(--secondaryCopper);
     width: 25px;
@@ -1972,44 +2111,53 @@
     color: var(--primaryCopper);
     font-size: 0.8rem;
 }
-.chatDiv .chatsList .header{
+
+.chatDiv .chatsList .header {
     justify-content: center;
     gap: 15px;
 }
-.chatDiv .chatRoom .header{
+
+.chatDiv .chatRoom .header {
     gap: 15px;
 }
-.chatDiv .chatRoom .header img{
+
+.chatDiv .chatRoom .header img {
     width: 30px;
     border-radius: 50%;
 }
-.chatDiv .otherInfo .header{
+
+.chatDiv .otherInfo .header {
     justify-content: space-between;
 }
 
-.chatDiv .chatsList .chatBoxes{
+.chatDiv .chatsList .chatBoxes {
     padding: 20px 30px;
     height: 100%;
     overflow-y: auto;
 }
-.chatDiv .chatsList .chatBoxes .chatBox{
+
+.chatDiv .chatsList .chatBoxes .chatBox {
     display: flex;
     gap: 15px;
     cursor: pointer;
     padding: 10px 15px;
     border-radius: 8px;
 }
-.chatDiv .chatsList .chatBoxes .active{
+
+.chatDiv .chatsList .chatBoxes .active {
     background: var(--lightGray);
 }
-.chatDiv .chatsList .chatBoxes .chatBox .imgDiv{
+
+.chatDiv .chatsList .chatBoxes .chatBox .imgDiv {
     width: 50px;
 }
-.chatDiv .chatsList .chatBoxes .chatBox .imgDiv img{
+
+.chatDiv .chatsList .chatBoxes .chatBox .imgDiv img {
     width: 100%;
     border-radius: 10px;
 }
-.chatDiv .chatsList .chatBoxes .chatBox .lastMessage{
+
+.chatDiv .chatsList .chatBoxes .chatBox .lastMessage {
     font-size: 0.7rem;
     color: var(--darkGray);
     margin-top: 5px;
@@ -2017,7 +2165,7 @@
 }
 
 
-.chatDiv .chatRoom .messages .offerMessage{
+.chatDiv .chatRoom .messages .offerMessage {
     border: 1px solid var(--gray);
     background: var(--extraLightGray);
 }
@@ -2025,68 +2173,77 @@
 .chatDiv .chatRoom .messages .offerMessage .upper,
 .chatDiv .chatRoom .messages .offerMessage .middle,
 .chatDiv .chatRoom .messages .offerMessage .bottom,
-.chatDiv .chatRoom .messages .offerMessage .buttonsDiv{
+.chatDiv .chatRoom .messages .offerMessage .buttonsDiv {
     padding: 10px 20px;
 }
 
-.chatDiv .chatRoom .messages .offerMessage .upper{
+.chatDiv .chatRoom .messages .offerMessage .upper {
     border-bottom: 1px solid var(--gray);
     display: flex;
     align-items: center;
 }
-.chatDiv .chatRoom .messages .offerMessage .upper .price{
+
+.chatDiv .chatRoom .messages .offerMessage .upper .price {
     font-size: 1.3rem;
     font-weight: 600;
     color: var(--primaryCopper);
     margin-left: 20px;
 }
-.chatDiv .chatRoom .messages .offerMessage .bottom{
+
+.chatDiv .chatRoom .messages .offerMessage .bottom {
     border-top: 1px solid var(--gray);
     display: flex;
     gap: 5px;
     flex-direction: column;
 }
-.chatDiv .chatRoom .messages .offerMessage .bottom .row{
+
+.chatDiv .chatRoom .messages .offerMessage .bottom .row {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-.chatDiv .chatRoom .messages .offerMessage .buttonsDiv{
+
+.chatDiv .chatRoom .messages .offerMessage .buttonsDiv {
     margin-bottom: 10px;
     display: flex;
     justify-content: right;
 }
-.chatDiv .chatRoom .messages .offerMessage .buttonsDiv a{
+
+.chatDiv .chatRoom .messages .offerMessage .buttonsDiv a {
     font-size: 0.75rem;
     padding: 6px 18px;
 }
 
-.chatDiv .otherInfo .participantDetails{
+.chatDiv .otherInfo .participantDetails {
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 20px 30px;
 }
-.chatDiv .otherInfo .participantDetails .row{
+
+.chatDiv .otherInfo .participantDetails .row {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.chatDiv .otherInfo .sampleProvisionsDiv{
+.chatDiv .otherInfo .sampleProvisionsDiv {
     margin: 10px 0px;
 }
 
-.chatDiv .otherInfo .sampleProvisionsDiv .sampleProvisionsLower .productsDiv{
+.chatDiv .otherInfo .sampleProvisionsDiv .sampleProvisionsLower .productsDiv {
     padding: 0px 20px;
 }
-.chatDiv .otherInfo .sampleProvisionsDiv .sampleProvisionsLower .productsDiv .product{
+
+.chatDiv .otherInfo .sampleProvisionsDiv .sampleProvisionsLower .productsDiv .product {
     width: 100%;
 }
-.chatDiv .otherInfo .sampleProvisionsDiv .sampleProvisionsLower .productsDiv .service{
+
+.chatDiv .otherInfo .sampleProvisionsDiv .sampleProvisionsLower .productsDiv .service {
     width: 100%;
 }
-.chatDiv .popupDiv .showQuoteModelContent{
+
+.chatDiv .popupDiv .showQuoteModelContent {
     width: 55%;
 }
 
@@ -2096,7 +2253,7 @@
 
 /* *************** CONTACT PAGE **************** */
 
-.contactDiv .contactContent{
+.contactDiv .contactContent {
     background: var(--white);
     border-radius: 8px;
     margin: 50px 0px;
@@ -2108,37 +2265,39 @@
 
 /* *************** PROFILE PAGE **************** */
 
-.profileDiv{
+.profileDiv {
     padding-bottom: 100px;
 }
-.profileDiv .bg{
+
+.profileDiv .bg {
     height: 18vh;
     width: 100%;
     background: var(--secondaryBlue);
     position: relative;
 }
-.profileDiv .bg img{
+
+.profileDiv .bg img {
     position: absolute;
     width: 150px;
     bottom: -60%;
     left: 45%;
 }
 
-.profileDiv .profileContent{
+.profileDiv .profileContent {
     display: flex;
     flex-direction: column;
     gap: 50px;
     margin-top: 120px;
 }
 
-.profileDiv .profileContent .upper{
+.profileDiv .profileContent .upper {
     display: flex;
     justify-content: space-between;
     gap: 50px;
 }
 
 .profileDiv .profileContent .upper .sellerInfo,
-.profileDiv .profileContent .upper .aboutSeller{
+.profileDiv .profileContent .upper .aboutSeller {
     height: fit-content;
     padding: 20px 30px;
     border-radius: 8px;
@@ -2148,46 +2307,73 @@
     gap: 10px;
     min-width: 30%;
 }
-.profileDiv .profileContent .upper .aboutSeller{
+
+.profileDiv .profileContent .upper .aboutSeller {
     flex: 1;
 }
 
-.profileDiv .profileContent .upper .sellerInfo .row{
+.profileDiv .profileContent .upper .sellerInfo .row {
     display: flex;
     justify-content: space-between;
 }
-.profileDiv .profileContent .upper .sellerInfo .buttonsDiv{
+
+.profileDiv .profileContent .upper .sellerInfo .buttonsDiv {
     margin-top: 10px;
 }
-.profileDiv .profileContent .upper .sellerInfo .buttonsDiv .btnsForAdmin{
+
+.profileDiv .profileContent .upper .sellerInfo .buttonsDiv .btnsForAdmin {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-.profileDiv .profileContent .upper .sellerInfo .buttonsDiv .btnsForAdmin div{
+
+.profileDiv .profileContent .upper .sellerInfo .buttonsDiv .btnsForAdmin div {
     display: flex;
     justify-content: space-between;
     gap: 10px;
 }
+
 .profileDiv .profileContent .upper .sellerInfo .buttonsDiv .btnsForAdmin div a,
-.profileDiv .profileContent .upper .sellerInfo .buttonsDiv .btnsForAdmin div button{
+.profileDiv .profileContent .upper .sellerInfo .buttonsDiv .btnsForAdmin div button {
     width: 100% !important;
 }
 
 .profileDiv .sellerServices .services,
-.profileDiv .sellerProducts .products{
+.profileDiv .sellerProducts .products {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 15px;
     margin: 20px 0px;
 }
+
 .profileDiv .sellerServices .services .service,
-.profileDiv .sellerProducts .products .product{
+.profileDiv .sellerProducts .products .product {
     width: 100%;
 }
+.profileDiv .sellerServices .services.grid-1,
+.profileDiv .sellerProducts .products.grid-1 {
+    grid-template-columns: repeat(1, 1fr);
+}
+.profileDiv .sellerServices .services.grid-2 ,
+.profileDiv .sellerProducts .products.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+.profileDiv .sellerServices .services.grid-3 ,
+.profileDiv .sellerProducts .products.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+.profileDiv .sellerServices .services.grid-4 ,
+.profileDiv .sellerProducts .products.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+.profileDiv .sellerServices .services.grid-5 ,
+.profileDiv .sellerProducts .products.grid-5 {
+    grid-template-columns: repeat(5, 1fr);
+}
 
-.profileDiv .sellerReviews{
+
+.profileDiv .sellerReviews {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -2195,6 +2381,7 @@
     border-radius: 8px;
     padding: 20px 30px;
 }
-.profileDiv .sellerReviews .reviewDiv{
+
+.profileDiv .sellerReviews .reviewDiv {
     margin-top: 20px;
 }

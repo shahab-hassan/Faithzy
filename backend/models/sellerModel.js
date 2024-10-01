@@ -40,6 +40,8 @@ const sellerSchema = new mongoose.Schema({
   productsSold: {type: Number, default: 0},
   servicesDone: {type: Number, default: 0},
   stripeAccountId: { type: String },
+  payoneerAccountId: { type: String },
+  activePaymentMethod: { type: String, enum: ["Stripe", "Payoneer"] },
 
 }, { timestamps: true });
 

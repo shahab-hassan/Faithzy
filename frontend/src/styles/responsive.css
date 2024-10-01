@@ -1,0 +1,1365 @@
+@media only screen and (max-width: 1290px) {
+    .productDetailsDiv .upper .upperRight .productActions {
+        display: grid;
+        gap: 15px;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .productDetailsDiv .upper .upperRight .productActions .addToCartBtn {
+        width: 100%;
+    }
+
+}
+
+
+
+
+
+
+
+/* |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| */
+
+
+@media only screen and (max-width: 1090px) {
+
+    p,
+    a {
+        font-size: 0.9rem;
+    }
+
+    .primaryBtn,
+    .primaryBtn2 {
+        padding: 7px 18px;
+        font-size: 0.85rem;
+    }
+
+    .primaryBtn .icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .secondaryBtn,
+    .dangerBtn {
+        padding: 7px 13px;
+        font-size: 0.85rem;
+    }
+
+    .luxuryBtn {
+        padding: 10px 22px;
+        font-size: 14px;
+    }
+
+    .primaryHeading {
+        font-size: 27px;
+    }
+
+    .secondaryHeading {
+        font-size: 18px;
+    }
+
+    .starIcon,
+    .starIconFilled {
+        height: 15px;
+        width: 15px;
+    }
+
+    .ratingsDiv {
+        font-size: 0.85rem;
+    }
+
+
+    .form {
+        gap: 14px;
+    }
+
+    .form .inputDiv:has(.inputInnerDiv) {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .form textarea {
+        min-height: 100px;
+    }
+
+    .uploadIcon {
+        font-size: 35px;
+    }
+
+    .dropdownPlus {
+        padding: 8px 17px;
+        padding-right: 40px;
+        background-size: 10px;
+        font-size: 0.8rem;
+    }
+
+    .cartCountBtn .minus,
+    .cartCountBtn .plus {
+        padding: 0px 10px;
+        font-size: 20px;
+    }
+
+    .popupDiv .popupContent {
+        min-width: 60%;
+        max-width: 80%;
+    }
+
+    /* .tableDiv .tableContent{
+        width: 100%;
+    } */
+
+    .tableDiv p {
+        font-size: 0.88rem;
+    }
+
+    .tableDiv .rows .row .field {
+        gap: 12px;
+    }
+
+    .tableDiv .rows .row .priceField {
+        font-size: 0.95rem;
+    }
+
+    .tableDiv .rows .row .field .icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .tableDiv .totalRows {
+        font-size: 0.9rem;
+    }
+
+
+    .buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper .buyerHeaderActions,
+    .buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper .buyerHeaderActionsBefore {
+        display: none;
+    }
+
+    .buyerHeaderDiv .buyerHeaderContent .buyerHeaderUpper .buyerHeaderDrawer {
+        display: block;
+    }
+
+    .buyerHeaderDiv .drawerContent ,
+    .sellerHeaderDiv .drawerContent {
+        position: absolute;
+        top: 11%;
+        right: 4%;
+        flex-direction: column;
+        gap: 0;
+        z-index: 100;
+        width: 25%;
+    }
+
+    .buyerHeaderDiv .drawerContent li ,
+    .sellerHeaderDiv .drawerContent li {
+        width: 100%;
+        height: 3rem;
+        background-color: var(--secondaryBlue);
+        animation: navbarMenuAnimation 200ms linear forwards;
+        transform-origin: top right;
+        opacity: 0;
+        box-shadow: 1px 3px 10px 1px var(--primaryBlue);
+    }
+
+    .buyerHeaderDiv .drawerContent li:nth-child(2) ,
+    .sellerHeaderDiv .drawerContent li:nth-child(2) {
+        animation-delay: 50ms;
+    }
+
+    .buyerHeaderDiv .drawerContent li:nth-child(3) ,
+    .sellerHeaderDiv .drawerContent li:nth-child(3) {
+        animation-delay: 100ms;
+    }
+
+    .buyerHeaderDiv .drawerContent li:nth-child(4) ,
+    .sellerHeaderDiv .drawerContent li:nth-child(4) {
+        animation-delay: 170ms;
+    }
+
+    .buyerHeaderDiv .drawerContent li:nth-child(5) ,
+    .sellerHeaderDiv .drawerContent li:nth-child(5) {
+        animation-delay: 240ms;
+    }
+
+    .buyerHeaderDiv .drawerContent li:nth-child(6) ,
+    .sellerHeaderDiv .drawerContent li:nth-child(6) {
+        animation-delay: 300ms;
+    }
+
+    .buyerHeaderDiv .drawerContent li:nth-child(7) ,
+    .sellerHeaderDiv .drawerContent li:nth-child(7) {
+        animation-delay: 350ms;
+    }
+
+    .buyerHeaderDiv .drawerContent li:nth-child(8) ,
+    .sellerHeaderDiv .drawerContent li:nth-child(8) {
+        animation-delay: 410ms;
+    }
+
+    .buyerHeaderDiv .drawerContent li:nth-child(9) ,
+    .sellerHeaderDiv .drawerContent li:nth-child(9) {
+        animation-delay: 480ms;
+    }
+
+    .buyerHeaderDiv .drawerContent li:nth-child(10) ,
+    .sellerHeaderDiv .drawerContent li:nth-child(10) {
+        animation-delay: 570ms;
+    }
+
+    .buyerHeaderDiv .drawerContent li:nth-child(11) ,
+    .sellerHeaderDiv .drawerContent li:nth-child(11) {
+        animation-delay: 670ms;
+    }
+
+    .buyerHeaderDiv .drawerContent li:nth-child(12) ,
+    .sellerHeaderDiv .drawerContent li:nth-child(12) {
+        animation-delay: 780ms;
+    }
+
+    .buyerHeaderDiv .drawerContent li:nth-child(13) ,
+    .sellerHeaderDiv .drawerContent li:nth-child(13) {
+        animation-delay: 880ms;
+    }
+
+    .buyerHeaderDiv .drawerContent li:nth-child(14) ,
+    .sellerHeaderDiv .drawerContent li:nth-child(14) {
+        animation-delay: 990ms;
+    }
+
+    .buyerHeaderDiv .drawerContent li a ,
+    .sellerHeaderDiv .drawerContent li a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        width: 100%;
+        height: 100%;
+    }
+
+    .heroDiv .heroContent .heroContentMain h1 {
+        font-size: 44px;
+    }
+
+    .heroDiv .heroContent .heroContentMain p {
+        font-size: 16px;
+    }
+
+    .heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .stepInputs .tradeleadInputDiv {
+        font-size: 0.8rem;
+    }
+
+    .sampleProvisionsDiv .sampleProvisionsLower .productsDiv {
+        gap: 20px;
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+
+    .product .productImgDiv {
+        height: 200px;
+    }
+
+    .service .serviceImgDiv {
+        height: 160px;
+    }
+
+    .product .productTitle,
+    .service .serviceTitle {
+        font-size: 0.88rem;
+    }
+
+    .product .productLower .productLowerTop,
+    .service .serviceLower .serviceLowerTop {
+        font-size: 0.8rem;
+    }
+
+    .product .productLower .productPrice,
+    .service .serviceLower .servicePrice {
+        font-size: 1.3rem;
+    }
+
+    .product .productLower .productDiscount,
+    .service .serviceLower .serviceDiscount {
+        font-size: 0.9rem;
+    }
+
+    .service .hoverActions .iconDiv,
+    .product .hoverActions .iconDiv {
+        width: 30px;
+        height: 30px;
+        padding: 8px;
+    }
+
+    .categoriesDiv .categories {
+        grid-template-columns: repeat(2, 1fr);
+        font-size: 0.8rem;
+    }
+
+    .categoriesDiv .categories .category .count {
+        font-size: 0.7rem;
+    }
+
+    .servicesDiv .right .services,
+    .productsDiv .right .products {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .pagination .pageBtn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.8rem;
+    }
+
+    .pagination .leftArrow,
+    .pagination .rightArrow {
+        width: 35px;
+        height: 35px;
+        padding: 7px;
+    }
+
+    .cartDiv .cartContent .section {
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+        gap: 40px;
+    }
+
+    .cartDiv .left {
+        width: 100%;
+    }
+
+    .cartDiv .summary {
+        width: 100%;
+    }
+
+    .profileDiv .profileContent .upper {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+}
+
+
+
+
+
+
+/* |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| */
+
+
+@media only screen and (max-width: 900px) {
+
+    p,
+    a {
+        font-size: 0.85rem;
+    }
+
+    .luxuryBtn {
+        padding: 8px 18px;
+        font-size: 12px;
+    }
+
+    .primaryHeading {
+        font-size: 24px;
+    }
+
+    .secondaryHeading {
+        font-size: 17px;
+    }
+
+    .starIcon,
+    .starIconFilled {
+        height: 13px;
+        width: 13px;
+    }
+
+    .ratingsDiv {
+        font-size: 0.8rem;
+    }
+
+    .dropdownPlus {
+        padding: 7px 16px;
+        padding-right: 40px;
+        background-size: 10px;
+        font-size: 0.75rem;
+    }
+
+    .primaryBtn,
+    .primaryBtn2 {
+        padding: 6px 15px;
+        font-size: 0.78rem;
+    }
+
+    .primaryBtn .icon {
+        width: 15px;
+        height: 15px;
+    }
+
+    .secondaryBtn,
+    .dangerBtn {
+        font-size: 0.78rem;
+    }
+
+    .form {
+        gap: 10px;
+    }
+
+    .form .inputDiv {
+        font-size: 0.9rem;
+    }
+
+    .form .inputDiv .inputField,
+    .form .inputDiv textarea {
+        font-size: 0.75rem;
+    }
+
+    .form textarea {
+        min-height: 90px;
+    }
+
+    .uploadIcon {
+        font-size: 33px;
+    }
+
+    .popupDiv .popupContent {
+        min-width: 70%;
+        max-width: 85%;
+    }
+
+
+    .tableDiv .section {
+        overflow: auto;
+    }
+
+    .tableDiv .tableContent {
+        width: 840px;
+    }
+
+    .tableDiv p {
+        font-size: 0.7rem;
+    }
+
+    .tableDiv .rows .row .priceField {
+        font-size: 0.9rem;
+    }
+
+    .tableDiv .rows .row .field {
+        gap: 8px;
+    }
+
+    .tableDiv .rows .row .field .icon {
+        width: 15px;
+        height: 15px;
+    }
+
+    .tableDiv .totalRows {
+        font-size: 0.8rem;
+    }
+
+
+
+    .buyerHeaderDiv .drawerContent ,
+    .sellerHeaderDiv .drawerContent {
+        width: 40%;
+    }
+
+    .searchBoxDiv {
+        width: 95%;
+        margin: auto;
+        margin-right: 50px;
+    }
+
+    .searchBoxDiv .searchBtnDiv {
+        font-size: 15px;
+        width: 60px;
+        height: 55px;
+        gap: 0;
+        box-shadow: -2px 1px 10px 0.1px var(--lightBlack);
+        cursor: pointer;
+        transition: 0.1s;
+    }
+
+    .searchBoxDiv .searchBoxMain {
+        height: 40px;
+    }
+
+    .searchBoxDiv .searchBoxMain .searchBoxLeft .searchInput:placeholder-shown {
+        font-size: 0.75rem;
+    }
+
+    .searchBoxDiv .searchBoxMain .searchBoxRight {
+        padding: 10px 15px;
+        padding-right: 50px;
+    }
+
+    .heroDiv {
+        height: 85vh;
+    }
+
+    .heroDiv .heroContent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+
+    .heroDiv .heroContent .heroContentMain {
+        width: 90%;
+        text-align: center;
+        align-items: center;
+    }
+
+    .heroDiv .heroTradeleadFormDiv {
+        width: 90%;
+    }
+
+    .heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .stepInputs {
+        flex-direction: row;
+    }
+
+    .heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .stepInputs .tradeleadInputDiv {
+        width: 100%;
+        font-size: 0.75rem;
+    }
+
+    .buyerFooterDiv .footerContent .footerUpper {
+        flex-wrap: wrap;
+    }
+
+    .buyerFooterDiv .footerContent .footerUpper .column {
+        min-width: 40%;
+    }
+
+    .buyerFooterDiv .footerContent {
+        font-size: 0.85rem !important;
+    }
+
+    .buyerFooterDiv .footerContent h4 {
+        font-size: 1rem !important;
+    }
+
+    .buyerFooterDiv .footerContent .footerUpper .footerUpperLeft .faithzyLogoDiv {
+        width: 70px;
+        height: 70px;
+    }
+
+    .sampleProvisionsDiv .sampleProvisionsLower .productsDiv {
+        gap: 18px;
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+
+    .product .productImgDiv {
+        height: 190px;
+    }
+
+    .service .serviceImgDiv {
+        height: 170px;
+    }
+
+    .product .productTitle {
+        font-size: 0.83rem;
+    }
+
+    .product .productLower .productLowerTop {
+        font-size: 0.75rem;
+    }
+
+    .product .productLower .productPrice {
+        font-size: 1.1rem;
+    }
+
+    .product .productLower .productDiscount {
+        font-size: 0.85rem;
+    }
+
+    .service .hoverActions .iconDiv,
+    .product .hoverActions .iconDiv {
+        width: 26px;
+        height: 26px;
+        padding: 8px;
+    }
+
+
+    .servicesDiv,
+    .productsDiv {
+        margin: 45px 0px;
+    }
+
+    .servicesDiv .servicesContent,
+    .productsDiv .productsContent {
+        gap: 35px;
+    }
+
+    .servicesDiv .filters,
+    .productsDiv .filters {
+        min-width: 22%;
+    }
+
+    .servicesDiv .filters .filter .row,
+    .productsDiv .filters .filter .row {
+        font-size: 0.7rem;
+    }
+
+    .servicesDiv .left .ratingFilter .rating .up,
+    .productsDiv .left .ratingFilter .rating .up {
+        font-size: 0.7rem;
+    }
+
+    .servicesDiv .right .services,
+    .productsDiv .right .products {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop .title {
+        font-size: 0.9rem;
+        -webkit-line-clamp: 2;
+        line-clamp: inherit;
+        height: 3em;
+        width: 85%;
+    }
+
+    .cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop .icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .cartCountBtn p {
+        font-size: 12px;
+    }
+
+    .cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .price {
+        font-size: 1.5rem;
+    }
+
+    .cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .price span {
+        font-size: 0.9rem;
+    }
+
+    .productDetailsDiv {
+        padding: 50px 0px;
+    }
+
+    .serviceDetailsDiv {
+        margin: 50px 0px;
+    }
+
+    .productDetailsDiv .upper,
+    .serviceDetailsDiv .serviceInfo {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .productDetailsDiv .upper .upperLeft,
+    .serviceDetailsDiv .serviceInfo .serviceImages {
+        width: 100%;
+        display: flex;
+        gap: 50px;
+    }
+
+    .productDetailsDiv .upper .upperRight,
+    .serviceDetailsDiv .serviceInfo .info {
+        width: 100%;
+    }
+
+    .productDetailsDiv .upper .upperRight .productActions {
+        grid-template-columns: 0.7fr 1.5fr 1fr;
+    }
+
+    .productDetailsDiv .upper .upperLeft .productThumbnail,
+    .serviceDetailsDiv .serviceInfo .serviceImages .serviceThumbnail {
+        width: 75%;
+    }
+
+    .productDetailsDiv .upper .upperLeft .productGalleryDiv,
+    .serviceDetailsDiv .serviceInfo .serviceImages .serviceGalleryDiv {
+        flex-direction: column;
+        width: 22%;
+        margin-top: 0px;
+        flex-wrap: wrap;
+    }
+
+    .productDetailsDiv .upper .upperLeft .productGalleryDiv img,
+    .serviceDetailsDiv .serviceInfo .serviceImages .serviceGalleryDiv img {
+        width: 90%;
+        height: 60px;
+    }
+
+    .serviceDetailsDiv .packages {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 50px 0px;
+    }
+
+    .serviceDetailsDiv .packages .packageBox {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .serviceDetailsDiv .aboutSeller .upper {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .serviceDetailsDiv .aboutSeller .upper .sellerInfo {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-right: 0px;
+        width: 100%;
+    }
+
+    .serviceDetailsDiv .aboutSeller .upper .sellerInfo .col {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .serviceDetailsDiv .aboutService,
+    .serviceDetailsDiv .aboutSeller {
+        margin-bottom: 50px;
+    }
+
+
+    .checkoutDiv {
+        padding: 30px 0px;
+    }
+
+    .checkoutDiv .checkoutContent {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 30px;
+    }
+
+    .checkoutDiv .billingInfo {
+        width: 100%;
+    }
+
+    .checkoutDiv .orderSummary {
+        width: 100%;
+    }
+
+    .profileDiv .bg img {
+        left: 40%;
+    }
+
+    .registerDiv .registerContent .registerRight,
+    .loginDiv .loginContent .loginRight {
+        min-width: 70%;
+    }
+
+}
+
+
+
+
+
+
+
+
+/* |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| */
+
+
+@media only screen and (max-width: 650px) {
+
+    p {
+        font-size: 0.8rem;
+    }
+
+    a {
+        font-size: 0.75rem;
+    }
+
+    .primaryBtn,
+    .primaryBtn2 {
+        padding: 6px 15px;
+        font-size: 0.7rem;
+    }
+
+    .primaryBtn .icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .secondaryBtn,
+    .dangerBtn {
+        font-size: 0.7rem;
+    }
+
+    .form .inputDiv {
+        font-size: 0.8rem;
+    }
+
+    .form .inputDiv .inputField,
+    .form .inputDiv textarea {
+        font-size: 0.7rem;
+    }
+
+    .form textarea {
+        min-height: 80px;
+    }
+
+    .uploadIcon {
+        font-size: 30px;
+    }
+
+    .popupDiv .popupContent {
+        min-width: 85%;
+        max-width: 90%;
+    }
+
+    .tableDiv .tableContent {
+        width: 750px;
+    }
+
+    .tableDiv p {
+        font-size: 0.68rem;
+    }
+
+    .tableDiv .rows .row .priceField {
+        font-size: 0.8rem;
+    }
+
+    .tableDiv .rows .row .field {
+        gap: 6px;
+    }
+
+    .tableDiv .rows .row .field .icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .tableDiv .totalRows {
+        font-size: 0.75rem;
+    }
+
+    .section {
+        width: 88%;
+    }
+
+    .primaryHeading {
+        font-size: 22px;
+    }
+
+    .secondaryHeading {
+        font-size: 16px;
+    }
+
+    .dropdownPlus {
+        padding: 7px 15px;
+        padding-right: 37px;
+        background-size: 8px;
+        font-size: 0.72rem;
+    }
+
+    .sampleProvisionsDiv .sampleProvisionsLower .productsDiv {
+        gap: 18px;
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .product .productImgDiv {
+        height: 210px;
+    }
+
+    .product .productTitle {
+        font-size: 0.88rem;
+    }
+
+    .product .productLower .productPrice {
+        font-size: 1.2rem;
+    }
+
+    .heroDiv .heroTradeleadFormDiv {
+        width: 95%;
+    }
+
+    .heroDiv .heroTradeleadFormDiv .tradeleadStepper {
+        padding: 20px 35px;
+        width: 100%;
+    }
+
+    .heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepper {
+        margin-bottom: 16px;
+    }
+
+    .heroDiv .heroTradeleadFormDiv .tradeleadStepper .step {
+        width: 30px;
+        height: 30px;
+        font-size: 0.85rem;
+    }
+
+    .heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepButtons {
+        margin-top: 13px;
+    }
+
+    .heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .inputField {
+        font-size: 0.65rem;
+    }
+
+    .heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent label {
+        font-size: 0.65rem;
+    }
+
+    .categoriesDiv {
+        padding: 30px 0px;
+    }
+
+    .categoriesDiv .categoriesContent {
+        padding: 30px;
+    }
+
+    .categoriesDiv .categories {
+        grid-template-columns: repeat(1, 1fr);
+        font-size: 0.7rem;
+    }
+
+    .categoriesDiv .categories .category .count {
+        font-size: 0.65rem;
+    }
+
+    .servicesDiv .servicesContent,
+    .productsDiv .productsContent {
+        gap: 35px;
+    }
+
+    .servicesDiv .filters,
+    .productsDiv .filters {
+        min-width: 24%;
+    }
+
+    .servicesDiv .right,
+    .productsDiv .right {
+        min-width: 55%;
+        max-width: 62%;
+    }
+
+    .servicesDiv .filters .filter .row,
+    .productsDiv .filters .filter .row {
+        font-size: 0.63rem;
+    }
+
+    .servicesDiv .left .ratingFilter .rating .up,
+    .productsDiv .left .ratingFilter .rating .up {
+        font-size: 0.63rem;
+    }
+
+    .servicesDiv .right .services,
+    .productsDiv .right .products {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 20px;
+    }
+
+    .pagination .pageBtn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.7rem;
+    }
+
+    .pagination .leftArrow,
+    .pagination .rightArrow {
+        width: 28px;
+        height: 28px;
+        padding: 5px;
+    }
+
+    .productDetailsDiv {
+        padding: 40px 0px;
+    }
+
+    .serviceDetailsDiv {
+        margin: 40px 0px;
+    }
+
+    .productDetailsDiv .upper,
+    .serviceDetailsDiv .serviceInfo {
+        gap: 30px;
+    }
+
+    .productDetailsDiv .upper .upperRight .productActions {
+        grid-template-columns: 0.7fr 1.5fr 1fr;
+    }
+
+    .productDetailsDiv .upper .upperLeft,
+    .serviceDetailsDiv .serviceInfo .serviceImages {
+        gap: 20px;
+    }
+
+    .productDetailsDiv .upper .upperLeft .productThumbnail,
+    .serviceDetailsDiv .serviceInfo .serviceImages .serviceThumbnail {
+        width: 85%;
+    }
+
+    .productDetailsDiv .upper .upperLeft .productGalleryDiv,
+    .serviceDetailsDiv .serviceInfo .serviceImages .serviceGalleryDiv {
+        flex-direction: column;
+        width: 11%;
+        margin-top: 0px;
+    }
+
+    .productDetailsDiv .upper .upperLeft .productGalleryDiv img,
+    .serviceDetailsDiv .serviceInfo .serviceImages .serviceGalleryDiv img {
+        width: 100%;
+        height: 42px;
+        border: 1px solid transparent;
+    }
+
+    .productDetailsDiv .upper .upperRight .productTitle,
+    .serviceDetailsDiv .serviceInfo .info .title {
+        font-size: 1rem;
+    }
+
+    .productDetailsDiv .lower .innerLower,
+    .productDetailsDiv .lower .productReviews {
+        padding: 20px;
+    }
+
+    .productDetailsDiv .lower .innerLower p {
+        font-size: 0.75rem !important;
+        margin-top: 8px;
+    }
+
+    .productDetailsDiv .lower {
+        margin-top: 40px;
+    }
+
+    .reviewDiv .userReview .upper img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .reviewDiv .userReview .upper .date {
+        font-size: 0.8rem;
+    }
+
+    .reviewDiv .userReview .userComment {
+        font-size: 0.88rem;
+    }
+
+    .reviewDiv .userReview .sellerResponse p {
+        font-size: 0.88rem;
+    }
+
+    .contactDiv .contactContent {
+        margin: 30px 0px;
+        padding: 25px;
+    }
+
+    .settingsDiv {
+        padding: 30px 0px;
+    }
+
+    .settingsDiv .settingsContent {
+        padding: 25px;
+    }
+
+    .termsDiv {
+        padding: 30px;
+    }
+
+    .termsDiv .termsContent {
+        padding: 25px 35px;
+        font-size: 0.85rem !important;
+    }
+
+    .requirementsDiv {
+        margin: 30px 0px;
+    }
+
+    .requirementsDiv .requirementsContent {
+        padding: 20px 30px;
+    }
+
+
+    .profileDiv .bg img {
+        left: 38%;
+    }
+
+    .registerDiv .registerContent .registerRight .registerRightLower .inputDiv .passInstructions {
+        font-size: 0.6rem;
+    }
+
+    .registerDiv .registerContent .registerRight,
+    .loginDiv .loginContent .loginRight {
+        min-width: 90%;
+    }
+}
+
+
+
+
+
+
+/* |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| */
+
+
+@media only screen and (max-width: 500px) {
+    p {
+        font-size: 0.8rem;
+    }
+
+    .primaryHeading {
+        font-size: 18px;
+    }
+
+    .secondaryHeading {
+        font-size: 15px;
+    }
+
+    .luxuryBtn {
+        padding: 7px 16px;
+        font-size: 11px;
+    }
+
+    .dropdownPlus {
+        padding: 7px 14px;
+        padding-right: 36px;
+        background-size: 7px;
+        font-size: 0.68rem;
+    }
+
+    .buyerHeaderDiv .drawerContent ,
+    .sellerHeaderDiv .drawerContent {
+        width: 65%;
+    }
+
+    .searchBoxDiv {
+        width: 92%;
+        margin: auto;
+        margin-right: 50px;
+    }
+
+    .searchBoxDiv .searchBoxMain .searchBoxLeft .searchInput:placeholder-shown {
+        font-size: 0.6rem;
+    }
+
+    .searchBoxDiv .searchBoxMain .searchBoxRight {
+        padding: 10px 12px;
+        padding-right: 46px;
+    }
+
+    .buyerFooterDiv .footerContent .footerUpper .column {
+        min-width: 100%;
+        text-align: center;
+        align-items: center;
+    }
+
+    .buyerFooterDiv .footerContent .footerUpper .footerUpperLeft p {
+        width: 90%;
+    }
+
+    .buyerFooterDiv .footerContent .footerUpper .footerUpperLeft .faithzyLogoDiv {
+        width: 60px;
+        height: 60px;
+    }
+
+    .buyerFooterDiv .footerContent .footerLower p {
+        text-align: center;
+        width: 100%;
+    }
+
+    .heroDiv .heroContent .heroContentMain h1 {
+        font-size: 37px;
+    }
+
+    .heroDiv .heroContent .heroContentMain p {
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .heroDiv .heroTradeleadFormDiv .tradeleadStepper .stepContent .stepInputs .tradeleadInputDiv {
+        font-size: 0.7rem;
+    }
+
+    .sampleProvisionsDiv .sampleProvisionsLower .productsDiv {
+        gap: 18px;
+        grid-template-columns: repeat(1, 1fr) !important;
+    }
+
+    .product .productImgDiv {
+        height: 280px;
+    }
+
+    .service .serviceImgDiv {
+        height: 210px;
+    }
+
+    .product .productTitle {
+        font-size: 0.83rem;
+    }
+
+    .product .productLower .productLowerTop {
+        font-size: 0.75rem;
+    }
+
+    .product .productLower .productPrice {
+        font-size: 1.2rem;
+    }
+
+    .product .productLower .productDiscount {
+        font-size: 0.85rem;
+    }
+
+    .service .hoverActions .iconDiv,
+    .product .hoverActions .iconDiv {
+        width: 30px;
+        height: 30px;
+        padding: 8px;
+    }
+
+
+    .servicesDiv .servicesContent,
+    .productsDiv .productsContent {
+        gap: 25px;
+    }
+
+    .servicesDiv .filters,
+    .productsDiv .filters {
+        min-width: 32%;
+    }
+
+    .servicesDiv .filters .ratingFilter .starIconFilled,
+    .productsDiv .filters .ratingFilter .starIconFilled,
+    .servicesDiv .filters .ratingFilter .starIcon,
+    .productsDiv .filters .ratingFilter .starIcon {
+        width: 9px;
+        height: 9px;
+    }
+
+    .servicesDiv .right,
+    .productsDiv .right {
+        min-width: 65%;
+        max-width: 70%;
+        gap: 14px;
+    }
+
+    .servicesDiv .right .services .service .serviceImgDiv {
+        height: 160px;
+    }
+
+    .productsDiv .right .products .product .productImgDiv {
+        height: 190px;
+    }
+
+    .servicesDiv .filters .filter .row,
+    .productsDiv .filters .filter .row {
+        font-size: 0.6rem;
+    }
+
+    .servicesDiv .left .ratingFilter .rating .up,
+    .productsDiv .left .ratingFilter .rating .up {
+        font-size: 0.55rem;
+    }
+
+    .servicesDiv .right .activeFilters .filterTag,
+    .productsDiv .right .activeFilters .filterTag {
+        font-size: 0.75rem;
+    }
+
+    .pagination .pageBtn {
+        width: 23px;
+        height: 23px;
+        font-size: 0.65rem;
+    }
+
+    .pagination .leftArrow,
+    .pagination .rightArrow {
+        width: 23px;
+        height: 23px;
+        padding: 2px;
+    }
+
+    .cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .price {
+        flex-direction: row-reverse;
+    }
+
+    .cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop .title {
+        font-size: 0.8rem;
+    }
+
+    .cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemTop .icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .cartCountBtn p {
+        font-size: 11px;
+    }
+
+    .cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .price {
+        font-size: 1rem;
+    }
+
+    .cartDiv .left .cartProducts .cartElem .cartElemContent .cartElemBottom .price span {
+        font-size: 0.75rem;
+    }
+
+    .cartDiv .left .cartProducts .cartElem .imgDiv {
+        width: 100px;
+    }
+
+    .cartDiv .left .cartProducts .cartElem {
+        gap: 15px;
+    }
+
+    .productDetailsDiv .upper .upperRight .productActions {
+        grid-template-columns: 1fr 1.4fr;
+    }
+
+    .serviceDetailsDiv .serviceInfo .info .serviceActions {
+        display: flex;
+        gap: 15px;
+        flex-direction: column;
+    }
+
+    .serviceDetailsDiv .serviceInfo .info .serviceActions .moreActions a,
+    .serviceDetailsDiv .serviceInfo .info .serviceActions .moreActions button {
+        width: 100%;
+    }
+
+    .reviewDiv .userReview .upper .date {
+        font-size: 0.75rem;
+    }
+
+    .reviewDiv .userReview .userComment {
+        font-size: 0.82rem;
+    }
+
+    .reviewDiv .userReview .sellerResponse p {
+        font-size: 0.82rem;
+    }
+
+    .profileDiv .bg img {
+        left: 32%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+@keyframes navbarMenuAnimation {
+    0% {
+        transform: rotateZ(-90deg) scale(0.1);
+    }
+
+    100% {
+        transform: rotateZ(0deg) scale(1);
+        opacity: 1;
+    }
+}

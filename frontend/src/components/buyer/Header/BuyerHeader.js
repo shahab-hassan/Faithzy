@@ -1,16 +1,15 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useContext, useRef } from 'react'
 import { NavLink, Link, useLocation } from 'react-router-dom'
 import { MdKeyboardArrowDown } from "react-icons/md";
-// import { FaShop } from "react-icons/fa6";
 import CatsDropdown from "./CatsDropdown"
+import { IoMdMenu, IoMdClose } from "react-icons/io";
 
 import SearchBox from "../SearchBox"
 import { AuthContext } from '../../../utils/AuthContext';
 
 function BuyerHeader() {
 
-  const { isLogin, logout, user } = useContext(AuthContext);
+  const { isLogin, logout, user, isTablet } = useContext(AuthContext);
   const [showOptions, setShowOptions] = React.useState(false);
   const accountRef = useRef(null);
   const servicesRef = useRef(null);
@@ -21,6 +20,9 @@ function BuyerHeader() {
 
   const location = useLocation();
   const [activeLink, setActiveLink] = React.useState("");
+
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const drawerRef = useRef(null);
 
 
   React.useEffect(() => {
@@ -46,6 +48,8 @@ function BuyerHeader() {
       setShowServicesDropdown(false);
     if (productsRef.current && !productsRef.current.contains(event.target))
       setShowProductsDropdown(false);
+    if (drawerRef.current && !drawerRef.current.contains(event.target))
+      setDrawerOpen(false);
   };
 
   const handleDropdownClick = (e, type) => {
@@ -62,6 +66,9 @@ function BuyerHeader() {
     setShowProductsDropdown(false);
   }
 
+  const toggleMenu = () => {
+    setDrawerOpen(!drawerOpen);
+  };
 
   return (
     <div className='buyerHeaderDiv'>
@@ -71,18 +78,11 @@ function BuyerHeader() {
           <div className="buyerHeaderUpper">
 
             <div className='buyerHeaderUpperLeft'>
-              {/* <Link to="/" style={{color: "white"}}><div className="logoDiv"><h2>FAITHZY</h2></div></Link> */}
               <Link to="/" className="faithzyLogoDiv">
                 <img src="/assets/images/logo.svg" className='faithzyLogo' alt="Error" />
               </Link>
-              <SearchBox />
+              {!isTablet && <SearchBox />}
             </div>
-
-            {/* {!isLogin && <div className="buyerHeaderActionsBefore">
-              <li><NavLink to="/seller/becomeaseller" className={(v) => `${v.isActive ? "white navLink" : "darkGray navLink"}`}><FaShop className='icon' /> Become Seller</NavLink></li>
-              <li><NavLink to="/register" className={(v) => `${v.isActive ? "white navLink" : "darkGray navLink"}`}><i className="fa-solid fa-user-plus"></i>Register</NavLink></li>
-              <li><NavLink to="/login" className={(v) => `${v.isActive ? "white navLink" : "darkGray navLink"}`}><i className="fa-solid fa-arrow-right-to-bracket"></i>Login</NavLink></li>
-            </div>} */}
 
             {!isLogin && <div className="buyerHeaderActionsBefore">
               <NavLink to="/login" className={(v) => `${v.isActive && "active"} luxuryBtn`}>Log In</NavLink>
@@ -92,7 +92,6 @@ function BuyerHeader() {
             {isLogin && <div className="buyerHeaderActions">
 
               <div className="leftActions">
-                {/* <div className="notificationsDiv"><i className="fa-regular fa-bell"></i></div> */}
                 <Link to="/chat" className="inboxDiv"><i className="fa-regular fa-envelope"></i></Link>
                 <Link to="/orders" className="ordersHeader"><p>Orders</p></Link>
               </div>
@@ -104,7 +103,7 @@ function BuyerHeader() {
                   <i className="fa-regular fa-circle-user"></i>
                   {showOptions && (
                     <div className='optionsMenu'>
-                      {user && user?.role === "seller"? <Link to="/seller/dashboard">Dashboard</Link> : <Link to="/seller/becomeaseller">Become Seller</Link>}
+                      {user && user?.role === "seller" ? <Link to="/seller/dashboard">Dashboard</Link> : <Link to="/seller/becomeaseller">Become Seller</Link>}
                       <Link to="/contact">Contact Us</Link>
                       <div className="horizontalLine"></div>
                       <Link to="/settings">Settings</Link>
@@ -116,9 +115,43 @@ function BuyerHeader() {
 
             </div>}
 
+            <div className="buyerHeaderDrawer">
+
+              <div className="drawerIconsBuyerHeader">
+                {drawerOpen ? <IoMdClose size={28} className='close' onClick={toggleMenu} /> : <IoMdMenu size={28} className='open' onClick={toggleMenu} />}
+              </div>
+
+              {isLogin ? <ul className='drawerContent' ref={drawerRef} style={{ display: (drawerOpen ? 'flex' : 'none') }}>
+                <li>{user && user?.role === "seller" ? <Link to="/seller/dashboard">Dashboard</Link> : <Link to="/seller/becomeaseller">Become Seller</Link>}</li>
+                <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/chat" onClick={toggleMenu}>Messages</NavLink></li>
+                {isTablet && <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/categories" onClick={toggleMenu}>Categories</NavLink></li>}
+                {isTablet && <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/services" onClick={toggleMenu}>Services</NavLink></li>}
+                {isTablet && <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/products" onClick={toggleMenu}>Products</NavLink></li>}
+                {isTablet && <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/postRequest" onClick={toggleMenu}>Post a Request</NavLink></li>}
+                <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/orders" onClick={toggleMenu}>Orders</NavLink></li>
+                <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/cart" onClick={toggleMenu}>Cart</NavLink></li>
+                <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/wishlist" onClick={toggleMenu}>Wishlist</NavLink></li>
+                <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/contact" onClick={toggleMenu}>Contact Us</NavLink></li>
+                <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/settings" onClick={toggleMenu}>Settings</NavLink></li>
+                <li><Link to="/" onClick={() => { toggleMenu(); logout() }}>Logout</Link></li>
+              </ul>
+                :
+                <ul className='drawerContent' ref={drawerRef} style={{ display: (drawerOpen ? 'flex' : 'none') }}>
+                  <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/login" onClick={toggleMenu}>Log In</NavLink></li>
+                  <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/register" onClick={toggleMenu}>Sign Up</NavLink></li>
+                  {isTablet && <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/categories" onClick={toggleMenu}>Categories</NavLink></li>}
+                  {isTablet && <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/services" onClick={toggleMenu}>Services</NavLink></li>}
+                  {isTablet && <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/products" onClick={toggleMenu}>Products</NavLink></li>}
+                  {isTablet && <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/postRequest" onClick={toggleMenu}>Post a Request</NavLink></li>}
+                  <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/contact" onClick={toggleMenu}>Contact Us</NavLink></li>
+                </ul>}
+
+            </div>
+
+
           </div>
 
-          <div className="buyerHeaderLower">
+          {!isTablet && <div className="buyerHeaderLower">
 
             <nav className='lowerLeft'>
 
@@ -146,19 +179,20 @@ function BuyerHeader() {
                   {showProductsDropdown && <CatsDropdown isProduct={true} closeDropdowns={closeDropdowns} />}
                 </li>
 
-                
-                <li><NavLink to="/postRequest" className={(v) => `${v.isActive ? "white" : "darkGray"}`}>Post a Request</NavLink></li>
 
-                {/* <li><NavLink to="/contact" className={(v)=>`${v.isActive? "white": "darkGray"}`}>Contact</NavLink></li> */}
+                <li><NavLink to="/postRequest" className={(v) => `${v.isActive ? "white" : "darkGray"}`}>Post a Request</NavLink></li>
 
               </ul>
 
             </nav>
 
-          </div>
+          </div>}
+
+          {isTablet && <SearchBox />}
 
         </div>
       </section>
+
     </div>
   )
 }

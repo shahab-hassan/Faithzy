@@ -20,9 +20,7 @@ function Profile() {
     const [crrProductPage, setCrrProductPage] = React.useState(1);
     const [isUpdated, setIsUpdated] = React.useState(false);
 
-    const { isAdminLogin } = useContext(AuthContext);
-
-    console.log(services.length);
+    const { isAdminLogin, isTabletPro, isTablet, isMobilePro, isMobile } = useContext(AuthContext);
 
     React.useEffect(() => {
 
@@ -40,7 +38,7 @@ function Profile() {
 
     React.useEffect(() => {
         axios.get(`http://localhost:5000/api/v1/services/profile/myServices/${id}`, {
-            params: { page: crrServicePage, isAdminLogin },
+            params: { page: crrServicePage, isAdminLogin, isTabletPro, isTablet, isMobilePro, isMobile },
         })
             .then(response => {
                 if (response.data.success) {
@@ -52,12 +50,12 @@ function Profile() {
                 console.log(e);
                 enqueueSnackbar("Something went wrong!", { variant: "error" });
             });
-    }, [id, isAdminLogin, crrServicePage]);
+    }, [id, isAdminLogin, crrServicePage, isTabletPro, isTablet, isMobilePro, isMobile]);
 
     React.useEffect(() => {
 
         axios.get(`http://localhost:5000/api/v1/products/profile/myProducts/${id}`, {
-            params: { page: crrProductPage, isAdminLogin },
+            params: { page: crrProductPage, isAdminLogin, isTabletPro, isTablet, isMobilePro, isMobile },
         })
             .then(response => {
                 if (response.data.success) {
@@ -70,7 +68,7 @@ function Profile() {
                 enqueueSnackbar("Something went wrong!", { variant: "error" });
             });
 
-    }, [id, isAdminLogin, crrProductPage]);
+    }, [id, isAdminLogin, crrProductPage, isTabletPro, isTablet, isMobilePro, isMobile]);
 
 
     const formatJoinedDate = (date) => {
@@ -103,6 +101,8 @@ function Profile() {
         }
     };
 
+    const maxDisplay = isMobile ? 1 : isMobilePro ? 2 : isTablet ? 3 : (isTabletPro || isAdminLogin) ? 4 : 5;
+    console.log(maxDisplay);
 
     return (
         <div className='profileDiv'>
@@ -145,7 +145,7 @@ function Profile() {
 
                     <div className="sellerServices">
                         <h2 className="secondaryHeading">My <span>Services</span></h2>
-                        <div className="services" style={isAdminLogin ? { gridTemplateColumns: "repeat(4, 1fr)" } : { gridTemplateColumns: "repeat(5, 1fr)" }}>
+                        <div className={`services grid-${maxDisplay}`}>
                             {services && services.map((service, index) => {
                                 return <ServiceCard key={index} item={service} />
                             })}
@@ -155,7 +155,7 @@ function Profile() {
 
                     <div className="sellerProducts">
                         <h2 className="secondaryHeading">My <span>Products</span></h2>
-                        <div className="products" style={isAdminLogin ? { gridTemplateColumns: "repeat(4, 1fr)" } : { gridTemplateColumns: "repeat(5, 1fr)" }}>
+                        <div className={`products grid-${maxDisplay}`}>
                             {products && products.map((product, index) => {
                                 return <ProductCard key={index} item={product} />
                             })}

@@ -24,6 +24,7 @@ const withdrawSchema = new mongoose.Schema({
     amount: { type: Number, required: true },
     status: {type: String, required: true, enum: ["Pending", "Paid"], default: "Pending"},
     paymentType: {type: String, enum: ["Auto", "Manual"]},
+    paymentMethod: {type: String, enum: ["Stripe", "Payoneer"], default: "Stripe"},
     paidOn: {type: Date, default: Date.now},
     comment: {type: String},
 }, 

@@ -1,5 +1,5 @@
 const express = require('express');
-const { refundPayments, releasePayments, movePaymentToPending, markPaymentAsPaidManually, confirmPaymentIntent, getSellerHistory, getWithdrawalRequests, getSellerEarnings, connectStripe, requestForWithdraw } = require('../controllers/paymentCtrl');
+const { updateActivePaymentMethod, addPayoneer, refundPayments, releasePayments, movePaymentToPending, markPaymentAsPaidManually, confirmPaymentIntent, getSellerHistory, getWithdrawalRequests, getSellerEarnings, connectStripe, requestForWithdraw } = require('../controllers/paymentCtrl');
 const { authorized, authorizeAdmin, combinedAuthorization } = require('../middlewares/authorization');
 const router = express.Router();
 
@@ -10,6 +10,10 @@ router.get('/seller/:sellerId', combinedAuthorization, getSellerHistory);
 router.get('/seller/:sellerId/earnings', combinedAuthorization, getSellerEarnings);
 
 router.post('/seller/connect-stripe', authorized, connectStripe);
+
+router.post('/seller/add-payoneer', authorized, addPayoneer);
+
+router.post('/seller/update-active-payment-method', authorized, updateActivePaymentMethod);
 
 router.post('/seller/request-withdrawal', authorized, requestForWithdraw);
 

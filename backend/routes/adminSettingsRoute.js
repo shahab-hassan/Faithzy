@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getTerms, createOrUpdateTerms, getSocialLinks, createOrUpdateSocialLinks, getAdminFeesAndMembership, updateAdminFees, updateAdminMembership, getGeneralDashboardInfo, getRevenueAndProfitDetails, sendEmailToUserFromAdmin, receiveEmailFromUser, addStripeKeys, getStripeKeys } = require('../controllers/adminSettingsCtrl');
+const { addPayoneerKeys, getTerms, createOrUpdateTerms, getSocialLinks, createOrUpdateSocialLinks, getAdminFeesAndMembership, updateAdminFees, updateAdminMembership, getGeneralDashboardInfo, getRevenueAndProfitDetails, sendEmailToUserFromAdmin, receiveEmailFromUser, addStripeKeys, getKeys } = require('../controllers/adminSettingsCtrl');
 const { authorizeAdmin, authorized, combinedAuthorization } = require('../middlewares/authorization');
 
 router.get('/terms', getTerms);
@@ -23,6 +23,8 @@ router.post('/receive/email', receiveEmailFromUser);
 
 router.post('/stripe_keys', authorizeAdmin, addStripeKeys);
 
-router.get('/stripe_keys', combinedAuthorization, getStripeKeys);
+router.get('/keys', combinedAuthorization, getKeys);
+
+router.post('/payoneer_keys', authorizeAdmin, addPayoneerKeys);
 
 module.exports = router;

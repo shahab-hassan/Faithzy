@@ -630,8 +630,6 @@ function Checkout() {
               {loading ? "Processing..." : `Pay $${(items || (customItem && customItem.quoteType === "product")) ? summary.paidByBuyer.total.toFixed(2) : serviceSummary.paidByBuyer.total.toFixed(2)}`}
             </button>
 
-            <p>By placing an order, you agree to our Terms and Conditions</p>
-
           </div>
 
         </div>

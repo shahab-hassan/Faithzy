@@ -907,6 +907,11 @@
     align-items: center;
     gap: 10px;
 }
+.earningsDiv .sellerPaymentMethodsDiv .paymentMethods .buttonsDiv{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
 
 
 .earningsDiv .earningsOverview {
