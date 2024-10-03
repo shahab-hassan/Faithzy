@@ -21,13 +21,13 @@ app.use(cors({
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: process.env.NODE_ENV === 'production' }
-  }));
-  
-  app.use(passport.initialize());
-  app.use(passport.session());
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: process.env.NODE_ENV === 'production' }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/api/v1/auth/", require("./routes/userRoute"));
 app.use("/api/v1/products", require("./routes/productRoute"));
@@ -48,4 +48,4 @@ app.use("/api/v1/disputes", require("./routes/disputeRoute.js"));
 
 app.use(errorHandler);
 
-module.exports = {app, server};
+module.exports = { app, server };
