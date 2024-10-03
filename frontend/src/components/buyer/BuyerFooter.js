@@ -8,7 +8,6 @@ import { hostNameBack } from '../../utils/constants';
 
 function BuyerFooter() {
 
-
   const [socialLinks, setSocialLinks] = useState({});
   const { isLogin, user, isTabletPro } = useContext(AuthContext);
 

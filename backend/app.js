@@ -16,16 +16,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors({
   origin: [`${hostNameFront}`, "http://localhost:3000"],
-  methods: ["POST", "GET", "PUT", "DELETE"],
   credentials: true
 }));
-
-app.options('*', cors({
-  origin: [`${hostNameFront}`, "http://localhost:3000"],
-  methods: ["POST", "GET", "PUT", "DELETE"],
-  credentials: true
-}));
-
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
