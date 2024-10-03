@@ -13,10 +13,13 @@ const { hostNameFront } = require("./utils/constants.js");
 
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use(cors({
   origin: [`${hostNameFront}`, "http://localhost:3000"],
+  methods: ["POST", "GET", "PUT", "DELETE"],
   credentials: true
 }));
+
 // app.use(cors())
 
 app.use(session({
