@@ -6,6 +6,7 @@ import {Link} from "react-router-dom"
 
 import SellerBasicDetails from "../../components/seller/SellerBasicDetails"
 import Orders from '../common/Orders';
+import { hostNameBack } from '../../utils/constants';
 
 function SellerDashboard() {
   const { isLogin, user } = useContext(AuthContext);
@@ -15,7 +16,7 @@ function SellerDashboard() {
     const fetchSellerDetails = async () => {
       const token = localStorage.getItem('token');
       try {
-        const response = await axios.get(`http://localhost:5000/api/v1/sellers/seller/${user.sellerId._id}`, {
+        const response = await axios.get(`${hostNameBack}/api/v1/sellers/seller/${user.sellerId._id}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }

@@ -8,6 +8,7 @@ import ServiceCard from "../../components/buyer/ServiceCard";
 import ProductCard from "../../components/buyer/ProductCard";
 import { AuthContext } from '../../utils/AuthContext';
 import Reviews from '../../components/common/Reviews';
+import { hostNameBack } from '../../utils/constants';
 
 function Profile() {
     const { id } = useParams();
@@ -24,7 +25,7 @@ function Profile() {
 
     React.useEffect(() => {
 
-        axios.get(`http://localhost:5000/api/v1/sellers/profile/${id}`)
+        axios.get(`${hostNameBack}/api/v1/sellers/profile/${id}`)
             .then(response => {
                 if (response.data.success)
                     setSeller(response.data.seller);
@@ -37,7 +38,7 @@ function Profile() {
     }, [id, isAdminLogin, isUpdated]);
 
     React.useEffect(() => {
-        axios.get(`http://localhost:5000/api/v1/services/profile/myServices/${id}`, {
+        axios.get(`${hostNameBack}/api/v1/services/profile/myServices/${id}`, {
             params: { page: crrServicePage, isAdminLogin, isTabletPro, isTablet, isMobilePro, isMobile },
         })
             .then(response => {
@@ -54,7 +55,7 @@ function Profile() {
 
     React.useEffect(() => {
 
-        axios.get(`http://localhost:5000/api/v1/products/profile/myProducts/${id}`, {
+        axios.get(`${hostNameBack}/api/v1/products/profile/myProducts/${id}`, {
             params: { page: crrProductPage, isAdminLogin, isTabletPro, isTablet, isMobilePro, isMobile },
         })
             .then(response => {
@@ -86,7 +87,7 @@ function Profile() {
         try {
             const token = localStorage.getItem('adminToken');
             const response = await axios.put(
-                `http://localhost:5000/api/v1/auth/block/`,
+                `${hostNameBack}/api/v1/auth/block/`,
                 { userId, isBlocked },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -107,7 +108,7 @@ function Profile() {
     return (
         <div className='profileDiv'>
             <section className="bg">
-                <img src={`http://localhost:5000/${seller?.profileImage}`} alt="Error" />
+                <img src={`${hostNameBack}/${seller?.profileImage}`} alt="Error" />
             </section>
             <section className="section">
                 <div className="profileContent">

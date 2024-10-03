@@ -16,6 +16,7 @@ import { IoIosCloseCircleOutline, IoIosCloseCircle } from "react-icons/io";
 import { FaFilePdf, FaFileWord, FaFileAlt } from "react-icons/fa";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { FaBasketShopping } from "react-icons/fa6";
+import { hostNameBack } from '../../utils/constants';
 
 
 let socket;
@@ -34,6 +35,7 @@ const ChatPage = () => {
     const [showQuoteModel, setShowQuoteModel] = useState(false);
     const [quoteType, setQuoteType] = useState('product');
     const [quoteItems, setQuoteItems] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [offerDetails, setOfferDetails] = useState({
         productId: '',
         serviceId: '',
@@ -54,7 +56,7 @@ const ChatPage = () => {
             userId = decodedToken.id;
         }
 
-        socket = io('http://localhost:5000', {
+        socket = io(`${hostNameBack}`, {
             query: { userId }
         });
         
@@ -63,7 +65,7 @@ const ChatPage = () => {
     useEffect(() => {
         const paramsId = searchParams.get("p");
         if (paramsId) {
-            axios.get(`http://localhost:5000/api/v1/auth/getUser/${paramsId}`)
+            axios.get(`${hostNameBack}/api/v1/auth/getUser/${paramsId}`)
                 .then(response => {
                     if (response.data.success) {
                         setSelectedParticipant(response.data.user);
@@ -79,7 +81,7 @@ const ChatPage = () => {
     useEffect(() => {
         if (!user && !admin) return;
 
-        axios.get(`http://localhost:5000/api/v1/chats/${user ? "userChats" : "adminChats"}/${user ? user._id : admin._id}`, { headers: { Authorization: `Bearer ${user ? token : adminToken}` } })
+        axios.get(`${hostNameBack}/api/v1/chats/${user ? "userChats" : "adminChats"}/${user ? user._id : admin._id}`, { headers: { Authorization: `Bearer ${user ? token : adminToken}` } })
             .then(response => {
                 if (response.data.success) {
                     const chatsFetched = response.data.chats;
@@ -115,7 +117,7 @@ const ChatPage = () => {
     useEffect(() => {
         if (!user && !admin) return;
         if (selectedParticipant) {
-            axios.get(`http://localhost:5000/api/v1/chats/${user ? "userChats" : "adminChats"}/${user ? user._id : admin._id}`, { headers: { Authorization: `Bearer ${user ? token : adminToken}` } })
+            axios.get(`${hostNameBack}/api/v1/chats/${user ? "userChats" : "adminChats"}/${user ? user._id : admin._id}`, { headers: { Authorization: `Bearer ${user ? token : adminToken}` } })
                 .then(response => {
                     if (response.data.success) {
                         const updatedChats = response.data.chats;
@@ -144,6 +146,8 @@ const ChatPage = () => {
     const sendMessage = async () => {
         if (!message.trim() && !file) return;
 
+        setLoading(true);
+
         const formData = new FormData();
         formData.append('senderId', user ? user?._id : admin?._id);
         formData.append('receiverId', selectedParticipant._id);
@@ -154,7 +158,7 @@ const ChatPage = () => {
             formData.append('file', file);
 
         try {
-            const response = await axios.post(`http://localhost:5000/api/v1/chats/sendMessage/${user ? "user" : "admin"}`, formData, {
+            const response = await axios.post(`${hostNameBack}/api/v1/chats/sendMessage/${user ? "user" : "admin"}`, formData, {
                 headers: {
                     Authorization: `Admin ${user ? token : adminToken}`,
                     'Content-Type': 'multipart/form-data'
@@ -176,10 +180,13 @@ const ChatPage = () => {
                 setFile(null);
                 socket.emit('sendMessage', response.data.message);
             }
+            setLoading(false);
         } catch (error) {
+            setLoading(false);
             console.log(error);
             enqueueSnackbar(error?.response?.data?.error || "Failed to send message!", { variant: "error" });
         }
+        setLoading(false);
     };
 
     const handleFileChange = (event) => {
@@ -222,7 +229,7 @@ const ChatPage = () => {
     };
 
     const fetchQuoteItems = async (quoteType) => {
-        await axios.get(`http://localhost:5000/api/v1/${quoteType + "s"}/seller/${quoteType === "product" ? "myProducts" : "myServices"}/all`, { headers: { Authorization: `Bearer ${token}` } })
+        await axios.get(`${hostNameBack}/api/v1/${quoteType + "s"}/seller/${quoteType === "product" ? "myProducts" : "myServices"}/all`, { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 if (response.data.success) {
                     if (quoteType === "product") {
@@ -288,7 +295,7 @@ const ChatPage = () => {
         formData.append('offer', JSON.stringify(offer));
         formData.append('isParticipantAdmin', isParticipantAdmin);
 
-        axios.post('http://localhost:5000/api/v1/chats/sendMessage/user', formData, {
+        axios.post(`${hostNameBack}/api/v1/chats/sendMessage/user`, formData, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'multipart/form-data'
@@ -337,7 +344,7 @@ const ChatPage = () => {
                                     onClick={() => selectChat(chat)}
                                 >
                                     <div className="imgDiv">
-                                        <img src={chat.participantId?.role === "seller" ? `http://localhost:5000/${chat?.participantId.sellerId?.profileImage}` : chat.adminParticipantId ? "/assets/images/logo.svg" : "/assets/images/seller.png"} alt="Profile" />
+                                        <img src={chat.participantId?.role === "seller" ? `${hostNameBack}/${chat?.participantId.sellerId?.profileImage}` : chat.adminParticipantId ? "/assets/images/logo.svg" : "/assets/images/seller.png"} alt="Profile" />
                                     </div>
                                     <div>
                                         <div className='fw600'>{chat.participantId?._id === user?._id ? "You - Personal Chat" : chat.participantId ? chat.participantId?.username : "Admin"}</div>
@@ -361,7 +368,7 @@ const ChatPage = () => {
                         {selectedParticipant ? (
                             <>
                                 <div className="header">
-                                    <img src={selectedParticipant?.role === "seller" ? `http://localhost:5000/${selectedParticipant?.sellerId?.profileImage}` : isParticipantAdmin ? "/assets/images/logo.svg" : "/assets/images/seller.png"} alt="Profile" />
+                                    <img src={selectedParticipant?.role === "seller" ? `${hostNameBack}/${selectedParticipant?.sellerId?.profileImage}` : isParticipantAdmin ? "/assets/images/logo.svg" : "/assets/images/seller.png"} alt="Profile" />
                                     <Link to={!isParticipantAdmin && `/${user ? "profile" : "ftzy-admin/sellers"}/${selectedParticipant?.sellerId?._id}`} >{selectedParticipant?._id === user?._id ? "You - Personal Chat" : isParticipantAdmin ? "Admin" : selectedParticipant?.username}</Link>
                                 </div>
                                 <div className="messages content">
@@ -375,11 +382,11 @@ const ChatPage = () => {
                                             {msg.fileUrl && (
                                                 <div className="fileBox">
                                                     {msg.fileType.startsWith('image/') && (
-                                                        <img src={`http://localhost:5000/${msg.fileUrl}`} alt="Attachment" style={{ maxWidth: '100px', maxHeight: '100px', cursor: "pointer" }} onClick={() => setShowImageModel(msg.fileUrl)} />
+                                                        <img src={`${hostNameBack}/${msg.fileUrl}`} alt="Attachment" style={{ maxWidth: '100px', maxHeight: '100px', cursor: "pointer" }} onClick={() => setShowImageModel(msg.fileUrl)} />
                                                     )}
                                                     {msg.fileType.startsWith('video/') && (
                                                         <video controls style={{ maxWidth: '100%', maxHeight: '100%' }}>
-                                                            <source src={`http://localhost:5000/${msg.fileUrl}`} type={msg.fileType} />
+                                                            <source src={`${hostNameBack}/${msg.fileUrl}`} type={msg.fileType} />
                                                             Your browser does not support the video tag.
                                                         </video>
                                                     )}
@@ -387,7 +394,7 @@ const ChatPage = () => {
                                                         <div className="documentBox">
                                                             {renderDocumentIcon(msg.fileType)}
                                                             <div className="fileInfo">
-                                                                <a href={`http://localhost:5000/${msg.fileUrl}`} download>Download</a>
+                                                                <a href={`${hostNameBack}/${msg.fileUrl}`} download>Download</a>
                                                             </div>
                                                         </div>
                                                     )}
@@ -444,7 +451,7 @@ const ChatPage = () => {
                                             {user && user?.role === "seller" && !isParticipantAdmin && <button className='secondaryBtn' onClick={handleOpenQuoteModel}>Create an offer</button>}
                                         </div>
                                         <div className="right">
-                                            <button className='primaryBtn' onClick={sendMessage}>Send</button>
+                                            <button className='primaryBtn' disabled={loading} onClick={sendMessage}>Send</button>
                                         </div>
                                     </div>
                                 </div>
@@ -500,7 +507,7 @@ const ChatPage = () => {
                             <div className="horizontalLine"></div>
 
                             <div className="imgDiv previewImgDiv">
-                                <img src={`http://localhost:5000/${showImageModel}`} alt="Error" />
+                                <img src={`${hostNameBack}/${showImageModel}`} alt="Error" />
                             </div>
 
                             <div className="buttonsDiv">

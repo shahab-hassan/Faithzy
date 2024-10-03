@@ -5,6 +5,7 @@ import { useSnackbar } from "notistack"
 
 import ThirdPartyLogin from "../../components/buyer/ThirdPartyLogin"
 import { AuthContext } from "../../utils/AuthContext";
+import { hostNameBack } from '../../utils/constants'
 
 function Login() {
 
@@ -23,7 +24,7 @@ function Login() {
   const loginUser = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/v1/auth/login", { email, password })
+      const response = await axios.post(`${hostNameBack}/api/v1/auth/login`, { email, password })
       if (response.data.success) {
         login(response.data.token);
         navigate("/");
@@ -47,7 +48,7 @@ function Login() {
   const resendVerificationEmail = async () => {
     setResendDisabled(true);
     try {
-      await axios.post("http://localhost:5000/api/v1/auth/resend-verification", { email });
+      await axios.post(`${hostNameBack}/api/v1/auth/resend-verification`, { email });
       enqueueSnackbar("Verification email has been resent!", { variant: "success" });
       setTimeout(() => setResendDisabled(false), 10000);
     } catch (error) {

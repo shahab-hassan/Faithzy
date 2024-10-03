@@ -9,6 +9,7 @@ import LeaveServiceReview from '../../components/common/LeaveServiceReview';
 import Gallery from "../../components/seller/Gallery"
 import DisputeChatRoom from '../../components/common/DisputeChatRoom';
 import { AuthContext } from '../../utils/AuthContext';
+import { hostNameBack } from '../../utils/constants';
 
 function ServiceOrderDetails({ isBuyer }) {
   const { id } = useParams();
@@ -53,7 +54,7 @@ function ServiceOrderDetails({ isBuyer }) {
 
   useEffect(() => {
     const fetchOrderData = () => {
-      axios.get(`http://localhost:5000/api/v1/orders/${isBuyer ? "buyer" : "seller"}/service/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+      axios.get(`${hostNameBack}/api/v1/orders/${isBuyer ? "buyer" : "seller"}/service/${id}`, { headers: { Authorization: `Bearer ${token}` } })
         .then(response => {
           if (response.data.success) {
             const order = response.data.order;
@@ -77,7 +78,7 @@ function ServiceOrderDetails({ isBuyer }) {
     };
 
     if (order?.service?.disputeId) {
-      axios.get(`http://localhost:5000/api/v1/disputes/dispute/${order?.service?.disputeId}`, { headers: { Authorization: `Bearer ${token}` } })
+      axios.get(`${hostNameBack}/api/v1/disputes/dispute/${order?.service?.disputeId}`, { headers: { Authorization: `Bearer ${token}` } })
         .then(response => {
           if (response.data.success)
             setDispute(response.data.dispute);
@@ -155,7 +156,7 @@ function ServiceOrderDetails({ isBuyer }) {
     }
 
     try {
-      await axios.put(`http://localhost:5000/api/v1/orders/buyer/service/answers/${id}`, { answers }, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.put(`${hostNameBack}/api/v1/orders/buyer/service/answers/${id}`, { answers }, { headers: { Authorization: `Bearer ${token}` } });
       enqueueSnackbar("Answers submitted successfully!", { variant: 'success' });
       localStorage.setItem('reqsSubmitted', 'true');
       window.location.reload();
@@ -179,7 +180,7 @@ function ServiceOrderDetails({ isBuyer }) {
     setShowExtensionModel(false);
 
     try {
-      await axios.put(`http://localhost:5000/api/v1/orders/seller/service/extension/request/${id}`, {
+      await axios.put(`${hostNameBack}/api/v1/orders/seller/service/extension/request/${id}`, {
         extensionDate,
         extensionReason
       }, { headers: { Authorization: `Bearer ${token}` } });
@@ -195,7 +196,7 @@ function ServiceOrderDetails({ isBuyer }) {
 
   const handleResponseToExtension = async (response, activityId) => {
     try {
-      const res = await axios.put(`http://localhost:5000/api/v1/orders/buyer/service/extension/response/${order._id}/${activityId}`, { response }, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.put(`${hostNameBack}/api/v1/orders/buyer/service/extension/response/${order._id}/${activityId}`, { response }, { headers: { Authorization: `Bearer ${token}` } });
 
       if (res.data.success) {
         if (response === "accept")
@@ -253,7 +254,7 @@ function ServiceOrderDetails({ isBuyer }) {
     });
 
     try {
-      await axios.put(`http://localhost:5000/api/v1/orders/seller/service/delivery/send/${id}`, formData, {
+      await axios.put(`${hostNameBack}/api/v1/orders/seller/service/delivery/send/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
@@ -270,7 +271,7 @@ function ServiceOrderDetails({ isBuyer }) {
 
   const handleResponseToDelivery = async (response, activityId) => {
     try {
-      const res = await axios.put(`http://localhost:5000/api/v1/orders/buyer/service/delivery/response/${order._id}/${activityId}`, { response }, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.put(`${hostNameBack}/api/v1/orders/buyer/service/delivery/response/${order._id}/${activityId}`, { response }, { headers: { Authorization: `Bearer ${token}` } });
 
       if (res.data.success) {
         if (response === "accept")
@@ -292,7 +293,7 @@ function ServiceOrderDetails({ isBuyer }) {
     setShowCancelModel(false);
 
     try {
-      await axios.put(`http://localhost:5000/api/v1/orders/seller/service/cancel/request/${id}`, {
+      await axios.put(`${hostNameBack}/api/v1/orders/seller/service/cancel/request/${id}`, {
         cancellationReason
       }, { headers: { Authorization: `Bearer ${token}` } });
 
@@ -307,7 +308,7 @@ function ServiceOrderDetails({ isBuyer }) {
 
   const handleResponseToCancellation = async (response, activityId) => {
     try {
-      const res = await axios.put(`http://localhost:5000/api/v1/orders/buyer/service/cancel/response/${order._id}/${activityId}`, { response }, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.put(`${hostNameBack}/api/v1/orders/buyer/service/cancel/response/${order._id}/${activityId}`, { response }, { headers: { Authorization: `Bearer ${token}` } });
 
       if (res.data.success) {
         if (response === "accept")
@@ -335,7 +336,7 @@ function ServiceOrderDetails({ isBuyer }) {
 
     setShowStartDisputeModel(null)
     try {
-      const response = await axios.post('http://localhost:5000/api/v1/disputes/service/new', {
+      const response = await axios.post(`${hostNameBack}/api/v1/disputes/service/new`, {
         orderId: order._id,
         disputeReason,
         initiatedBy: isBuyer ? "Buyer" : "Seller"
@@ -392,7 +393,7 @@ function ServiceOrderDetails({ isBuyer }) {
       <div><strong>Description: </strong>{activity.description.text}</div>
 
       <div className='deliveryImages'>{activity.description.images.map((img, index) => {
-        return <img key={index} src={`http://localhost:5000/${img}`} alt="Error" style={{ cursor: "pointer" }} onClick={() => setShowImageModel(img)} />
+        return <img key={index} src={`${hostNameBack}/${img}`} alt="Error" style={{ cursor: "pointer" }} onClick={() => setShowImageModel(img)} />
       })}</div>
 
       {isBuyer && !activity.isDone && <div className='detailsBtns'>
@@ -505,7 +506,7 @@ function ServiceOrderDetails({ isBuyer }) {
               <div className="horizontalLine"></div>
               <div className="posting">
                 <div className="imgDiv">
-                  <img src={`http://localhost:5000/${order.service.serviceId.serviceImages[0]}`} alt="Error" />
+                  <img src={`${hostNameBack}/${order.service.serviceId.serviceImages[0]}`} alt="Error" />
                 </div>
                 <p className="singleLineText">{order.service.serviceId.title}</p>
               </div>
@@ -668,7 +669,7 @@ function ServiceOrderDetails({ isBuyer }) {
               <div className="horizontalLine"></div>
 
               <div className="imgDiv previewImgDiv">
-                <img src={`http://localhost:5000/${showImageModel}`} alt="Error" />
+                <img src={`${hostNameBack}/${showImageModel}`} alt="Error" />
               </div>
 
               <div className="buttonsDiv">

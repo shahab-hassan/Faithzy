@@ -8,6 +8,7 @@ const userModel = require("../models/userModel")
 const sendToken = require("../utils/sendToken")
 const sendEmail = require("../utils/sendEmail");
 const { verificationEmail, welcomeEmail } = require("../utils/emailTemplates");
+const { hostNameFront } = require("../utils/constants");
 
 exports.getUser = asyncHandler(async (req, res) => {
     const user = await userModel.findById(req.params.id).populate("sellerId");
@@ -148,7 +149,7 @@ exports.resetPasswordRequest = asyncHandler(async (req, res) => {
     const resetToken = user.getResetPasswordToken();
     await user.save();
 
-    const resetUrl = `http://localhost:3000/resetPassword/${resetToken}`;
+    const resetUrl = `${hostNameFront}/resetPassword/${resetToken}`;
 
     const message = `
         <h1>You have requested a password reset</h1>
@@ -223,7 +224,7 @@ exports.onGoogleLoginSuccess = (req, res, next) => {
             }
 
             const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN_SECRET, { expiresIn: process.env.JWT_TOKEN_EXPIRY });
-            res.redirect(`http://localhost:3000/?token=${token}`);
+            res.redirect(`${hostNameFront}/?token=${token}`);
         });
     })(req, res, next);
 }
@@ -250,7 +251,7 @@ exports.onFacebookLoginSuccess = (req, res, next) => {
             }
 
             const token = jwt.sign({ id: user._id }, process.env.JWT_TOKEN_SECRET, { expiresIn: process.env.JWT_TOKEN_EXPIRY });
-            res.redirect(`http://localhost:3000/?token=${token}`);
+            res.redirect(`${hostNameFront}/?token=${token}`);
         });
     })(req, res, next);
 }

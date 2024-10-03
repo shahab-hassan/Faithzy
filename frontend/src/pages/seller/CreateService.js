@@ -6,6 +6,7 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 
 import { AuthContext } from '../../utils/AuthContext';
 import Gallery from '../../components/seller/Gallery';
+import { hostNameBack } from '../../utils/constants';
 
 function CreateService() {
 
@@ -47,7 +48,7 @@ function CreateService() {
 
     React.useEffect(() => {
 
-        axios.get("http://localhost:5000/api/v1/settings/admin/feesAndMembership")
+        axios.get(`${hostNameBack}/api/v1/settings/admin/feesAndMembership`)
             .then(response => {
                 if (response.data.success)
                     setFeesObj(response.data.fees);
@@ -60,7 +61,7 @@ function CreateService() {
     }, [])
 
     React.useEffect(() => {
-        axios.get('http://localhost:5000/api/v1/categories/service/all')
+        axios.get(`${hostNameBack}/api/v1/categories/service/all`)
             .then(response => {
                 if (response.data.success) {
                     let categories = response.data.categories;
@@ -79,7 +80,7 @@ function CreateService() {
             });
 
         if (id) {
-            axios.get(`http://localhost:5000/api/v1/services/service/${id}`)
+            axios.get(`${hostNameBack}/api/v1/services/service/${id}`)
                 .then(response => {
                     if (response.data.success) {
                         const service = response.data.service;
@@ -94,7 +95,7 @@ function CreateService() {
                             questions: service.questions
                         });
                         if (Number(service.discountPercent) !== 0) setOfferDiscount(true);
-                        setServiceImages(service.serviceImages.map(image => `http://localhost:5000/${image}`));
+                        setServiceImages(service.serviceImages.map(image => `${hostNameBack}/${image}`));
                         setPackages(service.packages);
                     }
                     else
@@ -306,7 +307,7 @@ function CreateService() {
         try {
             const token = localStorage.getItem("token");
             if (id) {
-                await axios.put(`http://localhost:5000/api/v1/services/seller/service/${id}`, formData, {
+                await axios.put(`${hostNameBack}/api/v1/services/seller/service/${id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${token}`
@@ -314,7 +315,7 @@ function CreateService() {
                 });
             }
             else {
-                await axios.post("http://localhost:5000/api/v1/services/seller/service/new", formData, {
+                await axios.post(`${hostNameBack}/api/v1/services/seller/service/new`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${token}`

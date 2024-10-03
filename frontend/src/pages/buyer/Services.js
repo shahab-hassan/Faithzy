@@ -8,6 +8,7 @@ import RatingFilter from '../../components/buyer/Filters/RatingFilter';
 import Pagination from '../../components/common/Pagination';
 import CategoryFilter from '../../components/buyer/Filters/CategoryFilter';
 import ActiveFilters from '../../components/buyer/Filters/ActiveFilters';
+import { hostNameBack } from '../../utils/constants';
 
 function Services() {
 
@@ -24,40 +25,10 @@ function Services() {
 
     const searchQuery = searchParams.get('search') || '';
 
-    // useEffect(() => {
-        
-    //     const fetchServices = async () => {
-    //         try {
-    //             const response = await axios.get(`http://localhost:5000/api/v1/services/category/all/${categoryName}`, {
-    //                 params: {
-    //                     minPrice: priceRange.min,
-    //                     maxPrice: priceRange.max,
-    //                     rating,
-    //                     page,
-    //                 },
-    //             });
-    //             if (response.data.success) {
-    //                 setServices(response.data.services);
-    //                 setTotalPages(response.data.totalPages);
-    //                 setTotalServices(response.data.totalServices)
-    //             } 
-    //             else
-    //                 enqueueSnackbar("Something went wrong!", { variant: "error" });
-    //         } catch (e) {
-    //             console.log(e);
-    //             enqueueSnackbar(e.response.data.error || "Something went wrong!", { variant: "error" });
-    //         }
-    //     };
-
-
-    //     fetchServices();
-    // }, [categoryName, rating, page, priceRange]);
-
-
     useEffect(() => {
         const fetchServices = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/v1/services/results/all/`, {
+                const response = await axios.get(`${hostNameBack}/api/v1/services/results/all/`, {
                     params: {
                         category: categoryName,
                         search: searchQuery,

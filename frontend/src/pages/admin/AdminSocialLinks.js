@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaFacebook, FaInstagram, FaTwitter, FaPinterest, FaTumblr, FaYoutube, FaSnapchatGhost, FaTiktok, FaLinkedin } from "react-icons/fa";
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
+import { hostNameBack } from '../../utils/constants';
 
 const socialMediaPlatforms = [
     { name: 'facebook', label: 'Facebook', icon: <FaFacebook className='icon' /> },
@@ -23,7 +24,7 @@ function AdminSocialLinks() {
 
         const fetchLinks = async () => {
             try {
-                const { data } = await axios.get('http://localhost:5000/api/v1/settings/admin/social-links');
+                const { data } = await axios.get(`${hostNameBack}/api/v1/settings/admin/social-links`);
                 setLinks(data.socialLinks || {});
                 setChecked(data.socialLinks || {});
             } catch (error) {
@@ -54,7 +55,7 @@ function AdminSocialLinks() {
 
         try {
             const token = localStorage.getItem('adminToken');
-            const response = await axios.post('http://localhost:5000/api/v1/settings/admin/social-links', { socialLinks: filteredLinks }, {
+            const response = await axios.post(`${hostNameBack}/api/v1/settings/admin/social-links`, { socialLinks: filteredLinks }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.data.success)

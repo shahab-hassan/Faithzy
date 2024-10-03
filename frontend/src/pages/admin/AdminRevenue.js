@@ -3,6 +3,7 @@ import { Bar, Pie, Line } from 'react-chartjs-2';
 // eslint-disable-next-line no-unused-vars
 import Chart from 'chart.js/auto';
 import axios from 'axios';
+import { hostNameBack } from '../../utils/constants';
 
 const AdminRevenue = () => {
 
@@ -27,7 +28,7 @@ const AdminRevenue = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            let url = `http://localhost:5000/api/v1/settings/admin/revenue?filter=${filter}`;
+            let url = `${hostNameBack}/api/v1/settings/admin/revenue?filter=${filter}`;
             if (filter === 'custom') {
                 url += `&startDate=${customStartDate}&endDate=${customEndDate}`;
             }

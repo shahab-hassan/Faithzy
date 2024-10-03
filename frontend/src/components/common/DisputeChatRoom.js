@@ -8,6 +8,7 @@ import { IoIosChatboxes, IoIosCloseCircle, IoIosCloseCircleOutline } from 'react
 import { CgAttachment } from 'react-icons/cg';
 import io from 'socket.io-client';
 import { jwtDecode } from 'jwt-decode';
+import { hostNameBack } from '../../utils/constants';
 
 function DisputeChatRoom({ disputeId, isSourceAdmin }) {
 
@@ -35,7 +36,7 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
 
     useEffect(() => {
 
-        axios.get(`http://localhost:5000/api/v1/disputes/dispute/${disputeId}`, { headers: { Authorization: `${isSourceAdmin ? "Admin" : "Bearer"} ${isSourceAdmin ? adminToken : token}` } })
+        axios.get(`${hostNameBack}/api/v1/disputes/dispute/${disputeId}`, { headers: { Authorization: `${isSourceAdmin ? "Admin" : "Bearer"} ${isSourceAdmin ? adminToken : token}` } })
             .then(response => {
                 if (response.data.success) {
                     setDispute(response.data.dispute)
@@ -63,7 +64,7 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
             userId = decodedToken.id;
         }
 
-        const socket = io('http://localhost:5000', {
+        const socket = io(`${hostNameBack}`, {
             query: { userId }
         });
 
@@ -104,7 +105,7 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
         if (file) formData.append('file', file);
 
         try {
-            const response = await axios.post(`http://localhost:5000/api/v1/disputes/sendMessage`, formData, { headers: { Authorization: `${isSourceAdmin ? "Admin" : "Bearer"} ${isSourceAdmin ? adminToken : token}` } });
+            const response = await axios.post(`${hostNameBack}/api/v1/disputes/sendMessage`, formData, { headers: { Authorization: `${isSourceAdmin ? "Admin" : "Bearer"} ${isSourceAdmin ? adminToken : token}` } });
             if (response.data.success) {
                 setMessages(prevMessages => [...prevMessages, response.data.message]);
                 setMessage("");
@@ -134,7 +135,7 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
         }
 
         try {
-            const response = await axios.post(`http://localhost:5000/api/v1/disputes/${dispute.provisionType.toLowerCase()}/resolve`, {
+            const response = await axios.post(`${hostNameBack}/api/v1/disputes/${dispute.provisionType.toLowerCase()}/resolve`, {
                 disputeId: dispute._id,
                 amountToBuyer
             }, { headers: { Authorization: `Admin ${adminToken}` } });
@@ -168,11 +169,11 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
                             {msg.fileUrl && (
                                 <div className="fileBox">
                                     {msg.fileType.startsWith('image/') && (
-                                        <img src={`http://localhost:5000/${msg.fileUrl}`} alt="Attachment" style={{ maxWidth: '100px', maxHeight: '100px', cursor: "pointer" }} onClick={() => setShowImageModel(msg.fileUrl)} />
+                                        <img src={`${hostNameBack}/${msg.fileUrl}`} alt="Attachment" style={{ maxWidth: '100px', maxHeight: '100px', cursor: "pointer" }} onClick={() => setShowImageModel(msg.fileUrl)} />
                                     )}
                                     {msg.fileType.startsWith('video/') && (
                                         <video controls style={{ maxWidth: '100%', maxHeight: '100%' }}>
-                                            <source src={`http://localhost:5000/${msg.fileUrl}`} type={msg.fileType} />
+                                            <source src={`${hostNameBack}/${msg.fileUrl}`} type={msg.fileType} />
                                             Your browser does not support the video tag.
                                         </video>
                                     )}
@@ -180,7 +181,7 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
                                         <div className="documentBox">
                                             {renderDocumentIcon(msg.fileType)}
                                             <div className="fileInfo">
-                                                <a href={`http://localhost:5000/${msg.fileUrl}`} download>Download</a>
+                                                <a href={`${hostNameBack}/${msg.fileUrl}`} download>Download</a>
                                             </div>
                                         </div>
                                     )}
@@ -233,10 +234,10 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
                 <h2 className="secondaryHeading">Dispute <span>Details</span></h2>
 
                 {dispute.provisionType === "Product" ? <div className="item">
-                    <img src={`http://localhost:5000/${subOrder?.productId?.productImages[0]}`} alt="Error" />
+                    <img src={`${hostNameBack}/${subOrder?.productId?.productImages[0]}`} alt="Error" />
                     <p>{subOrder?.productId?.title}</p>
                 </div> :
-                    <div className="item"><img src={`http://localhost:5000/${subOrder?.service?.serviceId?.serviceImages[0]}`} alt="Error" />
+                    <div className="item"><img src={`${hostNameBack}/${subOrder?.service?.serviceId?.serviceImages[0]}`} alt="Error" />
                         <p>{subOrder?.service.serviceId?.title}</p></div>
                 }
 
@@ -337,7 +338,7 @@ function DisputeChatRoom({ disputeId, isSourceAdmin }) {
                             <div className="horizontalLine"></div>
 
                             <div className="imgDiv previewImgDiv">
-                                <img src={`http://localhost:5000/${showImageModel}`} alt="Error" />
+                                <img src={`${hostNameBack}/${showImageModel}`} alt="Error" />
                             </div>
 
                             <div className="buttonsDiv">

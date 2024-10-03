@@ -8,6 +8,7 @@ import { IoIosCloseCircleOutline } from 'react-icons/io';
 import { BsStripe } from "react-icons/bs";
 // import { FaPaypal } from "react-icons/fa";
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
+import { hostNameBack } from '../../utils/constants';
 
 function Upgrade() {
 
@@ -28,7 +29,7 @@ function Upgrade() {
     useEffect(() => {
         if (!user) return;
 
-        axios.get(`http://localhost:5000/api/v1/settings/admin/feesAndMembership`)
+        axios.get(`${hostNameBack}/api/v1/settings/admin/feesAndMembership`)
             .then(response => {
                 if (response.data.success) {
                     setMembership(response.data.membership);
@@ -40,7 +41,7 @@ function Upgrade() {
                 enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
             });
 
-        axios.get(`http://localhost:5000/api/v1/sellers/seller/${user?.sellerId?._id}`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`${hostNameBack}/api/v1/sellers/seller/${user?.sellerId?._id}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 if (response.data.success)
                     setCurrentPlan(response.data.seller.plan);
@@ -83,7 +84,7 @@ function Upgrade() {
         if (!window.confirm("You are ending your Paid Membership... Are you sure you want to continue?"))
             return;
 
-        axios.put(`http://localhost:5000/api/v1/sellers/plan/cancel/${user?.sellerId?._id}`, {}, { headers: { Authorization: `Bearer ${token}` } })
+        axios.put(`${hostNameBack}/api/v1/sellers/plan/cancel/${user?.sellerId?._id}`, {}, { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 if (response.data.success) {
                     setCurrentPlan(null);
@@ -131,7 +132,7 @@ function Upgrade() {
                 endDate: new Date(new Date().setMonth(new Date().getMonth() + selectedMonths)),
                 paymentMethod: 'stripe'
             };
-            const { data } = await axios.put(`http://localhost:5000/api/v1/sellers/plan/upgrade/${user?.sellerId?._id}`, { plan: planData }, { headers: { Authorization: `Bearer ${token}` } })
+            const { data } = await axios.put(`${hostNameBack}/api/v1/sellers/plan/upgrade/${user?.sellerId?._id}`, { plan: planData }, { headers: { Authorization: `Bearer ${token}` } })
 
             const clientSecret = data.clientSecret;
 

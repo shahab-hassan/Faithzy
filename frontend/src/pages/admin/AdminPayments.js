@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { FaEye } from "react-icons/fa";
 import { CSVLink } from 'react-csv';
 import { SiPayoneer } from 'react-icons/si';
+import { hostNameBack } from '../../utils/constants';
 
 
 const AdminPayments = () => {
@@ -46,7 +47,7 @@ const AdminPayments = () => {
 
         const fetchStripeKey = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/v1/settings/admin/keys', { headers: { Authorization: `Admin ${token}` } });
+                const response = await axios.get(`${hostNameBack}/api/v1/settings/admin/keys`, { headers: { Authorization: `Admin ${token}` } });
                 if (response.data.success) {
                     setStripePublishableKey(response.data.stripePublishableKey)
                     setStripeSecretKey(response.data.stripeSecretKey)
@@ -61,7 +62,7 @@ const AdminPayments = () => {
 
         const fetchWithdrawalRequests = async (type) => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/v1/payments/withdrawal-requests?type=${type}`, {
+                const response = await axios.get(`${hostNameBack}/api/v1/payments/withdrawal-requests?type=${type}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
@@ -93,7 +94,7 @@ const AdminPayments = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/settings/admin/stripe_keys',
+            const response = await axios.post(`${hostNameBack}/api/v1/settings/admin/stripe_keys`,
                 { stripePublishableKey, stripeSecretKey },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -117,7 +118,7 @@ const AdminPayments = () => {
         }
     
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/settings/admin/payoneer_keys',
+            const response = await axios.post(`${hostNameBack}/api/v1/settings/admin/payoneer_keys`,
                 { payoneerAccountId, payoneerClientId, payoneerClientSecret },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -156,7 +157,7 @@ const AdminPayments = () => {
         }
 
         try {
-            const response = await axios.put('http://localhost:5000/api/v1/payments/mark-paid', {
+            const response = await axios.put(`${hostNameBack}/api/v1/payments/mark-paid`, {
                 requestIds: selectedRequests,
                 paidOn: paymentDate,
                 comment,
@@ -182,7 +183,7 @@ const AdminPayments = () => {
         setReleaseLoading(true);
 
         try {
-            const response = await axios.put('http://localhost:5000/api/v1/payments/release-payment' + (value === 4 && "/payoneer"), {
+            const response = await axios.put(`${hostNameBack}/api/v1/payments/release-payment` + (value === 4 && "/payoneer"), {
                 requestIds: selectedRequests
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -206,7 +207,7 @@ const AdminPayments = () => {
         setReleaseLoading(true);
 
         try {
-            const response = await axios.put('http://localhost:5000/api/v1/payments/refund-payment', {
+            const response = await axios.put(`${hostNameBack}/api/v1/payments/refund-payment`, {
                 requestIds: selectedRequests
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -228,7 +229,7 @@ const AdminPayments = () => {
     const moveToPending = async (type) => {
 
         try {
-            const response = await axios.put('http://localhost:5000/api/v1/payments/move-to-pending', { requestIds: selectedRequests, isRefund: type === "Refund" ? true : false }, {
+            const response = await axios.put(`${hostNameBack}/api/v1/payments/move-to-pending`, { requestIds: selectedRequests, isRefund: type === "Refund" ? true : false }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.data.success) {
@@ -533,7 +534,7 @@ function PendingPayments({ requests, selectedRequests, handleSelectRequest, hand
 
         setShowSellerDetailsModel(true);
 
-        axios.get(`http://localhost:5000/api/v1/payments/seller/${sellerId}`, {
+        axios.get(`${hostNameBack}/api/v1/payments/seller/${sellerId}`, {
             headers: { Authorization: `Admin ${token}` }
         })
             .then(response => {
@@ -545,7 +546,7 @@ function PendingPayments({ requests, selectedRequests, handleSelectRequest, hand
                 enqueueSnackbar("Something went wrong with payments", { variant: 'error' });
             });
 
-        axios.get(`http://localhost:5000/api/v1/payments/seller/${sellerId}/earnings`, {
+        axios.get(`${hostNameBack}/api/v1/payments/seller/${sellerId}/earnings`, {
             headers: { Authorization: `Admin ${token}` }
         })
             .then(response => {

@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
+import { hostNameBack } from "../../../utils/constants";
 
 function CategoryFilter({ isProduct, categoryName }) {
 
@@ -12,7 +13,7 @@ function CategoryFilter({ isProduct, categoryName }) {
   React.useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/v1/categories/${isProduct ? "product" : "service"}/all`);
+        const response = await axios.get(`${hostNameBack}/api/v1/categories/${isProduct ? "product" : "service"}/all`);
         if (response.data.success)
           setCategories(response.data.categories);
         else

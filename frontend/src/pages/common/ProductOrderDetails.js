@@ -10,6 +10,7 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 import LeaveProductReview from '../../components/common/LeaveProductReview';
 import DisputeChatRoom from '../../components/common/DisputeChatRoom';
 import { AuthContext } from '../../utils/AuthContext';
+import { hostNameBack } from '../../utils/constants';
 
 const ProductOrderDetails = ({ isBuyer }) => {
 
@@ -44,7 +45,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
 
   useEffect(() => {
 
-    axios.get(`http://localhost:5000/api/v1/orders/${isBuyer ? 'buyer' : 'seller'}/product/${id}`, {
+    axios.get(`${hostNameBack}/api/v1/orders/${isBuyer ? 'buyer' : 'seller'}/product/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(response => {
@@ -62,7 +63,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
         enqueueSnackbar(e?.response?.data?.error || "Something went wrong!", { variant: "error" });
       });
 
-    axios.get(`http://localhost:5000/api/v1/disputes/dispute/${showStatusDetails?.disputeId}`, { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${hostNameBack}/api/v1/disputes/dispute/${showStatusDetails?.disputeId}`, { headers: { Authorization: `Bearer ${token}` } })
       .then(response => {
         if (response.data.success)
           setDispute(response.data.dispute);
@@ -76,7 +77,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
 
   const handleStatusChange = async () => {
     try {
-      const response = await axios.put('http://localhost:5000/api/v1/orders/product/status', {
+      const response = await axios.put(`${hostNameBack}/api/v1/orders/product/status`, {
         orderId: order._id,
         productId: subOrder._id,
         newStatus
@@ -96,7 +97,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
 
   const handleResponseToDelivery = async (productId, resp) => {
     try {
-      const response = await axios.put('http://localhost:5000/api/v1/orders/product/delivery/response', {
+      const response = await axios.put(`${hostNameBack}/api/v1/orders/product/delivery/response`, {
         orderId: order._id,
         productId: productId,
         response: resp
@@ -116,7 +117,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
   const handleCancelOrder = async (productId) => {
     setShowCancellationModel(null)
     try {
-      const response = await axios.put('http://localhost:5000/api/v1/orders/product/cancel', {
+      const response = await axios.put(`${hostNameBack}/api/v1/orders/product/cancel`, {
         orderId: order._id,
         productId,
         cancellationReason,
@@ -143,7 +144,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
       return;
     }
     try {
-      const response = await axios.post('http://localhost:5000/api/v1/disputes/product/new', {
+      const response = await axios.post(`${hostNameBack}/api/v1/disputes/product/new`, {
         orderId: order._id,
         productId,
         disputeReason,
@@ -164,7 +165,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
 
   const handleResponseToCancellation = async (productId, resp) => {
     try {
-      const response = await axios.put('http://localhost:5000/api/v1/orders/product/cancel/response', {
+      const response = await axios.put(`${hostNameBack}/api/v1/orders/product/cancel/response`, {
         orderId: order._id,
         productId: productId,
         response: resp
@@ -346,7 +347,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
           <div className="leftLeft">
 
             <div className="imgDiv">
-              <img src={`http://localhost:5000/${subOrder.productId?.productImages[0]}`} alt="Error" />
+              <img src={`${hostNameBack}/${subOrder.productId?.productImages[0]}`} alt="Error" />
             </div>
 
             <div className="productInfo">
@@ -425,7 +426,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
           <div className="left">
             <div className="leftLeft">
               <div className="imgDiv">
-                <img src={`http://localhost:5000/${product.productId?.productImages[0]}`} alt="Error" />
+                <img src={`${hostNameBack}/${product.productId?.productImages[0]}`} alt="Error" />
               </div>
               <div className="productInfo">
                 <p className='singleLineText'>{product.productId.title}</p>

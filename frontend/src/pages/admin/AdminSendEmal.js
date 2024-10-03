@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { enqueueSnackbar } from 'notistack';
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { hostNameBack } from '../../utils/constants';
 
 function AdminSendEmail() {
     const [receiverEmail, setReceiverEmail] = useState('');
@@ -14,7 +15,7 @@ function AdminSendEmail() {
 
     React.useEffect(() => {
         axios
-            .get(`http://localhost:5000/api/v1/auth/getUser/${id}`)
+            .get(`${hostNameBack}/api/v1/auth/getUser/${id}`)
             .then((response) => {
                 if (response.data.success)
                     setReceiverEmail(response.data.user.email);
@@ -57,7 +58,7 @@ function AdminSendEmail() {
         setLoading(true);
 
         axios
-            .post('http://localhost:5000/api/v1/settings/admin/send/email', emailData)
+            .post(`${hostNameBack}/api/v1/settings/admin/send/email`, emailData)
             .then((response) => {
                 if (response.data.success)
                     enqueueSnackbar('Email sent successfully!', { variant: 'success' });

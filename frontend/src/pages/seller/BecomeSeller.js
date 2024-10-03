@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FaUpload } from 'react-icons/fa';
 
 import { AuthContext } from "../../utils/AuthContext";
+import { hostNameBack } from '../../utils/constants';
 
 function BecomeSeller({sellerId}) {
   const { isLogin, fetchUserData } = useContext(AuthContext);
@@ -26,13 +27,13 @@ function BecomeSeller({sellerId}) {
   React.useEffect(()=>{
     if(sellerId){
       const token = localStorage.getItem("token")
-      axios.get(`http://localhost:5000/api/v1/sellers/seller/${sellerId}`, {
+      axios.get(`${hostNameBack}/api/v1/sellers/seller/${sellerId}`, {
         headers: {Authorization: `Bearer ${token}`}
       })
       .then(response => {
         if(response.data.success){
           const seller = response.data.seller;
-          setPreviewImage(`http://localhost:5000/${seller.profileImage}`);
+          setPreviewImage(`${hostNameBack}/${seller.profileImage}`);
           setSellerDetails({
             profileImage: seller.profileImage,
             firstName: seller.fullName.split(" ")[0].trim(),
@@ -90,7 +91,7 @@ function BecomeSeller({sellerId}) {
       const token = localStorage.getItem('token');
       let response;
       if(sellerId){
-        response = await axios.put(`http://localhost:5000/api/v1/sellers/seller/${sellerId}`, formData, {
+        response = await axios.put(`${hostNameBack}/api/v1/sellers/seller/${sellerId}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`
@@ -98,7 +99,7 @@ function BecomeSeller({sellerId}) {
         });
       }
       else{
-        response = await axios.post(`http://localhost:5000/api/v1/sellers/seller/new`, formData, {
+        response = await axios.post(`${hostNameBack}/api/v1/sellers/seller/new`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`

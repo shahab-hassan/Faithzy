@@ -9,6 +9,7 @@ import { AuthContext } from '../../utils/AuthContext';
 import { addToWishlistUtil, removeFromWishlistUtil, fetchWishlistUtil, formatDate } from '../../utils/utilFuncs';
 import { addToCartUtil, removeFromCartUtil, fetchCartUtil } from '../../utils/utilFuncs';
 import Reviews from '../../components/common/Reviews';
+import { hostNameBack } from '../../utils/constants';
 
 function ProductDetails() {
 
@@ -22,7 +23,7 @@ function ProductDetails() {
   const [isShowDescription, setIsShowDescription] = useState(true);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/v1/products/product/${id}`)
+    axios.get(`${hostNameBack}/api/v1/products/product/${id}`)
       .then(response => {
         setProduct(response.data.product)
         setProductThumbnail(response.data.product.productImages[0]);
@@ -31,7 +32,7 @@ function ProductDetails() {
 
     if (isLogin) {
       const token = localStorage.getItem('token');
-      axios.post('http://localhost:5000/api/v1/products/user/recentlyViewed/',
+      axios.post(`${hostNameBack}/api/v1/products/user/recentlyViewed/`,
         { productId: id },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -89,7 +90,7 @@ function ProductDetails() {
   const galleryImages = product.productImages ? product.productImages.map((image, index) => {
     return <img
       key={index}
-      src={`http://localhost:5000/${image}`}
+      src={`${hostNameBack}/${image}`}
       alt="Error"
       onClick={() => setProductThumbnail(image)}
       style={productThumbnail === image ? { borderColor: "var(--primaryCopper)" } : { borderColor: "transparent" }}
@@ -106,7 +107,7 @@ function ProductDetails() {
 
             <div className="upperLeft">
 
-              {product.productImages && <img className='productThumbnail' src={`http://localhost:5000/${productThumbnail}`} alt="Error" />}
+              {product.productImages && <img className='productThumbnail' src={`${hostNameBack}/${productThumbnail}`} alt="Error" />}
 
               <div className="productGalleryDiv">
                 {galleryImages}
@@ -124,7 +125,7 @@ function ProductDetails() {
               <p className="productTitle">{product.title}</p>
 
               <div className="sellerInfo">
-                <img src={product.sellerId && `http://localhost:5000/${product.sellerId.profileImage}`} alt="Error" />
+                <img src={product.sellerId && `${hostNameBack}/${product.sellerId.profileImage}`} alt="Error" />
                 <Link to={`/profile/${product?.sellerId?._id}`}>{product && product.sellerId && product.sellerId.userId.username + " >"}</Link>
               </div>
 

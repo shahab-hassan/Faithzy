@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import React, { useState } from 'react'
+import { hostNameBack } from '../../utils/constants';
 // import Gallery from "../../components/seller/Gallery"
 
 function Contact() {
@@ -26,7 +27,7 @@ function Contact() {
 
     setLoading(true);
 
-    axios.post('http://localhost:5000/api/v1/settings/admin/receive/email', emailData)
+    axios.post(`${hostNameBack}/api/v1/settings/admin/receive/email`, emailData)
       .then((response) => {
         if (response.data.success)
           enqueueSnackbar('Email sent successfully!', { variant: 'success' });

@@ -2,6 +2,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useSnackbar } from 'notistack';
+import { hostNameBack } from '../../utils/constants';
 
 function ResetPasswordRequest() {
     const [email, setEmail] = React.useState("");
@@ -10,7 +11,7 @@ function ResetPasswordRequest() {
     const requestPasswordReset = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:5000/api/v1/auth/resetPasswordRequest", { email });
+            const response = await axios.post(`${hostNameBack}/api/v1/auth/resetPasswordRequest`, { email });
             if(response.data.success)
                 enqueueSnackbar("Password reset link sent to your email", { variant: "success" });
             else

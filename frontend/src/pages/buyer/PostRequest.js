@@ -8,6 +8,7 @@ import { FaEye } from "react-icons/fa6";
 import RequestDetails from '../../components/common/RequestDetails';
 import { MdMessage } from "react-icons/md";
 import { Link } from 'react-router-dom';
+import { hostNameBack } from '../../utils/constants';
 
 function PostRequest() {
     const [buyerRequests, setBuyerRequests] = useState([]);
@@ -20,7 +21,7 @@ function PostRequest() {
     useEffect(() => {
         const token = localStorage.getItem('token');
         axios
-            .get('http://localhost:5000/api/v1/tradeleads/requests/user', {
+            .get(`${hostNameBack}/api/v1/tradeleads/requests/user`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             .then((response) => {
@@ -43,7 +44,7 @@ function PostRequest() {
     const handleDeleteRequest = async (requestId) => {
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.delete(`http://localhost:5000/api/v1/tradeleads/request/${requestId}`, {
+            const response = await axios.delete(`${hostNameBack}/api/v1/tradeleads/request/${requestId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.data.success) {
@@ -60,7 +61,7 @@ function PostRequest() {
     const handleViewOffers = async (requestId) => {
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.get(`http://localhost:5000/api/v1/tradeleads/offers/${requestId}`, {
+            const response = await axios.get(`${hostNameBack}/api/v1/tradeleads/offers/${requestId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.data.success) {
@@ -186,7 +187,7 @@ function PostNewRequest({ setShowPostRequestModel, selectedRequest, setSelectedR
     });
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/v1/categories/service/all`)
+        axios.get(`${hostNameBack}/api/v1/categories/service/all`)
             .then(response => {
                 if (response.data.success) {
                     const categories = response.data.categories;
@@ -228,8 +229,8 @@ function PostNewRequest({ setShowPostRequestModel, selectedRequest, setSelectedR
         e.preventDefault();
         const token = localStorage.getItem('token');
         const url = selectedRequest
-            ? `http://localhost:5000/api/v1/tradeleads/request/${selectedRequest._id}`
-            : 'http://localhost:5000/api/v1/tradeleads/request';
+            ? `${hostNameBack}/api/v1/tradeleads/request/${selectedRequest._id}`
+            : `${hostNameBack}/api/v1/tradeleads/request`;
         const method = selectedRequest ? 'put' : 'post';
 
         try {

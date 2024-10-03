@@ -5,6 +5,7 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import {AuthContext} from "../../utils/AuthContext"
 import BecomeSeller from "../../pages/seller/BecomeSeller"
 import { enqueueSnackbar } from 'notistack';
+import { hostNameBack } from '../../utils/constants';
 
 function Settings() {
 
@@ -24,7 +25,7 @@ function Settings() {
   const updateGeneralSettings = async (e)=>{
     e.preventDefault();
     const token = localStorage.getItem("token");
-    await axios.put(`http://localhost:5000/api/v1/auth/updateUser/${user._id}`, {email, username}, {
+    await axios.put(`${hostNameBack}/api/v1/auth/updateUser/${user._id}`, {email, username}, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(response => {
@@ -43,7 +44,7 @@ function Settings() {
     e.preventDefault();
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.put(`http://localhost:5000/api/v1/auth/updatePassword/${user._id}`, { oldPassword, newPassword, confirmNewPassword }, {
+      const response = await axios.put(`${hostNameBack}/api/v1/auth/updatePassword/${user._id}`, { oldPassword, newPassword, confirmNewPassword }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.data.success)

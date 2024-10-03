@@ -5,6 +5,7 @@ import { addToWishlistUtil, removeFromWishlistUtil, fetchWishlistUtil, fetchCart
 import { AuthContext } from '../../utils/AuthContext';
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import { BsCartPlus, BsFillCartCheckFill } from "react-icons/bs";
+import { hostNameBack } from '../../utils/constants';
 
 function ProductCard({ item }) {
   const { user, isLogin } = useContext(AuthContext);
@@ -69,7 +70,7 @@ function ProductCard({ item }) {
     >
       <div className="productContent">
         <div className="productImgDiv">
-          {item.productImages && <img src={`http://localhost:5000/${item.productImages[0]}`} alt="Error" />}
+          {item.productImages && <img src={`${hostNameBack}/${item.productImages[0]}`} alt="Error" />}
         </div>
         <h2 className='productTitle'>{item.title}</h2>
         <div className="productLower">

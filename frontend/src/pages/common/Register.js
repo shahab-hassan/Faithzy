@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useSnackbar } from "notistack"
 
 import ThirdPartyLogin from "../../components/buyer/ThirdPartyLogin"
+import { hostNameBack } from '../../utils/constants'
 
 function Register() {
 
@@ -20,12 +21,13 @@ function Register() {
   const registerUser = (e) => {
     e.preventDefault();
     setLoading(true);
-    axios.post("http://localhost:5000/api/v1/auth/register", { username, email, password, confirmPass }).then(() => {
+    axios.post(`${hostNameBack}/api/v1/auth/register`, { username, email, password, confirmPass }).then(() => {
       enqueueSnackbar("An Email has been sent to you for verification... Please check your inbox!", { variant: "success" })
       setLoading(false);
       navigate("/login")
     }).catch((e) => {
-      enqueueSnackbar(e.response.data.error, { variant: "error" })
+      console.log(e);
+      enqueueSnackbar(e.response?.data?.error, { variant: "error" })
       setLoading(false);
     })
   }

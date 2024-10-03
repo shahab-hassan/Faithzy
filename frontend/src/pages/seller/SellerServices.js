@@ -5,6 +5,7 @@ import { enqueueSnackbar } from 'notistack';
 
 import { AuthContext } from "../../utils/AuthContext"
 import SellerServiceCard from '../../components/seller/SellerServiceCard';
+import { hostNameBack } from '../../utils/constants';
 
 function SellerServices() {
 
@@ -14,7 +15,7 @@ function SellerServices() {
     const deleteService = (id) => {
         if (window.confirm('Are you sure you want to delete this post?')) {
             const token = localStorage.getItem("token");
-            axios.delete(`http://localhost:5000/api/v1/services/seller/service/${id}`, {
+            axios.delete(`${hostNameBack}/api/v1/services/seller/service/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then((response) => {
@@ -31,7 +32,7 @@ function SellerServices() {
 
         const fetchSellerServices = () => {
             const token = localStorage.getItem('token');
-            axios.get("http://localhost:5000/api/v1/services/seller/myServices/all/", { headers: { Authorization: `Bearer ${token}` } })
+            axios.get(`${hostNameBack}/api/v1/services/seller/myServices/all/`, { headers: { Authorization: `Bearer ${token}` } })
                 .then(response => {
                     if (response.data.success)
                         setSellerServices(response.data.allServices)

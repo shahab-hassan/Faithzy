@@ -4,6 +4,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
 import Checkout from '../pages/buyer/Checkout';
 import Upgrade from '../pages/seller/Upgrade';
+import { hostNameBack } from './constants';
 
 
 const CheckoutStripeContainer = () => {
@@ -15,7 +16,7 @@ const CheckoutStripeContainer = () => {
   useEffect(() => {
     const fetchStripeKey = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/v1/settings/admin/stripe_keys',
+        const response = await axios.get(`${hostNameBack}/api/v1/settings/admin/stripe_keys`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         if (response.data.success) {
@@ -49,7 +50,7 @@ const UpgradeStripeContainer = () => {
   useEffect(() => {
     const fetchStripeKey = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/v1/settings/admin/stripe_keys',
+        const response = await axios.get(`${hostNameBack}/api/v1/settings/admin/stripe_keys`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         if (response.data.success) {

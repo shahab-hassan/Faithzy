@@ -7,6 +7,7 @@ import { formatDate } from '../../utils/utilFuncs';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 import { SiPayoneer } from "react-icons/si";
 import { Switch } from '@mui/material';
+import { hostNameBack } from '../../utils/constants';
 
 const SellerEarnings = () => {
 
@@ -47,7 +48,7 @@ const SellerEarnings = () => {
 
         if (user?.sellerId?.payoneerAccountId) setPayoneerAccountId(user?.sellerId?.payoneerAccountId);
 
-        axios.get(`http://localhost:5000/api/v1/payments/seller/${user?.sellerId?._id}`, {
+        axios.get(`${hostNameBack}/api/v1/payments/seller/${user?.sellerId?._id}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(response => {
@@ -59,7 +60,7 @@ const SellerEarnings = () => {
                 enqueueSnackbar("Something went wrong with payments", { variant: 'error' });
             });
 
-        axios.get(`http://localhost:5000/api/v1/payments/seller/${user?.sellerId?._id}/earnings`, {
+        axios.get(`${hostNameBack}/api/v1/payments/seller/${user?.sellerId?._id}/earnings`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(response => {
@@ -77,7 +78,7 @@ const SellerEarnings = () => {
     const connectStripe = async () => {
         setLoading(true);
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/payments/seller/connect-stripe', { sellerId: user?.sellerId?._id }, { headers: { Authorization: `Bearer ${token}` } });
+            const response = await axios.post(`${hostNameBack}/api/v1/payments/seller/connect-stripe`, { sellerId: user?.sellerId?._id }, { headers: { Authorization: `Bearer ${token}` } });
             // setStripeUrl(response.data.url);
             window.location.href = response.data.url;
             setLoading(false);
@@ -92,7 +93,7 @@ const SellerEarnings = () => {
     const requestedWithdrawal = async () => {
         setShowWithdrawalModel(false);
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/payments/seller/request-withdrawal', { userId: user?._id, sellerId: user?.sellerId?._id, amount: earnings.availableBalance, stripeActive }, { headers: { Authorization: `Bearer ${token}` } });
+            const response = await axios.post(`${hostNameBack}/api/v1/payments/seller/request-withdrawal`, { userId: user?._id, sellerId: user?.sellerId?._id, amount: earnings.availableBalance, stripeActive }, { headers: { Authorization: `Bearer ${token}` } });
             if (response.data.success) {
                 localStorage.setItem('requestSubmitted', 'true');
                 window.location.reload();
@@ -113,7 +114,7 @@ const SellerEarnings = () => {
 
         setLoading(true);
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/payments/seller/add-payoneer',
+            const response = await axios.post(`${hostNameBack}/api/v1/payments/seller/add-payoneer`,
                 { sellerId: user?.sellerId?._id, payoneerAccountId },
                 { headers: { Authorization: `Bearer ${token}` } });
 
@@ -156,7 +157,7 @@ const SellerEarnings = () => {
     };
     const updateActivePaymentMethod = async (method) => {
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/payments/seller/update-active-payment-method',
+            const response = await axios.post(`${hostNameBack}/api/v1/payments/seller/update-active-payment-method`,
                 { sellerId: user?.sellerId?._id, activePaymentMethod: method },
                 { headers: { Authorization: `Bearer ${token}` } });
             if (response.data.success) {

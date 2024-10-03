@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Dropdown from '../../components/common/Dropdown';
 import {formatDate} from "../../utils/utilFuncs"
 import { Link, useNavigate } from 'react-router-dom';
+import { hostNameBack } from '../../utils/constants';
 
 function AdminDisputes() {
 
@@ -14,7 +15,7 @@ function AdminDisputes() {
     useEffect(() => {
         const fetchDisputes = () => {
             const token = localStorage.getItem('adminToken');
-            axios.get(`http://localhost:5000/api/v1/disputes/all/`, {
+            axios.get(`${hostNameBack}/api/v1/disputes/all/`, {
                 headers: { Authorization: `Bearer ${token}` },
                 params: { filterType }
             })

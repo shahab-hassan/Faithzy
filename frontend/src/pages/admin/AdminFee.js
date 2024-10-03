@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
+import { hostNameBack } from '../../utils/constants';
 
 function AdminFee() {
     const [fees, setFees] = useState({
@@ -33,7 +34,7 @@ function AdminFee() {
 
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/v1/settings/admin/feesAndMembership')
+        axios.get(`${hostNameBack}/api/v1/settings/admin/feesAndMembership`)
             .then(response => {
                 if (response.data.success) {
                     if (response.data.fees) {
@@ -105,7 +106,7 @@ function AdminFee() {
         const token = localStorage.getItem('adminToken');
         // const updatedFees = { ...fees, [type]: fees[type] };
 
-        axios.post('http://localhost:5000/api/v1/settings/admin/update/fees', { fees: fees }, {
+        axios.post(`${hostNameBack}/api/v1/settings/admin/update/fees`, { fees: fees }, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(() => {
@@ -127,7 +128,7 @@ function AdminFee() {
 
         const token = localStorage.getItem('adminToken');
 
-        axios.post('http://localhost:5000/api/v1/settings/admin/update/membership', { membership }, {
+        axios.post(`${hostNameBack}/api/v1/settings/admin/update/membership`, { membership }, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(() => {

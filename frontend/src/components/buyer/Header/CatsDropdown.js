@@ -3,13 +3,14 @@ import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import { hostNameBack } from '../../../utils/constants';
 
 function CatsDropdown({ isProduct, closeDropdowns }) {
   const [categories, setCategories] = React.useState([]);
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    axios.get(`http://localhost:5000/api/v1/categories/${isProduct ? "product" : "service"}/all`)
+    axios.get(`${hostNameBack}/api/v1/categories/${isProduct ? "product" : "service"}/all`)
       .then(response => {
         if (response.data.success)
           setCategories(response.data.categories);

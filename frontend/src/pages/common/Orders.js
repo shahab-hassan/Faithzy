@@ -10,6 +10,7 @@ import { BsHourglassSplit } from "react-icons/bs";
 import { FiDollarSign } from "react-icons/fi";
 
 import DropDown from "../../components/common/Dropdown";
+import { hostNameBack } from '../../utils/constants';
 
 const Orders = ({ pageType }) => {
   const [searchParams] = useSearchParams();
@@ -24,9 +25,9 @@ const Orders = ({ pageType }) => {
   useEffect(() => {
     let url;
     if (pageType === "buyer") {
-      url = `http://localhost:5000/api/v1/orders/buyer/${ordersType === "Products" ? "product" : "service"}/all`;
+      url = `${hostNameBack}/api/v1/orders/buyer/${ordersType === "Products" ? "product" : "service"}/all`;
     } else if (pageType === "seller" || pageType === "dashboard") {
-      url = `http://localhost:5000/api/v1/orders/seller/${ordersType === "Products" ? "product" : "service"}/all`;
+      url = `${hostNameBack}/api/v1/orders/seller/${ordersType === "Products" ? "product" : "service"}/all`;
     }
 
     axios.get(url, {
@@ -71,7 +72,7 @@ const Orders = ({ pageType }) => {
               <div className="left">
                 <div className="leftLeft">
                   <div className="imgDiv">
-                    <img src={`http://localhost:5000/${product.productId?.productImages[0]}`} alt="Error" />
+                    <img src={`${hostNameBack}/${product.productId?.productImages[0]}`} alt="Error" />
                   </div>
                   <div className="productInfo">
                     <p className='singleLineText'>{product.productId?.title}</p>
@@ -129,7 +130,7 @@ const Orders = ({ pageType }) => {
               <div className="left">
                 <div className="leftLeft">
                   <div className="imgDiv">
-                    <img src={`http://localhost:5000/${product.productId?.productImages[0]}`} alt="Error" />
+                    <img src={`${hostNameBack}/${product.productId?.productImages[0]}`} alt="Error" />
                   </div>
                   <div className="productInfo">
                     <p className='singleLineText'>{product.productId?.title}</p>
@@ -189,7 +190,7 @@ const Orders = ({ pageType }) => {
             <div className="left">
               <div className="leftLeft">
                 <div className="imgDiv">
-                  <img src={`http://localhost:5000/${crrService.serviceId?.serviceImages && crrService.serviceId?.serviceImages[0]}`} alt="Error" />
+                  <img src={`${hostNameBack}/${crrService.serviceId?.serviceImages && crrService.serviceId?.serviceImages[0]}`} alt="Error" />
                 </div>
                 <div className="productInfo">
                   <p className='singleLineText'>{crrService.serviceId?.title}</p>
@@ -249,7 +250,7 @@ const Orders = ({ pageType }) => {
             <div className="left">
               <div className="leftLeft">
                 <div className="imgDiv">
-                  <img src={`http://localhost:5000/${crrService.serviceId?.serviceImages && crrService.serviceId?.serviceImages[0]}`} alt="Error" />
+                  <img src={`${hostNameBack}/${crrService.serviceId?.serviceImages && crrService.serviceId?.serviceImages[0]}`} alt="Error" />
                 </div>
                 <div className="productInfo">
                   <p className='singleLineText'>{crrService.serviceId?.title}</p>

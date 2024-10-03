@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { FaStar } from "react-icons/fa";
 import axios from 'axios';
+import { hostNameBack } from '../../utils/constants';
 
 function Reviews({ type, id }) {
 
@@ -12,7 +13,7 @@ function Reviews({ type, id }) {
 
 
     React.useEffect(() => {
-        axios.get(`http://localhost:5000/api/v1/reviews/${type}/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`${hostNameBack}/api/v1/reviews/${type}/${id}`, { headers: { Authorization: `Bearer ${token}` } })
             .then((response) => {
                 if (response.data.success) {
                     setRating(response.data.rating)
@@ -53,7 +54,7 @@ function Reviews({ type, id }) {
                             <div className="upper">
                                 <div className="aboutUser">
                                     <div className="userProfileImgDiv">
-                                        <img src={review?.userId?.sellerId?.profileImage? `http://localhost:5000/${review?.userId?.sellerId?.profileImage}` : "/assets/images/seller.png"} alt="Error" />
+                                        <img src={review?.userId?.sellerId?.profileImage? `${hostNameBack}/${review?.userId?.sellerId?.profileImage}` : "/assets/images/seller.png"} alt="Error" />
                                     </div>
                                     <div className='userInfo'>
                                         <div className='fw600'>{review.userId.username}</div>

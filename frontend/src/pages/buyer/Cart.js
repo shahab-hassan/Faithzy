@@ -4,6 +4,7 @@ import {Link} from "react-router-dom"
 
 import { fetchCartUtil, removeFromCartUtil, updateCartUtil } from '../../utils/utilFuncs';
 import {AuthContext} from "../../utils/AuthContext"
+import { hostNameBack } from '../../utils/constants';
 
 function Cart() {
 
@@ -57,7 +58,7 @@ function Cart() {
 
         <div className="cartElem">
           <div className="imgDiv">
-            <img src={`http://localhost:5000/${product.productImages? product.productImages[0]:""}`} alt="Error" />
+            <img src={`${hostNameBack}/${product.productImages? product.productImages[0]:""}`} alt="Error" />
           </div>
           <div className="cartElemContent">
             <div className="cartElemTop">

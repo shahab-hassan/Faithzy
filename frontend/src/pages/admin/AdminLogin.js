@@ -1,8 +1,9 @@
 import React, { useContext } from 'react'
 import axios from 'axios'
 import { enqueueSnackbar } from 'notistack';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../utils/AuthContext";
+import { hostNameBack } from '../../utils/constants';
 
 function AdminLogin() {
 
@@ -15,7 +16,7 @@ function AdminLogin() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:5000/api/v1/admins/admin/login`, { email, password })
+      const response = await axios.post(`${hostNameBack}/api/v1/admins/admin/login`, { email, password })
       if (response.data.success) {
         adminLogin(response.data.token)
         navigate("/ftzy-admin/dashboard")

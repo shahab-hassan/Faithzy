@@ -3,6 +3,7 @@ import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import RequestDetails from '../../components/common/RequestDetails';
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { hostNameBack } from '../../utils/constants';
 
 function Tradelead() {
     const [buyerRequests, setBuyerRequests] = React.useState([]);
@@ -13,7 +14,7 @@ function Tradelead() {
     const fetchBuyerRequests = async () => {
         const token = localStorage.getItem("token");
         try {
-            const response = await axios.get("http://localhost:5000/api/v1/tradeleads/requests/all", {
+            const response = await axios.get(`${hostNameBack}/api/v1/tradeleads/requests/all`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setBuyerRequests(response.data.requests);
@@ -25,7 +26,7 @@ function Tradelead() {
     const fetchSellerOffers = async () => {
         const token = localStorage.getItem("token");
         try {
-            const response = await axios.get("http://localhost:5000/api/v1/tradeleads/myOffers", {
+            const response = await axios.get(`${hostNameBack}/api/v1/tradeleads/myOffers`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setSellerOffers(response.data.offers);
@@ -109,7 +110,7 @@ function MakeOfferModel({ showMakeOfferModel, setShowMakeOfferModel, fetchSeller
         if (offer) {
             setFormData(offer);
         }
-    }, [showMakeOfferModel]);
+    }, [showMakeOfferModel, offer]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -119,8 +120,8 @@ function MakeOfferModel({ showMakeOfferModel, setShowMakeOfferModel, fetchSeller
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const url = offer
-            ? `http://localhost:5000/api/v1/tradeleads/offer/${requestId}/${offer._id}`
-            : `http://localhost:5000/api/v1/tradeleads/offer/${requestId}`;
+            ? `${hostNameBack}/api/v1/tradeleads/offer/${requestId}/${offer._id}`
+            : `${hostNameBack}/api/v1/tradeleads/offer/${requestId}`;
         const method = offer ? 'put' : 'post';
         await axios[method](url, formData, { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
@@ -134,7 +135,7 @@ function MakeOfferModel({ showMakeOfferModel, setShowMakeOfferModel, fetchSeller
     };
 
     const handleWithdrawOffer = async () => {
-        await axios.delete(`http://localhost:5000/api/v1/tradeleads/offer/${requestId}/${offer._id}`, { headers: { Authorization: `Bearer ${token}` } })
+        await axios.delete(`${hostNameBack}/api/v1/tradeleads/offer/${requestId}/${offer._id}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 enqueueSnackbar(response.data.message, { variant: 'success' });
                 setShowMakeOfferModel(null);

@@ -5,6 +5,7 @@ import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { Link } from "react-router-dom"
 import { IoIosCloseCircleOutline } from 'react-icons/io';
+import { hostNameBack } from '../../utils/constants';
 
 function AdminOrders({pre}) {
 
@@ -22,7 +23,7 @@ function AdminOrders({pre}) {
     useEffect(() => {
         const fetchOrders = () => {
             const token = localStorage.getItem('adminToken');
-            axios.get(`http://localhost:5000/api/v1/orders/admin/all/`, {
+            axios.get(`${hostNameBack}/api/v1/orders/admin/all/`, {
                 headers: { Authorization: `Bearer ${token}` },
                 params: { ordersType, pre }
             })
@@ -307,7 +308,8 @@ function AdminOrders({pre}) {
                                 </div>
                             </div>}
                             <div className="contactBuyerBtnDiv">
-                                <Link className='primaryBtn'>Contact Buyer {">"}</Link>
+                                <Link  className='primaryBtn'>Contact Buyer {">"}</Link>
+                                <Link to={`/ftzy-admin/sellers/${openedOrder? openedOrder?.service?.sellerId?._id : openedSubOrder.sellerId?._id}`}>Contact Buyer {" >"}</Link>
                             </div>
 
 

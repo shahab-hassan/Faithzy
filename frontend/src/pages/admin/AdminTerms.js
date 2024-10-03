@@ -3,12 +3,13 @@ import axios from 'axios';
 import { enqueueSnackbar } from "notistack";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { hostNameBack } from '../../utils/constants';
 
 function AdminTerms() {
     const [terms, setTerms] = useState("");
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/v1/settings/admin/terms')
+        axios.get(`${hostNameBack}/api/v1/settings/admin/terms`)
             .then(res => {
                 if (res.data.success) {
                     setTerms(res.data?.terms || "");
@@ -22,7 +23,7 @@ function AdminTerms() {
 
     const handleSave = () => {
         const token = localStorage.getItem('adminToken');
-        axios.post('http://localhost:5000/api/v1/settings/admin/terms', { content: terms }, {
+        axios.post(`${hostNameBack}/api/v1/settings/admin/terms`, { content: terms }, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => {

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { hostNameBack } from '../../utils/constants';
 
 function Requirements() {
 
@@ -13,7 +14,7 @@ function Requirements() {
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        axios.get(`http://localhost:5000/api/v1/orders/buyer/service/${orderId}`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`${hostNameBack}/api/v1/orders/buyer/service/${orderId}`, { headers: { Authorization: `Bearer ${token}` } })
             .then(response => {
                 if (response.data.success)
                     setOrder(response.data.order);
@@ -53,7 +54,7 @@ function Requirements() {
         }
 
         try {
-            await axios.put(`http://localhost:5000/api/v1/orders/buyer/service/answers/${orderId}`, { answers }, { headers: { Authorization: `Bearer ${token}` } });
+            await axios.put(`${hostNameBack}/api/v1/orders/buyer/service/answers/${orderId}`, { answers }, { headers: { Authorization: `Bearer ${token}` } });
             enqueueSnackbar("Answers submitted successfully!", { variant: 'success' });
             navigate("/orders?s=t")
         } catch (e) {

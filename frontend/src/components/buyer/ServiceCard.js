@@ -4,6 +4,7 @@ import { FaStar } from "react-icons/fa";
 import { addToWishlistUtil, removeFromWishlistUtil, fetchWishlistUtil } from '../../utils/utilFuncs';
 import { AuthContext } from '../../utils/AuthContext';
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
+import { hostNameBack } from '../../utils/constants';
 
 function ServiceCard({ item }) {
 
@@ -42,7 +43,7 @@ function ServiceCard({ item }) {
         >
             <div className="serviceContent">
                 <div className="serviceImgDiv">
-                    {item.serviceImages && <img src={`http://localhost:5000/${item.serviceImages[0]}`} alt="Error" />}
+                    {item.serviceImages && <img src={`${hostNameBack}/${item.serviceImages[0]}`} alt="Error" />}
                 </div>
                 <h2 className='serviceTitle'>{item.title}</h2>
                 <div className="serviceLower">

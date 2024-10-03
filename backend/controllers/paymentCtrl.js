@@ -4,6 +4,7 @@ const Seller = require('../models/sellerModel');
 const AdminSettings = require('../models/adminSettingsModel');
 const { productOrderModel, serviceOrderModel } = require('../models/orderModel');
 const axios = require("axios");
+const { hostNameFront } = require("../utils/constants");
 
 const getStripeSecretKey = async () => {
   const settings = await AdminSettings.findOne();
@@ -144,8 +145,8 @@ const connectStripe = asyncHandler(async (req, res) => {
 
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: 'http://localhost:3000/seller/earnings',
-      return_url: 'http://localhost:3000/seller/earnings',
+      refresh_url: `${hostNameFront}/seller/earnings`,
+      return_url: `${hostNameFront}/seller/earnings`,
       type: 'account_onboarding',
     });
 

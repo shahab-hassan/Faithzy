@@ -1,13 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { hostNameBack } from '../../utils/constants';
 
 function ThirdPartyLogin() {
 
   const googleLogin = () => {
-    window.location.href = "http://localhost:5000/api/v1/auth/login/google";
+    window.location.href = `${hostNameBack}/api/v1/auth/login/google`;
   };
   const facebookLogin = () => {
-    window.location.href = "http://localhost:5000/api/v1/auth/login/facebook";
+    window.location.href = `${hostNameBack}/api/v1/auth/login/facebook`;
   };
 
   return (

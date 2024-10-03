@@ -2,13 +2,14 @@ import React from 'react'
 import axios from "axios"
 import { useSearchParams } from 'react-router-dom'
 import { enqueueSnackbar } from "notistack";
-import { FaPaypal } from "react-icons/fa";
+// import { FaPaypal } from "react-icons/fa";
 import { BsStripe } from "react-icons/bs";
 import { useNavigate } from 'react-router-dom';
 
 import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
 
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { hostNameBack } from '../../utils/constants';
 
 function Checkout() {
 
@@ -58,7 +59,7 @@ function Checkout() {
 
   React.useEffect(() => {
 
-    axios.get("http://localhost:5000/api/v1/settings/admin/feesAndMembership")
+    axios.get(`${hostNameBack}/api/v1/settings/admin/feesAndMembership`)
       .then(response => {
         if (response.data.success)
           setFeesObj(response.data.fees);
@@ -78,7 +79,7 @@ function Checkout() {
     const messageId = searchParams.get("c");
 
     if (fromCart) {
-      axios.get("http://localhost:5000/api/v1/carts", { headers: { Authorization: `Bearer ${token}` } })
+      axios.get(`${hostNameBack}/api/v1/carts`, { headers: { Authorization: `Bearer ${token}` } })
         .then(response => {
           if (response.data.success) {
             setItems(response.data.cart.products);
@@ -95,7 +96,7 @@ function Checkout() {
       const id = productId.split("_")[0];
       const count = productId.split("_")[1];
 
-      axios.get(`http://localhost:5000/api/v1/products/product/${id}`)
+      axios.get(`${hostNameBack}/api/v1/products/product/${id}`)
         .then(response => {
           if (response.data.success) {
             const item = {
@@ -117,7 +118,7 @@ function Checkout() {
       const pkgIndex = serviceId.split("_")[0];
       const id = serviceId.split("_")[1];
 
-      axios.get(`http://localhost:5000/api/v1/services/service/${id}`)
+      axios.get(`${hostNameBack}/api/v1/services/service/${id}`)
         .then(response => {
           if (response.data.success) {
             const service = { service: response.data.service, pkgIndex: Number(pkgIndex) };
@@ -131,7 +132,7 @@ function Checkout() {
         })
     }
     else if (messageId) {
-      axios.get(`http://localhost:5000/api/v1/chats/offer/details/${messageId}`, { headers: { Authorization: `Bearer ${token}` } })
+      axios.get(`${hostNameBack}/api/v1/chats/offer/details/${messageId}`, { headers: { Authorization: `Bearer ${token}` } })
         .then(response => {
           if (response.data.success) {
             const offer = response.data.offer;
@@ -296,7 +297,7 @@ function Checkout() {
     };
 
     try {
-      const { data } = await axios.post(`http://localhost:5000/api/v1/orders/${(items || (customItem && customItem.quoteType === "product")) ? "product" : "service"}/order`, orderData, {
+      const { data } = await axios.post(`${hostNameBack}/api/v1/orders/${(items || (customItem && customItem.quoteType === "product")) ? "product" : "service"}/order`, orderData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -335,7 +336,7 @@ function Checkout() {
     };
 
     try {
-      const { data } = await axios.post(`http://localhost:5000/api/v1/orders/${(items || (customItem && customItem.quoteType === "product")) ? "product" : "service"}/order`, orderData, {
+      const { data } = await axios.post(`${hostNameBack}/api/v1/orders/${(items || (customItem && customItem.quoteType === "product")) ? "product" : "service"}/order`, orderData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -373,7 +374,7 @@ function Checkout() {
       enqueueSnackbar("Coupon removed!", { variant: "info" });
     }
     else {
-      axios.post("http://localhost:5000/api/v1/coupons/apply", { code: couponCode, salesPrice: (items || (customItem && customItem.quoteType === "product")) ? summary.paidByBuyer.totalSalesPrice.toFixed(2) : serviceSummary.paidByBuyer.salesPrice.toFixed(2) }, {
+      axios.post(`${hostNameBack}/api/v1/coupons/apply`, { code: couponCode, salesPrice: (items || (customItem && customItem.quoteType === "product")) ? summary.paidByBuyer.totalSalesPrice.toFixed(2) : serviceSummary.paidByBuyer.salesPrice.toFixed(2) }, {
         headers: { Authorization: `Bearer ${token}` }
       })
         .then(response => {
@@ -408,7 +409,7 @@ function Checkout() {
 
     return <div key={index} className="item">
       <div className="imgDiv">
-        <img src={`http://localhost:5000/${myItem.productImages ? myItem.productImages[0] : ""}`} alt="Error" />
+        <img src={`${hostNameBack}/${myItem.productImages ? myItem.productImages[0] : ""}`} alt="Error" />
       </div>
       <div className="itemContent">
         <p className='singleLineText'>{myItem.title}</p>
@@ -419,7 +420,7 @@ function Checkout() {
 
   const serviceElem = serviceItem ? <div className="item">
     <div className="imgDiv">
-      <img src={`http://localhost:5000/${serviceItem.service?.serviceImages[0]}`} alt="Error" />
+      <img src={`${hostNameBack}/${serviceItem.service?.serviceImages[0]}`} alt="Error" />
     </div>
     <div className="itemContent">
       <p className='singleLineText'>{serviceItem.service.title}</p>
@@ -430,7 +431,7 @@ function Checkout() {
 
   const customElem = customItem ? <div className="item">
     <div className="imgDiv">
-      <img src={`http://localhost:5000/${customItem.productId ? customItem.productId.productImages[0] : customItem.serviceId.serviceImages[0]}`} alt="Error" />
+      <img src={`${hostNameBack}/${customItem.productId ? customItem.productId.productImages[0] : customItem.serviceId.serviceImages[0]}`} alt="Error" />
     </div>
     <div className="itemContent">
       <p className='singleLineText'>{customItem.title}</p>

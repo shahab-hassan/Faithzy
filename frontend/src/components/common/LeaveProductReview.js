@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaStar } from 'react-icons/fa';
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
+import { hostNameBack } from '../../utils/constants';
 
 const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
     const [rating, setRating] = useState(0);
@@ -13,7 +14,7 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
     const token = localStorage.getItem("token");
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/v1/reviews/order/product/${sellerId}/${subOrderId}`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`${hostNameBack}/api/v1/reviews/order/product/${sellerId}/${subOrderId}`, { headers: { Authorization: `Bearer ${token}` } })
             .then((response) => {
                 if (response.data.review) {
                     setExistingReview(response.data.review);
@@ -39,7 +40,7 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
             subOrderId
         };
 
-        axios.post(`http://localhost:5000/api/v1/reviews/product/new`, reviewData, { headers: { Authorization: `Bearer ${token}` } })
+        axios.post(`${hostNameBack}/api/v1/reviews/product/new`, reviewData, { headers: { Authorization: `Bearer ${token}` } })
             .then((response) => {
                 enqueueSnackbar('Review submitted successfully!', { variant: 'success' });
                 setExistingReview(response.data.review);
@@ -52,7 +53,7 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
     };
 
     const handleReplySubmit = () => {
-        axios.put(`http://localhost:5000/api/v1/reviews/review/product/reply/${subOrderId}`, { reply }, { headers: { Authorization: `Bearer ${token}` } })
+        axios.put(`${hostNameBack}/api/v1/reviews/review/product/reply/${subOrderId}`, { reply }, { headers: { Authorization: `Bearer ${token}` } })
             .then((response) => {
                 enqueueSnackbar('Reply added successfully!', { variant: 'success' });
                 setExistingReview(response.data.updatedReview);

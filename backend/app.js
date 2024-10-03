@@ -9,11 +9,12 @@ require("dotenv").config({ path: "./config/.env" });
 require("./config/passport.js");
 
 const { app, server } = require("./config/socket.js");
+const { hostNameFront } = require("./utils/constants.js");
 
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: `${hostNameFront}`,
   credentials: true
 }));
 // app.use(cors())

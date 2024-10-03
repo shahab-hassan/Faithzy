@@ -5,6 +5,7 @@ import { enqueueSnackbar } from 'notistack';
 import { FaEnvelope, FaLock, FaLockOpen } from 'react-icons/fa';
 import { MdChat } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
+import { hostNameBack } from '../../utils/constants';
 
 function AdminBuyers() {
 
@@ -16,7 +17,7 @@ function AdminBuyers() {
     useEffect(() => {
         const fetchBuyers = () => {
             const token = localStorage.getItem('adminToken');
-            axios.get(`http://localhost:5000/api/v1/auth/all/`, {
+            axios.get(`${hostNameBack}/api/v1/auth/all/`, {
                 headers: { Authorization: `Bearer ${token}` },
                 params: { filterType }
             })
@@ -40,7 +41,7 @@ function AdminBuyers() {
         try {
             const token = localStorage.getItem('adminToken');
             const response = await axios.put(
-                `http://localhost:5000/api/v1/auth/block/`,
+                `${hostNameBack}/api/v1/auth/block/`,
                 { userId, isBlocked },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

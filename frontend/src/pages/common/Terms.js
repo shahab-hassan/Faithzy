@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { enqueueSnackbar } from "notistack";
+import { hostNameBack } from '../../utils/constants';
 
 function Terms() {
     const [terms, setTerms] = useState("");
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/v1/settings/admin/terms')
+        axios.get(`${hostNameBack}/api/v1/settings/admin/terms`)
             .then(res => {
                 if (res.data.success) {
                     setTerms(res.data?.terms || "");

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { enqueueSnackbar } from "notistack";
+import { hostNameBack } from "./constants";
 
 
 export async function addToWishlistUtil(e, itemId, itemType, user) {
@@ -13,7 +14,7 @@ export async function addToWishlistUtil(e, itemId, itemType, user) {
   }
 
   try {
-    const response = await axios.post(`http://localhost:5000/api/v1/wishlists/`, { itemId, itemType }, {
+    const response = await axios.post(`${hostNameBack}/api/v1/wishlists/`, { itemId, itemType }, {
       headers: { Authorization: `Bearer ${token}` }
     });
     if (response.data.success) {
@@ -41,7 +42,7 @@ export async function removeFromWishlistUtil(e, itemId, itemType, user) {
   }
 
   try {
-    const response = await axios.delete(`http://localhost:5000/api/v1/wishlists/`, {
+    const response = await axios.delete(`${hostNameBack}/api/v1/wishlists/`, {
       headers: { Authorization: `Bearer ${token}` },
       data: { itemId, itemType }
     });
@@ -66,7 +67,7 @@ export async function fetchWishlistUtil(user) {
     return null;
 
   try {
-    const response = await axios.get(`http://localhost:5000/api/v1/wishlists/`, {
+    const response = await axios.get(`${hostNameBack}/api/v1/wishlists/`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -93,7 +94,7 @@ export async function addToCartUtil(e, productId, count, user) {
   }
 
   try {
-    const response = await axios.post(`http://localhost:5000/api/v1/carts/`, { productId, count }, {
+    const response = await axios.post(`${hostNameBack}/api/v1/carts/`, { productId, count }, {
       headers: { Authorization: `Bearer ${token}` }
     });
     if (response.data.success) {
@@ -121,7 +122,7 @@ export async function removeFromCartUtil(e, productId, count, user) {
   }
 
   try {
-    const response = await axios.delete(`http://localhost:5000/api/v1/carts/`, {
+    const response = await axios.delete(`${hostNameBack}/api/v1/carts/`, {
       headers: { Authorization: `Bearer ${token}` },
       data: { productId, count }
     });
@@ -146,7 +147,7 @@ export async function fetchCartUtil(user) {
     return null;
 
   try {
-    const response = await axios.get(`http://localhost:5000/api/v1/carts/`, {
+    const response = await axios.get(`${hostNameBack}/api/v1/carts/`, {
       headers: { Authorization: `Bearer ${token}` }
     });
 
@@ -173,7 +174,7 @@ export async function updateCartUtil(e, productId, count, user) {
   }
 
   try {
-    const response = await axios.put(`http://localhost:5000/api/v1/carts/`, { productId, count }, {
+    const response = await axios.put(`${hostNameBack}/api/v1/carts/`, { productId, count }, {
       headers: { Authorization: `Bearer ${token}` }
     });
     if (response.data.success)

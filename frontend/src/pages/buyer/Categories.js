@@ -2,6 +2,7 @@ import React from 'react'
 import axios from "axios"
 import { enqueueSnackbar } from "notistack"
 import { Link } from 'react-router-dom';
+import { hostNameBack } from '../../utils/constants';
 
 function Categories() {
 
@@ -10,7 +11,7 @@ function Categories() {
 
     React.useEffect(() => {
 
-        axios.get("http://localhost:5000/api/v1/categories/all")
+        axios.get(`${hostNameBack}/api/v1/categories/all`)
             .then(response => {
                 if (response.data.success) {
                     setProductCats(response.data.productCategories);

@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { hostNameBack } from '../../utils/constants';
 
 function ResetPassword() {
     const [password, setPassword] = React.useState("");
@@ -13,7 +14,7 @@ function ResetPassword() {
     const resetPassword = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(`http://localhost:5000/api/v1/auth/resetPassword/${token}`, { password, confirmPass });
+            await axios.post(`${hostNameBack}/api/v1/auth/resetPassword/${token}`, { password, confirmPass });
             enqueueSnackbar("Password reset successful", { variant: "success" });
             navigate("/login");
         } catch (e) {

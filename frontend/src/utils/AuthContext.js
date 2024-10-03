@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
+import { hostNameBack } from './constants';
 
 export const AuthContext = createContext();
 
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('token');
         if (token) {
             try {
-                const response = await axios.get("http://localhost:5000/api/v1/auth/checkLogin", {
+                const response = await axios.get(`${hostNameBack}/api/v1/auth/checkLogin`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -68,7 +69,7 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('adminToken');
         if (token) {
             try {
-                const response = await axios.get("http://localhost:5000/api/v1/admins/admin/checkAdminLogin", {
+                const response = await axios.get(`${hostNameBack}/api/v1/admins/admin/checkAdminLogin`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { removeFromWishlistUtil, fetchWishlistUtil, addToCartUtil, fetchCartUtil } from '../../utils/utilFuncs';
 import { AuthContext } from '../../utils/AuthContext';
 import Dropdown from "../../components/common/Dropdown";
+import { hostNameBack } from '../../utils/constants';
 
 function Wishlist() {
   const { user } = useContext(AuthContext);
@@ -57,7 +58,7 @@ function Wishlist() {
         <div className="wishlistElem row">
           <div className="titleField field">
             <div className="imgDiv">
-              <img src={`http://localhost:5000/${selectedType === "Products" ? wishlist.productImages ? wishlist.productImages[0] : "" : wishlist.serviceImages ? wishlist.serviceImages[0] : ""}`} alt="Error" />
+              <img src={`${hostNameBack}/${selectedType === "Products" ? wishlist.productImages ? wishlist.productImages[0] : "" : wishlist.serviceImages ? wishlist.serviceImages[0] : ""}`} alt="Error" />
             </div>
             <p className='title'>{wishlist.title}</p>
           </div>

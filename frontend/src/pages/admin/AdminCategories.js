@@ -4,6 +4,7 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import { enqueueSnackbar } from 'notistack';
 import Dropdown from '../../components/common/Dropdown';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
+import { hostNameBack } from '../../utils/constants';
 
 function AdminCategories() {
     const [categories, setCategories] = useState([]);
@@ -19,11 +20,11 @@ function AdminCategories() {
 
         const fetchCategories = () => {
             const token = localStorage.getItem('adminToken');
-            let url = 'http://localhost:5000/api/v1/categories/';
+            let url = `${hostNameBack}/api/v1/categories/`;
             if (filterType === 'Products') {
-                url = 'http://localhost:5000/api/v1/categories/product/all';
+                url = `${hostNameBack}/api/v1/categories/product/all`;
             } else if (filterType === 'Services') {
-                url = 'http://localhost:5000/api/v1/categories/service/all';
+                url = `${hostNameBack}/api/v1/categories/service/all`;
             }
             axios.get(url, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -47,7 +48,7 @@ function AdminCategories() {
     const handleAddNewCategory = (e) => {
         e.preventDefault();
         const token = localStorage.getItem('adminToken');
-        axios.post('http://localhost:5000/api/v1/categories/category/new', newCategory, {
+        axios.post(`${hostNameBack}/api/v1/categories/category/new`, newCategory, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then((response) => {
@@ -65,7 +66,7 @@ function AdminCategories() {
     const handleEditCategory = (e) => {
         e.preventDefault();
         const token = localStorage.getItem('adminToken');
-        axios.put(`http://localhost:5000/api/v1/categories/category/${selectedCategory._id}`, newCategory, {
+        axios.put(`${hostNameBack}/api/v1/categories/category/${selectedCategory._id}`, newCategory, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then((response) => {
@@ -90,7 +91,7 @@ function AdminCategories() {
     const handleDeleteCategory = (categoryId) => {
         if (!window.confirm("Are you sure you want to delete this category?")) return;
         const token = localStorage.getItem('adminToken');
-        axios.delete(`http://localhost:5000/api/v1/categories/category/${categoryId}`, {
+        axios.delete(`${hostNameBack}/api/v1/categories/category/${categoryId}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then((response) => {

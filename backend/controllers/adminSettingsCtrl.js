@@ -56,12 +56,7 @@ exports.createOrUpdateTerms = asyncHandler(async (req, res) => {
 exports.getSocialLinks = asyncHandler(async (req, res) => {
     const settings = await adminSettingsModel.findOne({}, 'socialLinks');
 
-    if (!settings || !settings.socialLinks) {
-        res.status(404);
-        throw new Error("Social links not found!");
-    }
-
-    res.status(200).json({ success: true, socialLinks: settings.socialLinks });
+    res.status(200).json({ success: true, socialLinks: settings?.socialLinks });
 });
 
 exports.createOrUpdateSocialLinks = asyncHandler(async (req, res) => {

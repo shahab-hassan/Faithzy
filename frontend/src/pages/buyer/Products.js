@@ -8,6 +8,7 @@ import RatingFilter from '../../components/buyer/Filters/RatingFilter';
 import Pagination from '../../components/common/Pagination';
 import CategoryFilter from '../../components/buyer/Filters/CategoryFilter';
 import ActiveFilters from '../../components/buyer/Filters/ActiveFilters';
+import { hostNameBack } from '../../utils/constants';
 
 function Products() {
 
@@ -27,7 +28,7 @@ function Products() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/v1/products/results/all/`, {
+                const response = await axios.get(`${hostNameBack}/api/v1/products/results/all/`, {
                     params: {
                         category: categoryName,
                         search: searchQuery,

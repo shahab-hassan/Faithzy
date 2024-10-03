@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { hostNameBack } from '../../utils/constants';
 
 function SellerProductCard({ product, deleteProduct }) {
   const [showOptions, setShowOptions] = React.useState(false);
@@ -21,7 +22,7 @@ function SellerProductCard({ product, deleteProduct }) {
     <div className='sellerProductCardDiv'>
       <div className='sellerProductCardContent'>
         <div className='productImgDiv'>
-          <img src={`http://localhost:5000/${product.productImages[0]}`} alt='Error' />
+          <img src={`${hostNameBack}/${product.productImages[0]}`} alt='Error' />
         </div>
         <div className='productUpper'>
           <p className='category'>{product.category}</p>

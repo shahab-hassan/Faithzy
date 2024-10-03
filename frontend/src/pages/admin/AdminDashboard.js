@@ -2,13 +2,14 @@ import React from 'react'
 import axios from "axios"
 import { enqueueSnackbar } from "notistack"
 import AdminOrders from "./AdminOrders"
+import { hostNameBack } from '../../utils/constants';
 
 function AdminDashboard() {
 
   const [generalInfo, setGeneralInfo] = React.useState({});
 
   React.useEffect(() => {
-    axios.get('http://localhost:5000/api/v1/settings/admin/dashboard/general')
+    axios.get(`${hostNameBack}/api/v1/settings/admin/dashboard/general`)
       .then(res => {
         if (res.data.success)
           setGeneralInfo(res.data?.generalInfo);

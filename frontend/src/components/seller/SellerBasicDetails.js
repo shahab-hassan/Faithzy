@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { FaStar } from "react-icons/fa";
+import { hostNameBack } from '../../utils/constants';
 
 function SellerBasicDetails({ sellerDetails }) {
 
@@ -14,7 +15,7 @@ function SellerBasicDetails({ sellerDetails }) {
                 <div className="sellerBasicDetailsContent">
 
                     <div className="profileImageDiv">
-                        <img src={`http://localhost:5000/${sellerDetails.profileImage}`} alt="Error" />
+                        <img src={`${hostNameBack}/${sellerDetails.profileImage}`} alt="Error" />
                     </div>
 
                     <div className="upper">

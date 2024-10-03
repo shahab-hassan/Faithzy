@@ -8,6 +8,7 @@ import { IoIosCloseCircleOutline } from 'react-icons/io';
 import { AuthContext } from "../../utils/AuthContext";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from 'react-icons/md';
 import { formatDate } from '../../utils/utilFuncs';
+import { hostNameBack } from '../../utils/constants';
 
 function Employees() {
 
@@ -32,7 +33,7 @@ function Employees() {
   React.useEffect(() => {
     const token = localStorage.getItem('adminToken');
     axios
-      .get('http://localhost:5000/api/v1/admins/all', {
+      .get(`${hostNameBack}/api/v1/admins/all`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then((response) => {
@@ -73,7 +74,7 @@ function Employees() {
     // };
 
     axios
-      .post('http://localhost:5000/api/v1/admins/admin/add', newEmployee, {
+      .post(`${hostNameBack}/api/v1/admins/admin/add`, newEmployee, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then((response) => {
@@ -113,7 +114,7 @@ function Employees() {
     };
 
     axios
-      .put(`http://localhost:5000/api/v1/admins/admin/update/${editAdmin._id}`, updatedAdminData, {
+      .put(`${hostNameBack}/api/v1/admins/admin/update/${editAdmin._id}`, updatedAdminData, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then((response) => {
@@ -137,7 +138,7 @@ function Employees() {
       return;
     const token = localStorage.getItem('adminToken');
     axios
-      .delete(`http://localhost:5000/api/v1/admins/admin/delete/${adminId}`, {
+      .delete(`${hostNameBack}/api/v1/admins/admin/delete/${adminId}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then((response) => {

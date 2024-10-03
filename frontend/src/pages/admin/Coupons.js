@@ -4,6 +4,7 @@ import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 import { enqueueSnackbar } from 'notistack';
 import Dropdown from '../../components/common/Dropdown';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
+import { hostNameBack } from '../../utils/constants';
 
 function Coupons() {
 
@@ -28,13 +29,13 @@ function Coupons() {
     useEffect(() => {
         const fetchCoupons = () => {
             const token = localStorage.getItem('adminToken');
-            let url = 'http://localhost:5000/api/v1/coupons/';
+            let url = `${hostNameBack}/api/v1/coupons/`;
             if (filterType === 'Active') {
-                url = 'http://localhost:5000/api/v1/coupons/active';
+                url = `${hostNameBack}/api/v1/coupons/active`;
             } else if (filterType === 'Expired') {
-                url = 'http://localhost:5000/api/v1/coupons/expired';
+                url = `${hostNameBack}/api/v1/coupons/expired`;
             } else if (filterType === 'Scheduled') {
-                url = 'http://localhost:5000/api/v1/coupons/scheduled';
+                url = `${hostNameBack}/api/v1/coupons/scheduled`;
             }
             axios.get(url, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -58,7 +59,7 @@ function Coupons() {
     const handleAddNewCoupon = (e) => {
         e.preventDefault();
         const token = localStorage.getItem('adminToken');
-        axios.post('http://localhost:5000/api/v1/coupons/new', newCoupon, {
+        axios.post(`${hostNameBack}/api/v1/coupons/new`, newCoupon, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then((response) => {
@@ -77,7 +78,7 @@ function Coupons() {
     const handleEditCoupon = (e) => {
         e.preventDefault();
         const token = localStorage.getItem('adminToken');
-        axios.put(`http://localhost:5000/api/v1/coupons/${selectedCoupon._id}`, newCoupon, {
+        axios.put(`${hostNameBack}/api/v1/coupons/${selectedCoupon._id}`, newCoupon, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then((response) => {
@@ -99,7 +100,7 @@ function Coupons() {
     const handleDeleteCoupon = (couponId) => {
         if (!window.confirm("Are you sure you want to delete this Coupon?")) return;
         const token = localStorage.getItem('adminToken');
-        axios.delete(`http://localhost:5000/api/v1/coupons/${couponId}`, {
+        axios.delete(`${hostNameBack}/api/v1/coupons/${couponId}`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then((response) => {

@@ -8,6 +8,7 @@ import SampleProvisions from '../../components/buyer/SampleProvisions';
 import { AuthContext } from '../../utils/AuthContext';
 import { addToWishlistUtil, removeFromWishlistUtil, fetchWishlistUtil, formatDate } from '../../utils/utilFuncs';
 import Reviews from '../../components/common/Reviews';
+import { hostNameBack } from '../../utils/constants';
 
 function ServiceDetails() {
 
@@ -20,7 +21,7 @@ function ServiceDetails() {
     const [joined, setJoined] = useState("");
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/v1/services/service/${id}`)
+        axios.get(`${hostNameBack}/api/v1/services/service/${id}`)
             .then(response => {
                 const service = response.data.service;
                 setService(service)
@@ -33,7 +34,7 @@ function ServiceDetails() {
 
         if (isLogin) {
             const token = localStorage.getItem('token');
-            axios.post('http://localhost:5000/api/v1/services/user/recentlyViewed/',
+            axios.post(`${hostNameBack}/api/v1/services/user/recentlyViewed/`,
                 { serviceId: id },
                 { headers: { Authorization: `Bearer ${token}` } }
             )
@@ -71,7 +72,7 @@ function ServiceDetails() {
     const galleryImages = service.serviceImages ? service.serviceImages.map((image, index) => {
         return <img
             key={index}
-            src={`http://localhost:5000/${image}`}
+            src={`${hostNameBack}/${image}`}
             alt="Error"
             onClick={() => setServiceThumbnail(image)}
             style={serviceThumbnail === image ? { borderColor: "var(--primaryCopper)" } : { borderColor: "transparent" }}
@@ -110,7 +111,7 @@ function ServiceDetails() {
                     <div className="serviceInfo">
 
                         <div className="serviceImages">
-                            {<img className='serviceThumbnail' src={`http://localhost:5000/${serviceThumbnail}`} alt="Error" />}
+                            {<img className='serviceThumbnail' src={`${hostNameBack}/${serviceThumbnail}`} alt="Error" />}
                             <div className="serviceGalleryDiv">
                                 {galleryImages}
                             </div>
@@ -126,7 +127,7 @@ function ServiceDetails() {
                             <p className="title">{service.title}</p>
 
                             <div className="sellerInfo">
-                                <img src={service.sellerId && `http://localhost:5000/${service.sellerId.profileImage}`} alt="Error" />
+                                <img src={service.sellerId && `${hostNameBack}/${service.sellerId.profileImage}`} alt="Error" />
                                 <Link to={`/profile/${service?.sellerId?._id}`}>{service && service.sellerId && service.sellerId.userId?.username + " >"}</Link>
                             </div>
 
@@ -179,7 +180,7 @@ function ServiceDetails() {
                         <div className="upper">
                             <div className="sellerProfile">
                                 <div className="imgDiv">
-                                    <img src={`http://localhost:5000/${service.sellerId.profileImage}`} alt="Error" />
+                                    <img src={`${hostNameBack}/${service.sellerId.profileImage}`} alt="Error" />
                                 </div>
                                 <div className="profileInfo">
                                     <h4>{service.sellerId.fullName}</h4>

@@ -4,6 +4,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
 import { enqueueSnackbar } from 'notistack';
 import axios from 'axios';
+import { hostNameBack } from '../../utils/constants';
 
 function TradeleadStepper() {
     const [currentStep, setCurrentStep] = useState(1);
@@ -22,7 +23,7 @@ function TradeleadStepper() {
     const today = crrDate.toISOString().split('T')[0];
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/api/v1/categories/service/all`)
+        axios.get(`${hostNameBack}/api/v1/categories/service/all`)
             .then(response => {
                 if (response.data.success) {
                     const fetchedCategories = response.data.categories;
@@ -69,7 +70,7 @@ function TradeleadStepper() {
         }
 
         try {
-            const response = await axios['post']('http://localhost:5000/api/v1/tradeleads/request', formData, { headers: { Authorization: `Bearer ${token}` } });
+            const response = await axios['post'](`${hostNameBack}/api/v1/tradeleads/request`, formData, { headers: { Authorization: `Bearer ${token}` } });
             if (response.data.success) {
                 enqueueSnackbar(`Request posted' successfully`, { variant: 'success' });
                 setFormData({

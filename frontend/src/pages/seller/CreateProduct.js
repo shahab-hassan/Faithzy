@@ -6,6 +6,7 @@ import { FaUpload } from 'react-icons/fa';
 
 import { AuthContext } from '../../utils/AuthContext';
 import Gallery from '../../components/seller/Gallery';
+import { hostNameBack } from '../../utils/constants';
 
 function CreateProduct() {
   const { isLogin, user } = useContext(AuthContext);
@@ -45,7 +46,7 @@ function CreateProduct() {
 
   React.useEffect(() => {
 
-    axios.get("http://localhost:5000/api/v1/settings/admin/feesAndMembership")
+    axios.get(`${hostNameBack}/api/v1/settings/admin/feesAndMembership`)
       .then(response => {
         if (response.data.success)
           setFeesObj(response.data.fees);
@@ -58,7 +59,7 @@ function CreateProduct() {
   }, [])
 
   React.useEffect(() => {
-    axios.get('http://localhost:5000/api/v1/categories/product/all')
+    axios.get(`${hostNameBack}/api/v1/categories/product/all`)
       .then(response => {
         if (response.data.success) {
           let categories = response.data.categories;
@@ -76,7 +77,7 @@ function CreateProduct() {
         enqueueSnackbar(e.response.data.error || 'Failed to fetch categories', { variant: 'error' });
       });
     if (id) {
-      axios.get(`http://localhost:5000/api/v1/products/product/${id}`)
+      axios.get(`${hostNameBack}/api/v1/products/product/${id}`)
         .then(response => {
           if (response.data.success) {
             const product = response.data.product;
@@ -86,8 +87,8 @@ function CreateProduct() {
               ...product,
             });
             if (product.productImages.length > 0) {
-              setProductThumbnail(`http://localhost:5000/${product.productImages[0]}`);
-              setGalleryImages(product.productImages.slice(1).map(image => `http://localhost:5000/${image}`));
+              setProductThumbnail(`${hostNameBack}/${product.productImages[0]}`);
+              setGalleryImages(product.productImages.slice(1).map(image => `${hostNameBack}/${image}`));
             }
           } else {
             enqueueSnackbar("Something went wrong", { variant: "error" });
@@ -285,14 +286,14 @@ function CreateProduct() {
       const token = localStorage.getItem('token');
       let response;
       if (id) {
-        response = await axios.put(`http://localhost:5000/api/v1/products/seller/product/${id}`, formData, {
+        response = await axios.put(`${hostNameBack}/api/v1/products/seller/product/${id}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`
           }
         });
       } else {
-        response = await axios.post('http://localhost:5000/api/v1/products/seller/product/new', formData, {
+        response = await axios.post(`${hostNameBack}/api/v1/products/seller/product/new`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`

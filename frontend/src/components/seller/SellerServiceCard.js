@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { hostNameBack } from '../../utils/constants';
 
 function SellerServiceCard({service, deleteService}) {
 
@@ -22,7 +23,7 @@ function SellerServiceCard({service, deleteService}) {
         <div className='sellerServiceCardDiv'>
           <div className='sellerServiceCardContent'>
             <div className='serviceImgDiv'>
-              <img src={`http://localhost:5000/${service.serviceImages[0]}`} alt='Error' />
+              <img src={`${hostNameBack}/${service.serviceImages[0]}`} alt='Error' />
             </div>
             <div className='serviceUpper'>
               <p className='category'>{service.category}</p>

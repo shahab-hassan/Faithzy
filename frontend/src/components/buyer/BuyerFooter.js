@@ -4,6 +4,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { FaFacebook, FaInstagram, FaTwitter, FaPinterest, FaTumblr, FaYoutube, FaSnapchatGhost, FaTiktok, FaLinkedin } from "react-icons/fa";
 import { AuthContext } from '../../utils/AuthContext';
+import { hostNameBack } from '../../utils/constants';
 
 function BuyerFooter() {
 
@@ -15,7 +16,7 @@ function BuyerFooter() {
   useEffect(() => {
     const fetchLinks = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/v1/settings/admin/social-links');
+        const { data } = await axios.get(`${hostNameBack}/api/v1/settings/admin/social-links`);
         setSocialLinks(data.socialLinks || {});
       } catch (error) {
         console.error("Failed to fetch social links", error);

@@ -19,7 +19,7 @@ function AdminPayments() {
 
     useEffect(() => {
 
-        axios.get(`http://localhost:5000/api/v1/payments/all/`, {
+        axios.get(`${hostNameBack}/api/v1/payments/all/`, {
             headers: { Authorization: `Bearer ${adminToken}` }
         })
             .then(response => {
@@ -42,7 +42,7 @@ function AdminPayments() {
         if (!window.confirm("You are marking this payment as 'Paid'... Are you sure you want to continue? (Note: You can't undo it later)"))
             return;
 
-        axios.put(`http://localhost:5000/api/v1/payments/markPaid/`, { paymentId }, {
+        axios.put(`${hostNameBack}/api/v1/payments/markPaid/`, { paymentId }, {
             headers: { Authorization: `Bearer ${adminToken}` }
         })
             .then(response => {
