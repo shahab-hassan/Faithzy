@@ -14,7 +14,7 @@ const { hostNameFront } = require("./utils/constants.js");
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(cors({
-  origin: `${hostNameFront}`,
+  origin: [`${hostNameFront}`, "http://localhost:3000"],
   credentials: true
 }));
 // app.use(cors())
@@ -23,7 +23,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }
+    cookie: { secure: process.env.NODE_ENV === 'production' }
   }));
   
   app.use(passport.initialize());
