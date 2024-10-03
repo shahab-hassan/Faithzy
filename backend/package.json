@@ -23,7 +23,8 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build": "npm i"
   },
   "name": "backend",
   "version": "1.0.0",
