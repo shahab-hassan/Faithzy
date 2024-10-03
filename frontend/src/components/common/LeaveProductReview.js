@@ -76,7 +76,7 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
                             return (
                                 <FaStar
                                     key={index}
-                                    size={40}
+                                    size={35}
                                     onMouseEnter={() => setHover(ratingValue)}
                                     onMouseLeave={() => setHover(null)}
                                     onClick={() => setRating(ratingValue)}
@@ -110,13 +110,13 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
                         {[...Array(5)].map((_, index) => (
                             <FaStar
                                 key={index}
-                                size={40}
+                                size={35}
                                 color={index + 1 <= existingReview.rating ? '#ffc107' : '#e4e5e9'}
                                 className='star'
                             />
                         ))}
                     </div>
-                    <div>{existingReview.comment}</div>
+                    <p>{existingReview.comment}</p>
                     {existingReview.reply && <div className='sellerReply'>
                         <h2 className='secondaryHeading'>Seller <span>Response</span></h2>
                         <p>{existingReview.reply}</p>
@@ -136,7 +136,7 @@ const LeaveReview = ({ subOrderId, productId, sellerId, isBuyer }) => {
                         {[...Array(5)].map((_, index) => (
                             <FaStar
                                 key={index}
-                                size={40}
+                                size={35}
                                 color={index + 1 <= existingReview.rating ? '#ffc107' : '#e4e5e9'}
                                 className='star'
                             />

@@ -7,7 +7,7 @@
 
 .ordersDiv .upper{
     margin-bottom: 30px;
-    background: white;
+    background: var(--white);
     padding: 20px 0px;
     border-radius: 8px;
 }
@@ -16,6 +16,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.ordersDiv .responsiveFilters {
+    display: none;
 }
 
 .ordersDiv .upper .upperRight{
@@ -96,6 +100,7 @@
     gap: 15px;
     min-width: 50%;
     max-width: 55%;
+    /* background: green; */
 }
 .sellerProductOrderCard .order .left .leftLeft .imgDiv,
 .buyerProductOrderCard .order .left .leftLeft .imgDiv{
@@ -122,6 +127,11 @@
     justify-content: space-between;
     gap: 60px;
     min-width: 25%;
+    /* background: red; */
+}
+.sellerProductOrderCard .order .left .leftRight .responsivePrice,
+.buyerProductOrderCard .order .left .leftRight .responsivePrice{
+    display: none;
 }
 .sellerProductOrderCard .order .left .leftRight .column,
 .buyerProductOrderCard .order .left .leftRight .column{
@@ -182,8 +192,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 20px;
     color: var(--lightGray);
-    font-size: 0.9rem;
 }
 .orderDetailsDiv .orders:has(.buyerProductOrderDetailsCard) .upper{
     border-radius: 8px;
@@ -268,11 +278,17 @@
     margin-bottom: 20px;
 }
 
+.orderDetailsDiv .orderStatusDetails .trackOrder{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
 .orderDetailsDiv .orderStatusDetails .trackOrderRow{
     position: relative;
-    padding-left: 40px;
+    /* padding-left: 40px; */
 }
-.orderDetailsDiv .orderStatusDetails .trackOrderRow::before{
+/* .orderDetailsDiv .orderStatusDetails .trackOrderRow::before{
     position: absolute;
     content: "";
     width: 25px;
@@ -290,7 +306,7 @@
     background: var(--secondaryCopper);
     top: 24px;
     left: 12px;
-}
+} */
 
 .orderDetailsDiv .orderStatusDetails .inputDiv .dropdownPlus{
     width: 100%;
@@ -377,6 +393,8 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    width: 100%;
+    height: fit-content;
 }
 .serviceOrderDetailsDiv .rightBox .orderDetails .posting{
     display: flex;
@@ -389,7 +407,7 @@
     width: 100%;
 }
 .serviceOrderDetailsDiv .rightBox .orderDetails .posting .singleLineText{
-    height: 3rem;
+    height: 2.78rem;
     -webkit-line-clamp: 2;
     line-clamp: inherit;
 }

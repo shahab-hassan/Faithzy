@@ -9,6 +9,35 @@
         width: 100%;
     }
 
+    .sellerProductOrderCard .order .right,
+    .buyerProductOrderCard .order .right {
+        display: none;
+    }
+
+    .sellerProductOrderCard .order .left,
+    .buyerProductOrderCard .order .left {
+        width: 100%;
+    }
+
+    .sellerProductOrderCard .order .left .leftLeft,
+    .buyerProductOrderCard .order .left .leftLeft {
+        display: flex;
+        gap: 15px;
+        min-width: 45%;
+        max-width: 50%;
+    }
+
+    .sellerProductOrderCard .order .left .leftRight,
+    .buyerProductOrderCard .order .left .leftRight {
+        display: flex;
+        gap: 30px;
+    }
+
+    .sellerProductOrderCard .order .left .leftRight .responsivePrice,
+    .buyerProductOrderCard .order .left .leftRight .responsivePrice {
+        display: block;
+    }
+
 }
 
 
@@ -25,6 +54,12 @@
     p,
     a {
         font-size: 0.9rem;
+    }
+
+    strong,
+    .fw600,
+    .fw500 {
+        font-size: 0.95rem;
     }
 
     .primaryBtn,
@@ -138,7 +173,7 @@
         display: block;
     }
 
-    .buyerHeaderDiv .drawerContent ,
+    .buyerHeaderDiv .drawerContent,
     .sellerHeaderDiv .drawerContent {
         position: absolute;
         top: 11%;
@@ -149,7 +184,7 @@
         width: 25%;
     }
 
-    .buyerHeaderDiv .drawerContent li ,
+    .buyerHeaderDiv .drawerContent li,
     .sellerHeaderDiv .drawerContent li {
         width: 100%;
         height: 3rem;
@@ -160,72 +195,72 @@
         box-shadow: 1px 3px 10px 1px var(--primaryBlue);
     }
 
-    .buyerHeaderDiv .drawerContent li:nth-child(2) ,
+    .buyerHeaderDiv .drawerContent li:nth-child(2),
     .sellerHeaderDiv .drawerContent li:nth-child(2) {
         animation-delay: 50ms;
     }
 
-    .buyerHeaderDiv .drawerContent li:nth-child(3) ,
+    .buyerHeaderDiv .drawerContent li:nth-child(3),
     .sellerHeaderDiv .drawerContent li:nth-child(3) {
         animation-delay: 100ms;
     }
 
-    .buyerHeaderDiv .drawerContent li:nth-child(4) ,
+    .buyerHeaderDiv .drawerContent li:nth-child(4),
     .sellerHeaderDiv .drawerContent li:nth-child(4) {
         animation-delay: 170ms;
     }
 
-    .buyerHeaderDiv .drawerContent li:nth-child(5) ,
+    .buyerHeaderDiv .drawerContent li:nth-child(5),
     .sellerHeaderDiv .drawerContent li:nth-child(5) {
         animation-delay: 240ms;
     }
 
-    .buyerHeaderDiv .drawerContent li:nth-child(6) ,
+    .buyerHeaderDiv .drawerContent li:nth-child(6),
     .sellerHeaderDiv .drawerContent li:nth-child(6) {
         animation-delay: 300ms;
     }
 
-    .buyerHeaderDiv .drawerContent li:nth-child(7) ,
+    .buyerHeaderDiv .drawerContent li:nth-child(7),
     .sellerHeaderDiv .drawerContent li:nth-child(7) {
         animation-delay: 350ms;
     }
 
-    .buyerHeaderDiv .drawerContent li:nth-child(8) ,
+    .buyerHeaderDiv .drawerContent li:nth-child(8),
     .sellerHeaderDiv .drawerContent li:nth-child(8) {
         animation-delay: 410ms;
     }
 
-    .buyerHeaderDiv .drawerContent li:nth-child(9) ,
+    .buyerHeaderDiv .drawerContent li:nth-child(9),
     .sellerHeaderDiv .drawerContent li:nth-child(9) {
         animation-delay: 480ms;
     }
 
-    .buyerHeaderDiv .drawerContent li:nth-child(10) ,
+    .buyerHeaderDiv .drawerContent li:nth-child(10),
     .sellerHeaderDiv .drawerContent li:nth-child(10) {
         animation-delay: 570ms;
     }
 
-    .buyerHeaderDiv .drawerContent li:nth-child(11) ,
+    .buyerHeaderDiv .drawerContent li:nth-child(11),
     .sellerHeaderDiv .drawerContent li:nth-child(11) {
         animation-delay: 670ms;
     }
 
-    .buyerHeaderDiv .drawerContent li:nth-child(12) ,
+    .buyerHeaderDiv .drawerContent li:nth-child(12),
     .sellerHeaderDiv .drawerContent li:nth-child(12) {
         animation-delay: 780ms;
     }
 
-    .buyerHeaderDiv .drawerContent li:nth-child(13) ,
+    .buyerHeaderDiv .drawerContent li:nth-child(13),
     .sellerHeaderDiv .drawerContent li:nth-child(13) {
         animation-delay: 880ms;
     }
 
-    .buyerHeaderDiv .drawerContent li:nth-child(14) ,
+    .buyerHeaderDiv .drawerContent li:nth-child(14),
     .sellerHeaderDiv .drawerContent li:nth-child(14) {
         animation-delay: 990ms;
     }
 
-    .buyerHeaderDiv .drawerContent li a ,
+    .buyerHeaderDiv .drawerContent li a,
     .sellerHeaderDiv .drawerContent li a {
         display: flex;
         align-items: center;
@@ -336,6 +371,87 @@
         gap: 30px;
     }
 
+    .sellerBasicDetailsDiv {
+        margin-top: 80px;
+    }
+
+    .sellerBasicDetailsDiv .sellerBasicDetailsContent {
+        padding: 30px 40px;
+        gap: 45px;
+    }
+
+    .sellerBasicDetailsDiv .profileImageDiv {
+        top: -9%;
+    }
+
+    .sellerBasicDetailsDiv .profileImageDiv img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .sellerBasicDetailsDiv .upper {
+        flex-direction: column;
+        justify-content: center;
+        gap: 20px;
+        height: fit-content;
+        margin-top: 50px;
+    }
+
+    .sellerBasicDetailsDiv .upper .verticalLine {
+        display: none;
+    }
+
+    .sellerBasicDetailsDiv .upperLeft,
+    .sellerBasicDetailsDiv .upperRight {
+        width: 100%;
+    }
+
+    .upgradeDiv .upgradeContent .timeLine {
+        gap: 20px;
+    }
+
+    .upgradeDiv .upgradeContent .plans {
+        gap: 30px;
+    }
+
+    .upgradeDiv .upgradeContent .plans .plan {
+        width: 100%;
+    }
+
+    .upgradeDiv .upgradeContent .plans .plan .rows .row {
+        font-size: 0.9rem;
+    }
+
+    .createProductDiv .createProductDetails {
+        gap: 35px;
+    }
+
+    .createProductDiv .createProductDetails .createProductGallery .productThumbnailContent {
+        height: 300px;
+        width: 300px;
+    }
+
+    .createServiceDiv .servicePackagesDiv {
+        flex-direction: column;
+
+    }
+
+    .createServiceDiv .verticalLine {
+        display: none;
+    }
+
+    .serviceOrderDetailsDiv .serviceOrderDetailsContent {
+        flex-direction: column-reverse;
+    }
+
+    .serviceOrderDetailsDiv .leftContainer {
+        width: 100%;
+    }
+
+    .serviceOrderDetailsDiv .rightBox {
+        width: 100%;
+        flex-direction: row;
+    }
 }
 
 
@@ -351,6 +467,12 @@
     p,
     a {
         font-size: 0.85rem;
+    }
+
+    strong,
+    .fw600,
+    .fw500 {
+        font-size: 0.9rem;
     }
 
     .luxuryBtn {
@@ -457,7 +579,7 @@
 
 
 
-    .buyerHeaderDiv .drawerContent ,
+    .buyerHeaderDiv .drawerContent,
     .sellerHeaderDiv .drawerContent {
         width: 40%;
     }
@@ -750,6 +872,88 @@
         min-width: 70%;
     }
 
+    .sellerBasicDetailsDiv .profileImageDiv {
+        top: -6%;
+    }
+
+    .sellerBasicDetailsDiv .profileImageDiv img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .upgradeDiv .upgradeContent .plans {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .upgradeDiv .upgradeContent .plans .plan {
+        width: 80%;
+        margin: auto;
+    }
+
+    .upgradeDiv .upgradeContent .plans .plan .rows .row {
+        font-size: 0.9rem;
+    }
+
+    .createProductDiv .createProductDetails .createProductGallery .productThumbnailContent {
+        height: 220px;
+        width: 220px;
+    }
+
+    .sellerProductOrderCard .order .left,
+    .buyerProductOrderCard .order .left {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .sellerProductOrderCard .order .left .leftLeft,
+    .buyerProductOrderCard .order .left .leftLeft {
+        display: flex;
+        gap: 15px;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .sellerProductOrderCard .order .left .leftRight,
+    .buyerProductOrderCard .order .left .leftRight {
+        display: flex;
+        gap: 30px;
+        width: 100%;
+        justify-content: center;
+        gap: 70px;
+    }
+
+    .sellerProductOrderCard .order .left .leftRight .column p,
+    .buyerProductOrderCard .order .left .leftRight .column p {
+        font-size: 1rem;
+        color: var(--darkGray);
+    }
+
+    .sellerProductOrderCard .order .left .leftRight .column a,
+    .sellerProductOrderCard .order .left .leftRight .column div,
+    .buyerProductOrderCard .order .left .leftRight .column a,
+    .buyerProductOrderCard .order .left .leftRight .column div {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--black);
+    }
+
+    .sellerProductOrderCard .order .left .leftRight .responsivePrice,
+    .buyerProductOrderCard .order .left .leftRight .responsivePrice {
+        display: block;
+    }
+
+    .serviceOrderDetailsDiv .rightBox {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .serviceOrderDetailsDiv .rightBox .orderDetails .posting .imgDiv {
+        width: 80px;
+    }
 }
 
 
@@ -770,6 +974,12 @@
 
     a {
         font-size: 0.75rem;
+    }
+
+    strong,
+    .fw600,
+    .fw500 {
+        font-size: 0.85rem;
     }
 
     .primaryBtn,
@@ -1084,6 +1294,158 @@
     .loginDiv .loginContent .loginRight {
         min-width: 90%;
     }
+
+    .sellerBasicDetailsDiv .profileImageDiv {
+        top: -5%;
+    }
+
+    .upgradeDiv .upgradeContent .timeLine {
+        gap: 20px;
+        font-size: 0.8rem;
+    }
+
+    .upgradeDiv .upgradeContent .plans .plan {
+        width: 100%;
+    }
+
+    .upgradeDiv .upgradeContent .plans .plan .rows .row {
+        font-size: 0.85rem;
+    }
+
+    .earningsDiv .earningsOverview {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .earningsDiv .earningsOverview .overviewBox .secondaryHeading {
+        font-size: 0.9rem;
+    }
+
+    .createProductDiv {
+        padding: 30px 0px;
+    }
+
+    .createProductDiv .createProductContent {
+        padding: 20px 30px;
+    }
+
+    .createProductDiv .createProductDetails {
+        flex-direction: column;
+    }
+
+    .createProductDiv .createProductDetails .createProductGallery {
+        width: 100%;
+    }
+
+    .createProductDiv .createProductDetails .createProductGallery .productThumbnailContent {
+        height: 250px;
+        width: 250px;
+    }
+
+    .createServiceDiv {
+        padding: 30px 0px;
+    }
+
+    .createServiceDiv .createServiceContent {
+        padding: 20px 30px;
+    }
+
+    .createServiceDiv .createServiceContent div {
+        font-size: 0.85rem;
+    }
+
+
+    .sellerProductOrderCard .order .left .leftLeft .productInfo .singleLineText,
+    .buyerProductOrderCard .order .left .leftLeft .productInfo .singleLineText {
+        font-size: 0.8rem;
+        width: 100%;
+    }
+
+    .sellerProductOrderCard .order .left .leftLeft .productInfo .category,
+    .buyerProductOrderCard .order .left .leftLeft .productInfo .category {
+        font-size: 0.72rem;
+    }
+
+    .sellerProductOrderCard .order .left .leftRight,
+    .buyerProductOrderCard .order .left .leftRight {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .sellerProductOrderCard .order .left .leftRight .column p,
+    .buyerProductOrderCard .order .left .leftRight .column p {
+        font-size: 0.9rem;
+        color: var(--darkGray);
+    }
+
+    .sellerProductOrderCard .order .left .leftRight .column a,
+    .sellerProductOrderCard .order .left .leftRight .column div,
+    .buyerProductOrderCard .order .left .leftRight .column a,
+    .buyerProductOrderCard .order .left .leftRight .column div {
+        font-size: 0.76rem;
+    }
+
+    .ordersDiv {
+        margin-top: 30px;
+        margin-bottom: 50px;
+    }
+
+    .ordersDiv .upper {
+        margin-bottom: 15px;
+    }
+
+    .ordersDiv .responsiveFilters {
+        width: 100%;
+        display: flex;
+        justify-content: right;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .ordersDiv .upper .upperRight {
+        display: none;
+    }
+
+    .sellerProductOrderCard .order .left .leftLeft .imgDiv,
+    .buyerProductOrderCard .order .left .leftLeft .imgDiv {
+        width: 60px;
+    }
+
+    .orderDetailsDiv .orders .upper .upperLeft .orderId {
+        font-size: 0.95rem;
+    }
+
+    .orderDetailsDiv .orders .upper .upperLeft .placedOn {
+        font-size: 0.7rem;
+    }
+
+    .orderDetailsDiv .orders .upper .upperRight {
+        font-size: 1.2rem;
+    }
+
+    .orderDetailsDiv .orderStatusDetails .trackOrderRow,
+    .orderDetailsDiv .orderStatusDetails .trackOrderRow strong {
+        font-size: 0.75rem;
+    }
+
+    .serviceOrderDetailsDiv .rightBox .orderDetails .posting .imgDiv {
+        width: 70px;
+    }
+
+    .serviceOrderDetailsDiv .rightBox .orderDetails .actions,
+    .serviceOrderDetailsDiv .rightBox .timeRemaining .actions {
+        gap: 8px;
+    }
+
+    .serviceOrderDetailsDiv .rightBox .orderDetails .actions button,
+    .serviceOrderDetailsDiv .rightBox .timeRemaining .actions button,
+    .serviceOrderDetailsDiv .rightBox .orderDetails .actions a,
+    .serviceOrderDetailsDiv .rightBox .timeRemaining .actions a {
+        font-size: 0.6rem;
+        padding: 5px 10px;
+    }
 }
 
 
@@ -1097,6 +1459,12 @@
 @media only screen and (max-width: 500px) {
     p {
         font-size: 0.8rem;
+    }
+
+    strong,
+    .fw600,
+    .fw500 {
+        font-size: 0.83rem;
     }
 
     .primaryHeading {
@@ -1119,7 +1487,7 @@
         font-size: 0.68rem;
     }
 
-    .buyerHeaderDiv .drawerContent ,
+    .buyerHeaderDiv .drawerContent,
     .sellerHeaderDiv .drawerContent {
         width: 65%;
     }
@@ -1339,6 +1707,106 @@
 
     .profileDiv .bg img {
         left: 32%;
+    }
+
+    .sellerBasicDetailsDiv .sellerBasicDetailsContent {
+        padding: 20px 30px;
+        gap: 40px;
+    }
+
+    .sellerBasicDetailsDiv .profileImageDiv {
+        top: -4%;
+    }
+
+    .earningsDiv .earningsOverview .overviewBox .secondaryHeading {
+        font-size: 0.82rem;
+    }
+
+    .earningsDiv .earningsOverview .overviewBox .value {
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    .earningsDiv .sellerPaymentMethodsDiv .paymentMethods .method span {
+        display: none;
+    }
+
+    .earningsDiv .sellerPaymentMethodsDiv .paymentMethods .method .methodLogo {
+        width: 30px;
+        height: 30px;
+    }
+
+    .createProductDiv .createProductDetails .createProductGallery .productThumbnailContent {
+        height: 220px;
+        width: 220px;
+    }
+
+
+    .orderDetailsDiv {
+        margin-top: 30px;
+        margin-bottom: 50px;
+    }
+
+    .orderDetailsDiv .orders>.upper {
+        padding: 20px 20px;
+    }
+
+    .orderDetailsDiv .orders .upper .upperLeft .orderId {
+        font-size: 0.9rem;
+    }
+
+    .orderDetailsDiv .orders .upper .upperLeft .placedOn {
+        font-size: 0.67rem;
+    }
+
+    .orderDetailsDiv .orders .upper .upperRight {
+        font-size: 1rem;
+    }
+
+    .orderDetailsDiv .orderStatusDetails .trackOrderRow,
+    .orderDetailsDiv .orderStatusDetails .trackOrderRow strong {
+        font-size: 0.7rem;
+    }
+
+    .orderDetailsDiv .orderStatusDetails .actionsB {
+        justify-content: left;
+        flex-wrap: wrap;
+    }
+
+    .buyerProductOrderDetailsCard .buyerProductOrderCard {
+        padding: 0px 20px;
+    }
+
+    .sellerProductOrderDetailsCard {
+        padding: 0px 20px;
+    }
+
+    .orderDetailsDiv .billingInfo {
+        padding: 20px;
+    }
+
+
+    .serviceOrderDetailsDiv {
+        margin-top: 30px;
+        margin-bottom: 50px;
+    }
+
+    .serviceOrderDetailsDiv .rightBox .orderDetails .posting .imgDiv {
+        width: 60px;
+    }
+
+    .serviceOrderDetailsDiv .leftHistory {
+        padding: 20px;
+    }
+
+    .serviceOrderDetailsDiv .rightBox .orderDetails,
+    .serviceOrderDetailsDiv .rightBox .timeRemaining {
+        padding: 20px;
+    }
+
+    .serviceOrderDetailsDiv .leftHistory .history .activity .title,
+    .serviceOrderDetailsDiv .leftHistory .history .activity .time{
+        font-size: 0.75rem;
     }
 }
 

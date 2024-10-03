@@ -197,7 +197,7 @@ const SellerEarnings = () => {
                     <div className='sellerPaymentMethodsDiv'>
                         <h2 className='secondaryHeading'><span>Payment</span> Methods</h2>
                         <div className="paymentMethods">
-                            <div className="method"><BsStripe />Stripe</div>
+                            <div className="method"><BsStripe className='methodLogo' /><span>Stripe</span></div>
                             <div className='buttonsDiv'>
                                 <Switch
                                     checked={stripeActive}
@@ -212,7 +212,7 @@ const SellerEarnings = () => {
                             </div>
                         </div>
                         <div className="paymentMethods">
-                            <div className="method"><SiPayoneer />Payoneer</div>
+                            <div className="method"><SiPayoneer className='methodLogo' /><span>Payoneer</span></div>
                             <div className='buttonsDiv'>
                                 <Switch
                                     checked={payoneerActive}
@@ -262,23 +262,25 @@ const SellerEarnings = () => {
                     </div>
 
                     <div className="tableDiv">
-                        <div className="tableContent">
-                            <div className="upper">
-                                <h2 className="secondaryHeading">Payments <span>History</span></h2>
-                                {/* <div className="upperRight">
-                                    <Dropdown options={["- Item Type -", "Product", "Service"]} onSelect={setItemTypeFilter} selected={itemTypeFilter} />
-                                    <Dropdown options={["- Status -", "Pending", "Paid"]} onSelect={setStatusTypeFilter} selected={statusTypeFilter} />
-                                </div> */}
+                        <section className="section">
+                            <div className="tableContent">
+                                <div className="upper">
+                                    <h2 className="secondaryHeading">Payments <span>History</span></h2>
+                                    {/* <div className="upperRight">
+                                        <Dropdown options={["- Item Type -", "Product", "Service"]} onSelect={setItemTypeFilter} selected={itemTypeFilter} />
+                                        <Dropdown options={["- Status -", "Pending", "Paid"]} onSelect={setStatusTypeFilter} selected={statusTypeFilter} />
+                                    </div> */}
+                                </div>
+                                <div className="header">
+                                    <p className="title">Activity</p>
+                                    <p>Date</p>
+                                    <p>Buyer</p>
+                                    <p>Order Type</p>
+                                    <p>Amount</p>
+                                </div>
+                                <div className="rows">{paymentElems}</div>
                             </div>
-                            <div className="header">
-                                <p className="title">Activity</p>
-                                <p>Date</p>
-                                <p>Buyer</p>
-                                <p>Order Type</p>
-                                <p>Amount</p>
-                            </div>
-                            <div className="rows">{paymentElems}</div>
-                        </div>
+                        </section>
                     </div>
 
                 </div>

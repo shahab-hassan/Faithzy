@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import Home from "./pages/buyer/Home";
@@ -25,8 +25,8 @@ import Cart from './pages/buyer/Cart.js';
 import PostRequest from './pages/buyer/PostRequest.js';
 import Tradelead from './pages/seller/Tradelead.js';
 import Orders from './pages/common/Orders.js';
-import {CheckoutStripeContainer} from './utils/StripeContainer.js';
-import {UpgradeStripeContainer} from './utils/StripeContainer.js';
+import { CheckoutStripeContainer } from './utils/StripeContainer.js';
+import { UpgradeStripeContainer } from './utils/StripeContainer.js';
 import ProductOrderDetails from './pages/common/ProductOrderDetails.js';
 import ServiceDetails from './pages/buyer/ServiceDetails.js';
 import Requirements from './pages/buyer/Requirements.js';
@@ -57,8 +57,12 @@ import AdminSendEmal from './pages/admin/AdminSendEmal.js';
 import NotFound from './utils/NotFound.js';
 import AdminManageDispute from './pages/admin/AdminManageDispute.js';
 import Terms from './pages/common/Terms.js';
+import { AuthContext } from './utils/AuthContext.js';
+import MobileRestricted from './utils/MobileRestricted.js';
 
 function App() {
+
+    const { isTabletPro } = useContext(AuthContext);
 
     return (
         <>
@@ -81,11 +85,11 @@ function App() {
                     <Route path='/terms' element={<Terms />} />
                 </Route>
 
-                <Route element={<BuyerLayoutHeader/>}>
+                <Route element={<BuyerLayoutHeader />}>
                     <Route path="/resetPasswordRequest" element={<ResetPasswordRequest />} />
                 </Route>
 
-                <Route element= {<LoginProtectedRoute /> } >
+                <Route element={<LoginProtectedRoute />} >
                     <Route path='/checkout' element={<CheckoutStripeContainer />} />
                     <Route path='/postRequest' element={<PostRequest />} />
                     <Route path='/wishlist' element={<Wishlist />} />
@@ -93,10 +97,11 @@ function App() {
                     <Route path='/orders' element={<Orders pageType="buyer" />} />
                     <Route path='/orders/product/orderDetails/:id' element={<ProductOrderDetails isBuyer={true} />} />
                     <Route path='/orders/posting/orderDetails/:id' element={<ServiceOrderDetails isBuyer={true} />} />
-                    <Route path='/chat' element={<ChatPage />} />
+                    <Route path='/chat' element={isTabletPro ? (<MobileRestricted />) : (<ChatPage />)} />
+
                 </Route>
 
-                <Route element={<SellerProtectedRoute isFooter = {true} />}>
+                <Route element={<SellerProtectedRoute isFooter={true} />}>
                     <Route path='/seller/dashboard' element={<SellerDashboard />} />
                     <Route path='/seller/product/preview/:id' element={<ProductDetails />} />
                     <Route path='/seller/posting/preview/:id' element={<ServiceDetails />} />

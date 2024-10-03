@@ -7,6 +7,7 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { FaShop } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
 import { BsHourglassSplit } from "react-icons/bs";
+import { FiDollarSign } from "react-icons/fi";
 
 import DropDown from "../../components/common/Dropdown";
 
@@ -42,13 +43,13 @@ const Orders = ({ pageType }) => {
 
   const handleOrdersTypeChange = (type) => {
     setOrdersType(type);
-    setSelectedFilter(pageType === "dashboard"? "Active":"All");
+    setSelectedFilter(pageType === "dashboard" ? "Active" : "All");
   };
 
   const calculateDeadline = (orderDate, deliveryDays) => {
     const deadline = new Date(orderDate);
     deadline.setDate(deadline.getDate() + deliveryDays);
-    
+
     const options = { month: 'short', day: 'numeric', year: '2-digit' };
     return deadline.toLocaleDateString(undefined, options);
   };
@@ -56,7 +57,7 @@ const Orders = ({ pageType }) => {
   const BuyerProductOrders = orders && pageType === "buyer" && ordersType === "Products" ? orders.map((order, index) => {
     if (!order.products) return null;
 
-    const filteredProducts = order.products.filter(product => 
+    const filteredProducts = order.products.filter(product =>
       selectedFilter === "All" || selectedFilter === product.status[product.status.length - 1].name
     );
 
@@ -90,6 +91,10 @@ const Orders = ({ pageType }) => {
                     <p><TbTruckDelivery className='icon' /></p>
                     <div>{product.status[product.status.length - 1].name}</div>
                   </div>
+                  <div className="column responsivePrice">
+                    <p><FiDollarSign className='icon' /></p>
+                    <div>${product.buyerPaid.salesPrice}</div>
+                  </div>
                 </div>
               </div>
               <div className="right">
@@ -110,7 +115,7 @@ const Orders = ({ pageType }) => {
   const SellerProductOrders = orders && (pageType === "seller" || pageType === "dashboard") && ordersType === "Products" ? orders.map((order, index) => {
     if (!order.products) return null;
 
-    const filteredProducts = order.products.filter(product => 
+    const filteredProducts = order.products.filter(product =>
       selectedFilter === "All" || selectedFilter === product.status[product.status.length - 1].name
     );
 
@@ -134,7 +139,7 @@ const Orders = ({ pageType }) => {
                 <div className="leftRight">
                   <div className="column">
                     <p><FaUserCircle className='icon' /></p>
-                    <p>{order.userId?.username}</p>
+                    <div>{order.userId?.username}</div>
                   </div>
                   <div className="column">
                     <p><FaBasketShopping className='icon' /></p>
@@ -143,6 +148,10 @@ const Orders = ({ pageType }) => {
                   <div className="column">
                     <p><TbTruckDelivery className='icon' /></p>
                     <div>{product.status[product.status.length - 1].name}</div>
+                  </div>
+                  <div className="column responsivePrice">
+                    <p><FiDollarSign className='icon' /></p>
+                    <div>${product.sellerToGet.salesPrice}</div>
                   </div>
                 </div>
               </div>
@@ -200,6 +209,10 @@ const Orders = ({ pageType }) => {
                   <p><BsHourglassSplit className='icon' /></p>
                   <div>{deadline}</div>
                 </div>
+                <div className="column responsivePrice">
+                  <p><FiDollarSign className='icon' /></p>
+                  <div>${order.summary.paidByBuyer.salesPrice}</div>
+                </div>
               </div>
             </div>
             <div className="right">
@@ -208,10 +221,10 @@ const Orders = ({ pageType }) => {
             </div>
           </div>
           <div className="horizontalLine"></div>
-          </div>
-          <div className='actionsDiv'>
-            <Link to={`/orders/posting/orderDetails/${order._id}`}>{"View Order >"}</Link>
-          </div>
+        </div>
+        <div className='actionsDiv'>
+          <Link to={`/orders/posting/orderDetails/${order._id}`}>{"View Order >"}</Link>
+        </div>
 
       </div>
     );
@@ -246,7 +259,7 @@ const Orders = ({ pageType }) => {
               <div className="leftRight">
                 <div className="column">
                   <p><FaUserCircle className='icon' /></p>
-                  <p>{order.userId?.username}</p>
+                  <div>{order.userId?.username}</div>
                 </div>
                 <div className="column">
                   <p><TbTruckDelivery className='icon' /></p>
@@ -256,6 +269,10 @@ const Orders = ({ pageType }) => {
                   <p><BsHourglassSplit className='icon' /></p>
                   <div>{deadline}</div>
                 </div>
+                <div className="column responsivePrice">
+                  <p><FiDollarSign className='icon' /></p>
+                  <div>${order.summary.sellerToGet.salesPrice}</div>
+                </div>
               </div>
             </div>
             <div className="right">
@@ -264,39 +281,49 @@ const Orders = ({ pageType }) => {
             </div>
           </div>
           <div className="horizontalLine"></div>
-          </div>
-          <div className='actionsDiv'>
-            <Link to={`/seller/orders/posting/orderDetails/${order._id}`}>{"View Order >"}</Link>
-          </div>
+        </div>
+        <div className='actionsDiv'>
+          <Link to={`/seller/orders/posting/orderDetails/${order._id}`}>{"View Order >"}</Link>
+        </div>
 
       </div>
     );
   }) : "Nothing to show here!";
 
-  const hasOrders = orders && (ordersType === "Products" 
-    ? orders.some(order => order.products && order.products.some(product => 
-        selectedFilter === "All" || selectedFilter === product.status[product.status.length - 1].name
-      )) 
+  const hasOrders = orders && (ordersType === "Products"
+    ? orders.some(order => order.products && order.products.some(product =>
+      selectedFilter === "All" || selectedFilter === product.status[product.status.length - 1].name
+    ))
     : orders.some(order => selectedFilter === "All" || selectedFilter === order.service?.status[order.service?.status.length - 1].name));
 
   return (
     <div className='ordersDiv'>
       <section className="section">
         <div className="ordersContent">
+
+          <div className="responsiveFilters">
+            {pageType !== "dashboard" &&
+              <DropDown options={ordersType === "Products" ? productFilters : serviceFilters} selected={selectedFilter} onSelect={setSelectedFilter} />}
+            <DropDown options={["Products", "Services"]} selected={ordersType} onSelect={handleOrdersTypeChange} />
+          </div>
+
           <div className="upper">
             <section className="section">
+
               <h2 className="primaryHeading">{selectedFilter} <span>Orders</span></h2>
               <div className="upperRight">
                 {pageType !== "dashboard" &&
                   <DropDown options={ordersType === "Products" ? productFilters : serviceFilters} selected={selectedFilter} onSelect={setSelectedFilter} />}
                 <DropDown options={["Products", "Services"]} selected={ordersType} onSelect={handleOrdersTypeChange} />
               </div>
+
             </section>
           </div>
+          
           <div className="orders">
-            {pageType === "buyer" ? 
+            {pageType === "buyer" ?
               hasOrders ? ordersType === "Products" ? BuyerProductOrders : BuyerServiceOrders : "Nothing to show here!"
-            : hasOrders ? ordersType === "Products"? SellerProductOrders : SellerServiceOrders : "Nothing to show here!"
+              : hasOrders ? ordersType === "Products" ? SellerProductOrders : SellerServiceOrders : "Nothing to show here!"
             }
           </div>
         </div>

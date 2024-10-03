@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
@@ -8,6 +8,7 @@ import LeaveServiceReview from '../../components/common/LeaveServiceReview';
 
 import Gallery from "../../components/seller/Gallery"
 import DisputeChatRoom from '../../components/common/DisputeChatRoom';
+import { AuthContext } from '../../utils/AuthContext';
 
 function ServiceOrderDetails({ isBuyer }) {
   const { id } = useParams();
@@ -37,6 +38,7 @@ function ServiceOrderDetails({ isBuyer }) {
   const [dispute, setDispute] = useState(null);
   const [showStartDisputeModel, setShowStartDisputeModel] = useState(null);
   const [disputeReason, setDisputeReason] = useState("");
+  const {isTabletPro} = useContext(AuthContext);
 
   useEffect(() => {
     if (localStorage.getItem('reqsSubmitted')) {
@@ -416,7 +418,7 @@ function ServiceOrderDetails({ isBuyer }) {
     const actionBy = ((isBuyer && activity.role === "Buyer") || (!isBuyer && activity.role === "Seller")) ? "You" : isBuyer ? usernames[1] : usernames[0];
 
     if (activity.name === "requirementsRequired" && !isBuyer)
-      return;
+      return "";
 
     let detailToShow = null;
     detailToShow = activity.name === "requirementsRequired" && isBuyer ? reqRequiredSection : detailToShow;
@@ -461,7 +463,7 @@ function ServiceOrderDetails({ isBuyer }) {
 
           <div className="leftContainer">
 
-            {(order.service.status[order.service.status.length - 1].name === "InDispute" || order.service.status[order.service.status.length - 1].name === "Resolved") && <div className="leftUpper">
+            {!isTabletPro && (order.service.status[order.service.status.length - 1].name === "InDispute" || order.service.status[order.service.status.length - 1].name === "Resolved") && <div className="leftUpper">
               <div className="commonChatDiv serviceOrderDisputeChat">
                 <div>
                   {isBuyer ? order.service.status[order.service.status.length - 1].name === "Resolved" ?
@@ -489,7 +491,7 @@ function ServiceOrderDetails({ isBuyer }) {
             <div className="leftHistory">
               {(order.service.status[order.service.status.length - 1].name === "Completed" || order.service.status[order.service.status.length - 1].name === "Resolved") && <LeaveServiceReview orderId={order._id} sellerId={order?.service?.serviceId?.sellerId?._id || order?.service?.serviceId?.sellerId} serviceId={order?.service?.serviceId} isBuyer={isBuyer} />}
               <h2 className="secondaryHeading"><span>Order</span> History</h2>
-              <div className="horizontalLine"></div>
+              {!(order.service.status[order.service.status.length - 1].name === "Completed" || order.service.status[order.service.status.length - 1].name === "Resolved") && <div className="horizontalLine"></div>}
               <div className="history">
                 {historyActivities}
               </div>

@@ -9,7 +9,7 @@ function BuyerFooter() {
 
 
   const [socialLinks, setSocialLinks] = useState({});
-  const { isLogin, user } = useContext(AuthContext);
+  const { isLogin, user, isTabletPro } = useContext(AuthContext);
 
 
   useEffect(() => {
@@ -53,7 +53,7 @@ function BuyerFooter() {
             <div className='column'>
               <h4>Useful Links</h4>
               <Link to="/categories">Categories</Link>
-              <Link to="/chat">Inbox</Link>
+              {!isTabletPro && <Link to="/chat">Inbox</Link>}
               <Link to="/cart">Cart</Link>
               <Link to="/wishlist">Wishlist</Link>
             </div>

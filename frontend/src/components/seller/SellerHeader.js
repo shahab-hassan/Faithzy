@@ -82,7 +82,7 @@ function SellerHeader() {
                 <li><NavLink style={(v) => v.isActive ? { color: "var(--secondaryCopper)" } : { color: "var(--white)" }} to="/seller/tradeleads" onClick={toggleMenu}>TradeLead</NavLink></li>
                 <li><NavLink style={(v) => v.isActive ? { color: "var(--secondaryCopper)" } : { color: "var(--white)" }} to="/seller/upgrade" onClick={toggleMenu}>Upgrade</NavLink></li>
                 <li><NavLink style={(v) => v.isActive ? { color: "var(--secondaryCopper)" } : { color: "var(--white)" }} to="/seller/earnings" onClick={toggleMenu}>Earnings</NavLink></li>
-                <li><NavLink style={(v) => v.isActive ? { color: "var(--secondaryCopper)" } : { color: "var(--white)" }} to="/seller/orders" onClick={toggleMenu}>Orders</NavLink></li>
+                <li><NavLink style={(v) => v.isActive ? { color: "var(--secondaryCopper)" } : { color: "var(--white)" }} to="/seller/orders" onClick={toggleMenu}>Orders as Seller</NavLink></li>
                 <li><NavLink style={(v) => v.isActive ? { color: "var(--secondaryCopper)" } : { color: "var(--white)" }} to="/contact" onClick={toggleMenu}>Contact Us</NavLink></li>
                 <li><NavLink style={(v) => v.isActive ? { color: "var(--secondaryCopper)" } : { color: "var(--white)" }} to="/settings" onClick={toggleMenu}>Settings</NavLink></li>
                 <li><Link to="/" onClick={() => { toggleMenu(); logout() }}>Logout</Link></li>

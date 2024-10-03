@@ -123,12 +123,12 @@ function BuyerHeader() {
 
               {isLogin ? <ul className='drawerContent' ref={drawerRef} style={{ display: (drawerOpen ? 'flex' : 'none') }}>
                 <li>{user && user?.role === "seller" ? <Link to="/seller/dashboard">Dashboard</Link> : <Link to="/seller/becomeaseller">Become Seller</Link>}</li>
-                <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/chat" onClick={toggleMenu}>Messages</NavLink></li>
+                {/* <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/chat" onClick={toggleMenu}>Messages</NavLink></li> */}
                 {isTablet && <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/categories" onClick={toggleMenu}>Categories</NavLink></li>}
                 {isTablet && <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/services" onClick={toggleMenu}>Services</NavLink></li>}
                 {isTablet && <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/products" onClick={toggleMenu}>Products</NavLink></li>}
                 {isTablet && <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/postRequest" onClick={toggleMenu}>Post a Request</NavLink></li>}
-                <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/orders" onClick={toggleMenu}>Orders</NavLink></li>
+                <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/orders" onClick={toggleMenu}>Orders as Buyer</NavLink></li>
                 <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/cart" onClick={toggleMenu}>Cart</NavLink></li>
                 <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/wishlist" onClick={toggleMenu}>Wishlist</NavLink></li>
                 <li><NavLink style={(v) => v.isActive ? {color: "var(--secondaryCopper)"}:{color: "var(--white)"}} to="/contact" onClick={toggleMenu}>Contact Us</NavLink></li>

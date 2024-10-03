@@ -1,66 +1,71 @@
 /* ********************* SELLER HEADER ********************* */
 
-.sellerHeaderDiv{
+.sellerHeaderDiv {
     background-color: var(--primaryBlue);
     color: white;
     /* height: 13vh; */
 }
 
 
-.sellerHeaderDiv .sellerHeaderContent, 
-.sellerHeaderDiv .sellerHeaderContent, .sellerHeaderActions,
-.sellerHeaderDiv .sellerHeaderContent, .sellerHeaderActions, .leftActions,
-.sellerHeaderDiv .sellerHeaderContent, .sellerHeaderActions, .rightActions,
+.sellerHeaderDiv .sellerHeaderContent,
+.sellerHeaderDiv .sellerHeaderContent,
+.sellerHeaderActions,
+.sellerHeaderDiv .sellerHeaderContent,
+.sellerHeaderActions,
+.leftActions,
+.sellerHeaderDiv .sellerHeaderContent,
+.sellerHeaderActions,
+.rightActions,
 
-.sellerHeaderDiv .sellerHeaderContent nav ul
-
-{
+.sellerHeaderDiv .sellerHeaderContent nav ul {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
 }
 
-.sellerHeaderDiv .sellerHeaderContent{
+.sellerHeaderDiv .sellerHeaderContent {
     padding: 30px 0px;
     justify-content: space-between;
 }
 
-.sellerHeaderActions{
+.sellerHeaderActions {
     gap: 50px;
 }
-.sellerHeaderActions i{
-    font-size: 20px;    
+
+.sellerHeaderActions i {
+    font-size: 20px;
     cursor: pointer;
     color: var(--gray);
     transition: 0.1s;
 }
-.sellerHeaderActions i:hover{
+
+.sellerHeaderActions i:hover {
     color: var(--white);
 }
 
 .sellerHeaderActions .leftActions,
-.sellerHeaderActions .rightActions
-{
+.sellerHeaderActions .rightActions {
     gap: 25px;
 }
-.sellerHeaderActions .leftActions i{
+
+.sellerHeaderActions .leftActions i {
     color: var(--secondaryCopper);
     transition: 0.1s;
 }
-.sellerHeaderActions .leftActions i:hover{
+
+.sellerHeaderActions .leftActions i:hover {
     color: var(--secondaryCopperDark);
 }
 
-.sellerHeaderActions .rightActions{
+.sellerHeaderActions .rightActions {
     border: 1px solid var(--primaryCopper);
     border-radius: 8px;
     padding: 12px 25px;
     background-color: var(--secondaryBlue);
 }
 
-.sellerHeaderDiv .sellerHeaderContent nav ul
-{
+.sellerHeaderDiv .sellerHeaderContent nav ul {
     gap: 40px;
 }
 
@@ -69,17 +74,17 @@
 
 /* ********************* BECOME A SELLER PAGE ********************* */
 
-.becomeSellerDiv{
+.becomeSellerDiv {
     padding: 50px 0px
 }
 
-.becomeSellerDiv .becomeSellerContent{
+.becomeSellerDiv .becomeSellerContent {
     background-color: white;
     border-radius: 8px;
     padding: 50px 0px;
 }
 
-.becomeSellerDiv form{
+.becomeSellerDiv form {
     margin: 30px 0px;
 }
 
@@ -103,9 +108,9 @@
     object-fit: cover;
 }
 
-.becomeSellerDiv form .inputDiv .uploadInput{
+.becomeSellerDiv form .inputDiv .uploadInput {
     display: none;
-}  
+}
 
 
 
@@ -115,14 +120,14 @@
 
 .createProductDiv {
     padding: 50px 0px;
-  }
-  
+}
+
 .createProductDiv .createProductContent {
-    background-color: white;
+    background-color: var(--white);
     border-radius: 8px;
     padding: 50px;
 }
-  
+
 .createProductDiv .createProductDetails {
     display: flex;
     align-items: flex-start;
@@ -130,35 +135,32 @@
     gap: 50px;
     margin-top: 30px;
 }
-  
+
 .createProductDiv .createProductDetails form {
-    /* flex: 1; */
-    width: 70%;
+    width: 100%;
 }
-  
+
 .createProductDiv .createProductDetails .createProductGallery {
     display: flex;
     flex-direction: column;
     align-items: start;
     gap: 20px;
-    width: 23%;
+    width: fit-content;
 }
-  
-.createProductDiv .createProductDetails .createProductGallery .productThumbnailContent,
-.createProductDiv .createProductDetails .createProductGallery .productGalleryContent {
-    width: 300px;
-    height: 300px;
-    border: 1px dashed  var(--darkGray);
+
+.createProductDiv .createProductDetails .createProductGallery .productThumbnail{
+    width: 100%;
+}
+.createProductDiv .createProductDetails .createProductGallery .productThumbnailContent{
+    width: 350px;
+    height: 350px;
+    border: 1px dashed var(--darkGray);
     border-radius: 8px;
     padding: 15px;
     margin-top: 10px;
 }
 
-.createProductDiv .createProductDetails .createProductGallery .productGalleryContent {
-    height: fit-content;
-}
-  
-.createProductDiv .createProductDetails .createProductGallery .productThumbnailContent .uploadLabel{
+.createProductDiv .createProductDetails .createProductGallery .productThumbnailContent .uploadLabel {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -168,45 +170,25 @@
     border-radius: 8px;
     cursor: pointer;
 }
-.createProductDiv .createProductDetails .createProductGallery .productThumbnailContent .uploadLabel img{
+
+.createProductDiv .createProductDetails .createProductGallery .productThumbnailContent .uploadLabel img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.createProductDiv .createProductDetails .createProductGallery .productThumbnailContent input{
+.createProductDiv .createProductDetails .createProductGallery .productThumbnailContent input {
     display: none;
-}
-.createProductDiv .createProductDetails .createProductGallery .productGalleryContent input{
-    display: none;
-}
-
-.createProductDiv .createProductDetails .createProductGallery .productGalleryContent .galleryImages{
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    flex-wrap: wrap;
-    gap: 10px;
-    cursor: pointer;
-}
-.createProductDiv .createProductDetails .createProductGallery .productGalleryContent .galleryImages:has(.uploadIcon){
-    justify-content: center;
-}
-
-.createProductDiv .createProductDetails .createProductGallery .productGalleryContent .galleryImages img{
-    width: 58px;
-    height: 58px;
-    object-fit: cover;
 }
 
 .createProductDiv .createProductDetails .createProductGallery .productGalleryUpper,
-.createProductDiv .createProductDetails .createProductGallery .productThumbnailUpper
-{
+.createProductDiv .createProductDetails .createProductGallery .productThumbnailUpper {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.createProductDiv .createProductDetails .createProductGallery .clearBtn{
+
+.createProductDiv .createProductDetails .createProductGallery .clearBtn {
     cursor: pointer;
 }
 
@@ -216,24 +198,26 @@
 
 /* ********************* SELLER BASIC DETAILS COMPONENT ********************* */
 
-.sellerBasicDetailsDiv{
+.sellerBasicDetailsDiv {
     position: relative;
     margin-top: 100px;
 }
 
-.sellerBasicDetailsDiv .profileImageDiv{
+.sellerBasicDetailsDiv .profileImageDiv {
     position: absolute;
-    width: 150px;
-    height: 150px;
     top: -10%;
-    left: 44.5%;
-}
-.sellerBasicDetailsDiv .profileImageDiv img{
     width: 100%;
-    height: 100%;
+    left: 0;
+    display: flex;
+    justify-content: center;
 }
 
-.sellerBasicDetailsDiv .sellerBasicDetailsContent{
+.sellerBasicDetailsDiv .profileImageDiv img {
+    width: 150px;
+    height: 150px;
+}
+
+.sellerBasicDetailsDiv .sellerBasicDetailsContent {
     display: flex;
     flex-direction: column;
     background: var(--white);
@@ -242,15 +226,14 @@
     gap: 50px;
 }
 
-.sellerBasicDetailsDiv .upper{
+.sellerBasicDetailsDiv .upper {
     display: flex;
     justify-content: space-around;
     height: 200px;
 }
 
 .sellerBasicDetailsDiv .upperLeft,
-.sellerBasicDetailsDiv .upperRight
-{
+.sellerBasicDetailsDiv .upperRight {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -259,15 +242,16 @@
     width: 35%;
 }
 
-.sellerBasicDetailsDiv .upperLeft a{
+.sellerBasicDetailsDiv .upperLeft a {
     width: 100%;
     text-align: center;
 }
-.sellerBasicDetailsDiv .upperLeft .previewProfileBtn{
+
+.sellerBasicDetailsDiv .upperLeft .previewProfileBtn {
     margin-top: 10px;
 }
 
-.sellerBasicDetailsDiv .upperRight div{
+.sellerBasicDetailsDiv .upperRight div {
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -279,12 +263,12 @@
 
 /* ********************* SELLER PRODUCTS ********************* */
 
-.sellerProductsDiv{
+.sellerProductsDiv {
     margin-top: 50px;
     margin-bottom: 100px;
 }
 
-.sellerProductsDiv .sellerProductsHeader{
+.sellerProductsDiv .sellerProductsHeader {
     background: var(--white);
     border-radius: 8px;
     padding: 20px 25px;
@@ -294,8 +278,8 @@
     align-items: center;
 }
 
-.sellerProductsDiv .sellerProductsHeader .primaryBtn{
-    height: 50px;   
+.sellerProductsDiv .sellerProductsHeader .primaryBtn {
+    height: 50px;
     width: 50px;
     border-radius: 50%;
     display: flex;
@@ -304,12 +288,31 @@
     font-size: 1.5rem;
 }
 
-.sellerProductsDiv .sellerProducts{
-    display: flex;
-    justify-content: left;
-    gap: 17.5px;
+.sellerProductsDiv .sellerProducts {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(5, 1fr);
     width: 100%;
-    flex-wrap: wrap;
+}
+
+.sellerProductsDiv .sellerProducts.grid-1 {
+    grid-template-columns: repeat(1, 1fr);
+}
+
+.sellerProductsDiv .sellerProducts.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.sellerProductsDiv .sellerProducts.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.sellerProductsDiv .sellerProducts.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.sellerProductsDiv .sellerProducts.grid-5 {
+    grid-template-columns: repeat(5, 1fr);
 }
 
 
@@ -319,15 +322,14 @@
 
 .sellerProductCardDiv {
     padding: 10px;
-    /* width: 266px; */
-    width: 19%;
+    width: 100%;
     border-radius: 8px;
     background-color: var(--white);
     box-shadow: 0.1px 0.1px 10px 1px var(--gray);
     user-select: none;
 }
 
-.sellerProductCardDiv .productImgDiv{
+.sellerProductCardDiv .productImgDiv {
     width: 100%;
     height: 250px;
 }
@@ -336,9 +338,10 @@
     width: 100%;
     height: 100%;
     border-radius: 8px;
+    object-fit: cover;
 }
 
-.sellerProductCardDiv .productUpper{
+.sellerProductCardDiv .productUpper {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -347,7 +350,7 @@
     font-size: 0.85rem;
 }
 
-.sellerProductCardDiv .productUpper .ellipsis{
+.sellerProductCardDiv .productUpper .ellipsis {
     position: relative;
     font-size: 22px;
     color: var(--darkGray);
@@ -355,13 +358,14 @@
     cursor: pointer;
     transition: 0.1s;
 }
-.sellerProductCardDiv .productUpper .ellipsis i:hover{
+
+.sellerProductCardDiv .productUpper .ellipsis i:hover {
     color: var(--black);
 }
 
-.sellerProductCardDiv .productUpper .ellipsis .optionsMenu{
+.sellerProductCardDiv .productUpper .ellipsis .optionsMenu {
     position: absolute;
-    background-color: white;
+    background-color: var(--white);
     box-shadow: 0.1px 0.1px 10px 1px var(--gray);
     display: flex;
     flex-direction: column;
@@ -373,11 +377,13 @@
     top: 100%;
     right: 0;
 }
-.sellerProductCardDiv .productUpper .ellipsis .optionsMenu a{
+
+.sellerProductCardDiv .productUpper .ellipsis .optionsMenu a {
     color: var(--darkGray);
     transition: 0.1s;
 }
-.sellerProductCardDiv .productUpper .ellipsis .optionsMenu a:hover{
+
+.sellerProductCardDiv .productUpper .ellipsis .optionsMenu a:hover {
     color: var(--black);
 }
 
@@ -396,43 +402,46 @@
 }
 
 
-.sellerProductCardDiv .productLower{
+.sellerProductCardDiv .productLower {
     margin-top: 8px;
     display: flex;
     flex-direction: column;
 }
 
-.sellerProductCardDiv .productLower .productLowerTop{
+.sellerProductCardDiv .productLower .productLowerTop {
     display: flex;
     align-items: center;
 }
-.sellerProductCardDiv .productLower .productLowerBottom{
+
+.sellerProductCardDiv .productLower .productLowerBottom {
     display: flex;
     gap: 15px;
     justify-content: right;
     align-items: baseline;
 }
 
-.sellerProductCardDiv .productLower .productLowerTop{
+.sellerProductCardDiv .productLower .productLowerTop {
     font-size: 0.9rem;
     gap: 5px;
 }
 
-.sellerProductCardDiv .productLower .productLowerTop p{
+.sellerProductCardDiv .productLower .productLowerTop p {
     color: var(--lightBlack);
     font-weight: 600;
 }
-.sellerProductCardDiv .productLower .productLowerTop span{
+
+.sellerProductCardDiv .productLower .productLowerTop span {
     color: var(--primaryCopper);
     font-weight: 500;
 }
 
-.sellerProductCardDiv .productLower .productPrice{
+.sellerProductCardDiv .productLower .productPrice {
     color: var(--secondaryBlue);
     font-size: 1.8rem;
     margin-right: 5px;
 }
-.sellerProductCardDiv .productLower .productDiscount{
+
+.sellerProductCardDiv .productLower .productDiscount {
     color: var(--darkGray);
     text-decoration: line-through;
     font-size: 1.2rem;
@@ -443,59 +452,69 @@
 
 /* ********************* CREATE SERVICE PAGE ********************* */
 
-.createServiceDiv{
+.createServiceDiv {
     padding: 50px 0px;
 }
 
-.createServiceDiv .createServiceContent{
+.createServiceDiv .createServiceContent {
     padding: 50px;
     background: var(--white);
     border-radius: 8px;
 }
 
-.createServiceDiv .form{
+.createServiceDiv .form {
     margin-top: 30px;
 }
 
-.createServiceDiv .servicePackagesDiv{
+.createServiceDiv .servicePackagesDiv {
     display: flex;
     align-items: top;
     justify-content: space-between;
     margin: 50px 0px;
     height: 100%;
+    width: 100%;
     gap: 40px;
 }
-.createServiceDiv .verticalLine{
+.createServiceDiv .servicePackagesDiv label {
+    font-size: 0.8rem;
+}
+
+.createServiceDiv .verticalLine {
     height: 410px;
 }
-.createServiceDiv .servicePackagesDiv .servicePackage .secondaryHeading{
+
+.createServiceDiv .servicePackagesDiv .servicePackage .secondaryHeading {
     text-align: center;
     margin-bottom: 10px;
 }
 
-.createServiceDiv .form .reqQuestions{
+.createServiceDiv .form .reqQuestions {
     display: flex;
     flex-direction: column;
     gap: 10px;
     margin: 20px 0px;
 }
-.createServiceDiv .form .reqQuestions .reqQuestion{
+
+.createServiceDiv .form .reqQuestions .reqQuestion {
     display: flex;
     justify-content: space-between;
 }
-.createServiceDiv .form .reqQuestions .reqQuestion .icons .icon{
+
+.createServiceDiv .form .reqQuestions .reqQuestion .icons .icon {
     cursor: pointer;
     color: var(--darkGray);
     margin-left: 15px;
 }
-.createServiceDiv .form .addReq{
+
+.createServiceDiv .form .addReq {
     display: flex;
     flex-direction: column;
     gap: 10px;
     justify-content: right;
     align-items: end;
 }
-.createServiceDiv .form .addReq button{
+
+.createServiceDiv .form .addReq button {
     width: fit-content;
 }
 
@@ -505,24 +524,24 @@
 
 /* ********************* Gallery Component ********************* */
 
-.galleryDiv{
+.galleryDiv {
     width: 100%;
 }
 
 .galleryDiv .galleryContent {
     width: 100%;
     height: fit-content;
-    border: 1px dashed  var(--darkGray);
+    border: 1px dashed var(--darkGray);
     border-radius: 8px;
     padding: 15px;
     margin-top: 10px;
 }
 
-.galleryDiv .galleryContent  input{
+.galleryDiv .galleryContent input {
     display: none;
 }
 
-.galleryDiv .galleryContent .galleryImages{
+.galleryDiv .galleryContent .galleryImages {
     display: flex;
     align-items: center;
     justify-content: start;
@@ -531,26 +550,29 @@
     cursor: pointer;
     width: 100%;
 }
-.galleryDiv .galleryContent .galleryImages:has(.uploadIcon){
+
+.galleryDiv .galleryContent .galleryImages:has(.uploadIcon) {
     justify-content: center;
 }
 
-.galleryDiv .galleryContent .galleryImages img{
+.galleryDiv .galleryContent .galleryImages img {
     width: 17%;
     max-height: 200px;
     object-fit: contain;
 }
 
-.galleryDiv .galleryUpper{
+.galleryDiv .galleryUpper {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.galleryDiv .galleryUpper .imagesLimit{
+
+.galleryDiv .galleryUpper .imagesLimit {
     color: var(--darkGray);
     font-size: 0.9rem;
 }
-.galleryDiv .galleryUpper .clearBtn{
+
+.galleryDiv .galleryUpper .clearBtn {
     cursor: pointer;
 }
 
@@ -561,12 +583,12 @@
 
 /* ********************* SELLER SERVICES ********************* */
 
-.sellerServicesDiv{
+.sellerServicesDiv {
     margin-top: 50px;
     margin-bottom: 100px;
 }
 
-.sellerServicesDiv .sellerServicesHeader{
+.sellerServicesDiv .sellerServicesHeader {
     background: var(--white);
     border-radius: 8px;
     padding: 20px 25px;
@@ -576,8 +598,8 @@
     align-items: center;
 }
 
-.sellerServicesDiv .sellerServicesHeader .primaryBtn{
-    height: 50px;   
+.sellerServicesDiv .sellerServicesHeader .primaryBtn {
+    height: 50px;
     width: 50px;
     border-radius: 50%;
     display: flex;
@@ -586,12 +608,31 @@
     font-size: 1.5rem;
 }
 
-.sellerServicesDiv .sellerServices{
-    display: flex;
-    justify-content: left;
-    gap: 17.5px;
+.sellerServicesDiv .sellerServices {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
     width: 100%;
-    flex-wrap: wrap;
+}
+
+.sellerServicesDiv .sellerServices.grid-1 {
+    grid-template-columns: repeat(1, 1fr);
+}
+
+.sellerServicesDiv .sellerServices.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.sellerServicesDiv .sellerServices.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.sellerServicesDiv .sellerServices.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.sellerServicesDiv .sellerServices.grid-5 {
+    grid-template-columns: repeat(5, 1fr);
 }
 
 
@@ -601,15 +642,14 @@
 
 .sellerServiceCardDiv {
     padding: 10px;
-    /* width: 266px; */
-    width: 19%;
+    width: 100%;
     border-radius: 8px;
     background-color: var(--white);
     box-shadow: 0.1px 0.1px 10px 1px var(--gray);
     user-select: none;
 }
 
-.sellerServiceCardDiv .serviceImgDiv{
+.sellerServiceCardDiv .serviceImgDiv {
     width: 100%;
     height: 180px;
 }
@@ -618,9 +658,10 @@
     width: 100%;
     height: 100%;
     border-radius: 8px;
+    object-fit: cover;
 }
 
-.sellerServiceCardDiv .serviceUpper{
+.sellerServiceCardDiv .serviceUpper {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -629,7 +670,7 @@
     font-size: 0.85rem;
 }
 
-.sellerServiceCardDiv .serviceUpper .ellipsis{
+.sellerServiceCardDiv .serviceUpper .ellipsis {
     position: relative;
     font-size: 22px;
     color: var(--darkGray);
@@ -637,13 +678,14 @@
     cursor: pointer;
     transition: 0.1s;
 }
-.sellerServiceCardDiv .serviceUpper .ellipsis i:hover{
+
+.sellerServiceCardDiv .serviceUpper .ellipsis i:hover {
     color: var(--black);
 }
 
-.sellerServiceCardDiv .serviceUpper .ellipsis .optionsMenu{
+.sellerServiceCardDiv .serviceUpper .ellipsis .optionsMenu {
     position: absolute;
-    background-color: white;
+    background-color: var(--white);
     box-shadow: 0.1px 0.1px 10px 1px var(--gray);
     display: flex;
     flex-direction: column;
@@ -655,11 +697,13 @@
     top: 100%;
     right: 0;
 }
-.sellerServiceCardDiv .serviceUpper .ellipsis .optionsMenu a{
+
+.sellerServiceCardDiv .serviceUpper .ellipsis .optionsMenu a {
     color: var(--darkGray);
     transition: 0.1s;
 }
-.sellerServiceCardDiv .serviceUpper .ellipsis .optionsMenu a:hover{
+
+.sellerServiceCardDiv .serviceUpper .ellipsis .optionsMenu a:hover {
     color: var(--black);
 }
 
@@ -678,42 +722,27 @@
 }
 
 
-.sellerServiceCardDiv .serviceLower{
+.sellerServiceCardDiv .serviceLower {
     margin-top: 8px;
     display: flex;
     flex-direction: column;
 }
 
-/* .sellerServiceCardDiv .serviceLower .serviceLowerTop{
-    display: flex;
-    align-items: center;
-    font-size: 0.9rem;
-    gap: 5px;
-} */
 
-.sellerServiceCardDiv .serviceLower .serviceLowerBottom{
+.sellerServiceCardDiv .serviceLower .serviceLowerBottom {
     display: flex;
     gap: 15px;
     justify-content: right;
     align-items: baseline;
 }
 
-/* .sellerServiceCardDiv .serviceLower .serviceLowerTop p{
-    color: var(--lightBlack);
-    font-weight: 600;
-} */
-
-/* .sellerServiceCardDiv .serviceLower .serviceLowerTop span{
-    color: var(--primaryCopper);
-    font-weight: 500;
-} */
-
-.sellerServiceCardDiv .serviceLower .servicePrice{
+.sellerServiceCardDiv .serviceLower .servicePrice {
     color: var(--secondaryBlue);
     font-size: 1.8rem;
     margin-right: 5px;
 }
-.sellerServiceCardDiv .serviceLower .serviceDiscount{
+
+.sellerServiceCardDiv .serviceLower .serviceDiscount {
     color: var(--darkGray);
     text-decoration: line-through;
     font-size: 1.2rem;
@@ -724,12 +753,13 @@
 
 /* ********************* TRADELEAD PAGE ********************* */
 
-.requestDetailsModelDiv .requestDetailsModelContent{
+.requestDetailsModelDiv .requestDetailsModelContent {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
-.requestDetailsModelDiv .requestDetailsModelContent .categorySpan{
+
+.requestDetailsModelDiv .requestDetailsModelContent .categorySpan {
     color: var(--primaryCopper);
 }
 
@@ -741,36 +771,42 @@
 
 /* ********************* UPGRADE PAGE ********************* */
 
-.upgradeDiv{
+.upgradeDiv {
     margin: 50px 0px;
 }
-.upgradeDiv .upgradeContent{
+
+.upgradeDiv .upgradeContent {
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
+
 .upgradeDiv .upgradeContent .primaryHeading,
-.upgradeDiv .upgradeContent .secondaryHeading{
+.upgradeDiv .upgradeContent .secondaryHeading {
     text-align: center;
 }
-.upgradeDiv .upgradeContent .timeLine{
+
+.upgradeDiv .upgradeContent .timeLine {
     display: flex;
     gap: 30px;
     width: 100%;
     justify-content: center;
 }
-.upgradeDiv .upgradeContent .timeLine div{
+
+.upgradeDiv .upgradeContent .timeLine div {
     display: flex;
     justify-content: center;
     gap: 10px;
     align-content: center;
 }
-.upgradeDiv .upgradeContent .plans{
+
+.upgradeDiv .upgradeContent .plans {
     display: flex;
     justify-content: center;
     gap: 40px;
 }
-.upgradeDiv .upgradeContent .plans .plan{
+
+.upgradeDiv .upgradeContent .plans .plan {
     width: 100%;
     background: var(--white);
     padding: 40px 30px;
@@ -778,78 +814,91 @@
     flex-direction: column;
     gap: 15px;
     align-items: center;
-    width: 30%;
+    width: 35%;
     border-radius: 8px;
 }
-.upgradeDiv .upgradeContent .plans .plan .price{
+
+.upgradeDiv .upgradeContent .plans .plan .price {
     font-size: 2.5rem;
     font-weight: 600;
 }
-.upgradeDiv .upgradeContent .plans .plan .price span{
+
+.upgradeDiv .upgradeContent .plans .plan .price span {
     font-size: 1rem;
     font-weight: 600;
 }
-.upgradeDiv .upgradeContent .plans .plan .rows{
+
+.upgradeDiv .upgradeContent .plans .plan .rows {
     display: flex;
     flex-direction: column;
     gap: 8px;
     margin: 15px 0px;
 }
-.upgradeDiv .upgradeContent .plans .plan .rows .row{
+
+.upgradeDiv .upgradeContent .plans .plan .rows .row {
     display: flex;
     gap: 10px;
     align-items: center;
 }
-.upgradeDiv .upgradeContent .plans .plan .rows .row .icon{
+
+.upgradeDiv .upgradeContent .plans .plan .rows .row .icon {
     width: 18px;
     height: 18px;
     color: var(--success);
 }
-.upgradeDiv .upgradeContent .plans .plan .rows .notIncluded span{
+
+.upgradeDiv .upgradeContent .plans .plan .rows .notIncluded span {
     color: var(--darkGray);
     text-decoration: line-through;
 }
-.upgradeDiv .upgradeContent .plans .plan .rows .notIncluded .icon{
+
+.upgradeDiv .upgradeContent .plans .plan .rows .notIncluded .icon {
     color: var(--danger);
 }
-.upgradeDiv .upgradeContent .premiumPlan{
+
+.upgradeDiv .upgradeContent .premiumPlan {
     color: var(--white);
     background: var(--primaryBlue) !important;
 }
-.upgradeDiv .upgradeContent .premiumPlan .secondaryHeading{
-    color: var(--white) ;
+
+.upgradeDiv .upgradeContent .premiumPlan .secondaryHeading {
+    color: var(--white);
 }
-.upgradeDiv .upgradeContent .premiumPlan .primaryBtn2{
-    color: var(--white) ;
+
+.upgradeDiv .upgradeContent .premiumPlan .primaryBtn2 {
+    color: var(--white);
     border-color: var(--white);
 }
+
 .upgradeDiv .upgradeContent .premiumPlan .discountPercent,
-.upgradeDiv .upgradeContent .premiumPlan .discountExpiry span{
+.upgradeDiv .upgradeContent .premiumPlan .discountExpiry span {
     color: var(--secondaryCopper);
     font-weight: 600;
 }
-.upgradeDiv .upgradeContent .plans .plan .buttonDiv{
+
+.upgradeDiv .upgradeContent .plans .plan .buttonDiv {
     width: 70%;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.upgradeDiv .upgradeCheckoutModelDiv .form{
+.upgradeDiv .upgradeCheckoutModelDiv .form {
     width: 100%;
 }
-.upgradeDiv .upgradeCheckoutModelDiv .buttonsDiv{
+
+.upgradeDiv .upgradeCheckoutModelDiv .buttonsDiv {
     margin-top: 15px;
 }
 
-.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions{
+.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions {
     display: flex;
     justify-content: space-between;
     gap: 15px;
     width: 100%;
 }
 
-.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption{
+.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -861,19 +910,23 @@
     transition: 0.2s;
     border-radius: 8px;
 }
-.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption.selected{
+
+.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption.selected {
     background: var(--primaryBlue);
     color: var(--white);
 }
-.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption:not(.selected):hover{
+
+.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption:not(.selected):hover {
     background: var(--lightGray);
 }
-.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption .icon{
+
+.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption .icon {
     width: 40px;
     height: 40px;
     color: var(--secondaryBlue);
 }
-.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption.selected .icon{
+
+.upgradeDiv .upgradeCheckoutModelDiv .paymentOptions .paymentOption.selected .icon {
     color: var(--white);
 }
 
@@ -887,13 +940,15 @@
 .earningsDiv {
     margin: 50px 0px;
 }
-.earningsDiv .sellerPaymentMethodsDiv{
+
+.earningsDiv .sellerPaymentMethodsDiv {
     background: var(--white);
     padding: 20px 30px;
     border-radius: 8px;
     margin-bottom: 20px;
 }
-.earningsDiv .sellerPaymentMethodsDiv .paymentMethods{
+
+.earningsDiv .sellerPaymentMethodsDiv .paymentMethods {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -902,12 +957,14 @@
     border-radius: 8px;
     margin: 10px 0px;
 }
-.earningsDiv .sellerPaymentMethodsDiv .paymentMethods .method{
+
+.earningsDiv .sellerPaymentMethodsDiv .paymentMethods .method {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-.earningsDiv .sellerPaymentMethodsDiv .paymentMethods .buttonsDiv{
+
+.earningsDiv .sellerPaymentMethodsDiv .paymentMethods .buttonsDiv {
     display: flex;
     align-items: center;
     gap: 15px;
@@ -915,9 +972,11 @@
 
 
 .earningsDiv .earningsOverview {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
+
 .earningsDiv .earningsOverview .overviewBox {
     border-radius: 8px;
     background: var(--white);
@@ -936,16 +995,22 @@
     font-size: 1.5rem;
     font-weight: 600;
 }
-.earningsDiv .tableDiv{
+
+.earningsDiv .tableDiv {
     padding: 0;
     margin: 20px 0px;
 }
-.earningsDiv .tableDiv .upperRight{
+
+.earningsDiv .tableDiv .section {
+    width: 100%;
+}
+
+.earningsDiv .tableDiv .upperRight {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.earningsDiv .popupDiv .popupContent{
+.earningsDiv .popupDiv .popupContent {
     width: 40% !important;
 }

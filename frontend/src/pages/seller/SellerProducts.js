@@ -9,7 +9,7 @@ import SellerProductCard from '../../components/seller/SellerProductCard';
 function SellerProducts() {
 
     const [sellerProducts, setSellerProducts] = React.useState([]);
-    const {isLogin, user} = useContext(AuthContext);
+    const {isLogin, user, isTabletPro, isTablet, isMobilePro, isMobile} = useContext(AuthContext);
     
     const deleteProduct = (id)=>{
         if(window.confirm('Are you sure you want to delete this product?')){
@@ -54,6 +54,8 @@ function SellerProducts() {
         return <SellerProductCard key={index} product={product} deleteProduct={deleteProduct} />
     })
 
+    const maxDisplay = isMobile ? 1 : isMobilePro ? 2 : isTablet ? 3 : isTabletPro ? 4 : 5;
+
     return (
         <div className='sellerProductsDiv'>
             <section className='section'>
@@ -67,7 +69,7 @@ function SellerProducts() {
                             <Link to="/seller/products/manageProduct/new" className="primaryBtn"><i className="fa-solid fa-plus"></i></Link>
                         </div>
 
-                        <div className="sellerProducts">
+                        <div className={`sellerProducts grid-${maxDisplay}`}>
                             {sellerProducts.length > 0? allSellerProducts: <div>Nothing to show here</div>}
                         </div>
             

@@ -3,6 +3,7 @@ const { paymentModel, withdrawModel } = require('../models/paymentModel');
 const Seller = require('../models/sellerModel');
 const AdminSettings = require('../models/adminSettingsModel');
 const { productOrderModel, serviceOrderModel } = require('../models/orderModel');
+const axios = require("axios");
 
 const getStripeSecretKey = async () => {
   const settings = await AdminSettings.findOne();
@@ -199,8 +200,6 @@ const getWithdrawalRequests = asyncHandler(async (req, res) => {
     const { type } = req.query;
 
     let filter = {};
-
-    console.log(type);
 
     switch (type) {
       case 'pendingPayments':
@@ -437,7 +436,76 @@ const updateActivePaymentMethod = asyncHandler(async (req, res) => {
   }
 });
 
+const releasePayoneerPayments = asyncHandler(async (req, res) => {
+  const { requestIds } = req.body;
+
+  
+  try {
+    const adminSettings = await AdminSettings.findOne();
+    if (!adminSettings || !adminSettings.payoneerClientId || !adminSettings.payoneerClientSecret) {
+      return res.status(500).json({ message: 'Admin Payoneer credentials not set' });
+    }
+    
+    const tokenResponse = await axios.post('https://api.payoneer.com/v4/oauth/token', {
+      client_id: adminSettings.payoneerClientId,
+      client_secret: adminSettings.payoneerClientSecret,
+      grant_type: 'client_credentials',
+    });
+
+    const accessToken = tokenResponse.data.access_token;
+
+    for (let requestId of requestIds) {
+      const request = await withdrawModel.findById(requestId).populate('userId');
+      if (!request || request?.to === "Buyer") return res.status(404).json({ message: `Request ${requestId} not found` });
+
+      const seller = await Seller.findById(request.userId?.sellerId);
+      if (!seller || !seller.payoneerAccountId) {
+        return res.status(400).json({ message: `Seller with Payoneer account not found for request ${requestId}` });
+      }
+
+      const payoutResponse = await axios.post(`https://api.payoneer.com/v4/programs/${adminSettings.payoneerAccountId}/payouts`, {
+        payee_id: seller.payoneerAccountId,
+        amount: request.amount,
+        currency: 'USD',
+        description: 'Payment paid!',
+        external_id: requestId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (payoutResponse.status === 200) {
+        request.status = "Paid";
+        request.paymentType = "Auto";
+        request.paidOn = Date.now();
+
+        let payment = await paymentModel.findOne({ sellerId: request?.userId?.sellerId });
+        if (!payment || !payment.history) return res.status(404).json({ message: `Payment not found` });
+
+        payment.history.push({
+          amount: request.amount,
+          status: "Paid",
+          description: "Amount Paid",
+          date: Date.now()
+        });
+
+        await request.save();
+        await payment.save();
+      } else {
+        console.error(`Failed to pay seller for request ${requestId}`);
+      }
+    }
+
+    res.status(200).json({ success: true, message: 'Payments processed successfully' });
+  } catch (error) {
+    // console.error(error);
+    res.status(500).json({ success: false, message: 'Error processing payments' });
+  }
+});
 
 
 
-module.exports = { updateActivePaymentMethod, addPayoneer, refundPayments, releasePayments, movePaymentToPending, markPaymentAsPaidManually, confirmPaymentIntent, createPaymentIntent, getSellerEarnings, connectStripe, requestForWithdraw, getSellerHistory, getWithdrawalRequests };
+
+module.exports = { releasePayoneerPayments, updateActivePaymentMethod, addPayoneer, refundPayments, releasePayments, movePaymentToPending, markPaymentAsPaidManually, confirmPaymentIntent, createPaymentIntent, getSellerEarnings, connectStripe, requestForWithdraw, getSellerHistory, getWithdrawalRequests };

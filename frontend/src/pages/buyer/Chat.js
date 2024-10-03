@@ -17,17 +17,8 @@ import { FaFilePdf, FaFileWord, FaFileAlt } from "react-icons/fa";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { FaBasketShopping } from "react-icons/fa6";
 
-const token = localStorage.getItem('token');
-const adminToken = localStorage.getItem('adminToken');
-let userId = null;
-if (token || adminToken) {
-    const decodedToken = jwtDecode(token || adminToken);
-    userId = decodedToken.id;
-}
 
-const socket = io('http://localhost:5000', {
-    query: { userId }
-});
+let socket;
 
 const ChatPage = () => {
     const { user, admin } = useContext(AuthContext);
@@ -53,6 +44,21 @@ const ChatPage = () => {
         shippingFee: 0,
         duration: 1,
     });
+    const token = localStorage.getItem('token');
+    const adminToken = localStorage.getItem('adminToken');
+
+    React.useEffect(() => {
+        let userId = null;
+        if (token || adminToken) {
+            const decodedToken = jwtDecode(token || adminToken);
+            userId = decodedToken.id;
+        }
+
+        socket = io('http://localhost:5000', {
+            query: { userId }
+        });
+        
+    }, [token, adminToken])
 
     useEffect(() => {
         const paramsId = searchParams.get("p");
@@ -73,7 +79,7 @@ const ChatPage = () => {
     useEffect(() => {
         if (!user && !admin) return;
 
-        axios.get(`http://localhost:5000/api/v1/chats/${user? "userChats":"adminChats"}/${user? user._id : admin._id}`, { headers: { Authorization: `Bearer ${user? token : adminToken}` } })
+        axios.get(`http://localhost:5000/api/v1/chats/${user ? "userChats" : "adminChats"}/${user ? user._id : admin._id}`, { headers: { Authorization: `Bearer ${user ? token : adminToken}` } })
             .then(response => {
                 if (response.data.success) {
                     const chatsFetched = response.data.chats;
@@ -81,7 +87,7 @@ const ChatPage = () => {
                         const dbChats = chatsFetched.find(c => (c.participantId?._id || c.adminParticipantId?._id) === selectedParticipant?._id);
                         const localChats = chats.find(c => (c.participantId?._id || c.participantId?._id) === selectedParticipant?._id);
                         if (!dbChats && !localChats)
-                            setChats([{ adminParticipantId: isParticipantAdmin? selectedParticipant : null,  participantId: isParticipantAdmin? null : selectedParticipant, messages: [] }, ...chatsFetched]);
+                            setChats([{ adminParticipantId: isParticipantAdmin ? selectedParticipant : null, participantId: isParticipantAdmin ? null : selectedParticipant, messages: [] }, ...chatsFetched]);
                     }
                     else
                         setChats(chatsFetched);
@@ -104,19 +110,19 @@ const ChatPage = () => {
         return () => {
             socket.off('receiveMessage');
         };
-    }, [selectedParticipant]);  
+    }, [selectedParticipant]);
 
     useEffect(() => {
         if (!user && !admin) return;
         if (selectedParticipant) {
-            axios.get(`http://localhost:5000/api/v1/chats/${user? "userChats" : "adminChats"}/${user? user._id : admin._id}`, { headers: { Authorization: `Bearer ${user? token : adminToken}` } })
+            axios.get(`http://localhost:5000/api/v1/chats/${user ? "userChats" : "adminChats"}/${user ? user._id : admin._id}`, { headers: { Authorization: `Bearer ${user ? token : adminToken}` } })
                 .then(response => {
                     if (response.data.success) {
                         const updatedChats = response.data.chats;
                         const dbChats = updatedChats.find(c => (c.participantId?._id || c.adminParticipantId?._id) === selectedParticipant?._id);
                         const localChats = updatedChats.find(c => (c.participantId?._id || c.adminParticipantId?._id) === selectedParticipant?._id);
                         if (!dbChats && !localChats) {
-                            setChats([{ adminParticipantId: isParticipantAdmin? selectedParticipant : null, participantId: isParticipantAdmin? null : selectedParticipant, messages: [] }, ...chats, ...updatedChats]);
+                            setChats([{ adminParticipantId: isParticipantAdmin ? selectedParticipant : null, participantId: isParticipantAdmin ? null : selectedParticipant, messages: [] }, ...chats, ...updatedChats]);
                             setMessages([]);
                         } else {
                             setChats(updatedChats);
@@ -139,7 +145,7 @@ const ChatPage = () => {
         if (!message.trim() && !file) return;
 
         const formData = new FormData();
-        formData.append('senderId', user? user?._id : admin?._id);
+        formData.append('senderId', user ? user?._id : admin?._id);
         formData.append('receiverId', selectedParticipant._id);
         formData.append('receiverEmail', selectedParticipant?.email);
         formData.append('text', message);
@@ -148,9 +154,9 @@ const ChatPage = () => {
             formData.append('file', file);
 
         try {
-            const response = await axios.post(`http://localhost:5000/api/v1/chats/sendMessage/${user?"user":"admin"}`, formData, {
+            const response = await axios.post(`http://localhost:5000/api/v1/chats/sendMessage/${user ? "user" : "admin"}`, formData, {
                 headers: {
-                    Authorization: `Admin ${user? token : adminToken}`,
+                    Authorization: `Admin ${user ? token : adminToken}`,
                     'Content-Type': 'multipart/form-data'
                 }
             });
@@ -186,7 +192,7 @@ const ChatPage = () => {
 
     const selectChat = (chat) => {
         setSelectedParticipant(chat.participantId || chat.adminParticipantId);
-        if(chat.adminParticipantId && chat.isParticipantAdmin)
+        if (chat.adminParticipantId && chat.isParticipantAdmin)
             setIsParticipantAdmin(true);
         else
             setIsParticipantAdmin(false);
@@ -331,10 +337,10 @@ const ChatPage = () => {
                                     onClick={() => selectChat(chat)}
                                 >
                                     <div className="imgDiv">
-                                        <img src={chat.participantId?.role === "seller" ? `http://localhost:5000/${chat?.participantId.sellerId?.profileImage}` : chat.adminParticipantId? "/assets/images/logo.svg" : "/assets/images/seller.png"} alt="Profile" />
+                                        <img src={chat.participantId?.role === "seller" ? `http://localhost:5000/${chat?.participantId.sellerId?.profileImage}` : chat.adminParticipantId ? "/assets/images/logo.svg" : "/assets/images/seller.png"} alt="Profile" />
                                     </div>
                                     <div>
-                                        <div className='fw600'>{chat.participantId?._id === user?._id ? "You - Personal Chat" : chat.participantId? chat.participantId?.username : "Admin"}</div>
+                                        <div className='fw600'>{chat.participantId?._id === user?._id ? "You - Personal Chat" : chat.participantId ? chat.participantId?.username : "Admin"}</div>
                                         <p className='lastMessage singleLineText'>
                                             {messages.length > 0 && (chat.participantId?._id === selectedParticipant?._id || chat.adminParticipantId?._id === selectedParticipant?._id) ?
                                                 messages[messages.length - 1]?.offer ? "Custom Offer" : messages[messages.length - 1]?.text !== "" ? messages[messages.length - 1]?.text : "File" :
@@ -355,14 +361,14 @@ const ChatPage = () => {
                         {selectedParticipant ? (
                             <>
                                 <div className="header">
-                                    <img src={selectedParticipant?.role === "seller" ? `http://localhost:5000/${selectedParticipant?.sellerId?.profileImage}` : isParticipantAdmin? "/assets/images/logo.svg" : "/assets/images/seller.png"} alt="Profile" />
-                                    <Link to={!isParticipantAdmin && `/${user? "profile":"ftzy-admin/sellers"}/${selectedParticipant?.sellerId?._id}`} >{selectedParticipant?._id === user?._id ? "You - Personal Chat" : isParticipantAdmin? "Admin" : selectedParticipant?.username}</Link>
+                                    <img src={selectedParticipant?.role === "seller" ? `http://localhost:5000/${selectedParticipant?.sellerId?.profileImage}` : isParticipantAdmin ? "/assets/images/logo.svg" : "/assets/images/seller.png"} alt="Profile" />
+                                    <Link to={!isParticipantAdmin && `/${user ? "profile" : "ftzy-admin/sellers"}/${selectedParticipant?.sellerId?._id}`} >{selectedParticipant?._id === user?._id ? "You - Personal Chat" : isParticipantAdmin ? "Admin" : selectedParticipant?.username}</Link>
                                 </div>
                                 <div className="messages content">
                                     {messages.map((msg, index) => (
-                                        <div key={index} className={msg.senderId === (user? user?._id : admin?._id) ? "message sent" : "message received"}>
+                                        <div key={index} className={msg.senderId === (user ? user?._id : admin?._id) ? "message sent" : "message received"}>
                                             <div className='senderName fw600 lightBlackPrimary fs09'>
-                                                <div>{msg.senderId === (user? user?._id : admin?._id) ? "You" : isParticipantAdmin? "Admin" : selectedParticipant.username}</div>
+                                                <div>{msg.senderId === (user ? user?._id : admin?._id) ? "You" : isParticipantAdmin ? "Admin" : selectedParticipant.username}</div>
                                                 <span className='messageTime'>{formatDateTime(msg.timestamp)}</span>
                                             </div>
                                             <div>{msg.offer ? "Custom Offer:" : msg.text}</div>
@@ -396,10 +402,10 @@ const ChatPage = () => {
                                                     <div className="bottom">
                                                         <div className='row'><MdOutlineLocalOffer className='icon' />{msg.offer.quoteType.charAt(0).toUpperCase() + msg.offer.quoteType.slice(1)}</div>
                                                         {msg.offer.quoteType === "product" && <div className='row'><FaBasketShopping className='icon' />{(msg.offer.quantity < 10 && "0") + msg.offer.quantity} (Quantity)</div>}
-                                                        {msg.offer.quoteType === "product" && <div className='row'><TbTruckDelivery className='icon' />{Number(msg.offer.shippingFee) === 0? "Free Shipping" : "$" + msg.offer.shippingFee + " Shipping Fees"}</div>}
+                                                        {msg.offer.quoteType === "product" && <div className='row'><TbTruckDelivery className='icon' />{Number(msg.offer.shippingFee) === 0 ? "Free Shipping" : "$" + msg.offer.shippingFee + " Shipping Fees"}</div>}
                                                         {msg.offer.quoteType === "service" && <div className='row'><IoMdStopwatch className='icon' />{(msg.offer.duration < 10 && "0") + msg.offer.duration} delivery days</div>}
                                                     </div>
-                                                    {msg.senderId !== (user? user?._id : admin?._id) && <div className="buttonsDiv">
+                                                    {msg.senderId !== (user ? user?._id : admin?._id) && <div className="buttonsDiv">
                                                         <Link to={`/checkout?c=${msg._id}`} className="primaryBtn2">Place Order</Link>
                                                     </div>}
                                                 </div>
@@ -459,18 +465,18 @@ const ChatPage = () => {
                                     {/* <FaEllipsisV className='icon' /> */}
                                 </div>
                                 <div className="participantDetails content">
-                                    {!isParticipantAdmin && <><h2 className="secondaryHeading">About <Link to={`/${user? "profile":"ftzy-admin/sellers"}/${selectedParticipant?.sellerId?._id}`}>@{selectedParticipant.username}</Link></h2>
-                                    {selectedParticipant.role === "seller" && <><div className="row"><p>Name</p><div className='fw600'>{selectedParticipant.sellerId.fullName}</div></div>
-                                        <div className="row"><p>Ratings</p><div className='fw600 ratingsDiv'>
-                                            <FaStar className='starIconFilled' />
-                                            <span>{`${selectedParticipant.sellerId.rating} (${selectedParticipant.sellerId.noOfReviews})`}</span>
+                                    {!isParticipantAdmin && <><h2 className="secondaryHeading">About <Link to={`/${user ? "profile" : "ftzy-admin/sellers"}/${selectedParticipant?.sellerId?._id}`}>@{selectedParticipant.username}</Link></h2>
+                                        {selectedParticipant.role === "seller" && <><div className="row"><p>Name</p><div className='fw600'>{selectedParticipant.sellerId.fullName}</div></div>
+                                            <div className="row"><p>Ratings</p><div className='fw600 ratingsDiv'>
+                                                <FaStar className='starIconFilled' />
+                                                <span>{`${selectedParticipant.sellerId.rating} (${selectedParticipant.sellerId.noOfReviews})`}</span>
+                                            </div></div>
+                                            <div className="row"><p>From</p><div className='fw600'>{selectedParticipant.sellerId.country}</div></div></>}
+                                        <div className="row"><p>Role</p><div className='fw600'>{selectedParticipant.role}</div></div>
+                                        <div className="row"><p>Member Since</p><div className='fw600'>
+                                            {formatDate(selectedParticipant?.role === "seller" ? selectedParticipant?.sellerId?.createdAt : selectedParticipant?.createdAt)}
                                         </div></div>
-                                        <div className="row"><p>From</p><div className='fw600'>{selectedParticipant.sellerId.country}</div></div></>}
-                                    <div className="row"><p>Role</p><div className='fw600'>{selectedParticipant.role}</div></div>
-                                    <div className="row"><p>Member Since</p><div className='fw600'>
-                                        {formatDate(selectedParticipant?.role === "seller" ? selectedParticipant?.sellerId?.createdAt : selectedParticipant?.createdAt)}
-                                    </div></div>
-                                    <div className="horizontalLine"></div></>}
+                                        <div className="horizontalLine"></div></>}
                                     {user && <SampleProvisions pre="chat" />}
                                 </div>
                             </>
@@ -550,33 +556,33 @@ const ChatPage = () => {
                                 </div>
                             )}
 
-                            {quoteItems && quoteItems.length > 0? <><div className="inputDiv">
+                            {quoteItems && quoteItems.length > 0 ? <><div className="inputDiv">
                                 <label>Description <span>*</span></label>
                                 <textarea name="description" className='inputField' value={offerDetails.description} onChange={handleOfferChange} placeholder='Explain your offer...' required />
                             </div>
 
-                            <div className="inputDiv">
-                                <div className="inputInnerDiv">
-                                    <label>Offer Amount ($) <span>*</span></label>
-                                    <input type="number" name="offerAmount" className='inputField' value={offerDetails.offerAmount} onChange={handleOfferChange} placeholder='Enter Amount' required />
-                                </div>
-                                {quoteType === 'product' && (<>
+                                <div className="inputDiv">
                                     <div className="inputInnerDiv">
-                                        <label>Shipping Fee ($)</label>
-                                        <input type="number" name="shippingFee" className='inputField' value={offerDetails.shippingFee} onChange={handleOfferChange} />
+                                        <label>Offer Amount ($) <span>*</span></label>
+                                        <input type="number" name="offerAmount" className='inputField' value={offerDetails.offerAmount} onChange={handleOfferChange} placeholder='Enter Amount' required />
                                     </div>
-                                    <div className="inputInnerDiv">
-                                        <label>Quantity</label>
-                                        <input type="number" name="quantity" className='inputField' value={offerDetails.quantity} onChange={handleOfferChange} />
-                                    </div>
-                                </>)}
-                                {quoteType === 'service' && (
-                                    <div className="inputInnerDiv">
-                                        <label>Duration (in days)</label>
-                                        <input type="number" name="duration" className='inputField' value={offerDetails.duration} onChange={handleOfferChange} placeholder='Enter Days' />
-                                    </div>
-                                )}
-                            </div></> : `You currently don't have active ${quoteType} to send offer!`}
+                                    {quoteType === 'product' && (<>
+                                        <div className="inputInnerDiv">
+                                            <label>Shipping Fee ($)</label>
+                                            <input type="number" name="shippingFee" className='inputField' value={offerDetails.shippingFee} onChange={handleOfferChange} />
+                                        </div>
+                                        <div className="inputInnerDiv">
+                                            <label>Quantity</label>
+                                            <input type="number" name="quantity" className='inputField' value={offerDetails.quantity} onChange={handleOfferChange} />
+                                        </div>
+                                    </>)}
+                                    {quoteType === 'service' && (
+                                        <div className="inputInnerDiv">
+                                            <label>Duration (in days)</label>
+                                            <input type="number" name="duration" className='inputField' value={offerDetails.duration} onChange={handleOfferChange} placeholder='Enter Days' />
+                                        </div>
+                                    )}
+                                </div></> : `You currently don't have active ${quoteType} to send offer!`}
 
                             <div className="buttonsDiv">
                                 <button className='primaryBtn' type='submit' disabled={!(quoteItems && quoteItems.length > 0)}>Send Offer</button>

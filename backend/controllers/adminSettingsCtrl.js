@@ -425,7 +425,9 @@ exports.getKeys = asyncHandler(async (req, res) => {
             success: true,
             stripePublishableKey: settings.p_key,
             stripeSecretKey: settings.s_key,
-            payoneerAccountId: settings.payoneerAccountId
+            payoneerAccountId: settings.payoneerAccountId,
+            payoneerClientId: settings.payoneerClientId,
+            payoneerClientSecret: settings.payoneerClientSecret,
         });
     } catch (error) {
         console.error(error);
@@ -435,7 +437,7 @@ exports.getKeys = asyncHandler(async (req, res) => {
 
 exports.addPayoneerKeys = asyncHandler(async (req, res) => {
     try {
-        const { payoneerAccountId } = req.body;
+        const { payoneerAccountId, payoneerClientId, payoneerClientSecret } = req.body;
 
         let settings = await adminSettingsModel.findOne();
 
@@ -445,6 +447,8 @@ exports.addPayoneerKeys = asyncHandler(async (req, res) => {
         }
 
         settings.payoneerAccountId = payoneerAccountId || settings.payoneerAccountId
+        settings.payoneerClientId = payoneerClientId || settings.payoneerClientId
+        settings.payoneerClientSecret = payoneerClientSecret || settings.payoneerClientSecret   
 
         settings.save();
 

@@ -20,6 +20,8 @@ const AdminPayments = () => {
     const [stripeSecretKey, setStripeSecretKey] = useState('');
     const [showAddStripeModel, setShowAddStripeModel] = useState(false);
     const [payoneerAccountId, setPayoneerAccountId] = useState('');
+    const [payoneerClientId, setPayoneerClientId] = useState('');
+    const [payoneerClientSecret, setPayoneerClientSecret] = useState('');
     const [showAddPayoneerModel, setShowAddPayoneerModel] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
     const token = localStorage.getItem("adminToken");
@@ -49,6 +51,8 @@ const AdminPayments = () => {
                     setStripePublishableKey(response.data.stripePublishableKey)
                     setStripeSecretKey(response.data.stripeSecretKey)
                     setPayoneerAccountId(response.data.payoneerAccountId);
+                    setPayoneerClientId(response.data.payoneerClientId);
+                    setPayoneerClientSecret(response.data.payoneerClientSecret);
                 }
             } catch (error) {
                 console.error("Error fetching Stripe keys:", error);
@@ -107,14 +111,14 @@ const AdminPayments = () => {
     const handlePayoneerDetailsSubmit = async (e) => {
         e.preventDefault();
     
-        if (!payoneerAccountId) {
-            enqueueSnackbar('Please fill in Payoneer account details', { variant: 'error' });
+        if (!payoneerAccountId || !payoneerClientId || !payoneerClientSecret) {
+            enqueueSnackbar('All fields are Required!', { variant: 'error' });
             return;
         }
     
         try {
             const response = await axios.post('http://localhost:5000/api/v1/settings/admin/payoneer_keys',
-                { payoneerAccountId },
+                { payoneerAccountId, payoneerClientId, payoneerClientSecret },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             if (response.data.success){
@@ -178,7 +182,7 @@ const AdminPayments = () => {
         setReleaseLoading(true);
 
         try {
-            const response = await axios.put('http://localhost:5000/api/v1/payments/release-payment', {
+            const response = await axios.put('http://localhost:5000/api/v1/payments/release-payment' + (value === 4 && "/payoneer"), {
                 requestIds: selectedRequests
             }, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -401,6 +405,26 @@ const AdminPayments = () => {
                                     className="inputField"
                                 />
                             </div>
+                            <div className='inputDiv'>
+                                <label>Payoneer Client ID <span>*</span></label>
+                                <input
+                                    type="text"
+                                    value={payoneerClientId}
+                                    onChange={(e) => setPayoneerClientId(e.target.value)}
+                                    placeholder="Enter your Payoneer Client ID"
+                                    className="inputField"
+                                />
+                            </div>
+                            <div className='inputDiv'>
+                                <label>Payoneer Client Secret <span>*</span></label>
+                                <input
+                                    type="text"
+                                    value={payoneerClientSecret}
+                                    onChange={(e) => setPayoneerClientSecret(e.target.value)}
+                                    placeholder="Enter your Payoneer Client Secret"
+                                    className="inputField"
+                                />
+                            </div>
                         </div>
 
                         <div className="buttonsDiv" style={{ marginTop: "20px" }}>
@@ -462,9 +486,9 @@ const AdminPayments = () => {
                 <div className="popupDiv">
                     <div className="popupContent releasePopupContent">
                         <div className="form">
-                            <h2 className="secondaryHeading">Confirm <span>{showReleaseModel === "Release" ? "Releasing" : "Refunding"}</span> Payments</h2>
+                            <h2 className="secondaryHeading">Confirm <span>{showReleaseModel === "Release" ? "Releasing" : "Refunding"}</span> Payments - <span>{value === 4? "Payoneer":"Stripe"}</span></h2>
                             <div className="horizontalLine"></div>
-                            <p>You are about to release a total of <strong>${calculateTotalAmount().toFixed(2)}</strong> to the {showReleaseModel === "Release" ? "sellers" : "buyers"}. Please ensure you have sufficient funds in your your linked Stripe account!</p>
+                            <p>You are about to release a total of <strong>${calculateTotalAmount().toFixed(2)}</strong> to the {showReleaseModel === "Release" ? "sellers" : "buyers"}. Please ensure you have sufficient funds in your your linked {value === 4? "Payoneer":"Stripe"} account!</p>
                         </div>
 
                         <div className="buttonsDiv" style={{ marginTop: "20px" }}>
@@ -591,7 +615,7 @@ function PendingPayments({ requests, selectedRequests, handleSelectRequest, hand
                 <div className="upper">
                     <h2 className="secondaryHeading"><span>Pending {isStripe ? "Stripe" : "Payoneer"}</span> Withdrawal requests from Sellers</h2>
                     <div className="upperRight">
-                        <CSVLink data={csvData} headers={headers} filename={"pending_payments.csv"} className="secondaryBtn">Export CSV</CSVLink>
+                        <CSVLink data={csvData} headers={headers} filename={`${isStripe? "pending_payments":"pending_payoneer_payments"}.csv`} className="secondaryBtn">Export CSV</CSVLink>
                         <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowMarkPaidModel("Release")}>Mark Paid</button>
                         <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => setShowReleaseModel("Release")}>Release Payment</button>
                     </div>
@@ -810,7 +834,7 @@ function CompletedPayments({ requests, selectedRequests, handleSelectRequest, ha
                 <div className="upper">
                     <h2 className="secondaryHeading"><span>Completed {isStripe ? "Stripe" : "Payoneer"}</span> Withdrawal requests</h2>
                     <div className="upperRight">
-                        <CSVLink data={csvData} headers={headers} filename={"completed_payments.csv"} className="secondaryBtn">Export CSV</CSVLink>
+                        <CSVLink data={csvData} headers={headers} filename={`${isStripe? "completed_payments":"completed_payoneer_payments"}.csv`} className="secondaryBtn">Export CSV</CSVLink>
                         <button className="secondaryBtn" disabled={selectedRequests.length < 1} onClick={() => moveToPending("Payment")}>Move to Pending</button>
                     </div>
                 </div>

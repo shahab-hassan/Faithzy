@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import { enqueueSnackbar } from "notistack"
@@ -9,6 +9,7 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md"
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import LeaveProductReview from '../../components/common/LeaveProductReview';
 import DisputeChatRoom from '../../components/common/DisputeChatRoom';
+import { AuthContext } from '../../utils/AuthContext';
 
 const ProductOrderDetails = ({ isBuyer }) => {
 
@@ -24,6 +25,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
   const [showStartDisputeModel, setShowStartDisputeModel] = useState(null);
   const [disputeReason, setDisputeReason] = useState("");
   const [dispute, setDispute] = useState(null);
+  const {isTabletPro} = useContext(AuthContext);
 
   useEffect(() => {
     if (localStorage.getItem('statusUpdated')) {
@@ -136,7 +138,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
   const handleStartDispute = async (e, productId) => {
     e.preventDefault();
     setShowStartDisputeModel(null)
-    if(!disputeReason || disputeReason === ""){
+    if (!disputeReason || disputeReason === "") {
       enqueueSnackbar("Dispute reason is Required!", { variant: "error" });
       return;
     }
@@ -186,13 +188,15 @@ const ProductOrderDetails = ({ isBuyer }) => {
 
       <h2 className="secondaryHeading"><span>Order</span> Status</h2>
 
-      {subOrder.status.map((status, index) => (
-        <div className='trackOrderRow' key={index}>
-          <span>{new Date(status.createdAt).toLocaleString()} - </span>
-          <strong>{status.name === "Active" && index === 0 ? "Order Placed" : status.name}</strong>
-          {(subOrder.cancellationReason && status.name === "Cancelled") && <span> - (<strong>Reason: </strong> {showStatusDetails.cancellationReason})</span>}
-        </div>
-      ))}
+      <div className="trackOrder">
+        {subOrder.status.map((status, index) => (
+          <div className='trackOrderRow' key={index}>
+            <span>{new Date(status.createdAt).toLocaleString()} - </span>
+            <strong>{status.name === "Active" && index === 0 ? "Order Placed" : status.name}</strong>
+            {(subOrder.cancellationReason && status.name === "Cancelled") && <span> - (<strong>Reason: </strong> {showStatusDetails.cancellationReason})</span>}
+          </div>
+        ))}
+      </div>
 
       {subOrder.status[subOrder.status.length - 1].name !== 'Delivered' &&
         subOrder.status[subOrder.status.length - 1].name !== 'Cancelled' &&
@@ -222,13 +226,13 @@ const ProductOrderDetails = ({ isBuyer }) => {
 
         )}
 
-      {(subOrder.status[subOrder.status.length - 1].name === "InDispute" || subOrder.status[subOrder.status.length - 1].name === "Resolved") && <div className="commonChatDiv productOrderDisputeChat">
+      {!isTabletPro && (subOrder.status[subOrder.status.length - 1].name === "InDispute" || subOrder.status[subOrder.status.length - 1].name === "Resolved") && <div className="commonChatDiv productOrderDisputeChat">
         <div className="horizontalLine"></div>
         <div>
           {subOrder.status[subOrder.status.length - 1].name === "Resolved" ?
             <>
               <h2 className="secondaryHeading">The Dispute has been <span>Resolved</span> - Admin paid <span>${dispute?.amountToSeller}</span> to you</h2>
-              <p>Dispute, which was initiated by {dispute?.initiatedBy === "Seller"? "you" : "Buyer"} has been marked as Resolved by Admin. You have earned ${dispute?.amountToSeller}!  </p>
+              <p>Dispute, which was initiated by {dispute?.initiatedBy === "Seller" ? "you" : "Buyer"} has been marked as Resolved by Admin. You have earned ${dispute?.amountToSeller}!  </p>
             </>
             : <>
               <h2 className="secondaryHeading">Order in <span>Dispute</span> - Chat with <span>Admin</span></h2>
@@ -248,13 +252,15 @@ const ProductOrderDetails = ({ isBuyer }) => {
 
       <h2 className="secondaryHeading"><span>Track</span> Order</h2>
 
-      {showStatusDetails.status.map((status, index) => (
-        <div className='trackOrderRow' key={index}>
-          <span>{new Date(status.createdAt).toLocaleString()} - </span>
-          <strong>{status.name === "Active" && index === 0 ? "Order Placed" : status.name}</strong>
-          {(showStatusDetails.cancellationReason && status.name === "Cancelled") && <span> - (<strong>Reason: </strong> {showStatusDetails.cancellationReason})</span>}
-        </div>
-      ))}
+      <div className="trackOrder">
+        {showStatusDetails.status.map((status, index) => (
+          <div className='trackOrderRow' key={index}>
+            <span>{new Date(status.createdAt).toLocaleString()} - </span>
+            <strong>{status.name === "Active" && index === 0 ? "Order Placed" : status.name}</strong>
+            {(showStatusDetails.cancellationReason && status.name === "Cancelled") && <span> - (<strong>Reason: </strong> {showStatusDetails.cancellationReason})</span>}
+          </div>
+        ))}
+      </div>
 
       <div className="actionsB">
         <Link to={`/chat?p=${showStatusDetails?.productId?.sellerId?.userId?._id}`} className='primaryBtn'>Contact Seller</Link>
@@ -281,13 +287,13 @@ const ProductOrderDetails = ({ isBuyer }) => {
         </button>
       </div>
 
-      {(showStatusDetails.status[showStatusDetails.status.length - 1].name === "InDispute" || showStatusDetails.status[showStatusDetails.status.length - 1].name === "Resolved") && <div className="commonChatDiv productOrderDisputeChat">
+      {!isTabletPro && (showStatusDetails.status[showStatusDetails.status.length - 1].name === "InDispute" || showStatusDetails.status[showStatusDetails.status.length - 1].name === "Resolved") && <div className="commonChatDiv productOrderDisputeChat">
         <div className="horizontalLine"></div>
         <div>
           {showStatusDetails.status[showStatusDetails.status.length - 1].name === "Resolved" ?
             <>
               <h2 className="secondaryHeading">The Dispute has been <span>Resolved</span> - Admin refunded <span>${dispute?.amountToBuyer}</span></h2>
-              <p>Dispute, which was initiated by {dispute?.initiatedBy === "Buyer"? "you" : "Seller"} has been marked as Resolved by Admin. You got ${dispute?.amountToBuyer} refund!  </p>
+              <p>Dispute, which was initiated by {dispute?.initiatedBy === "Buyer" ? "you" : "Seller"} has been marked as Resolved by Admin. You got ${dispute?.amountToBuyer} refund!  </p>
             </>
             : <>
               <h2 className="secondaryHeading">Order in <span>Dispute</span> - Chat with <span>Admin</span></h2>
@@ -465,7 +471,7 @@ const ProductOrderDetails = ({ isBuyer }) => {
             <div className="upper">
               <div className="upperLeft">
                 <div className="orderId">#{id}</div>
-                <div>
+                <div className='placedOn'>
                   {isBuyer && <span>{(order.products.length < 10 && "0") + order.products.length} Product{order.products.length > 1 && "s"} - </span>}
                   <span>Order Placed on: {new Date(order.createdAt).toLocaleString()}</span>
                 </div>

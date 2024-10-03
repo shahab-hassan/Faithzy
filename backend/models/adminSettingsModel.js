@@ -42,7 +42,9 @@ const adminSettingsSchema = new mongoose.Schema({
     },
     p_key: String,
     s_key: String,
-    payoneerAccountId: String
+    payoneerAccountId: String,
+    payoneerClientId: String,
+    payoneerClientSecret: String
 },
 {
     timestamps: true
