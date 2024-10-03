@@ -19,6 +19,12 @@ app.use(cors({
   credentials: true
 }));
 
+app.options('*', cors({
+  origin: [`${hostNameFront}`, "http://localhost:3000"],
+  credentials: true
+}));
+
+
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
