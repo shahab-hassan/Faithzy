@@ -22,6 +22,26 @@ app.use(cors({
 
 // app.use(cors())
 
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     console.log("Request origin: ", origin);
+//     const allowedOrigins = [`${hostNameFront}`, "http://localhost:3000"];
+//     if (allowedOrigins.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+//   methods: ["POST", "GET", "PUT", "DELETE"],
+//   credentials: true
+// }));
+
+// app.options('*', cors({
+//   origin: [`${hostNameFront}`, "http://localhost:3000"],
+//   methods: ["POST", "GET", "PUT", "DELETE"],
+//   credentials: true
+// }));
+
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
