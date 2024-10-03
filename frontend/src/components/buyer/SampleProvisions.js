@@ -9,7 +9,7 @@ import { AuthContext } from '../../utils/AuthContext';
 import { hostNameBack } from '../../utils/constants';
 
 function SampleProvisions({ pre, openedProduct, openedService }) {
-
+  axios.defaults.withCredentials = true;
   const { enqueueSnackbar } = useSnackbar();
   const { isLogin, isTabletPro, isTablet, isMobilePro, isMobile } = useContext(AuthContext);
 

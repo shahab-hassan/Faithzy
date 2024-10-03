@@ -12,7 +12,7 @@ function BuyerFooter() {
   const [socialLinks, setSocialLinks] = useState({});
   const { isLogin, user, isTabletPro } = useContext(AuthContext);
 
-
+  axios.defaults.withCredentials = true;
   useEffect(() => {
     const fetchLinks = async () => {
       try {
